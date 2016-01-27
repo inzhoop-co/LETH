@@ -8,12 +8,10 @@ LΞTH (Ligth Ξthereum Mobile Wallet) is the first hybrid mobile app to manage a
 Thanks to the great job in library of ConsenSys (eth-lightwallet), the app could manage the key-pairs securely on smartphone side without send any password out of the wallet.
 Every transaction could be signed using LETH directly on the smartphone to an ethereum node public/private.
 
-
 # References
 ```
 https://github.com/ConsenSys/eth-lightwallet
 ```
-
 
 # Stuff and info for the project (Draft!)
 
@@ -36,6 +34,13 @@ Test on browser in localhost:8100
 ```bash
 ionic serve
 ```
+
+# Screenshoot
+![pay](https://github.com/inzhoop-co/LETH/tree/master/resources/screenshot/pay.png)
+
+![receive](https://github.com/inzhoop-co/LETH/tree/master/resources/screenshot/receive.png)
+
+![settings](https://github.com/inzhoop-co/LETH/tree/master/resources/screenshot/settings.png)
 
 # License
  GNU GENERAL PUBLIC LICENSE
