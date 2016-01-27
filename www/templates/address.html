@@ -1,0 +1,30 @@
+<ion-view view-title="Address">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header has-tabs" padding="'true'">
+    <div class="list list-borderless">
+      <div class="item item-divider">
+        <i class="icon ion-qr-scanner"></i>
+        Your Address
+      </div>
+      <div class="item text-center">
+        <qr text="qrcodeString" type-number="typeNumber" correction-level="correctionLevel" size="size" input-mode="inputMode" image="image"></qr>
+        <p class="padding">
+          <a href="#" class="subdued" ng-click="showAddress()">{{qrcodeString}}</a>
+        </p>
+      </div>
+
+      <div class="item tabs tabs-secondary tabs-icon-left">
+        <a class="tab-item" href="#" ng-click="shareByEmail()">
+          <i class="icon ion-ios-email"></i>
+          Email
+        </a>
+        <a class="tab-item" href="#" ng-click="shareAddr()">
+          <i class="icon ion-share"></i>
+          Share
+        </a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

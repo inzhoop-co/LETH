@@ -1,0 +1,59 @@
+<ion-view view-title="Wallet">
+
+  <ion-nav-buttons side="left" >
+    <button menu-toggle="left" ng-hide="fromAddressBook" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+
+  <ion-nav-buttons side="right">
+    <button class="button button-clear" ng-click="scanTo()" ng-hide="fromAddressBook">
+      <i class="icon ion-ios-camera"></i>
+    </button>
+  </ion-nav-buttons>
+
+  <ion-nav-bar class="bar-stable bar-assertive">
+    <ion-nav-back-button ng-show="fromAddressBook">
+    </ion-nav-back-button>
+  </ion-nav-bar>
+
+  <ion-content class="has-header" padding="'true'">
+
+    <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+
+    <div class="list card">
+      <div class="item item-divider">
+        <i class="icon ion-arrow-up-a"></i>
+        Send ETH
+      </div>
+    <div class="item">
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Availability</span>
+        <p align="center"><b>ETH {{balance}}</b></p>
+      </label>
+
+      <form name="wallet">
+        <button ng-show="toAdd && addrTo.length"  class="button button-light" ng-click="addAddress(addrTo)">
+          <i class="icon ion-person-add positive"></i>
+        </button>
+        <label class="item item-input item-stacked-label item-button-right item-button-left">
+          <span class="input-label">Address To </span>
+          <input type="text" ng-model="addrTo" ng-disabled="fromAddressBook" placeholder="type address or use camera to scan" ng-required="true" ng-change="checkAddress(addrTo)"]>
+
+        </label>
+
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Amount</span>
+          <input type="text" ng-model="amountTo" placeholder="insert amount in ether" ng-required="true">
+        </label>
+
+        <button ng-disabled="!wallet.$valid" class="button button-block button-energized"
+                ng-click="confirmSend(addrTo,amountTo)">Pay
+        </button>
+
+      </form>
+
+    </div>
+
+    </div>
+  </ion-content>
+
+</ion-view>

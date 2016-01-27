@@ -1,0 +1,33 @@
+<ion-view view-title="Transactions">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header has-tabs" padding="'true'">
+    <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+
+
+    <ion-list class="list card" can-swipe="true">
+      <div class="item item-divider">
+        <i class="icon"></i>
+        Transactions
+      </div>
+      <h5 ng-show="transactions.length == 0">No saved transaction</h5>
+      <ion-item class="item item-icon-left" ng-repeat="t in transactions">
+        <!--ToDo: andrebbe gestito l'IN e l'OUT di Eth-->
+        <i class="icon ion-arrow-up-a assertive"></i>
+        <h2>{{t.id}}</h2>
+        <p>Value: {{t.value}}</p>
+        <p>To: {{t.to}}</p>
+        <p>Date: {{t.time}}</p>
+        <p>From: {{t.from}}</p>
+        <ion-option-button class="button-info" ng-click="edit(item)">CheckStatus</ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
+
+
+
+
+
+

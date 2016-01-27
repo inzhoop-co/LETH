@@ -1,0 +1,24 @@
+<ion-view view-title="Settings">
+
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content>
+
+	<div class="list">
+		<div class="item item-button-right">
+		    Import Wallet from backup
+		    <button class="button button-clear" ng-click="confirmImport()">
+		        <i class="icon ion-ios-cloud-download"></i>
+		    </button>
+		</div>
+		<div class="item item-input-inset">
+			<p>Host:</p>
+		    <label class="item-input-wrapper"><input type="text" ng-model="addrHost" placeholder="type host address"></label>
+		    <button class="button button-clear" ng-click="editHost(addrHost)">
+		        <i class="icon ion-edit"></i>
+		    </button>
+		</div>
+	</div>
+  </ion-content>
+</ion-view>

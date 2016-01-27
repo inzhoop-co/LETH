@@ -1,0 +1,34 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-stable bar-assertive">
+    <h1 class="title">ChangeCode</h1>
+    <div class="buttons">
+      <button class="button button-clear ion-ios-close" ng-click="closeChangeCodeModal()"></button>
+    </div>
+  </ion-header-bar>
+  <ion-content class="has-header" padding="'true'">
+    <div class="list">
+      <div class="item">
+        <p class="text-center">Change Your Code</p>
+      </div>
+      <div class="item">
+        <form name="changeCode" ng-submit="ChangeCode(oldCode,newCode)">
+          <label class="item item-input">
+            <span class="input-label">Old Code</span>
+            <input type="password" ng-model="oldCode" required="true">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">New Code</span>
+            <input type="password" ng-model="newCode" required="true">
+          </label>
+          <label class="item item-input padding-bottom">
+            <span class="input-label">Confirm New Code</span>
+            <input type="password" ng-model="confirmNewCode" required="true">
+          </label>
+          <button ng-disabled="!changeCode.$valid || confirmNewCode!=newCode"  class="button button-block button-assertive" type="submit" ng-disabled="">Change</button>
+        </form>
+      </div>
+
+    </div>
+
+  </ion-content>
+</ion-modal-view>

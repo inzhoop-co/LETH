@@ -1,0 +1,76 @@
+<ion-side-menus>
+
+  <ion-side-menu-content>
+
+    <ion-nav-bar class="bar-stable bar-assertive">
+      <ion-nav-buttons side="right">
+        <button class="button button-clear" ng-click="scanTo()">
+          <i class="icon ion-ios-camera"></i>
+        </button>
+      </ion-nav-buttons>
+      <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <ion-nav-view name="menuContent" animation="slide-left-right">
+
+      <ion-tabs class="tabs-striped tabs-color-assertive">
+        <!-- Friends Tab -->
+        <ion-tab title="Friends" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" href="#/app/friends">
+        </ion-tab>
+        <!-- Wallet Tab -->
+        <ion-tab title="Wallet" icon-off="ion-social-bitcoin-outline" icon-on="ion-social-bitcoin" href="#/app/wallet/">
+        </ion-tab>
+        <!-- Address Tab -->
+        <ion-tab title="address" icon-off="ion-ios-barcode-outline" icon-on="ion-ios-barcode" href="#/app/address">
+        </ion-tab>
+      </ion-tabs>
+
+    </ion-nav-view>
+
+  </ion-side-menu-content>
+
+
+  <ion-side-menu side="left" id="sideMenu">
+
+    <ion-header-bar class="bar-stable bar-assertive">
+      <h1 class="title">Menu</h1>
+    </ion-header-bar>
+    <ion-content>
+      <ion-list class="list card">
+        <ion-item class="item item-icon-left" menu-close href="#/app/friends">
+          <i class="icon ion-ios-home"></i>
+          Home
+        </ion-item>
+        <ion-item class="item item-icon-left" menu-close ng-click="openLoginModal()" ng-hide="hasLogged">
+          <i class="icon ion-log-in"></i>
+          Login
+        </ion-item>
+        <ion-item class="item item-icon-left" menu-close ng-click="openChangeCodeModal()" ng-show="hasLogged">
+          <i class="icon ion-lock-combination"></i>
+          Change Pin
+        </ion-item>
+        <ion-item class="item item-icon-left" menu-close href="#/app/settings">
+          <i class="icon ion-ios-gear"></i>
+          Settings
+        </ion-item>
+        <ion-item class="item item-icon-left" menu-close href="#/app/transactions">
+          <i class="icon ion-arrow-graph-up-right"></i>
+          Transactions
+        </ion-item>
+        <ion-item class="item item-icon-left" menu-close href="#/app/about">
+          <i class="icon ion-ios-help"></i>
+          About
+        </ion-item>
+      </ion-list>
+    </ion-content>
+
+  </ion-side-menu>
+
+
+</ion-side-menus>
+
+
+
+

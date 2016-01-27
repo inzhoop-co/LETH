@@ -1,0 +1,29 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="{{friend.name}}">
+  <ion-nav-bar class="bar-stable bar-assertive">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+  </ion-nav-bar>
+    <ion-content class="has-header has-tabs" padding="'true'">
+      <div class="list card text-center">
+       <div class="item">
+         <img class="rounded" ng-src="http://ipfs.io/ipfs/{{friend.face}}" style="width: 64px; height: 64px">
+         <p class="padding">
+           {{friend.comment}}
+         </p>
+         <p class="padding">
+           {{friend.addr}}
+         </p>
+         <a class="button button-outline button-positive" href="#/app/wallet/{{friend.addr}}"> Pay </a>
+       </div>
+
+      </div>
+
+        <!--button class="button button-outline button-positive" ng-click="sendMessage()"> Msg </button-->
+    </ion-content>
+</ion-view>

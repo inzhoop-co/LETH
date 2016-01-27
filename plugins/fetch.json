@@ -1,0 +1,61 @@
+{
+    "ionic-plugin-keyboard": {
+        "source": {
+            "type": "registry",
+            "id": "ionic-plugin-keyboard"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-network-information": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-network-information"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-dialogs": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-dialogs"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-contacts": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-contacts"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.telerik.plugins.wkwebview": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-wkwebview"
+        },
+        "is_top_level": true,
+        "variables": {
+            "WKWEBVIEW_SERVER_PORT": "12344"
+        }
+    },
+    "cordova-plugin-webserver": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-webserver"
+        },
+        "is_top_level": false,
+        "variables": {}
+    },
+    "phonegap-plugin-barcodescanner": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/wildabeast/BarcodeScanner.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    }
+}

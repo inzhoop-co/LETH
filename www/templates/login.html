@@ -1,0 +1,36 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-stable bar-assertive">
+    <h1 class="title">Create New Wallet</h1>
+    <div class="buttons">
+      <button class="button button-clear ion-ios-close" ng-click="exitApp()"></button>
+    </div>
+  </ion-header-bar>
+  <ion-content class="has-header" padding="'true'">
+    <div class="list">
+      <div class="item">
+        <p class="text-center">Choose a strong password to encrypt <br>
+          your wallet.<br>
+          Set a 4 digit password for rapid access</p>
+      </div>
+      <div class="item">
+        <form name="login" ng-submit="Login(password,code)">
+          <label class="item item-input">
+            <span class="input-label">Password</span>
+            <input type="password" ng-model="password" required="true">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Confirm Password</span>
+            <input type="password" ng-model="confirmPassword" required="true">
+          </label>
+          <label class="item item-input padding-bottom">
+            <span class="input-label">Code</span>
+            <input type="password" ng-model="code" required="true">
+          </label>
+          <button ng-disabled="!login.$valid || confirmPassword!=password"   class="button button-block button-assertive" type="submit" ng-disabled="">Start</button>
+        </form>
+      </div>
+
+    </div>
+
+  </ion-content>
+</ion-modal-view>
