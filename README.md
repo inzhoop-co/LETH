@@ -38,4 +38,4 @@ ionic serve
 ```
 
 # License
- GNU GENERAL PUBLIC LICENSE
+ GNU GENERAL PUBLIC LICENSE V 1.0
