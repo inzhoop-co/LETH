@@ -6,7 +6,7 @@ LΞTH (Ligth Ξthereum Mobile Wallet) is the first hybrid mobile app to manage a
 
 # Features
 Thanks to the great job in library of ConsenSys (eth-lightwallet), the app could manage the key-pairs securely on smartphone side without send any password out of the wallet.
-Every transaction could be signed using LETH directly on the smartphone to an ethereum node public/private.
+Every transaction could be signed directly with the smartphone and sent to an ethereum node public/private.
 
 
 # References
