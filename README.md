@@ -5,8 +5,8 @@ The First mobile LigthWallet for Ξthereum
 LΞTH (Ligth Ξthereum Mobile Wallet) is the first hybrid mobile app to manage an Ethereum wallet built using Ionic framework.
 
 # Features
-Thanks to the great job in library of ConsenSys (eth-lightwallet), the app could manage the key-pairs securely on smartphone side without send password out of the wallet.
-Every transaction could be signed using LETH from a smartphone to an ethereum node public/private.
+Thanks to the great job in library of ConsenSys (eth-lightwallet), the app could manage the key-pairs securely on smartphone side without send any password out of the wallet.
+Every transaction could be signed using LETH directly on the smartphone to an ethereum node public/private.
 
 
 # References
