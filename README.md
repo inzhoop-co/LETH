@@ -36,11 +36,11 @@ ionic serve
 ```
 
 # Screenshoot
-![pay](https://github.com/inzhoop-co/LETH/tree/master/resources/screenshot/pay.png)
+![pay](https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/Pay.PNG)
 
-![receive](https://github.com/inzhoop-co/LETH/tree/master/resources/screenshot/receive.png)
+![receive](https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/Receive.PNG)
 
-![settings](https://github.com/inzhoop-co/LETH/tree/master/resources/screenshot/settings.png)
+![settings](https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/Settings.PNG)
 
 # License
  GNU GENERAL PUBLIC LICENSE
