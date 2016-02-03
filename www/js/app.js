@@ -1,12 +1,8 @@
 // Ionic Starter App
 //set global and provider
 web3 = new Web3();
-//addrHost = "http://2.228.108.51:8545";  //"http://192.168.1.160:8545";
 if (typeof localStorage.NodeHost == 'undefined') {
-
-  //localStorage.NodeHost = "http://192.168.15.1:8545";
   localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
-
 }
 
 angular.module('weth', ['ionic', 'ionic.service.core', 'ngCordova', 'ja.qr', 'weth.controllers', 'weth.services'])
