@@ -128,6 +128,7 @@ angular.module('weth.controllers', [])
 
     }
 
+    $scope.items = [];
 
     $scope.openLoginModal = function () {
       loginModal.show();
@@ -399,6 +400,17 @@ angular.module('weth.controllers', [])
         }
       });
     };
+  })
+
+
+  .controller('ItemsCtrl', function ($scope) {
+
+
+  })
+
+  .controller('ItemCtrl', function ($scope, $stateParams) {
+    
+    
   })
 
   .controller('FriendsCtrl', function ($scope, Friends) {

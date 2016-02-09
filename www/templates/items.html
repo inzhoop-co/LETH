@@ -1,0 +1,30 @@
+<ion-view view-title="Home">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header has-tabs" padding="'true'">
+  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+    <div class="list card">
+      <div class="item item-divider">
+          <i class="icon ion-card"></i>
+          Your Balance <b>Ξ</b> {{balance}}
+      </div>
+    </div>
+    <ion-list class="list card">
+      <div class="list">
+      <a class="item item-icon-left" href="#/app/items/{{item}}">
+        <h2>Balenciaga Pencil</h2>
+        <p>Skirt Testurizzata</p>
+        <img src="http://cdn.yoox.biz/35/35276551OM_8_n_f.jpg">
+        <span class="badge badge-assertive">180 wei</span>
+      </a>
+    </div>
+    </ion-list>
+  </ion-content>
+</ion-view>
+
+
+
+
+
+

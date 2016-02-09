@@ -82,6 +82,24 @@ angular.module('weth', ['ionic', 'ionic.service.core', 'ngCordova', 'ja.qr', 'we
           }
         }
       })
+      .state('app.items', {
+        url: '/items',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/items.html',
+            controller: 'ItemsCtrl'
+          }
+        }
+      })
+      .state('app.detail', {
+        url: '/items/:Item',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/item-detail.html',
+            controller: 'ItemCtrl'
+          }
+        }
+      })
       .state('app.friends', {
         url: '/friends',
         views: {
@@ -101,7 +119,7 @@ angular.module('weth', ['ionic', 'ionic.service.core', 'ngCordova', 'ja.qr', 'we
         }
       });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/friends');
+    $urlRouterProvider.otherwise('/app/items');
   })
   .config(function ($httpProvider) {
     $httpProvider.interceptors.push(function ($rootScope) {
