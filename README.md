@@ -16,6 +16,7 @@ With LETH you could:
 - Send ETH
 - Receive ETH
 - List your transaction
+- Earn Wei on your wallet just watching some banner (*new)
 - ... more to be defined
 
 # References
