@@ -4,8 +4,7 @@ web3 = new Web3();
 if (typeof localStorage.NodeHost == 'undefined') {
   localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
 }
-
-angular.module('weth', ['ionic', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'weth.controllers', 'weth.services'])
+angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services'])
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $localstorage) {
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -31,6 +30,19 @@ angular.module('weth', ['ionic', 'ngSanitize', 'ionic.service.core', 'ngCordova'
 
     });
   })
+  /* block scroll
+  .directive('noScroll', function($document) {
+  return {
+    restrict: 'A',
+    link: function($scope, $element, $attr) {
+
+        $document.on('touchmove', function(e) {
+          e.preventDefault();
+        });
+      }
+    }
+  })
+*/
   .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
       .state('app', {

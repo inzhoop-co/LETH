@@ -1,4 +1,4 @@
-angular.module('weth.controllers', [])
+angular.module('leth.controllers', [])
 
   .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, AppService, $q, PasswordPopup, Transactions, Friends, Items) {
 
@@ -84,16 +84,6 @@ angular.module('weth.controllers', [])
       });
     }
 
-    var loadItems = function(itemsHash){
-      angular.forEach(itemsHash, function (key, value) {
-        Items.getFromIpfs(key).then(function (response) {
-          Items.add($scope.items, response, key);
-        }, function (err) {
-          console.log(err);
-        })
-      });
-    }
-
     $scope.scanTo = function () {
       $cordovaBarcodeScanner
         .scan()
@@ -112,8 +102,6 @@ angular.module('weth.controllers', [])
 
     $scope.friends = [];
 
-    $scope.items = [];
-
     /*********FRIENDS ********/
     if (typeof localStorage.ipfsFriends == 'undefined') {
       $scope.ipfsFriends = ["QmdQxP4dBKsAgZdfqH8jgX1BvhDuu742qZcgDYaCQYS13H", "QmNuBdR2D5osrPT4NgBDSvwpEo7dpR6N8gxVzhvMGNPw2S"];
@@ -129,7 +117,19 @@ angular.module('weth.controllers', [])
     }
     /*********FRIENDS ********/
 
-    /*********ITEMS ********/
+    
+    $scope.items = [];
+
+    var loadItems = function(itemsHash){
+      angular.forEach(itemsHash, function (key, value) {
+        Items.getFromIpfs(key).then(function (response) {
+          Items.add($scope.items, response, key);
+        }, function (err) {
+          console.log(err);
+        })
+      });
+    }
+
     if (typeof localStorage.ipfsItems == 'undefined') {
       $scope.ipfsItems = ["QmUFG564DSjsmMq4Uzaj4Vawzb3MK47LR8MVEYLdpQgj4J", 
                           "QmZ1ksqzFhG8MqJDnqBtbjuLWCEEcKeeW6VHzDFx7p4QkW", 
@@ -143,8 +143,6 @@ angular.module('weth.controllers', [])
     } else {
       $scope.items = JSON.parse(localStorage.Items);
     }
-
-    /*********ITEMS ********/
 
     $scope.openLoginModal = function () {
       loginModal.show();
@@ -367,7 +365,7 @@ angular.module('weth.controllers', [])
     };
 
     $scope.shareByEmail = function () {
-      window.location.href = "mailto:?subject=Weth - Richiesta di Pagamento&body=Inviami un pagamento a questo indirizzo: " + $scope.qrcodeString;
+      window.location.href = "mailto:?subject=Leth - Richiesta di Pagamento&body=Inviami un pagamento a questo indirizzo: " + $scope.qrcodeString;
     };
 
 
@@ -413,7 +411,23 @@ angular.module('weth.controllers', [])
   })
 
 
-  .controller('ItemsCtrl', function ($scope, Items) {
+  .controller('ItemsCtrl', function ($scope, Items, $ionicSwipeCardDelegate) {
+
+    $scope.cards = Array.prototype.slice.call($scope.items, 0, 0);
+
+    $scope.cardSwiped = function(index) {
+      $scope.addCard();
+    };
+
+    $scope.cardDestroyed = function(index) {
+      $scope.cards.splice(index, 1);
+    };
+
+    $scope.addCard = function() {
+      var newCard = $scope.items[Math.floor(Math.random() * $scope.items.length)];
+      newCard.id = Math.random();
+      $scope.cards.push(angular.extend({}, newCard));
+    }
 
   })
 
@@ -423,7 +437,6 @@ angular.module('weth.controllers', [])
   })
 
   .controller('FriendsCtrl', function ($scope, Friends) {
-
 
     $scope.remove = function (friend) {
       Friends.remove($scope.friends, friend);

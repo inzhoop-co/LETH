@@ -5,24 +5,25 @@
   </ion-nav-bar>
     <ion-content class="has-header has-tabs" padding="'true'">
       <div class="list card">
-      <div class="item item-divider">
-        <h2>{{item.Brand}}</h2>
-        <span class="badge badge-assertive">
-          {{item.Revenue}}
-        </span>
-        <p>{{item.Title}}</p>
-      </div>
-      <div class="item item-body">
-        <img class="full-image" src="{{item.ImageUrl}}">
-        <p>
-          {{item.Description}}
-        </p>
-        <div class="item">
-          <a href="#" class="subdued">1 <i class="subdued icon ion-thumbsup"></i> Like</a>
-          <a href="#" class="subdued">5 <i class="icon ion-ios-chatboxes"></i> Comments</a>
-          <a href="#" class="subdued">{{item.Revenue}} <i class="icon ion-ios-pricetags"></i></a>
+        <div class="item item-divider">
+          <h2>{{item.Brand}}</h2>
+          <span class="badge badge-assertive">{{item.Revenue}}</span>
+          <p>{{item.Title}}</p>
         </div>
+        <div class="item item-image">
+          <img class="full-image" src="{{item.ImageUrl}}">
+        </div>
+        <div class="item-body">
+          <p>
+            {{item.Description}}
+          </p>
+        </div>
+          <div class="item">
+            <a href="#" class="subdued">1 <i class="subdued icon ion-thumbsup"></i> Like</a>
+            <a href="#" class="subdued">5 <i class="icon ion-ios-chatboxes"></i> Comments</a>
+            <a href="#" class="subdued">{{item.Revenue}} <i class="icon ion-ios-pricetags"></i></a>
+          </div>
+
       </div>
-    </div>
     </ion-content>
 </ion-view>

@@ -1,4 +1,4 @@
-angular.module('weth.services', [])
+angular.module('leth.services', [])
   .factory('Friends', function ($rootScope, $http, $q) {
     // Might use a resource here that returns a JSON array
 
@@ -37,7 +37,7 @@ angular.module('weth.services', [])
     var apiURL = 'http://ipfs.io/ipfs';
 
     return {
-      all: function (itemHash) {
+      all: function (itemsHash) {
       },
       getFromIpfs: function (itemHash) {
         var q = $q.defer();
@@ -60,7 +60,7 @@ angular.module('weth.services', [])
       add: function(catalog,item, key) {
         if(Array.isArray(catalog))
           item.Key = key;
-          item.Revenue = 130;
+          item.Revenue = Math.floor((Math.random() * 300) + 1);
           catalog.push(item);
         return catalog;
       },

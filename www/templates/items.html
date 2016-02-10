@@ -9,17 +9,20 @@
           <i class="icon ion-card"></i>
           Balance:   <b>Ξ</b> {{balance}}
       </div>
-    </div>
-    <div class="list card">
-      <div class="list" ng-repeat="item in items track by $index ">
-      <a class="item item-icon-left" href="#/app/items/{{item.Key}}">
-        <h2>{{item.Brand}}</h2>
-        <p>{{item.Title}}
-          <span class="badge badge-assertive">{{item.Revenue}}</span>
-        </p>
-        <img src={{item.ImageUrl}}>        
-      </a>
-      </div>
+      <swipe-cards>
+        <swipe-card on-card-swipe="cardSwiped()" id="start-card">
+            <p>Swipe down to show a banner and earn a revenue!</p>
+        </swipe-card>
+        <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)">
+            <a class="item" href="#/app/items/{{card.Key}}">
+              <h2>{{card.Brand}}</h2>
+              <p >{{card.Title}}
+                <span class="badge badge-assertive">{{card.Revenue}}</span>
+              </p> 
+              <p><img src={{card.ThumbnailImageUrl}}></p>     
+            </a>
+        </swipe-card>
+      </swipe-cards>
     </div>
   </ion-content>
 </ion-view>
