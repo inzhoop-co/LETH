@@ -1,4 +1,4 @@
-<ion-view view-title="{{item.name}}">
+<ion-view view-title="{{item.Code}}">
   <ion-nav-bar class="bar-stable bar-assertive">
     <ion-nav-back-button>
     </ion-nav-back-button>
@@ -6,19 +6,22 @@
     <ion-content class="has-header has-tabs" padding="'true'">
       <div class="list card">
       <div class="item item-divider">
-        <span class="badge badge-assertive">180 wei</span>
-        <h2>Balenciaga Pencil</h2>
-        <p>Skirt Testurizzata</p>
+        <h2>{{item.Brand}}</h2>
+        <span class="badge badge-assertive">
+          {{item.Revenue}}
+        </span>
+        <p>{{item.Title}}</p>
       </div>
       <div class="item item-body">
-        <img class="full-image" src="http://cdn.yoox.biz/35/35276551OM_12_n_f.jpg">
+        <img class="full-image" src="{{item.ImageUrl}}">
         <p>
-          {{item.description}}
+          {{item.Description}}
         </p>
-        <p>
-          <a href="#" class="subdued">1 Like</a>
-          <a href="#" class="subdued">5 Comments</a>
-        </p>
+        <div class="item">
+          <a href="#" class="subdued">1 <i class="subdued icon ion-thumbsup"></i> Like</a>
+          <a href="#" class="subdued">5 <i class="icon ion-ios-chatboxes"></i> Comments</a>
+          <a href="#" class="subdued">{{item.Revenue}} <i class="icon ion-ios-pricetags"></i></a>
+        </div>
       </div>
     </div>
     </ion-content>

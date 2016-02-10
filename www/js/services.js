@@ -31,6 +31,46 @@ angular.module('weth.services', [])
       }
     };
   })
+  .factory('Items', function ($rootScope, $http, $q, $sanitize) {
+    // Might use a resource here that returns a JSON array
+
+    var apiURL = 'http://ipfs.io/ipfs';
+
+    return {
+      all: function (itemHash) {
+      },
+      getFromIpfs: function (itemHash) {
+        var q = $q.defer();
+        $http({
+          method: 'GET',
+          url: apiURL+'/'+itemHash
+        }).then(function(response) {
+          q.resolve(response.data.Item);
+        }, function(response) {
+          q.reject(response);
+        });
+        return q.promise;
+      },
+      get: function(catalog, key) {
+        var obj = catalog.filter(function (val) {
+          return val.Key === key;
+        });
+        return obj[0];
+      },
+      add: function(catalog,item, key) {
+        if(Array.isArray(catalog))
+          item.Key = key;
+          item.Revenue = 130;
+          catalog.push(item);
+        return catalog;
+      },
+      remove: function(catalog, item) {
+        catalog.pop(item);
+        return catalog;
+      }
+    };
+  })
+
   .service('AppService', function ($rootScope, $q) {
     return {
       setWeb3Provider: function (keys) {

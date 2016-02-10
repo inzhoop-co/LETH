@@ -1,6 +1,6 @@
 angular.module('weth.controllers', [])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, AppService, $q, PasswordPopup, Transactions, Friends) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, AppService, $q, PasswordPopup, Transactions, Friends, Items) {
 
     window.refresh = function () {
       $scope.balance = AppService.balance();
@@ -75,7 +75,6 @@ angular.module('weth.controllers', [])
       });
     };
     var loadFriends = function(friendsHash){
-
       angular.forEach(friendsHash, function (key, value) {
         Friends.getFromIpfs(key).then(function (response) {
           Friends.add($scope.friends, response[0], key);
@@ -83,9 +82,16 @@ angular.module('weth.controllers', [])
           console.log(err);
         })
       });
+    }
 
-
-
+    var loadItems = function(itemsHash){
+      angular.forEach(itemsHash, function (key, value) {
+        Items.getFromIpfs(key).then(function (response) {
+          Items.add($scope.items, response, key);
+        }, function (err) {
+          console.log(err);
+        })
+      });
     }
 
     $scope.scanTo = function () {
@@ -106,29 +112,39 @@ angular.module('weth.controllers', [])
 
     $scope.friends = [];
 
-    /*********IPFS********/
-    if (typeof localStorage.ipfsFriends == 'undefined') {
+    $scope.items = [];
 
+    /*********FRIENDS ********/
+    if (typeof localStorage.ipfsFriends == 'undefined') {
       $scope.ipfsFriends = ["QmdQxP4dBKsAgZdfqH8jgX1BvhDuu742qZcgDYaCQYS13H", "QmNuBdR2D5osrPT4NgBDSvwpEo7dpR6N8gxVzhvMGNPw2S"];
       localStorage.ipfsFriends = JSON.stringify($scope.ipfsFriends);
-
     }
 
-    /*********ALL********/
     if (typeof localStorage.Friends == 'undefined') {
-
       /*for testing purpose only*/
       var friendsHash = JSON.parse(localStorage.ipfsFriends);
       loadFriends(friendsHash);
-
-
     } else {
-
       $scope.friends = JSON.parse(localStorage.Friends);
+    }
+    /*********FRIENDS ********/
 
+    /*********ITEMS ********/
+    if (typeof localStorage.ipfsItems == 'undefined') {
+      $scope.ipfsItems = ["QmUFG564DSjsmMq4Uzaj4Vawzb3MK47LR8MVEYLdpQgj4J", 
+                          "QmZ1ksqzFhG8MqJDnqBtbjuLWCEEcKeeW6VHzDFx7p4QkW", 
+                          "QmeEuogUGXZGN69J6vfCiM3rFNZrFUsrhn3MSvC7pbqQmN"];
+      localStorage.ipfsItems = JSON.stringify($scope.ipfsItems);
     }
 
-    $scope.items = [];
+    if (typeof localStorage.Items == 'undefined') {
+      var itemsHash = JSON.parse(localStorage.ipfsItems);
+      loadItems(itemsHash);
+    } else {
+      $scope.items = JSON.parse(localStorage.Items);
+    }
+
+    /*********ITEMS ********/
 
     $scope.openLoginModal = function () {
       loginModal.show();
@@ -166,6 +182,7 @@ angular.module('weth.controllers', [])
       localStorage.HasLogged = JSON.stringify(true);
       localStorage.Transactions = JSON.stringify({});
       localStorage.Friends = JSON.stringify($scope.friends);
+      localStorage.Items = JSON.stringify($scope.items);
 
       loginModal.remove();
       $scope.hasLogged = true;
@@ -199,16 +216,10 @@ angular.module('weth.controllers', [])
     }
 
     $scope.saveAddr = function(name,comment,addr){
-
       var friend = {"addr": addr, "comment": comment, "name": name};
-
       $scope.friends.push(friend);
-
       localStorage.Friends = JSON.stringify($scope.friends);
-
       saveAddressModal.remove();
-
-
     }
     //temp
     $scope.transactions = Transactions.all();
@@ -241,7 +252,6 @@ angular.module('weth.controllers', [])
       AppService.setWeb3Provider(global_keystore);
 
       $scope.qrcodeString = AppService.account();
-
 
       refresh();
     }
@@ -403,13 +413,12 @@ angular.module('weth.controllers', [])
   })
 
 
-  .controller('ItemsCtrl', function ($scope) {
-
+  .controller('ItemsCtrl', function ($scope, Items) {
 
   })
 
-  .controller('ItemCtrl', function ($scope, $stateParams) {
-    
+  .controller('ItemCtrl', function ($scope, $stateParams, Items) {
+    $scope.item = Items.get($scope.items, $stateParams.Item);
     
   })
 

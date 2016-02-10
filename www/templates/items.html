@@ -7,19 +7,20 @@
     <div class="list card">
       <div class="item item-divider">
           <i class="icon ion-card"></i>
-          Your Balance <b>Ξ</b> {{balance}}
+          Balance:   <b>Ξ</b> {{balance}}
       </div>
     </div>
-    <ion-list class="list card">
-      <div class="list">
-      <a class="item item-icon-left" href="#/app/items/{{item}}">
-        <h2>Balenciaga Pencil</h2>
-        <p>Skirt Testurizzata</p>
-        <img src="http://cdn.yoox.biz/35/35276551OM_8_n_f.jpg">
-        <span class="badge badge-assertive">180 wei</span>
+    <div class="list card">
+      <div class="list" ng-repeat="item in items track by $index ">
+      <a class="item item-icon-left" href="#/app/items/{{item.Key}}">
+        <h2>{{item.Brand}}</h2>
+        <p>{{item.Title}}
+          <span class="badge badge-assertive">{{item.Revenue}}</span>
+        </p>
+        <img src={{item.ImageUrl}}>        
       </a>
+      </div>
     </div>
-    </ion-list>
   </ion-content>
 </ion-view>
 

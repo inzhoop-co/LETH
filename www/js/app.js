@@ -5,7 +5,7 @@ if (typeof localStorage.NodeHost == 'undefined') {
   localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
 }
 
-angular.module('weth', ['ionic', 'ionic.service.core', 'ngCordova', 'ja.qr', 'weth.controllers', 'weth.services'])
+angular.module('weth', ['ionic', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'weth.controllers', 'weth.services'])
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $localstorage) {
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
