@@ -7,28 +7,32 @@
         "files": {}
     },
     "installed_plugins": {
-        "com.telerik.plugins.wkwebview": {
-            "WKWEBVIEW_SERVER_PORT": "12344",
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-        "cordova-plugin-contacts": {
+        "cordova-plugin-console": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-        "cordova-plugin-dialogs": {
+        "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-        "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "cordova-plugin-webserver": {
+        "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-        "phonegap-plugin-barcodescanner": {
+        "com.telerik.plugins.wkwebview": {
+            "WKWEBVIEW_SERVER_PORT": "12344",
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-webserver": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        }
+    }
 }
