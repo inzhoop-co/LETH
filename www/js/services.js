@@ -130,11 +130,7 @@ angular.module('leth.services', [])
         web3.shh.post(message);
       },
       sendTransaction: function (from, to, value, gasPrice, gas) {
-
         return $q(function (resolve, reject) {
-
-          //bruttissimo
-
           try {
             web3.eth.sendTransaction({
               from: from,
@@ -195,8 +191,6 @@ angular.module('leth.services', [])
 
   })
   .factory('Transactions', function () {
-    // Might use a resource here that returns a JSON array
-
     var transactions;
 
     if (localStorage.Transactions != undefined) {

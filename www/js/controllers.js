@@ -43,8 +43,8 @@ angular.module('leth.controllers', [])
     var saveAddressModal;
     var password;
     var code;
-    var createLoginModal = function () {
 
+    var createLoginModal = function () {
       $ionicModal.fromTemplateUrl('templates/login.html', {
         scope: $scope,
         animation: 'slide-in-up'
@@ -61,7 +61,7 @@ angular.module('leth.controllers', [])
         codeModal = modal;
         codeModal.show();
       });
-    }
+    };
     var createSaveAddressModal = function(address) {
       $ionicModal.fromTemplateUrl('templates/addFriend.html', {
         scope: $scope,
@@ -82,7 +82,7 @@ angular.module('leth.controllers', [])
           console.log(err);
         })
       });
-    }
+    };
 
     $scope.scanTo = function () {
       $cordovaBarcodeScanner
@@ -101,7 +101,6 @@ angular.module('leth.controllers', [])
     $scope.hasLogged = false;
 
     $scope.friends = [];
-
     /*********FRIENDS ********/
     if (typeof localStorage.ipfsFriends == 'undefined') {
       $scope.ipfsFriends = ["QmdQxP4dBKsAgZdfqH8jgX1BvhDuu742qZcgDYaCQYS13H", "QmNuBdR2D5osrPT4NgBDSvwpEo7dpR6N8gxVzhvMGNPw2S"];
@@ -253,7 +252,7 @@ angular.module('leth.controllers', [])
 
       refresh();
     }
-  })
+  }) //fine AppCtrl
 
   .controller('WalletCtrl', function ($scope, $stateParams, $ionicModal, $state, $ionicPopup, $cordovaBarcodeScanner, AppService, Transactions) {
 
