@@ -3,26 +3,33 @@
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-content class="has-header has-tabs" padding="'true'">
-  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+  <!--ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher-->
     <div class="list card">
       <div class="item item-divider">
           <i class="icon ion-card"></i>
           Balance:   <b>Ξ</b> {{balance}}
       </div>
+      <div>
       <swipe-cards>
-        <swipe-card on-card-swipe="cardSwiped()" id="start-card">
-            <p>Swipe down to show a banner and earn a revenue!</p>
-        </swipe-card>
         <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)">
-            <a class="item" href="#/app/items/{{card.Key}}">
-              <h2>{{card.Brand}}</h2>
-              <p >{{card.Title}}
-                <span class="badge badge-assertive">{{card.Revenue}}</span>
-              </p> 
-              <p><img src={{card.ThumbnailImageUrl}}></p>     
-            </a>
+            <!--<a class="item" href="#/app/items/{{card.Key}}">-->
+              <h3>{{card.Title}}</h3>
+              <p>{{card.Abstract}}</p> 
+              <p><img class="full-image" src={{card.Logo}}>   
+                <span class="badge badge-assertive">Earn {{card.Revenue}} wei reading the news</span>
+              </p>
+            <!--</a>-->
+            <div class="button-bar">
+              <a class="button button-clear button-positive" href="#/app/items/{{card.Key}}"><i class="ion-ios-pricetag"></i>  
+              Read & Earn</a>
+              <a class="icon button button-clear button-assertive"><i class="ion-arrow-graph-down-left"></i> Swipe down</a>
+          </div>
+        </swipe-card>
+        <swipe-card on-card-swipe="cardSwiped()" id="start-card">
+          <p>Swipe down to show a banner<br/>and earn a revenue!</p>          
         </swipe-card>
       </swipe-cards>
+      </div>
     </div>
   </ion-content>
 </ion-view>

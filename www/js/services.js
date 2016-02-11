@@ -45,7 +45,7 @@ angular.module('leth.services', [])
           method: 'GET',
           url: apiURL+'/'+itemHash
         }).then(function(response) {
-          q.resolve(response.data.Item);
+          q.resolve(response.data.News);
         }, function(response) {
           q.reject(response);
         });
@@ -58,10 +58,12 @@ angular.module('leth.services', [])
         return obj[0];
       },
       add: function(catalog,item, key) {
-        if(Array.isArray(catalog))
+        if(Array.isArray(catalog)){
           item.Key = key;
+          item.Logo = apiURL + "/" + item.Logo;
           item.Revenue = Math.floor((Math.random() * 300) + 1);
           catalog.push(item);
+          }
         return catalog;
       },
       remove: function(catalog, item) {

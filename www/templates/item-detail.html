@@ -1,4 +1,4 @@
-<ion-view view-title="{{item.Code}}">
+<ion-view view-title="News">
   <ion-nav-bar class="bar-stable bar-assertive">
     <ion-nav-back-button>
     </ion-nav-back-button>
@@ -6,17 +6,16 @@
     <ion-content class="has-header has-tabs" padding="'true'">
       <div class="list card">
         <div class="item item-divider">
-          <h2>{{item.Brand}}</h2>
-          <span class="badge badge-assertive">{{item.Revenue}}</span>
           <p>{{item.Title}}</p>
         </div>
         <div class="item item-image">
-          <img class="full-image" src="{{item.ImageUrl}}">
+          <img class="full-image" src="{{item.Logo}}">
         </div>
         <div class="item-body">
           <p>
-            {{item.Description}}
+            {{item.Content}}
           </p>
+          <span class="badge badge-positive">Your wallet will receive {{item.Revenue}} wei, thanks!</span>
         </div>
           <div class="item">
             <a href="#" class="subdued">1 <i class="subdued icon ion-thumbsup"></i> Like</a>

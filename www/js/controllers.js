@@ -116,7 +116,8 @@ angular.module('leth.controllers', [])
     }
     /*********FRIENDS ********/
 
-    
+    //QmTQmAEHDzAk9i4BBES1BBhTj1v9KmF8Vcngyns1cd1XpX
+
     $scope.items = [];
 
     var loadItems = function(itemsHash){
@@ -130,9 +131,7 @@ angular.module('leth.controllers', [])
     }
 
     if (typeof localStorage.ipfsItems == 'undefined') {
-      $scope.ipfsItems = ["QmUFG564DSjsmMq4Uzaj4Vawzb3MK47LR8MVEYLdpQgj4J", 
-                          "QmZ1ksqzFhG8MqJDnqBtbjuLWCEEcKeeW6VHzDFx7p4QkW", 
-                          "QmeEuogUGXZGN69J6vfCiM3rFNZrFUsrhn3MSvC7pbqQmN"];
+      $scope.ipfsItems = ["QmTQmAEHDzAk9i4BBES1BBhTj1v9KmF8Vcngyns1cd1XpX"];
       localStorage.ipfsItems = JSON.stringify($scope.ipfsItems);
     }
 
@@ -428,6 +427,9 @@ angular.module('leth.controllers', [])
       $scope.cards.push(angular.extend({}, newCard));
     }
 
+    $scope.accept = function(index) {
+        alert(index);
+    };
   })
 
   .controller('ItemCtrl', function ($scope, $stateParams, Items) {
