@@ -8,10 +8,10 @@
         <i class="icon ion-qr-scanner"></i>
         Your Address
       </div>
-      <div class="item text-center">
+      <div class="item text-center" ng-click="showAddress()">
         <qr text="qrcodeString" type-number="typeNumber" correction-level="correctionLevel" size="size" input-mode="inputMode" image="image"></qr>
         <p class="padding">
-          <a href="#" class="subdued" ng-click="showAddress()">{{qrcodeString}}</a>
+          <a href="#" class="subdued">{{qrcodeString}}</a>
         </p>
       </div>
 
@@ -20,9 +20,9 @@
           <i class="icon ion-ios-email"></i>
           Email
         </a>
-        <a class="tab-item" href="#" ng-click="shareAddr()">
-          <i class="icon ion-share"></i>
-          Share
+        <a class="tab-item" href="#" ng-click="copyAddr()">
+          <i class="icon ion-clipboard"></i>
+          Copy
         </a>
       </div>
     </div>

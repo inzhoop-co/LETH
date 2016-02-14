@@ -30,7 +30,7 @@ angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.
 
     });
   })
-  /* block scroll
+  /*
   .directive('noScroll', function($document) {
   return {
     restrict: 'A',

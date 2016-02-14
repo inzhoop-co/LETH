@@ -12,9 +12,7 @@
           <img class="full-image" src="{{item.Logo}}">
         </div>
         <div class="item-body">
-          <p>
-            {{item.Content}}
-          </p>
+          <p ng-bind-html="contentText"></p>
           <span class="badge badge-positive">Your wallet will receive {{item.Revenue}} wei, thanks!</span>
         </div>
           <div class="item">

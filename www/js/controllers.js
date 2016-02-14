@@ -346,27 +346,58 @@ angular.module('leth.controllers', [])
 
   })
 
-  .controller('AddressCtrl', function ($scope, AppService, $ionicPopup) {
+  .controller('AddressCtrl', function ($scope, AppService, $ionicPopup, $cordovaEmailComposer, $cordovaClipboard) {
     $scope.size = 250;
     $scope.correctionLevel = 'H';
     $scope.typeNumber = 6;
     $scope.inputMode = '';
     $scope.image = true;
 
+
     $scope.showAddress = function () {
-      var alertPopup = $ionicPopup.alert({
-        title: 'Wallet Address',
-        template: $scope.qrcodeString
-      });
+      alert($scope.qrcodeString);
 
-      alertPopup.then();
+      //var alertPopup = $ionicPopup.alert({
+      //  title: 'Wallet Address',
+      //  template: $scope.qrcodeString
+      //});
+
+      //alertPopup.then();
     };
 
-    $scope.shareByEmail = function () {
-      window.location.href = "mailto:?subject=Leth - Richiesta di Pagamento&body=Inviami un pagamento a questo indirizzo: " + $scope.qrcodeString;
-    };
+     $scope.shareByEmail = function(){
+      $cordovaEmailComposer.isAvailable().then(function() {
+         // is available
+       }, function () {
+         // not available
+         console.log("cordovaEmailComposer not available");
+       });
 
+        window.plugin.email.open({
+            to:          [""], // email addresses for TO field
+            cc:          Array, // email addresses for CC field
+            bcc:         Array, // email addresses for BCC field
+            attachments: '', // file paths or base64 data streams
+            subject:    "Please Pay me", // subject of the email
+            body:       'Please send me ETH to this Wallet Address: </br><b>' +  $scope.qrcodeString + '</b>', // email body (for HTML, set isHtml to true)
+            isHtml:    true, // indicats if the body is HTML or plain text
+        }, function () {
+            console.log('email view dismissed');
+        },
+        this);  
+     }
 
+      $scope.copyAddr = function(){
+        $cordovaClipboard
+        .copy($scope.qrcodeString)
+        .then(function () {
+          // success
+          alert('Address in clipboard');
+        }, function () {
+          // error
+          console.log('Copy error');
+        });
+      }
   })
 
   .controller('SettingsCtrl', function ($scope, $ionicPopup, AppService) {
@@ -434,6 +465,7 @@ angular.module('leth.controllers', [])
 
   .controller('ItemCtrl', function ($scope, $stateParams, Items) {
     $scope.item = Items.get($scope.items, $stateParams.Item);
+    $scope.contentText = $scope.item.Content;
     
   })
 
@@ -442,6 +474,7 @@ angular.module('leth.controllers', [])
     $scope.remove = function (friend) {
       Friends.remove($scope.friends, friend);
       localStorage.Friends = JSON.stringify($scope.friends);
+
 
     };
 
@@ -453,7 +486,6 @@ angular.module('leth.controllers', [])
   })
 
   .controller('FriendCtrl', function ($scope, $stateParams) {
-    //ToDo: per il momento va bene cosi bisogna creare un servizio per passare lo scope tra un controller ed un altro
     $scope.friend = JSON.parse($stateParams.Friend);
     
      $scope.sendMessage = function () {

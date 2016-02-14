@@ -25,15 +25,14 @@ angular.module('leth.services', [])
           addressbook.push(user);
         return addressbook;
       },
-      remove: function(addressbook, user) {
-        addressbook.pop(user);
+      remove: function(addressbook, index) {
+        addressbook.splice(index,1);
+        //addressbook.pop(user);
         return addressbook;
       }
     };
   })
   .factory('Items', function ($rootScope, $http, $q, $sanitize) {
-    // Might use a resource here that returns a JSON array
-
     var apiURL = 'http://ipfs.io/ipfs';
 
     return {
