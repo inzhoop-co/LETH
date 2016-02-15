@@ -40,6 +40,12 @@
         },
         "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "de.appplant.cordova.plugin.email-composer": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "com.verso.cordova.clipboard": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },
     "dependent_plugins": {}
