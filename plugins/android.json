@@ -33,5 +33,9 @@
             "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },
-    "dependent_plugins": {}
+     "dependent_plugins": {
+        "cordova-plugin-webserver": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        }
+    }
 }
