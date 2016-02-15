@@ -44,6 +44,13 @@ NSString* appDataFolder;
     // Note: the embedded webserver is still needed for iOS 9. It's not needed to load index.html,
     //       but we need it to ajax-load files (file:// protocol has no origin, leading to CORS issues).
     NSString *directoryPath = myMainViewController.wwwFolderName;
+
+    // don't restart the webserver if we don't have to (fi. after a crash, see #223)
+    if (_webServer != nil && [_webServer isRunning]) {
+        [myMainViewController setServerPort:_webServer.port];
+        return;
+    }
+
     _webServer = [[GCDWebServer alloc] init];
     _webServerOptions = [NSMutableDictionary dictionary];
 
@@ -53,8 +60,6 @@ NSString* appDataFolder;
                            indexFilename:nil
                                 cacheAge:30
                       allowRangeRequests:YES];
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:ServerCreatedNotificationName object: @[myMainViewController, _webServer]];
 
     [self addHandlerForPath:@"/Library/"];
     [self addHandlerForPath:@"/Documents/"];
@@ -85,7 +90,9 @@ NSString* appDataFolder;
                            return nil;
                        }
                          
-                       return [GCDWebServerFileResponse responseWithFile:fileLocation byteRange:request.byteRange];
+                       GCDWebServerResponse* response = [GCDWebServerFileResponse responseWithFile:fileLocation byteRange:request.byteRange];
+                       [response setValue:@"bytes" forAdditionalHeader:@"Accept-Ranges"];
+                       return response;
                      }
    ];
 }
@@ -125,6 +132,7 @@ NSString* appDataFolder;
       httpPort = [[self.viewController.settings objectForKey:@"wkwebviewpluginembeddedserverport"] intValue];
     }
 
+    _webServer.delegate = (id<GCDWebServerDelegate>)self;
     do {
         [_webServerOptions setObject:[NSNumber numberWithInteger:httpPort++]
                               forKey:GCDWebServerOption_Port];
@@ -136,6 +144,12 @@ NSString* appDataFolder;
         [GCDWebServer setLogLevel:kGCDWebServerLoggingLevel_Warning];
         NSLog(@"Started http daemon: %@ ", _webServer.serverURL);
     }
+}
+
+//MARK:GCDWebServerDelegate
+- (void)webServerDidStart:(GCDWebServer*)server {
+    [NSNotificationCenter.defaultCenter postNotificationName:ServerCreatedNotificationName
+                                                      object: @[self.viewController, _webServer]];
 }
 
 @end

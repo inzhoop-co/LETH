@@ -10,6 +10,7 @@
     <content src="index.html" />
     <access origin="*" subdomains="true"/>
     <allow-navigation href="*" />
+	<allow-intent href="*" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />

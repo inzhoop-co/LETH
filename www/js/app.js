@@ -133,6 +133,9 @@ angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/items');
   })
+  .config(function($ionicConfigProvider) {
+    $ionicConfigProvider.tabs.position('bottom');
+	})
   .config(function ($httpProvider) {
     $httpProvider.interceptors.push(function ($rootScope) {
       return {
