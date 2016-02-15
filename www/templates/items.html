@@ -2,13 +2,12 @@
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
-  <ion-content class="has-header has-tabs" padding="'true'" >
+  <ion-content class="has-header has-tabs"  >
   <!--ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher-->
+    <div class="item item-divider" ng-click="refresh()">
+        <b>Ξ {{balance}}</b>
+    </div>
     <div class="list card">
-      <div class="item item-divider" ng-click="refresh()">
-          <b>Ξ {{balance}}</b>
-      </div>
-      <div>
         <swipe-cards>
           <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)">
                 <h3>{{card.Title}}</h3>
@@ -27,7 +26,6 @@
           </swipe-card>
         </swipe-cards>
       </div>
-    </div>
   </ion-content>
 </ion-view>
 

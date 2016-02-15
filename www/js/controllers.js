@@ -344,6 +344,9 @@ angular.module('leth.controllers', [])
       }
     }
 
+    $scope.clearAddrTo = function(){
+      $scope.fromAddressBook = false;
+    }
   })
 
   .controller('AddressCtrl', function ($scope, AppService, $ionicPopup, $cordovaEmailComposer, $cordovaClipboard) {
