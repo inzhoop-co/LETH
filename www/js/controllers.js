@@ -403,7 +403,7 @@ angular.module('leth.controllers', [])
       }
   })
 
-  .controller('SettingsCtrl', function ($scope, $ionicPopup, AppService) {
+  .controller('SettingsCtrl', function ($scope, $ionicPopup, $cordovaEmailComposer, $cordovaFile, AppService) {
 
     $scope.addrHost = localStorage.NodeHost;
 
@@ -418,6 +418,37 @@ angular.module('leth.controllers', [])
       AppService.setWeb3Provider(global_keystore);
       localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
       refresh();
+    };
+
+    $scope.backupWallet = function () {
+      //backup wallet to email
+      $cordovaFile.writeFile(cordova.file.dataDirectory,
+                             "keystore.json",
+                             JSON.stringify({data: global_keystore.serialize()}),
+                             true)
+        .then(function (success) {
+          $cordovaEmailComposer.isAvailable().then(function() {
+            var emailOpts = {
+              to: [''],
+              attachments: ['' +
+                            cordova.file.dataDirectory.replace('file://','') + "keystore.json"],
+              subject: 'Backup LETH Wallet',
+              body: 'A LETH backup wallet is attached',
+              isHtml: false
+            };
+
+            $cordovaEmailComposer.open(emailOpts).then(null, function () {
+              // user cancelled email
+            });
+
+            return;
+          }, function (error) {
+            return;
+          });
+        }, function () {
+          // not available
+        });
+
     };
 
     $scope.editHost = function (addr) {
@@ -440,6 +471,22 @@ angular.module('leth.controllers', [])
         }
       });
     };
+    $scope.confirmBackup = function () {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Backup wallet',
+        template: 'Backup your wallet to email?'
+      });
+      confirmPopup.then(function (res) {
+        if (res) {
+          $scope.backupWallet();
+          console.log('Backup wallet');
+          refresh();
+        } else {
+          console.log('Do not backup wallet');
+        }
+      });
+    };
+
   })
 
 

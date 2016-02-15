@@ -31,9 +31,12 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },
-     "dependent_plugins": {
+    "dependent_plugins": {
         "cordova-plugin-webserver": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         }
