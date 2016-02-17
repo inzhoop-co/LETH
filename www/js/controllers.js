@@ -1,6 +1,6 @@
 angular.module('leth.controllers', [])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, AppService, $q, PasswordPopup, Transactions, Friends, Items) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
 
     window.refresh = function () {
       $scope.balance = AppService.balance();
@@ -88,8 +88,6 @@ angular.module('leth.controllers', [])
       $cordovaBarcodeScanner
         .scan()
         .then(function (barcodeData) {
-          // Success! Barcode data is here
-          //Try to Validate before put in field
           $state.go('app.wallet', {addr: barcodeData.text});
           console.log('Success! ' + barcodeData.text);
         }, function (error) {
@@ -99,7 +97,7 @@ angular.module('leth.controllers', [])
     };
 
     $scope.hasLogged = false;
-
+  
     $scope.friends = [];
     /*********FRIENDS ********/
     if (typeof localStorage.ipfsFriends == 'undefined') {
@@ -116,8 +114,6 @@ angular.module('leth.controllers', [])
     }
     /*********FRIENDS ********/
 
-    //QmTQmAEHDzAk9i4BBES1BBhTj1v9KmF8Vcngyns1cd1XpX
-
     $scope.items = [];
 
     var loadItems = function(itemsHash){
@@ -131,7 +127,9 @@ angular.module('leth.controllers', [])
     }
 
     if (typeof localStorage.ipfsItems == 'undefined') {
-      $scope.ipfsItems = ["QmTQmAEHDzAk9i4BBES1BBhTj1v9KmF8Vcngyns1cd1XpX"];
+      $scope.ipfsItems = ["QmeUm18ySxXdDZQK18kYRZnGR6R4hd2XjTXrqFZQHcWwsu"];
+      //QmTQmAEHDzAk9i4BBES1BBhTj1v9KmF8Vcngyns1cd1XpX
+      //QmeUm18ySxXdDZQK18kYRZnGR6R4hd2XjTXrqFZQHcWwsu
       localStorage.ipfsItems = JSON.stringify($scope.ipfsItems);
     }
 
@@ -141,6 +139,14 @@ angular.module('leth.controllers', [])
     } else {
       $scope.items = JSON.parse(localStorage.Items);
     }
+
+    // NEWS
+    $scope.infoNews = [];
+    $scope.newinfo = [];
+    FeedService.GetFeed().then(function(infoNews){
+      $scope.infoNews = infoNews;
+    });
+    //
 
     $scope.openLoginModal = function () {
       loginModal.show();
@@ -242,13 +248,9 @@ angular.module('leth.controllers', [])
       $scope.transactions = JSON.parse(localStorage.Transactions);
 
       global_keystore = new lightwallet.keystore.deserialize(ls.data);
-
       global_keystore.passwordProvider = customPasswordProvider;
-
       AppService.setWeb3Provider(global_keystore);
-
       $scope.qrcodeString = AppService.account();
-
       refresh();
     }
   }) //fine AppCtrl
@@ -435,7 +437,7 @@ angular.module('leth.controllers', [])
                             cordova.file.dataDirectory.replace('file://','') + "keystore.json"],
               subject: 'Backup LETH Wallet',
               body: 'A LETH backup wallet is attached.<br>powerd by Ethereum from <b>Inzhoop</b>',
-              isHtml: false
+              isHtml: true
             };
 
             $cordovaEmailComposer.open(emailOpts).then(null, function () {
@@ -490,34 +492,74 @@ angular.module('leth.controllers', [])
 
   })
 
+  .controller('ItemsCtrl', function ($scope,  $state, Items, $ionicSwipeCardDelegate, $timeout, FeedService) {
+    $scope.doRefresh = function() {
+      if($scope.newinfo.length > 0){
+        $scope.infoNews = $scope.newinfo.concat($scope.infoNews);
+          
+        //Stop the ion-refresher from spinning
+        $scope.$broadcast('scroll.refreshComplete');
+        
+        $scope.newinfo = [];
+      } else {
+        FeedService.GetNew().then(function(infoNews){
+          $scope.infoNews = infoNews.concat($scope.infoNews);
+          
+          //Stop the ion-refresher from spinning
+          $scope.$broadcast('scroll.refreshComplete');
+        });
+      }
+    };
+    
+    $scope.loadMore = function(){
+      FeedService.GetOld().then(function(items) {
+        $scope.infoNews = $scope.infoNews.concat(items);
+      
+        $scope.$broadcast('scroll.infiniteScrollComplete');
+      });
+    };
+     var CheckNewInfo = function(){
+      $timeout(function(){
+        FeedService.GetNew().then(function(infoNews){
+          $scope.newinfo = infoNews.concat($scope.newinfo);
+        
+          CheckNewInfo();
+        });
+      },100000);
+     }
+    
+    CheckNewInfo();
 
-  .controller('ItemsCtrl', function ($scope, Items, $ionicSwipeCardDelegate) {
-
+    $scope.readNews = function(index){
+      //get bonus if exist ... later
+      //FeedService.GetBonus();
+      $state.go('app.detail',{Item: index});
+    };
+    $scope.remove = function (info) {
+      FeedService.remove($scope.infoNews, info);
+    };
     $scope.cards = Array.prototype.slice.call($scope.items, 0, 0);
-
     $scope.cardSwiped = function(index) {
       $scope.addCard();
     };
-
     $scope.cardDestroyed = function(index) {
       $scope.cards.splice(index, 1);
     };
-
     $scope.addCard = function() {
       var newCard = $scope.items[Math.floor(Math.random() * $scope.items.length)];
       newCard.id = Math.random();
       $scope.cards.push(angular.extend({}, newCard));
     }
-
     $scope.accept = function(index) {
         alert(index);
     };
   })
 
-  .controller('ItemCtrl', function ($scope, $stateParams, Items) {
-    $scope.item = Items.get($scope.items, $stateParams.Item);
-    $scope.contentText = $scope.item.Content;
-    
+  .controller('ItemCtrl', function ($scope, $stateParams, FeedService, Items) {
+    if($stateParams.Card){
+      $scope.item =  Items.get($scope.items, $stateParams.Card);    
+     }else
+      $scope.item =  FeedService.get($scope.infoNews, $stateParams.Item);    
   })
 
   .controller('FriendsCtrl', function ($scope, Friends) {
@@ -525,8 +567,6 @@ angular.module('leth.controllers', [])
     $scope.remove = function (friend) {
       Friends.remove($scope.friends, friend);
       localStorage.Friends = JSON.stringify($scope.friends);
-
-
     };
 
     $scope.payFriends = function () {

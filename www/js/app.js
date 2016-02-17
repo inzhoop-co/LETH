@@ -5,6 +5,11 @@ if (typeof localStorage.NodeHost == 'undefined') {
   localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
 }
 angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services'])
+  .constant('FeedEndpoint', {
+    //url: 'http://localhost:8100/feed'
+    url: 'https://blog.ethereum.org/feed'
+
+  })
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $localstorage) {
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -104,7 +109,7 @@ angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.
         }
       })
       .state('app.detail', {
-        url: '/items/:Item',
+        url: '/items/:Item/:Card',
         views: {
           'menuContent': {
             templateUrl: 'templates/item-detail.html',

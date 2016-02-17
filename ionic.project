@@ -1,4 +1,10 @@
 {
   "name": "LETH",
-  "app_id": "com.inzhoop.leth"
+  "app_id": "com.inzhoop.leth",
+   "proxies": [
+    {
+      "path": "/feed",
+      "proxyUrl": "https://blog.ethereum.org/feed"
+    }
+  ]
 }
