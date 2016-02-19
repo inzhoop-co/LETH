@@ -7,7 +7,8 @@ if (typeof localStorage.NodeHost == 'undefined') {
 angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services'])
   .constant('FeedEndpoint', {
     //url: 'http://localhost:8100/feed'
-    url: 'https://blog.ethereum.org/feed'
+    //url: 'https://blog.ethereum.org/feed'
+    url: 'http://us11.campaign-archive1.com/feed'
 
   })
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $localstorage) {

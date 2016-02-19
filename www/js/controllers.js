@@ -528,7 +528,7 @@ angular.module('leth.controllers', [])
       },100000);
      }
     
-    CheckNewInfo();
+    //CheckNewInfo();
 
     $scope.readNews = function(index){
       //get bonus if exist ... later

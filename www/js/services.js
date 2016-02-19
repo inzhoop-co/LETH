@@ -77,7 +77,7 @@ angular.module('leth.services', [])
     
     return {
       GetFeed: function(){
-        return $http.get(BASE_URL+'?results=10').then(function(response){
+        return $http.get(BASE_URL+'?u=947c9b18fc27e0b00fc2ad055&id=257df01285').then(function(response){
           var x2js = new X2JS();
           var xmlText = response.data;
           var jsonObj = x2js.xml_str2json( xmlText );
@@ -86,22 +86,26 @@ angular.module('leth.services', [])
         });
       },
       GetNew: function(){
-        return $http.get(BASE_URL+'?results=2').then(function(response){
+        /*
+        return $http.get(BASE_URL+'?u=947c9b18fc27e0b00fc2ad055&id=257df01285').then(function(response){
           var x2js = new X2JS();
           var xmlText = response.data;
           var jsonObj = x2js.xml_str2json( xmlText );
           items = jsonObj; 
           return items.rss.channel.item;
         });
+        */
       },
       GetOld: function(){
-        return $http.get(BASE_URL+'?results=10').then(function(response){
+        /*
+        return $http.get(BASE_URL+'?u=947c9b18fc27e0b00fc2ad055&id=257df01285').then(function(response){
           var x2js = new X2JS();
           var xmlText = response.data;
           var jsonObj = x2js.xml_str2json( xmlText );
           items = jsonObj; 
-          return items.rss.channel.item;
+          return items.rss.channel.item;        
         });
+        */
       },
       GetBonus: function(item){
          return alert('Bonus - ' + item);
