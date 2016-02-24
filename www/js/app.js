@@ -142,7 +142,7 @@ angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.
   .config(function($ionicConfigProvider) {
     $ionicConfigProvider.tabs.position('bottom');
 	})
-  .config(function ($httpProvider) {
+  /*.config(function ($httpProvider) {
     $httpProvider.interceptors.push(function ($rootScope) {
       return {
         request: function (config) {
@@ -155,4 +155,4 @@ angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.
         }
       }
     })
-  });
+  })*/;

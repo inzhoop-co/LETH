@@ -86,7 +86,6 @@ angular.module('leth.services', [])
         });
       },
       GetNew: function(){
-        /*
         return $http.get(BASE_URL+'?u=947c9b18fc27e0b00fc2ad055&id=257df01285').then(function(response){
           var x2js = new X2JS();
           var xmlText = response.data;
@@ -94,10 +93,8 @@ angular.module('leth.services', [])
           items = jsonObj; 
           return items.rss.channel.item;
         });
-        */
       },
       GetOld: function(){
-        /*
         return $http.get(BASE_URL+'?u=947c9b18fc27e0b00fc2ad055&id=257df01285').then(function(response){
           var x2js = new X2JS();
           var xmlText = response.data;
@@ -105,7 +102,6 @@ angular.module('leth.services', [])
           items = jsonObj; 
           return items.rss.channel.item;        
         });
-        */
       },
       GetBonus: function(item){
          return alert('Bonus - ' + item);
