@@ -1,4 +1,4 @@
-# LETH (alfa release)
+# LΞTH (alfa release)
 The First mobile LigthWallet for Ξthereum
 
 # About
