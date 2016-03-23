@@ -4,13 +4,13 @@ web3 = new Web3();
 if (typeof localStorage.NodeHost == 'undefined') {
   localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
 }
-angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services'])
+angular.module('leth', ['ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services'])
   .constant('FeedEndpoint', {
     //url: 'http://localhost:8100/feed'
     //url: 'https://blog.ethereum.org/feed'
     url: 'http://us11.campaign-archive1.com/feed'
-
   })
+
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $localstorage) {
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -49,6 +49,21 @@ angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.
     }
   })
 */
+  .directive("templapp", function($compile){
+      //recupera quello che ti serve da un servizio angular
+
+      //definisciti lo scope
+
+      return{
+          link: function(scope, element){
+              var template = "<button ng-click='doSomething()'>{{label}}</button>";
+              var linkFn = $compile(template);
+              var content = linkFn(scope);
+              element.append(content);
+          }
+      }
+/**/
+  })
   .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
       .state('app', {
@@ -87,10 +102,29 @@ angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.
         url: '/about',
         views: {
           'menuContent': {
-            templateUrl: 'templates/about.html'
+            templateUrl: 'templates/about.html',
+            controller: "AboutCtrl"
           }
         }
       })
+      .state('app.appleth', {
+        url: '/appleth',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/appleth.html',
+            controller: "ApplethCtrl"
+          }
+        }
+      }) 
+      .state('app.appleth-run', {
+        url: '/appleth-run',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/appleth-run.html',
+            controller: "ApplethRunCtrl"
+          }
+        }
+      })      
       .state('app.address', {
         url: '/address',
         views: {
@@ -137,12 +171,12 @@ angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.
         }
       });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/items');
+    $urlRouterProvider.otherwise('/app/appleth');
   })
   .config(function($ionicConfigProvider) {
     $ionicConfigProvider.tabs.position('bottom');
 	})
-  /*.config(function ($httpProvider) {
+  .config(function ($httpProvider) {
     $httpProvider.interceptors.push(function ($rootScope) {
       return {
         request: function (config) {
@@ -155,4 +189,4 @@ angular.module('leth', ['ionic', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.
         }
       }
     })
-  })*/;
+  });

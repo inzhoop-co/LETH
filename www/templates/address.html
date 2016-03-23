@@ -5,7 +5,7 @@
   <ion-content class="has-header has-tabs" padding="'true'">
     <div class="list list-borderless">
       <div class="item item-divider">
-        <i class="icon ion-qr-scanner"></i>
+        <i class="icon ion-ios-barcode-outline"></i>
         Your Address
       </div>
       <div class="item text-center" ng-click="showAddress()">
@@ -24,10 +24,15 @@
           <i class="icon ion-ios-email-outline"></i>
           Email
         </a>
+        <a class="tab-item" href="#" ng-click="shareBySms()">
+          <i class="icon ion-ios-chatbubble-outline"></i>
+          Sms
+        </a>
         <a class="tab-item" href="#" ng-click="copyAddr()">
           <i class="icon ion-clipboard"></i>
           Copy
         </a>
+        
       </div>
     </div>
   </ion-content>

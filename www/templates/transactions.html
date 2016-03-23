@@ -11,7 +11,7 @@
         <i class="icon"></i>
         Transactions
       </div>
-      <h5 ng-show="transactions.length == 0">No saved transaction</h5>
+      <p ng-show="transactions.length == 0" align="center"><br/>No saved transaction</p>
       <ion-item class="item item-icon-left" ng-repeat="t in transactions">
         <!--ToDo: andrebbe gestito l'IN e l'OUT di Eth-->
         <i class="icon ion-arrow-up-a assertive"></i>

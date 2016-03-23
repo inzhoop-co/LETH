@@ -26,7 +26,7 @@
         <ion-tab title="Wallet" icon-off="ion-social-bitcoin-outline" icon-on="ion-social-bitcoin" href="#/app/wallet/">
         </ion-tab>
         <!-- Address Tab -->
-        <ion-tab title="address" icon-off="ion-ios-barcode-outline" icon-on="ion-ios-barcode" href="#/app/address">
+        <ion-tab title="Address" icon-off="ion-ios-barcode-outline" icon-on="ion-ios-barcode" href="#/app/address">
         </ion-tab>
       </ion-tabs>
 
@@ -42,7 +42,7 @@
     </ion-header-bar>
     <ion-content>
       <ion-list class="list card">
-        <ion-item class="item item-icon-left" menu-close href="#/app/items">
+        <ion-item class="item item-icon-left" menu-close href="#/app/appleth">
           <i class="icon ion-ios-home"></i>
           Home
         </ion-item>
@@ -53,6 +53,14 @@
         <ion-item class="item item-icon-left" menu-close ng-click="openChangeCodeModal()" ng-show="hasLogged">
           <i class="icon ion-lock-combination"></i>
           Change Pin
+        </ion-item>
+        <ion-item class="item item-icon-left" menu-close href="#/app/appleth">
+          <i class="icon ion-android-apps"></i>
+          AppLeth
+        </ion-item>        
+        <ion-item class="item item-icon-left" menu-close href="#/app/items">
+          <i class="icon ion-ios-lightbulb"></i>
+          News
         </ion-item>
         <ion-item class="item item-icon-left" menu-close href="#/app/settings">
           <i class="icon ion-ios-gear"></i>

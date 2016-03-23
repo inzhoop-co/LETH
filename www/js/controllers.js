@@ -1,7 +1,6 @@
 angular.module('leth.controllers', [])
 
   .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
-
     window.refresh = function () {
       $scope.balance = AppService.balance();
       $scope.account = AppService.account();
@@ -351,7 +350,7 @@ angular.module('leth.controllers', [])
     }
   })
 
-  .controller('AddressCtrl', function ($scope, AppService, $ionicPopup, $cordovaEmailComposer, $cordovaClipboard) {
+  .controller('AddressCtrl', function ($scope, AppService, $ionicPopup, $cordovaEmailComposer, $cordovaClipboard,$cordovaSms,$cordovaContacts) {
     $scope.size = 250;
     $scope.correctionLevel = 'H';
     $scope.typeNumber = 6;
@@ -361,7 +360,6 @@ angular.module('leth.controllers', [])
 
     $scope.showAddress = function () {
       alert($scope.qrcodeString);
-
       //var alertPopup = $ionicPopup.alert({
       //  title: 'Wallet Address',
       //  template: $scope.qrcodeString
@@ -370,7 +368,33 @@ angular.module('leth.controllers', [])
       //alertPopup.then();
     };
 
-     $scope.shareByEmail = function(){
+    $scope.shareBySms = function() {
+      var content = "My address is " + $scope.qrcodeString;
+      var phonenumber="";
+      $cordovaContacts.pickContact().then(function (contactPicked) {
+          phonenumber = contactPicked;
+      });
+
+      var options = {
+          replaceLineBreaks: false, // true to replace \n by a new line, false by default
+          android: {
+              intent: 'INTENT'  // send SMS with the native android SMS messaging
+              //intent: '' // send SMS without open any other app
+          }
+      };
+    
+      $cordovaSms
+      .send(phonenumber, content, options)
+      .then(function() {
+        // Success! SMS was sent
+        console.log("SMS to " + phonenumber + " with text :" + content + " sent.");
+      }, function(error) {
+        // An error occurred
+        console.log("ERROR sending SMS to " + phonenumber + " with text :" + content + " sent.");
+      });
+    }
+
+    $scope.shareByEmail = function(){
       $cordovaEmailComposer.isAvailable().then(function() {
          // is available
        }, function () {
@@ -424,9 +448,10 @@ angular.module('leth.controllers', [])
 
     $scope.backupWallet = function () {
       //backup wallet to email
+
       console.log(cordova.file.dataDirectory);
       $cordovaFile.writeFile(cordova.file.dataDirectory,
-                             "keystore.json",
+                             "leth_keystore.dat",
                              JSON.stringify(global_keystore.serialize()),
                              true)
         .then(function (success) {
@@ -434,7 +459,7 @@ angular.module('leth.controllers', [])
             var emailOpts = {
               to: [''],
               attachments: ['' +
-                            cordova.file.dataDirectory.replace('file://','') + "keystore.json"],
+                            cordova.file.dataDirectory.replace('file://','') + "keystore.dat"],
               subject: 'Backup LETH Wallet',
               body: 'A LETH backup wallet is attached.<br>powerd by Ethereum from <b>Inzhoop</b>',
               isHtml: true
@@ -604,4 +629,50 @@ angular.module('leth.controllers', [])
 
   .controller('TransactionCtrl', function ($scope) {
 
+  })
+
+  .controller('AboutCtrl', function ($scope, angularLoad) {      
+      var dyScript = "/js/contracts/ioTEnel.js";
+      angularLoad.loadScript(dyScript).then(function() {
+          // Script loaded succesfully.
+          //$scope.hello = (hello.greet());
+      }).catch(function() {
+          // There was some error loading the script. Meh
+          alert('non ok');
+      });
+  })
+
+  .controller('ApplethCtrl', function ($scope, angularLoad, FeedService, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http) {
+    $ionicSlideBoxDelegate.start();
+    $scope.nextSlide = function() {
+      $ionicSlideBoxDelegate.next();
+    };
+    $scope.prevSlide = function() {
+      $ionicSlideBoxDelegate.previous();
+    };
+
+    //maybe a list  from an API of dappleth Store: sample app
+    $http.get('js/contracts/helloInzhoop.html') 
+      .success(function(data){
+      $scope.appContainer = $sce.trustAsHtml(data);
+
+    })
+
+  })
+
+  .controller('ApplethRunCtrl', function ($scope, angularLoad, FeedService, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http) {
+    $scope.label = "start";
+    //load app selected
+    //setting contract jscript
+    var dyScript = "js/contracts/helloInzhoop.js"; //http://www.inzhoop.com/appleth/hello/helloInzhoop.js
+    //loading contract jscript
+    angularLoad.loadScript(dyScript).then(function() {
+      //loading template html to inject  
+      $http.get('js/contracts/helloRun.html') //cors to load from website
+        .success(function(data){
+        $scope.appContainer = $sce.trustAsHtml(data);
+      })
+    }).catch(function() {
+        console.log('ERROR :' + dyScript );
+    });
   });

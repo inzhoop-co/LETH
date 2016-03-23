@@ -29,3 +29,12 @@ var helloABI = [{
 
 var helloAdr = "0x211d6b541bb55b03f9bd79a5964b1469d7928343";
 var hello = web3.eth.contract(helloABI).at(helloAdr);
+
+function writeMessage()
+{
+    var m = hello.greet();
+    alert(m);
+    //how to inject html on angularjs view?
+    document.getElementById('message').innerHtml = m;
+
+}

@@ -1,29 +1,31 @@
 <ion-view view-title="Settings">
-
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-content>
-
 	<div class="list">
-		<div class="item item-button-right">
-		    Backup Wallet
-		    <button class="button button-clear" ng-click="confirmBackup()">
-		        <i class="icon ion-ios-cloud-upload"></i>
-		    </button>
-		</div>
-		<div class="item item-button-right">
-		    Import Wallet from backup
-		    <button class="button button-clear" ng-click="confirmImport()">
-		        <i class="icon ion-ios-cloud-download"></i>
-		    </button>
-		</div>
+		<h5>Host Provider Address (free to choose yours)</h5>
 		<div class="item item-input">
-			<p>Host:</p>
 		    <label class="item-input-wrapper"><input type="text" ng-model="addrHost" placeholder="type host address"></label>
 		    <button class="button button-clear" ng-click="editHost(addrHost)">
 		        <i class="icon ion-edit"></i>
 		    </button>
+		</div>
+		<h5>Security (backup your keystore)</h5>
+		<div class="item item-button-right">
+		    Backup Wallet
+		    <button class="button button-clear" ng-click="confirmBackup()">
+		        <i class="icon ion-ios-cloud-download"></i>
+		    </button>		    
+		</div>
+		<div class="item item-button-right">
+		    Import Wallet from backup
+		    <button class="button button-clear" ng-click="confirmImport()">
+		        <i class="icon ion-ios-cloud-upload"></i>
+		    </button>
+		    <!--button class="button button-clear" ng-click="openChooser()">
+			     <i class="icon ion-social-dropbox"></i>
+		    </button-->
 		</div>
 	</div>
   </ion-content>

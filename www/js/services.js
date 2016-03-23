@@ -71,7 +71,7 @@ angular.module('leth.services', [])
       }
     };
   })
-  .factory('FeedService', function($http, FeedEndpoint){
+  .factory('FeedService', function($http, FeedEndpoint, $q){
     var BASE_URL = FeedEndpoint.url; //"https://blog.ethereum.org/feed/";
     var items = [];
     
@@ -86,6 +86,7 @@ angular.module('leth.services', [])
         });
       },
       GetNew: function(){
+        /*
         return $http.get(BASE_URL+'?u=947c9b18fc27e0b00fc2ad055&id=257df01285').then(function(response){
           var x2js = new X2JS();
           var xmlText = response.data;
@@ -93,8 +94,10 @@ angular.module('leth.services', [])
           items = jsonObj; 
           return items.rss.channel.item;
         });
+        */
       },
       GetOld: function(){
+        /*
         return $http.get(BASE_URL+'?u=947c9b18fc27e0b00fc2ad055&id=257df01285').then(function(response){
           var x2js = new X2JS();
           var xmlText = response.data;
@@ -102,8 +105,9 @@ angular.module('leth.services', [])
           items = jsonObj; 
           return items.rss.channel.item;        
         });
+        */
       },
-      GetBonus: function(item){
+      GetBonus: function(item) {
          return alert('Bonus - ' + item);
       },
       get: function(catalog, index) {
@@ -112,6 +116,19 @@ angular.module('leth.services', [])
       remove: function(catalog, item) {
         catalog.pop(item);
         return catalog;
+      },
+      getApp: function(url){
+        var q = $q.defer();
+        $http({
+          method: 'GET',
+          url: 'js/contracts/appleth.html'
+        }).then(function(response) {
+          q.resolve(response.data);
+        }, function(response) {
+          q.reject(response);
+        });
+        return q.promise;
+
       }
     }
   })

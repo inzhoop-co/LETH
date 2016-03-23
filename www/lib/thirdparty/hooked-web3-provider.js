@@ -157,17 +157,17 @@ var factory = function factory(Web3) {
             // Update the transaction parameters.
             tx_params.nonce = Web3.prototype.toHex(final_nonce);
 
+
             // If our transaction signer does represent the address,
             // sign the transaction ourself and rewrite the payload.
             _this3.transaction_signer.signTransaction(tx_params, function (err, raw_tx) {
               if (err != null) {
                 return next(err);
               }
-
-              // Update caches. (moved after signTransaction success)
+              // Update caches.
               session_nonces[sender] = final_nonce + 1;
               _this3.global_nonces[sender] = final_nonce + 1;
-
+            
               payload.method = "eth_sendRawTransaction";
               payload.params = [raw_tx];
               return next();
