@@ -33,8 +33,6 @@ var hello = web3.eth.contract(helloABI).at(helloAdr);
 function writeMessage()
 {
     var m = hello.greet();
-    alert(m);
-    //how to inject html on angularjs view?
-    document.getElementById('message').innerHtml = m;
+    angular.element(document.querySelector('#message')).html(m);
 
 }

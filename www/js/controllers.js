@@ -666,6 +666,12 @@ angular.module('leth.controllers', [])
 
     })
 
+   $http.get(path + '3' + '/app.html') 
+      .success(function(data){
+      $scope.appContainer += $sce.trustAsHtml(data);
+
+    })
+
 
   })
 
