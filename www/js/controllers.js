@@ -642,7 +642,7 @@ angular.module('leth.controllers', [])
       });
   })
 
-  .controller('ApplethCtrl', function ($scope, angularLoad, FeedService, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http) {
+  .controller('ApplethCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http) {
     $ionicSlideBoxDelegate.start();
     $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
@@ -651,28 +651,42 @@ angular.module('leth.controllers', [])
       $ionicSlideBoxDelegate.previous();
     };
 
+    var path = DappPath.url;
     //maybe a list  from an API of dappleth Store: sample app
-    $http.get('js/contracts/helloInzhoop.html') 
+    $http.get(path + '1' + '/app.html') 
       .success(function(data){
       $scope.appContainer = $sce.trustAsHtml(data);
 
     })
 
+    //maybe a list  from an API of dappleth Store: sample app machine coffee
+    $http.get(path + '2' + '/app.html') 
+      .success(function(data){
+      $scope.appContainer += $sce.trustAsHtml(data);
+
+    })
+
+
   })
 
-  .controller('ApplethRunCtrl', function ($scope, angularLoad, FeedService, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http) {
-    $scope.label = "start";
-    //load app selected
-    //setting contract jscript
-    var dyScript = "js/contracts/helloInzhoop.js"; //http://www.inzhoop.com/appleth/hello/helloInzhoop.js
-    //loading contract jscript
-    angularLoad.loadScript(dyScript).then(function() {
+  .controller('ApplethRunCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams, $ocLazyLoad,$timeout) {
+      console.log("Param " + $stateParams.Id);
+
+      //load app selected
+      var id = $stateParams.Id;
+      var path = DappPath.url + id;
+
       //loading template html to inject  
-      $http.get('js/contracts/helloRun.html') //cors to load from website
+      $http.get(path + '/index.html') //cors to load from website
         .success(function(data){
-        $scope.appContainer = $sce.trustAsHtml(data);
+          $scope.appContainer = $sce.trustAsHtml(data);
+          //setting contract jscript
+          var script = path + "/index.js" ;
+
+          angularLoad.loadScript(script).then(function() {
+              console.log('loading ' + script);
+          }).catch(function() {
+                console.log('ERROR :' + script );
+            });
       })
-    }).catch(function() {
-        console.log('ERROR :' + dyScript );
-    });
   });

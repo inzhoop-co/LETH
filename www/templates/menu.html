@@ -1,7 +1,5 @@
 <ion-side-menus>
-
   <ion-side-menu-content>
-
     <ion-nav-bar class="bar-stable bar-assertive">
       <ion-nav-buttons side="right">
         <button class="button button-clear" ng-click="scanTo()">
@@ -12,9 +10,7 @@
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
       </ion-nav-buttons>
     </ion-nav-bar>
-
     <ion-nav-view name="menuContent" animation="slide-left-right">
-
       <ion-tabs class="tabs-striped tabs-color-assertive">
         <!-- Home Tab -->
         <ion-tab title="Home" icon-off="ion-ios-home-outline" icon-on="ion-ios-home" href="#/app/items">
@@ -29,14 +25,9 @@
         <ion-tab title="Address" icon-off="ion-ios-barcode-outline" icon-on="ion-ios-barcode" href="#/app/address">
         </ion-tab>
       </ion-tabs>
-
     </ion-nav-view>
-
   </ion-side-menu-content>
-
-
   <ion-side-menu side="left" id="sideMenu">
-
     <ion-header-bar class="bar-stable bar-assertive">
       <h1 class="title">Menu</h1>
     </ion-header-bar>
@@ -50,25 +41,25 @@
           <i class="icon ion-log-in"></i>
           Login
         </ion-item>
-        <ion-item class="item item-icon-left" menu-close ng-click="openChangeCodeModal()" ng-show="hasLogged">
-          <i class="icon ion-lock-combination"></i>
-          Change Pin
-        </ion-item>
         <ion-item class="item item-icon-left" menu-close href="#/app/appleth">
           <i class="icon ion-android-apps"></i>
-          AppLeth
+          ÐappLeth
         </ion-item>        
         <ion-item class="item item-icon-left" menu-close href="#/app/items">
           <i class="icon ion-ios-lightbulb"></i>
           News
         </ion-item>
-        <ion-item class="item item-icon-left" menu-close href="#/app/settings">
-          <i class="icon ion-ios-gear"></i>
-          Settings
-        </ion-item>
         <ion-item class="item item-icon-left" menu-close href="#/app/transactions">
           <i class="icon ion-arrow-graph-up-right"></i>
           Transactions
+        </ion-item>
+        <ion-item class="item item-icon-left" menu-close ng-click="openChangeCodeModal()" ng-show="hasLogged">
+          <i class="icon ion-lock-combination"></i>
+          Change Pin
+        </ion-item>
+        <ion-item class="item item-icon-left" menu-close href="#/app/settings">
+          <i class="icon ion-ios-gear"></i>
+          Settings
         </ion-item>
         <ion-item class="item item-icon-left" menu-close href="#/app/about">
           <i class="icon ion-ios-help"></i>
@@ -76,12 +67,5 @@
         </ion-item>
       </ion-list>
     </ion-content>
-
   </ion-side-menu>
-
-
 </ion-side-menus>
-
-
-
-

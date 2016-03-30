@@ -4,11 +4,14 @@ web3 = new Web3();
 if (typeof localStorage.NodeHost == 'undefined') {
   localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
 }
-angular.module('leth', ['ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services'])
+angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services'])
   .constant('FeedEndpoint', {
     //url: 'http://localhost:8100/feed'
     //url: 'https://blog.ethereum.org/feed'
     url: 'http://us11.campaign-archive1.com/feed'
+  })
+  .constant('DappPath',{
+    url : "http://www.inzhoop.com/appleth/dapp_" 
   })
 
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $localstorage) {
@@ -117,7 +120,7 @@ angular.module('leth', ['ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSan
         }
       }) 
       .state('app.appleth-run', {
-        url: '/appleth-run',
+        url: '/appleth-run/:Id',
         views: {
           'menuContent': {
             templateUrl: 'templates/appleth-run.html',
@@ -189,4 +192,9 @@ angular.module('leth', ['ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSan
         }
       }
     })
+
+     $httpProvider.defaults.useXDomain = true;
+      delete $httpProvider.defaults.headers.common['X-Requested-With'];
   });
+
+
