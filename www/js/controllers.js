@@ -651,7 +651,7 @@ angular.module('leth.controllers', [])
       $ionicSlideBoxDelegate.previous();
     };
 
-    var path = DappPath.url;
+    var path = DappPath.url + '/dapp_';
     var localpath = 'dappleths/dapp_';    //maybe a list  from an API of dappleth Store: sample app
     //path=localpath; //for development
     
@@ -688,7 +688,7 @@ angular.module('leth.controllers', [])
 
       //load app selected
       var id = $stateParams.Id;
-      var path = DappPath.url;
+      var path = DappPath.url + '/dapp_';
       var localpath = 'dappleths/dapp_'; 
       //path=localpath;
       //loading template html to inject  
