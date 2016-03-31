@@ -2,7 +2,7 @@ web3 = new Web3();
 if (typeof localStorage.NodeHost == 'undefined') {
   localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
 }
-angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services'])
+angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('FeedEndpoint', {
     url: '/feed'
   })
@@ -11,10 +11,20 @@ angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionic.contrib.ui
   })
   .constant('CountDapp',4)
 
-  .run(function ($ionicPlatform, $rootScope, $ionicLoading, $localstorage) {
+  .run(function ($ionicPlatform, $rootScope, $ionicLoading, $localstorage,$lockScreen) {
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
+	  $lockScreen.show({
+        code: JSON.parse(localStorage.AppCode).code,
+        onCorrect: function () {
+          console.log('correct!');
+        },
+        onWrong: function (attemptNumber) {
+          console.log(attemptNumber + ' wrong passcode attempt(s)');
+        },
+      });
+	  
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         cordova.plugins.Keyboard.disableScroll(true);

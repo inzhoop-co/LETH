@@ -1,0 +1,20 @@
+{
+  "parser": "babel-eslint",
+  "rules": {
+    "strict": 0,
+    "no-console": 0,
+    "indent": [2, 2],
+    "quotes": [2, "single"],
+    "linebreak-style": [2, "unix"],
+    "semi": [2, "always"],
+    "comma-dangle": [2, "always-multiline"]
+  },
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "globals": {
+    "angular": true
+  },
+  "extends": "eslint:recommended"
+}
