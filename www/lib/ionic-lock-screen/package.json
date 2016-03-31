@@ -1,0 +1,57 @@
+{
+  "name": "ionic-lock-screen",
+  "version": "1.0.0",
+  "description": "A pin code lock screen for ionic cordova mobile apps",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "lock",
+    "screen",
+    "pin",
+    "code",
+    "ionic",
+    "cordova",
+    "mobile",
+    "ios",
+    "android",
+    "app"
+  ],
+  "author": {
+    "name": "Alex Disler"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "babel": "5.5.8",
+    "gulp-babel": "5.1.0",
+    "gulp-concat": "^2.2.0",
+    "gulp-ng-annotate": "^0.3.3",
+    "gulp-plumber": "0.6.6",
+    "gulp": "3.9.0",
+    "gulp-uglify": "^1.0.1"
+  },
+  "gitHead": "2f52d4820664edc32f2de9fea57a12be07ca5eb5",
+  "_id": "ionic-lock-screen@1.0.0",
+  "_shasum": "79aeb78a779552c0ba69ed93b36665cba2bd61b0",
+  "_from": "ionic-lock-screen@latest",
+  "_npmVersion": "2.7.5",
+  "_nodeVersion": "0.10.33",
+  "_npmUser": {
+    "name": "alex101",
+    "email": "alex@binarypattern.com"
+  },
+  "maintainers": [
+    {
+      "name": "alex101",
+      "email": "alex@binarypattern.com"
+    }
+  ],
+  "dist": {
+    "shasum": "79aeb78a779552c0ba69ed93b36665cba2bd61b0",
+    "tarball": "https://registry.npmjs.org/ionic-lock-screen/-/ionic-lock-screen-1.0.0.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/ionic-lock-screen/-/ionic-lock-screen-1.0.0.tgz",
+  "readme": "ERROR: No README data found!"
+}
