@@ -651,10 +651,6 @@ angular.module('leth.controllers', [])
       $ionicSlideBoxDelegate.previous();
     };
 
-    $scope.refresh = function() {
-      alert('refresh');
-    }
-
     var path = DappPath.url + '/dapp_';
     var localpath = 'dappleths/dapp_';    //maybe a list  from an API of dappleth Store: sample app
     //path=localpath; //for development
@@ -698,7 +694,7 @@ angular.module('leth.controllers', [])
       });
 
       $scope.refresh = function() {
-        alert('refresh');
+        externalRefresh();
       }
 
 
