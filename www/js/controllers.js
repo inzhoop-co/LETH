@@ -652,7 +652,9 @@ angular.module('leth.controllers', [])
     };
 
     var path = DappPath.url;
-    //maybe a list  from an API of dappleth Store: sample app
+    var localpath = 'dappleths/dapp_';    //maybe a list  from an API of dappleth Store: sample app
+    //path=localpath; //for development
+    
     $http.get(path + '1' + '/app.html') 
       .success(function(data){
       $scope.appContainer = $sce.trustAsHtml(data);
@@ -672,6 +674,12 @@ angular.module('leth.controllers', [])
 
     })
 
+   $http.get(path + '4' + '/app.html') 
+      .success(function(data){
+      $scope.appContainer += $sce.trustAsHtml(data);
+
+    })
+
 
   })
 
@@ -680,14 +688,15 @@ angular.module('leth.controllers', [])
 
       //load app selected
       var id = $stateParams.Id;
-      var path = DappPath.url + id;
-
+      var path = DappPath.url;
+      var localpath = 'dappleths/dapp_'; 
+      //path=localpath;
       //loading template html to inject  
-      $http.get(path + '/index.html') //cors to load from website
+      $http.get(path + id + '/index.html') //cors to load from website
         .success(function(data){
           $scope.appContainer = $sce.trustAsHtml(data);
           //setting contract jscript
-          var script = path + "/index.js" ;
+          var script = path + id +  "/index.js" ;
 
           angularLoad.loadScript(script).then(function() {
               console.log('loading ' + script);
