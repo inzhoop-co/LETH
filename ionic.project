@@ -1,15 +1,5 @@
 {
   "name": "LETH",
-  "app_id": "com.inzhoop.leth",
-   "proxies": [
-    {
-      "path": "/feed",
-      "proxyUrl": "http://us11.campaign-archive1.com/feed"
-    },
-	{
-      "path": "/dappleth",
-      "proxyUrl": "http://www.inzhoop.com/dappleths"
-    }
+  "app_id": "com.inzhoop.leth"
 
-  ]
 }
