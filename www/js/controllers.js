@@ -654,8 +654,15 @@ angular.module('leth.controllers', [])
     var path = DappPath.url + '/dapp_';
     var localpath = 'dappleths/dapp_';    //maybe a list  from an API of dappleth Store: sample app
     //path=localpath; //for development
-    
-    $http.get(path + '1' + '/app.html') 
+    var config = {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': 'application/json',
+                    'CacheControl': 'no-cache'
+                }
+    };
+
+    $http.get(path + '1' + '/app.html', config) 
       .success(function(data){
       $scope.appContainer = $sce.trustAsHtml(data);
 
