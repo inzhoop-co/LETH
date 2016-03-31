@@ -694,7 +694,8 @@ angular.module('leth.controllers', [])
       });
 
       $scope.refresh = function() {
-        externalRefresh();
+        updateData(); //defined in external js
+        $scope.$broadcast('scroll.refreshComplete');
       }
 
 
