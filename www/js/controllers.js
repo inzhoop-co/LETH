@@ -642,7 +642,7 @@ angular.module('leth.controllers', [])
       });
   })
 
-  .controller('ApplethCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http) {
+  .controller('ApplethCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http,CountDapp) {
     $ionicSlideBoxDelegate.start();
     $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
@@ -655,39 +655,20 @@ angular.module('leth.controllers', [])
     var localpath = 'dappleths/dapp_';    //maybe a list  from an API of dappleth Store: sample app
     //path=localpath; //for development
     var config = {
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Accept': 'application/json',
-                    'CacheControl': 'no-cache'
-                }
-    };
+          headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Accept': 'application/json',
+              'CacheControl': 'no-cache'
+          }
+      };
 
-    $http.get(path + '1' + '/app.html', config) 
-      .success(function(data){
-      $scope.appContainer = $sce.trustAsHtml(data);
+    for(var i=1; i<=CountDapp; i++) {
+      $http.get(path + i + '/app.html', config) 
+        .success(function(data){
+        $scope.appContainer += $sce.trustAsHtml(data);
 
-    })
-
-    //maybe a list  from an API of dappleth Store: sample app machine coffee
-    $http.get(path + '2' + '/app.html') 
-      .success(function(data){
-      $scope.appContainer += $sce.trustAsHtml(data);
-
-    })
-
-   $http.get(path + '3' + '/app.html') 
-      .success(function(data){
-      $scope.appContainer += $sce.trustAsHtml(data);
-
-    })
-
-   $http.get(path + '4' + '/app.html') 
-      .success(function(data){
-      $scope.appContainer += $sce.trustAsHtml(data);
-
-    })
-
-
+      })
+    }
   })
 
   .controller('ApplethRunCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams, $ocLazyLoad,$timeout) {

@@ -1,5 +1,3 @@
-// Ionic Starter App
-//set global and provider
 web3 = new Web3();
 if (typeof localStorage.NodeHost == 'undefined') {
   localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
@@ -7,13 +5,11 @@ if (typeof localStorage.NodeHost == 'undefined') {
 angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services'])
   .constant('FeedEndpoint', {
     url: '/feed'
-    //url: 'https://blog.ethereum.org/feed'
-    //url: 'http://us11.campaign-archive1.com/feed'
   })
   .constant('DappPath',{
     url : "/dappleth" 
-    //url : "http://www.inzhoop.com/appleth/dapp_" 
   })
+  .constant('CountDapp',4)
 
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $localstorage) {
     $ionicPlatform.ready(function () {
