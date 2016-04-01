@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+           id="com.cordova.plugins.sms"
+      version="0.1.9">
+    <name>Cordova SMS Plugin</name>
+    <description>Cross-platform plugin for Cordova / PhoneGap to to easily send SMS. Available for Android and iOS.</description>
+    <license>MIT</license>
+    <keywords>cordova,phonegap,sms</keywords>
+
+    <engines>
+      <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+    <js-module src="www/sms.js" name="Sms">
+        <clobbers target="window.sms" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="Sms">
+                <param name="android-package" value="com.cordova.plugins.sms.Sms"/>
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.SEND_SMS" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+            <uses-feature android:name="android.hardware.telephony" android:required="false" />
+        </config-file>
+
+        <source-file src="src/android/Sms.java" target-dir="src/com/cordova/plugins/sms" />
+    </platform>
+
+    <!-- wp8 -->
+    <platform name="wp8">
+        <source-file src="src/wp8/Sms.cs" />
+
+        <config-file target="config.xml" parent="/*">
+            <feature name="Sms">
+                <param name="wp-package" value="Sms" />
+            </feature>
+        </config-file>
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Sms">
+                <param name="ios-package" value="Sms" />
+            </feature>
+        </config-file>
+        <header-file src="src/ios/Sms.h" />
+        <source-file src="src/ios/Sms.m" />
+        <framework src="MessageUI.framework" weak="true" />
+    </platform>
+    
+    <!-- windows -->
+    <platform name="windows">
+        <js-module src="src/windows/SmsProxy.js" name="SmsProxy">
+            <merges target="" />
+        </js-module>
+    </platform>
+</plugin>

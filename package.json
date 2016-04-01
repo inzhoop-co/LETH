@@ -23,7 +23,12 @@
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     "cordova-plugin-wkwebview",
-    "cordova-plugin-whitelist"
+    "cordova-plugin-whitelist",
+    "cordova-plugin-file",
+    {
+      "locator": "https://github.com/cordova-sms/cordova-sms-plugin.git",
+      "id": "com.cordova.plugins.sms"
+    }
   ],
   "cordovaPlatforms": [
     "ios",

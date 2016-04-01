@@ -11,26 +11,26 @@
   <ion-content class="has-header has-tabs" >
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
     <ion-slide-box auto-play="true" does-continue="true" show-pager="false">
+      <!--ion-slide>
+        <div>
+          <img src="img/banners/inzhoop.png" height="160" weight="360" ng-click="nextSlide()"/>
+        </div>
+      </ion-slide-->
       <ion-slide>
         <div>
-          <img src="img/banners/inzhoop.png" height="160" ng-click="nextSlide()"/>
+          <img src="img/banners/shopchain01.png"  height="150" ng-click="nextSlide()"/>
         </div>
       </ion-slide>
       <ion-slide>
         <div>
-          <img src="img/banners/shopchain01.png"  height="160" ng-click="nextSlide()"/>
+          <img src="img/banners/shopchain02.png"  height="150" ng-click="nextSlide()"/>
         </div>
       </ion-slide>
-      <ion-slide>
+      <!--ion-slide>
         <div>
-          <img src="img/banners/shopchain02.png"  height="160" ng-click="nextSlide()"/>
+          <img src="img/banners/slockit.png"  height="160" weight="360" ng-click="prevSlide()"/>
         </div>
-      </ion-slide>
-      <ion-slide>
-        <div>
-          <img src="img/banners/slockit.png"  height="160" ng-click="prevSlide()"/>
-        </div>
-      </ion-slide>
+      </ion-slide-->
     </ion-slide-box>
     <div ng-bind-html="appContainer">
       <div class="list card padding"></div>

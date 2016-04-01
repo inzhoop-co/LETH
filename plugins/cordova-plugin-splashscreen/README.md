@@ -17,11 +17,13 @@
 #         under the License.
 -->
 
+[![Build Status](https://travis-ci.org/apache/cordova-plugin-splashscreen.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-splashscreen)
+
 # cordova-plugin-splashscreen
 
 This plugin displays and hides a splash screen during application launch.
 
-:warning: Report issues on the [Apache Cordova issue tracker](https://issues.apache.org/jira/issues/?jql=project%20%3D%20CB%20AND%20status%20in%20%28Open%2C%20%22In%20Progress%22%2C%20Reopened%29%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20%22Plugin%20Splashscreen%22%20ORDER%20BY%20priority%20DESC%2C%20summary%20ASC%2C%20updatedDate%20DESC)
+Report issues with this plugin on the [Apache Cordova issue tracker][Apache Cordova issue tracker].
 
 ## Installation
 
@@ -82,7 +84,7 @@ The plugin reloads splash drawable whenever orientation changes, so you can spec
 You can use the following preferences in your `config.xml`:
 
     <platform name="browser">
-        <preference name="SplashScreen" value="images/browser/splashscreen.jpg" /> <!-- defaults to "img/logo.png" -->
+        <preference name="SplashScreen" value="/images/browser/splashscreen.jpg" /> <!-- defaults to "/img/logo.png" -->
         <preference name="SplashScreenDelay" value="3000" /> <!-- defaults to "3000" -->
         <preference name="SplashScreenBackgroundColor" value="green" /> <!-- defaults to "#464646" -->
         <preference name="ShowSplashScreen" value="false" /> <!-- defaults to "true" -->
@@ -90,6 +92,7 @@ You can use the following preferences in your `config.xml`:
         <preference name="SplashScreenHeight" value="300" /> <!-- defaults to "200" -->
     </platform>
 
+__Note__: `SplashScreen` value should be absolute in order to work in a sub-page.
 
 ### Android and iOS Quirks
 
@@ -122,8 +125,6 @@ window.setTimeout(function () {
     navigator.splashscreen.hide();
 }, splashDuration - fadeDuration);
 ```
-
-### iOS Quirks
 
 - `ShowSplashScreenSpinner` (boolean, defaults to `true`): Set to `false`
   to hide the splash-screen spinner.
@@ -169,3 +170,5 @@ event. See [Icons and Splash Screens](http://cordova.apache.org/docs/en/edge/con
 for more information on doing this configuration. For this reason, it is
 unlikely you need to call `navigator.splashscreen.show()` to make the splash
 screen visible for app startup.
+
+[Apache Cordova issue tracker]: https://issues.apache.org/jira/issues/?jql=project%20%3D%20CB%20AND%20status%20in%20%28Open%2C%20%22In%20Progress%22%2C%20Reopened%29%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20%22Plugin%20Splashscreen%22%20ORDER%20BY%20priority%20DESC%2C%20summary%20ASC%2C%20updatedDate%20DESC

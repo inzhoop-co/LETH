@@ -13,7 +13,7 @@
     <ion-nav-view name="menuContent" animation="slide-left-right">
       <ion-tabs class="tabs-striped tabs-color-assertive">
         <!-- Home Tab -->
-        <ion-tab title="Home" icon-off="ion-ios-home-outline" icon-on="ion-ios-home" href="#/app/items">
+        <ion-tab title="ÐappLeth" icon-off="ion-ios-albums-outline" icon-on="ion-ios-albums" href="#/app/appleth">
         </ion-tab>
         <!-- Friends Tab -->
         <ion-tab title="Friends" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" href="#/app/friends">
@@ -33,16 +33,16 @@
     </ion-header-bar>
     <ion-content>
       <ion-list class="list card">
-        <ion-item class="item item-icon-left" menu-close href="#/app/appleth">
+        <!--ion-item class="item item-icon-left" menu-close href="#/app/appleth">
           <i class="icon ion-ios-home"></i>
           Home
-        </ion-item>
+        </ion-item-->
         <ion-item class="item item-icon-left" menu-close ng-click="openLoginModal()" ng-hide="hasLogged">
           <i class="icon ion-log-in"></i>
           Login
         </ion-item>
         <ion-item class="item item-icon-left" menu-close href="#/app/appleth">
-          <i class="icon ion-android-apps"></i>
+          <i class="icon ion-ios-albums"></i>
           ÐappLeth
         </ion-item>        
         <ion-item class="item item-icon-left" menu-close href="#/app/items">
@@ -58,7 +58,7 @@
           Change Pin
         </ion-item> -->
         <ion-item class="item item-icon-left" menu-close href="#/app/settings">
-          <i class="icon ion-ios-gear"></i>
+          <i class="icon ion-ios-cog"></i>
           Settings
         </ion-item>
         <ion-item class="item item-icon-left" menu-close href="#/app/about">

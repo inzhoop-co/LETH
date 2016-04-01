@@ -466,7 +466,7 @@ angular.module('leth.controllers', [])
             var emailOpts = {
               to: [''],
               attachments: ['' +
-                            cordova.file.dataDirectory.replace('file://','') + "keystore.json"],
+                            cordova.file.dataDirectory.replace('file://','') + "leth_keystore.json"],
               subject: 'Backup LETH Wallet',
               body: 'A LETH backup wallet is attached.<br>powerd by Ethereum from <b>Inzhoop</b>',
               isHtml: true
@@ -654,6 +654,8 @@ angular.module('leth.controllers', [])
     var path = DappPath.url + '/dapp_';
     var localpath = 'dappleths/dapp_';    //maybe a list  from an API of dappleth Store: sample app
     //path=localpath; //for development
+    
+    $scope.appContainer="</br>";
 
     for(var i=1; i<=CountDapp; i++) {
       $http.get(path + i + '/app.html') 

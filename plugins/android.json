@@ -27,6 +27,18 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "com.verso.cordova.clipboard": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-email-composer": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "com.cordova.plugins.sms": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },
     "dependent_plugins": {}
