@@ -639,14 +639,7 @@ angular.module('leth.controllers', [])
   })
 
   .controller('AboutCtrl', function ($scope, angularLoad) {      
-      var dyScript = "/js/contracts/ioTEnel.js";
-      angularLoad.loadScript(dyScript).then(function() {
-          // Script loaded succesfully.
-          //$scope.hello = (hello.greet());
-      }).catch(function() {
-          // There was some error loading the script. Meh
-          alert('non ok');
-      });
+   
   })
 
   .controller('ApplethCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http,CountDapp) {
