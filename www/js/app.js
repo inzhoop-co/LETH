@@ -7,10 +7,12 @@ if (typeof localStorage.NodeHost == 'undefined') {
 }
 angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('FeedEndpoint', {
-    url: '/feed'
+    //url: '/feed'
+    url: 'http://us11.campaign-archive1.com/feed'
   })
   .constant('DappPath',{
-    url : "/dappleth" 
+    //url : "/dappleth" 
+    url : "http://www.inzhoop.com/dappleths"
   })
   .constant('CountDapp',4)
 

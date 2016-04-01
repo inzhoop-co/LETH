@@ -661,16 +661,9 @@ angular.module('leth.controllers', [])
     var path = DappPath.url + '/dapp_';
     var localpath = 'dappleths/dapp_';    //maybe a list  from an API of dappleth Store: sample app
     //path=localpath; //for development
-    var config = {
-          headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Accept': 'application/json',
-              'CacheControl': 'no-cache'
-          }
-      };
 
     for(var i=1; i<=CountDapp; i++) {
-      $http.get(path + i + '/app.html', config) 
+      $http.get(path + i + '/app.html') 
         .success(function(data){
         $scope.appContainer += $sce.trustAsHtml(data);
 
@@ -701,7 +694,8 @@ angular.module('leth.controllers', [])
       });
 
       $scope.refresh = function() {
-        externalRefresh();
+        updateData(); //defined in external js
+        $scope.$broadcast('scroll.refreshComplete');
       }
 
 

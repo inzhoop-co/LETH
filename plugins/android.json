@@ -7,26 +7,13 @@
         "files": {}
     },
     "installed_plugins": {
-        "com.cordova.plugins.sms": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "com.telerik.plugins.wkwebview": {
-            "WKWEBVIEW_SERVER_PORT": "12344",
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "com.verso.cordova.clipboard": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "cordova-plugin-contacts": {
+        "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-        "cordova-plugin-file": {
+        "cordova-plugin-console": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
         "cordova-plugin-splashscreen": {
@@ -35,19 +22,10 @@
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-        "cordova-plugin-webserver": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "de.appplant.cordova.plugin.email-composer": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-        "phonegap-plugin-barcodescanner": {
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },

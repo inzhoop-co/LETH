@@ -77,9 +77,6 @@ function getSubscriptionCost(){
     return parseFloat(contract.getSubscriptionCost()) / 1.0e18;
 }
 
-function externalRefresh(){
-    alert('x');
-}
 
 function doOne() {
     var fromAddr = global_keystore.addresses[0];
