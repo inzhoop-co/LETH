@@ -458,7 +458,7 @@ angular.module('leth.controllers', [])
 
       console.log(cordova.file.dataDirectory);
       $cordovaFile.writeFile(cordova.file.dataDirectory,
-                             "leth_keystore.dat",
+                             "leth_keystore.json",
                              JSON.stringify(global_keystore.serialize()),
                              true)
         .then(function (success) {
@@ -466,7 +466,7 @@ angular.module('leth.controllers', [])
             var emailOpts = {
               to: [''],
               attachments: ['' +
-                            cordova.file.dataDirectory.replace('file://','') + "keystore.dat"],
+                            cordova.file.dataDirectory.replace('file://','') + "keystore.json"],
               subject: 'Backup LETH Wallet',
               body: 'A LETH backup wallet is attached.<br>powerd by Ethereum from <b>Inzhoop</b>',
               isHtml: true
