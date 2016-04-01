@@ -433,12 +433,12 @@ angular.module('leth.controllers', [])
 
     $scope.addrHost = localStorage.NodeHost;
 	
-	$scope.pin = { checked: localStorage.PinOn };
+	$scope.pin = { checked: (localStorage.PinOn=="true") };
 	
 	$scope.$watch('pin.checked',function(value) {
-		localStorage.PinOn=value;
+		localStorage.PinOn= value? "true":"false";
 		$scope.pin = { checked: value};
-	})
+	});
 
     $scope.importWallet = function () {
       //import wallet from (static value)

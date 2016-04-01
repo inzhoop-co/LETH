@@ -1,6 +1,6 @@
 web3 = new Web3();
 if (typeof localStorage.PinOn == 'undefined') {
-localStorage.PinOn=false;
+localStorage.PinOn="false";
 }
 if (typeof localStorage.NodeHost == 'undefined') {
   localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
