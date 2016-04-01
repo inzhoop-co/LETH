@@ -11,7 +11,7 @@
 		        <i class="icon ion-edit"></i>
 		    </button>
 		</div>
-		<h5>Security (backup your keystore)</h5>
+		<h5>Security</h5>
 		<div class="item item-button-right">
 		    Backup Wallet
 		    <button class="button button-clear" ng-click="confirmBackup()">
@@ -33,10 +33,9 @@
 		        <i class="icon ion-lock-combination"></i>
 		    </button>		    
 		</div>
-		<div class="item">
-		    <ion-toggle toggle-class="toggle-balanced" ng-model="pin.checked" ng-checked="pin.checked">
-			<i class="icon ion-locked"></i> PIN Status</ion-toggle>
-		</div>
+	    <ion-toggle  ng-model="pin.checked" ng-checked="pin.checked">
+			PIN Status
+		</ion-toggle>
 	</div>
   </ion-content>
 </ion-view>
