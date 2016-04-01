@@ -432,6 +432,13 @@ angular.module('leth.controllers', [])
   .controller('SettingsCtrl', function ($scope, $ionicPopup, $cordovaEmailComposer, $cordovaFile, AppService) {
 
     $scope.addrHost = localStorage.NodeHost;
+	
+	$scope.pin = { checked: localStorage.PinOn };
+	
+	$scope.$watch('pin.checked',function(value) {
+		localStorage.PinOn=value;
+		$scope.pin = { checked: value};
+	})
 
     $scope.importWallet = function () {
       //import wallet from (static value)
