@@ -255,15 +255,16 @@ angular.module('leth.controllers', [])
   }) //fine AppCtrl
 
   .controller('WalletCtrl', function ($scope, $stateParams, $ionicModal, $state, $ionicPopup, $cordovaBarcodeScanner, AppService, Transactions) {
-
     var TrueException = {};
     var FalseException = {};
-
 
     $scope.fromAddressBook = false;
 
     if($stateParams.addr){
-      $scope.addrTo = $stateParams.addr;
+      var addr = $stateParams.addr.split('@')[0];
+      var coins = $stateParams.addr.split('@')[1];
+      $scope.addrTo = addr;
+      $scope.amountTo = coins;
       $scope.fromAddressBook = true;
     }else {
       $scope.fromAddressBook = false;
@@ -368,52 +369,55 @@ angular.module('leth.controllers', [])
       //alertPopup.then();
     };
 
-    $scope.shareBySms = function() {
-      var content = "My address is " + $scope.qrcodeString;
+    $scope.shareBySms = function(c) {
+      var amount = c;
+      var content = "My address is ethereum://" + $scope.qrcodeString + '@' + amount;
       var phonenumber="";
       $cordovaContacts.pickContact().then(function (contactPicked) {
-          phonenumber = contactPicked;
-      });
+          console.log(JSON.stringify(contactPicked));
+          phonenumber = contactPicked.phoneNumbers[0].value;
 
-      var options = {
-          replaceLineBreaks: false, // true to replace \n by a new line, false by default
-          android: {
-              intent: 'INTENT'  // send SMS with the native android SMS messaging
-              //intent: '' // send SMS without open any other app
-          }
-      };
-    
-      $cordovaSms
-      .send(phonenumber, content, options)
-      .then(function() {
-        // Success! SMS was sent
-        console.log("SMS to " + phonenumber + " with text :" + content + " sent.");
-      }, function(error) {
-        // An error occurred
-        console.log("ERROR sending SMS to " + phonenumber + " with text :" + content + " sent.");
-      });
+          var options = {
+            replaceLineBreaks: false, // true to replace \n by a new line, false by default
+            android: {
+                intent: 'INTENT'  // send SMS with the native android SMS messaging
+                //intent: '' // send SMS without open any other app
+            }
+          };
+        
+          $cordovaSms
+          .send(phonenumber, content, options)
+          .then(function() {
+            // Success! SMS was sent
+            console.log("SMS to " + phonenumber + " with text :" + content + " sent.");
+          }, function(error) {
+            // An error occurred
+            console.log("ERROR sending SMS to " + phonenumber + " with text :" + content + " sent.");
+          });
+      });      
     }
 
-    $scope.shareByEmail = function(){
-      $cordovaEmailComposer.isAvailable().then(function() {
-         // is available
-       }, function () {
-         // not available
-         console.log("cordovaEmailComposer not available");
-       });
+    $scope.shareByEmail = function(c){
+        var amount = c;
+        var imgQrcode = angular.element(document.querySelector('qr > img')).attr('ng-src');
 
-        window.plugin.email.open({
-            to:          [""], // email addresses for TO field
-            cc:          Array, // email addresses for CC field
-            bcc:         Array, // email addresses for BCC field
-            attachments: '', // file paths or base64 data streams
-            subject:    "Please Pay me", // subject of the email
-            body:       'Please send me ETH to this Wallet Address: </br><b>' +  $scope.qrcodeString + '</b>', // email body (for HTML, set isHtml to true)
-            isHtml:    true, // indicats if the body is HTML or plain text
-        }, function () {
+        $cordovaEmailComposer.isAvailable().then(function() {
+          var emailOpts = {
+            to: [''],
+            subject: 'Please Pay me',
+            body: 'Please send me ETH to this Wallet Address: </br><a href="ethereum://' + $scope.qrcodeString + '@' + amount + '"/>' + $scope.qrcodeString + '@' + amount + '</br><img src="' + imgQrcode + '"</img></br>',
+            isHtml: true
+          };
+
+          $cordovaEmailComposer.open(emailOpts).then(null, function () {
             console.log('email view dismissed');
-        },
-        this);  
+          });
+
+          return;
+        }, function (error) {
+          console.log("cordovaEmailComposer not available");
+          return;
+        });
      }
 
       $scope.copyAddr = function(){
@@ -430,15 +434,14 @@ angular.module('leth.controllers', [])
   })
 
   .controller('SettingsCtrl', function ($scope, $ionicPopup, $cordovaEmailComposer, $cordovaFile, AppService) {
-
     $scope.addrHost = localStorage.NodeHost;
 	
-	$scope.pin = { checked: (localStorage.PinOn=="true") };
+    $scope.pin = { checked: (localStorage.PinOn=="true") };
 	
-	$scope.$watch('pin.checked',function(value) {
-		localStorage.PinOn= value? "true":"false";
-		$scope.pin = { checked: value};
-	});
+  	$scope.$watch('pin.checked',function(value) {
+  		localStorage.PinOn= value? "true":"false";
+  		$scope.pin = { checked: value};
+  	});
 
     $scope.importWallet = function () {
       //import wallet from (static value)
