@@ -14,25 +14,27 @@
           <a href="#" class="subdued">{{qrcodeString}}</a>
         </p>
       </div>
-
+      <div class="item tabs item-input">
+        <label class="item item-stacked-label">ETH: </label>  
+        <input type="text" placeholder=" amount in eth (optional)" ng-model="amountPayment">
+      </div>
       <div class="item tabs tabs-secondary tabs-icon-left">
         <!--a class="tab-item" href="#" ng-click="requestPayment()">
           <i class="icon ion-archive"></i>
           Request
-        </a-->      
-        <a class="tab-item" href="#" ng-click="shareByEmail()">
+        </a-->              
+        <a class="tab-item" href="#" ng-click="shareByEmail(amountPayment)">
           <i class="icon ion-ios-email-outline"></i>
           Email
         </a>
-        <a class="tab-item" href="#" ng-click="shareBySms()">
+        <a class="tab-item" href="#" ng-click="shareBySms(amountPayment)">
           <i class="icon ion-ios-chatbubble-outline"></i>
           Sms
         </a>
         <a class="tab-item" href="#" ng-click="copyAddr()">
           <i class="icon ion-clipboard"></i>
           Copy
-        </a>
-        
+        </a>        
       </div>
     </div>
   </ion-content>

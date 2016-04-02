@@ -39,6 +39,16 @@
         },
         "com.cordova.plugins.sms": {
             "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-contacts": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-touchid": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-customurlscheme": {
+            "URL_SCHEME": "ethereum",
+            "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },
     "dependent_plugins": {}

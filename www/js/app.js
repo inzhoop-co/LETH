@@ -16,22 +16,23 @@ angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionic.contrib.ui
   })
   .constant('CountDapp',4)
 
-  .run(function ($ionicPlatform, $rootScope, $ionicLoading, $localstorage,$lockScreen) {
+  .run(function ($ionicPlatform, $rootScope, $ionicLoading, $localstorage,$lockScreen,$state,$window) {
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
 	    if(localStorage.PinOn=="true"){
-		  $lockScreen.show({
-			code: JSON.parse(localStorage.AppCode).code,
-			ACDelbuttons: true,
-			onCorrect: function () {
-			  console.log('correct!');
-			},
-			onWrong: function (attemptNumber) {
-			  console.log(attemptNumber + ' wrong passcode attempt(s)');
-			},
-		  });
-		}
+    		$lockScreen.show({
+    			code: JSON.parse(localStorage.AppCode).code,
+          touchId: true,
+    			ACDelbuttons: true,
+    			onCorrect: function () {
+    			  console.log('correct!');
+    			},
+    			onWrong: function (attemptNumber) {
+    			  console.log(attemptNumber + ' wrong passcode attempt(s)');
+    			},
+  		  });
+		  }
 	  
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -52,6 +53,12 @@ angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionic.contrib.ui
         //console.log("Completo");
       })
 
+      $window.addEventListener('LaunchUrl', function(event) {
+        // gets page name from url
+        var page =/.*:[/]{2}([^?]*)[?]?(.*)/.exec(event.detail.url)[1];
+        // redirects to page specified in url
+        $state.go('app.wallet', {addr: page});
+      });
     });
   })
   /*
@@ -210,6 +217,14 @@ angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionic.contrib.ui
 
      $httpProvider.defaults.useXDomain = true;
       delete $httpProvider.defaults.headers.common['X-Requested-With'];
-  });
+  })
+
+  function handleOpenURL(url) {
+    setTimeout(function() {
+        var event = new CustomEvent('LaunchUrl', {detail: {'url': url}});
+        window.dispatchEvent(event);
+    }, 0);
+  }
+  ;
 
 

@@ -28,6 +28,15 @@
     {
       "locator": "https://github.com/cordova-sms/cordova-sms-plugin.git",
       "id": "com.cordova.plugins.sms"
+    },
+    "cordova-plugin-contacts",
+    "cordova-plugin-touchid",
+    {
+      "variables": {
+        "URL_SCHEME": "ethereum"
+      },
+      "locator": "cordova-plugin-customurlscheme",
+      "id": "cordova-plugin-customurlscheme"
     }
   ],
   "cordovaPlatforms": [
