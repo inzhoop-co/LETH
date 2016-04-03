@@ -4,38 +4,39 @@
   </ion-nav-buttons>
   <ion-content>
 	<div class="list">
-		<h5>Host Provider Address (free to choose yours)</h5>
+		<h5> Host Provider Address (free to choose yours)</h5>
 		<div class="item item-input">
 		    <label class="item-input-wrapper"><input type="text" ng-model="addrHost" placeholder="type host address"></label>
 		    <button class="button button-clear" ng-click="editHost(addrHost)">
 		        <i class="icon ion-edit"></i>
 		    </button>
 		</div>
-		<h5>Security</h5>
+		<h5>  Backup</h5>
 		<div class="item item-button-right">
-		    Backup Wallet
-		    <button class="button button-clear" ng-click="confirmBackup()">
+		    Backup your Wallet
+		    <button class="button button-clear" ng-click="backupWallet()">
 		        <i class="icon ion-ios-cloud-download"></i>
 		    </button>		    
 		</div>
 		<div class="item item-button-right">
-		    Import Wallet from backup
+		    Import a Wallet
 		    <button class="button button-clear" ng-click="confirmImport()">
 		        <i class="icon ion-ios-cloud-upload"></i>
 		    </button>
-		    <!--button class="button button-clear" ng-click="openChooser()">
-			     <i class="icon ion-social-dropbox"></i>
-		    </button-->
 		</div>
+		<h5> PIN</h5>
 		<div class="item item-button-right">
-		    Change Pin
+		    Change Code
 		    <button class="button button-clear" ng-click="openChangeCodeModal()">
 		        <i class="icon ion-lock-combination"></i>
 		    </button>		    
 		</div>
 	    <ion-toggle  ng-model="pin.checked" ng-checked="pin.checked">
-			PIN Status
+			Enabled
 		</ion-toggle>
+	    <!--button class="button button-clear" ng-click="testShareSheet()">
+			<i class="icon ion-social-dropbox"></i>
+	    </button-->
 	</div>
   </ion-content>
 </ion-view>

@@ -16,7 +16,7 @@ angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionic.contrib.ui
   })
   .constant('CountDapp',4)
 
-  .run(function ($ionicPlatform, $rootScope, $ionicLoading, $localstorage,$lockScreen,$state,$window) {
+  .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,$lockScreen,$state,$window) {
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)

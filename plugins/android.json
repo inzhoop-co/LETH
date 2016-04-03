@@ -49,6 +49,9 @@
         "cordova-plugin-customurlscheme": {
             "URL_SCHEME": "ethereum",
             "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-actionsheet": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },
     "dependent_plugins": {}

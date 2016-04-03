@@ -360,13 +360,15 @@ angular.module('leth.controllers', [])
 
 
     $scope.showAddress = function () {
-      alert($scope.qrcodeString);
-      //var alertPopup = $ionicPopup.alert({
-      //  title: 'Wallet Address',
-      //  template: $scope.qrcodeString
-      //});
+      //alert($scope.qrcodeString);
+      var alertPopup = $ionicPopup.alert({
+        title: 'Wallet Address',
+        template: $scope.qrcodeString
+      });
 
-      //alertPopup.then();
+      alertPopup.then(function(res) {
+        console.log('show address');
+      });
     };
 
     $scope.shareBySms = function(c) {
@@ -425,7 +427,15 @@ angular.module('leth.controllers', [])
         .copy($scope.qrcodeString)
         .then(function () {
           // success
-          alert('Address in clipboard');
+          //alert('Address in clipboard');
+          var alertPopup = $ionicPopup.alert({
+             title: 'Copy Address',
+             template: 'Address is in clipboard!'
+           });
+
+           alertPopup.then(function(res) {
+             console.log('address copied in clipboard');
+           });
         }, function () {
           // error
           console.log('Copy error');
@@ -433,7 +443,7 @@ angular.module('leth.controllers', [])
       }
   })
 
-  .controller('SettingsCtrl', function ($scope, $ionicPopup, $cordovaEmailComposer, $cordovaFile, AppService) {
+  .controller('SettingsCtrl', function ($scope, $ionicPopup, $cordovaEmailComposer, $cordovaActionSheet, $cordovaFile, AppService) {
     $scope.addrHost = localStorage.NodeHost;
 	
     $scope.pin = { checked: (localStorage.PinOn=="true") };
@@ -443,7 +453,8 @@ angular.module('leth.controllers', [])
   		$scope.pin = { checked: value};
   	});
 
-    $scope.importWallet = function () {
+
+    var importTestWallet = function () {
       //import wallet from (static value)
       var datal = '{"encSeed":{"encStr":"U2FsdGVkX1/TZRr3RnGrokz0r1v1nBj+qvkSwlYOSinCGUmgAr2bg6msxh3tmXu6NzojB+TVBBBvNBoshCn43qV+XEUi4dkdsIrWUdHNivgyeYRNf8K5daMGXiAapxIh","iv":"b2237015ccb4dd55fa0571f20ad64e66","salt":"d3651af74671aba2"},"encHdRootPriv":{"encStr":"U2FsdGVkX19AGRaRLGkRMY2RVdHrI0fV3B6lr2CTlOH7k+eUya9VSANXY886laiyhxCBFVPJJeuNph9iXfjaxz5a3ktxRJ/361WeJfCx1Y6FnrjEv0LE1V9dEleXA73RWJ7MZW8NbQcgGkVmCZ64L+qh9dM9EnbpI0S/BQ52EoA=","iv":"4e4f267e357c2f4b2d51d5183eefb507","salt":"401916912c691131"},"hdIndex":1,"encPrivKeys":{"d1324ada7e026211d0cacd90cae5777e340de948":{"key":"U2FsdGVkX1+t8Y7gU4jmt9L3WXAu1GwDQioNLTpEXknHZsGzOw1aFTlqzPUCkbpwbR+PTTR71XCtwSxzUD8Lhg==","iv":"3b2bec0c28997f8a9873538ff7407160","salt":"adf18ee05388e6b7"}},"addresses":["d1324ada7e026211d0cacd90cae5777e340de948"],"keyHash":"935cb8c28d033a9e9d9d25db59db954d55990944837c1b953f4d78196995080da5f4e140c4b4b42418ed895fd3de6863d59652bb3843bf0fdfd9c241c16c04c1","salt":{"words":[1505095718,1228820528,-1025278005,853733013],"sigBytes":16}}';
 
@@ -456,9 +467,66 @@ angular.module('leth.controllers', [])
       refresh();
     };
 
-    $scope.backupWallet = function () {
-      //backup wallet to email
+    $scope.importWallet = function () {
+      var options = {
+        title: 'Choose a wallet to import from?',
+        buttonLabels: ['Test Wallet', 'From Dropbox'],
+        addCancelButtonWithLabel: 'Cancel',
+        androidEnableCancelButton : true,
+        winphoneEnableCancelButton : true
+        //addDestructiveButtonWithLabel : 'Delete it'
+      };
 
+
+      document.addEventListener("deviceready", function () {
+        $cordovaActionSheet.show(options)
+          .then(function(btnIndex) {
+            var index = btnIndex;
+            switch(index){
+                case 1:
+                    console.log('Import static test wallet');
+                    importTestWallet();
+                    break;
+                case 2:
+                    console.log('Import wallet from Dropbox');
+                    alert('Not yet!')
+                    break;
+            }            
+          });
+      }, false);
+    };
+
+    $scope.backupWallet = function () {
+      var options = {
+        title: 'How do you want to backup your wallet?',
+        buttonLabels: ['Backup via Email', 'Backup via Dropbox'],
+        addCancelButtonWithLabel: 'Cancel',
+        androidEnableCancelButton : true,
+        winphoneEnableCancelButton : true
+        //addDestructiveButtonWithLabel : 'Delete it'
+      };
+
+
+      document.addEventListener("deviceready", function () {
+        $cordovaActionSheet.show(options)
+          .then(function(btnIndex) {
+            var index = btnIndex;
+            switch(index){
+                case 1:
+                    console.log('Backup via Email');
+                    walletViaEmail();
+                    break;
+                case 2:
+                    console.log('Backup via Email');
+                    alert('Not yet!')
+                    break;
+            }            
+          });
+      }, false);
+    };
+
+    var walletViaEmail = function(){
+      //backup wallet to email
       console.log(cordova.file.dataDirectory);
       $cordovaFile.writeFile(cordova.file.dataDirectory,
                              "leth_keystore.json",
@@ -486,7 +554,6 @@ angular.module('leth.controllers', [])
         }, function () {
           // not available
         });
-
     };
 
     $scope.editHost = function (addr) {
@@ -497,7 +564,7 @@ angular.module('leth.controllers', [])
     $scope.confirmImport = function () {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Recover wallet',
-        template: 'Are you sure you want to import wallet from backup?'
+        template: 'Are you sure you want to import a wallet from backup and overwrite the current? '
       });
       confirmPopup.then(function (res) {
         if (res) {
