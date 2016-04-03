@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+         "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+        <head>
+                <!-- Change this if you want to allow scaling -->
+                <meta name="viewport" content="width=default-width; user-scalable=no">
+                <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+                <title></title>
+
+                <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+                <script type="text/javascript" charset="utf-8" src="index.js"></script>
+        </head>
+        <body onload="onBodyLoad()">
+                <div style="color:red">
+                        (using servicename <input type="text" value="GOLDILOCKS" id="servicename">)
+                </div>
+                <hr>
+                <p>
+                        <br>
+                </p>
+                <div>
+                        GET FROM KEYCHAIN
+                </div>
+                <p>
+                        <br>
+                        <label for="keytoget">Key to Get&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="keytoget" value="ILLUMINATI"></label> <button onclick="onGet();">GET</button><br>
+                </p>
+                <hr>
+                <p>
+                        <br>
+                </p>
+                <div>
+                        SET TO KEYCHAIN
+                </div>
+                <p>
+                        <br>
+                        <label for="keytoset">Key to Set&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="keytoset" value="ILLUMINATI"></label><br>
+                        <label for="valuetoset">Value to Set <input type="text" id="valuetoset" value="SEKRIT"></label> <button onclick="onSet();">SET</button><br>
+                </p>
+                <hr>
+                <p>
+                        <br>
+                </p>
+                <div>
+                        REMOVE FROM KEYCHAIN
+                </div>
+                <p>
+                        <br>
+                        <label for="keytoremove">Key to Remove<input type="text" id="keytoremove" value="ILLUMINATI"></label> <button onclick="onRemove();">DEL</button>
+                </p>
+        </body>
+</html>

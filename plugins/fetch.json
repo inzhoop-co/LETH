@@ -133,5 +133,14 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "com.shazron.cordova.plugin.keychainutil": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/shazron/KeychainPlugin.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

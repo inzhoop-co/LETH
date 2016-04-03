@@ -52,6 +52,9 @@
         },
         "cordova-plugin-actionsheet": {
             "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "com.shazron.cordova.plugin.keychainutil": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },
     "dependent_plugins": {}
