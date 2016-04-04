@@ -34,10 +34,6 @@
     },
     "cordova-plugin-file",
     {
-      "locator": "https://github.com/katzer/cordova-plugin-email-composer.git",
-      "id": "cordova-plugin-email-composer"
-    },
-    {
       "locator": "https://github.com/cordova-sms/cordova-sms-plugin.git",
       "id": "com.cordova.plugins.sms"
     },
@@ -57,6 +53,10 @@
     {
       "locator": "https://github.com/shazron/KeychainPlugin.git",
       "id": "com.shazron.cordova.plugin.keychainutil"
+    },
+    {
+      "locator": "https://github.com/katzer/cordova-plugin-email-composer.git",
+      "id": "de.appplant.cordova.plugin.email-composer"
     }
   ],
   "cordovaPlatforms": [
