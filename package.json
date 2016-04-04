@@ -17,14 +17,26 @@
     "shelljs": "^0.3.0"
   },
   "cordovaPlugins": [
+    {
+      "locator": "https://github.com/wildabeast/BarcodeScanner.git",
+      "id": "phonegap-plugin-barcodescanner"
+    },
     "cordova-plugin-device",
     "cordova-plugin-console",
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
-    "cordova-plugin-wkwebview",
+    "cordova-plugin-webserver",
     "cordova-plugin-whitelist",
+    {
+      "locator": "https://github.com/VersoSolutions/CordovaClipboard.git",
+      "id": "com.verso.cordova.clipboard"
+    },
     "cordova-plugin-file",
+    {
+      "locator": "https://github.com/katzer/cordova-plugin-email-composer.git",
+      "id": "cordova-plugin-email-composer"
+    },
     {
       "locator": "https://github.com/cordova-sms/cordova-sms-plugin.git",
       "id": "com.cordova.plugins.sms"
@@ -32,15 +44,33 @@
     "cordova-plugin-contacts",
     "cordova-plugin-touchid",
     {
+      "id": "cordova-plugin-customurlscheme",
+      "locator": "cordova-plugin-customurlscheme",
       "variables": {
         "URL_SCHEME": "ethereum"
-      },
-      "locator": "cordova-plugin-customurlscheme",
-      "id": "cordova-plugin-customurlscheme"
+      }
+    },
+    {
+      "locator": "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
+      "id": "cordova-plugin-actionsheet"
+    },
+    {
+      "locator": "https://github.com/shazron/KeychainPlugin.git",
+      "id": "com.shazron.cordova.plugin.keychainutil"
     }
   ],
   "cordovaPlatforms": [
     "ios",
-    "android"
+    "android",
+    {
+      "platform": "android",
+      "version": "",
+      "locator": "android"
+    },
+    {
+      "platform": "ios",
+      "version": "",
+      "locator": "ios"
+    }
   ]
 }
