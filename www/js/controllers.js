@@ -526,7 +526,7 @@ angular.module('leth.controllers', [])
     var walletInStorage = function(){
       var keystoreFilename = "leth_keystore.json";
       
-      $cordovaFile.writeFile(cordova.file.syncedDataDirectory,
+      $cordovaFile.writeFile(cordova.file.dataDirectory,
              keystoreFilename,
              localStorage.AppKeys,
              true)
@@ -540,7 +540,7 @@ angular.module('leth.controllers', [])
     var walletFromStorage = function(){
       /*
       var fileList=[];
-      window.resolveLocalFileSystemURL(cordova.file.syncedDataDirectory, function (dirEntry) {
+      window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (dirEntry) {
         var directoryReader = dirEntry.createReader();
         directoryReader.readEntries(
           function(entries){
@@ -558,7 +558,7 @@ angular.module('leth.controllers', [])
       */
       //show all value fileList[]
       var keystoreFilename = "leth_keystore.json";
-      $cordovaFile.readAsText(cordova.file.syncedDataDirectory, keystoreFilename)
+      $cordovaFile.readAsText(cordova.file.dataDirectory, keystoreFilename)
         .then(function (success) {
           // success
           console.log('read successfully');
@@ -580,7 +580,7 @@ angular.module('leth.controllers', [])
       //backup wallet to email
       var keystoreFilename = global_keystore.addresses[0] + "_lethKeystore.json";
       
-      $cordovaFile.writeFile(cordova.file.syncedDataDirectory,
+      $cordovaFile.writeFile(cordova.file.dataDirectory,
                              keystoreFilename,
                              JSON.stringify(global_keystore.serialize()),
                              true)
@@ -589,7 +589,7 @@ angular.module('leth.controllers', [])
             var emailOpts = {
               to: [''],
               attachments: ['' +
-                            cordova.file.syncedDataDirectory.replace('file://','') + keystoreFilename],
+                            cordova.file.dataDirectory.replace('file://','') + keystoreFilename],
               subject: 'Backup LETH Wallet',
               body: 'A LETH backup wallet is attached.<br>powerd by Ethereum from <b>Inzhoop</b>',
               isHtml: true
