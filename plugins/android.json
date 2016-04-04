@@ -7,13 +7,35 @@
         "files": {}
     },
     "installed_plugins": {
-        "phonegap-plugin-barcodescanner": {
+        "com.cordova.plugins.sms": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "com.shazron.cordova.plugin.keychainutil": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "com.verso.cordova.clipboard": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-actionsheet": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-contacts": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-customurlscheme": {
+            "URL_SCHEME": "ethereum",
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-        "cordova-plugin-console": {
+        "cordova-plugin-email-composer": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-file": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
         "cordova-plugin-splashscreen": {
@@ -22,38 +44,19 @@
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-        "ionic-plugin-keyboard": {
+        "cordova-plugin-touchid": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-webserver": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-        "com.verso.cordova.clipboard": {
+        "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "cordova-plugin-email-composer": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "com.cordova.plugins.sms": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "cordova-plugin-contacts": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "cordova-plugin-touchid": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "cordova-plugin-customurlscheme": {
-            "URL_SCHEME": "ethereum",
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "cordova-plugin-actionsheet": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "com.shazron.cordova.plugin.keychainutil": {
+        "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },
