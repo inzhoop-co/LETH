@@ -22,7 +22,7 @@
           </label>
           <label class="item item-input padding-bottom">
             <span class="input-label">Confirm New Code</span>
-            <input type="password" ng-model="confirmNewCode" required="true">
+            <input type="password" pattern="[0-9]*" ng-model="confirmNewCode" required="true">
           </label>
           <button ng-disabled="!changeCode.$valid || confirmNewCode!=newCode"  class="button button-block button-assertive" type="submit" ng-disabled="">Change</button>
         </form>
