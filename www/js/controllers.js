@@ -419,9 +419,9 @@ angular.module('leth.controllers', [])
           console.log("cordovaEmailComposer not available");
           return;
         });
-     }
+    }
 
-      $scope.copyAddr = function(){
+    $scope.copyAddr = function(){
         $cordovaClipboard
         .copy($scope.qrcodeString)
         .then(function () {
@@ -439,7 +439,7 @@ angular.module('leth.controllers', [])
           // error
           console.log('Copy error');
         });
-      }
+    }
   })
 
   .controller('SettingsCtrl', function ($scope, $ionicPopup, $cordovaEmailComposer, $cordovaActionSheet, $cordovaFile, AppService) {
@@ -452,6 +452,65 @@ angular.module('leth.controllers', [])
   		$scope.pin = { checked: value};
   	});
 
+    $scope.editHost = function (addr) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Set Provider Host',
+        template: 'Are you sure you want to modify the provider host? '
+      });
+      confirmPopup.then(function (res) {
+        if (res) {
+          localStorage.NodeHost = addr;
+          AppService.setWeb3Provider(global_keystore);
+          console.log('provider host update to: ' + addr);
+        } else {
+          console.log('provider host not modified');
+        }
+      });
+    };
+
+    $scope.confirmImport = function () {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Import a backuped wallet',
+        template: 'Are you sure you want to import a wallet from backup and overwrite the current? '
+      });
+      confirmPopup.then(function (res) {
+        if (res) {
+          $scope.chooseImportWallet();
+          console.log('importing wallet from backup');
+          refresh();
+        } else {
+          console.log('do not import wallet');
+        }
+      });
+    };
+
+    $scope.chooseImportWallet = function () {
+      var options = {
+        title: 'Choose a wallet to import from?',
+        buttonLabels: ['Test Wallet', 'From Storage'],
+        addCancelButtonWithLabel: 'Cancel',
+        androidEnableCancelButton : true,
+        winphoneEnableCancelButton : true
+        //addDestructiveButtonWithLabel : 'Delete it'
+      };
+
+      document.addEventListener("deviceready", function () {
+        $cordovaActionSheet.show(options)
+          .then(function(btnIndex) {
+            var index = btnIndex;
+            switch(index){
+                case 1:
+                    console.log('importing static test wallet');
+                    importTestWallet();
+                    break;
+                case 2:
+                    console.log('Importing wallet from Storage');
+                    importStorageWallet();
+                    break;
+            }            
+          });
+      }, false);
+    };
 
     var importTestWallet = function () {
       //import wallet from (static value)
@@ -463,81 +522,18 @@ angular.module('leth.controllers', [])
       AppService.setWeb3Provider(global_keystore);
       localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
       refresh();
+
+      var alertPopup = $ionicPopup.alert({
+         title: 'Import Wallet',
+         template: 'Wallet imported successfully!'
+       });
+
+       alertPopup.then(function(res) {
+         console.log('test wallet imported');
+       });
     };
 
-    $scope.importWallet = function () {
-      var options = {
-        title: 'Choose a wallet to import from?',
-        buttonLabels: ['Test Wallet', 'From Storage'],
-        addCancelButtonWithLabel: 'Cancel',
-        androidEnableCancelButton : true,
-        winphoneEnableCancelButton : true
-        //addDestructiveButtonWithLabel : 'Delete it'
-      };
-
-
-      document.addEventListener("deviceready", function () {
-        $cordovaActionSheet.show(options)
-          .then(function(btnIndex) {
-            var index = btnIndex;
-            switch(index){
-                case 1:
-                    console.log('Import static test wallet');
-                    importTestWallet();
-                    break;
-                case 2:
-                    console.log('Import wallet from Storage');
-                    walletFromStorage();
-                    break;
-            }            
-          });
-      }, false);
-    };
-
-    $scope.backupWallet = function () {
-      var options = {
-        title: 'How do you want to backup your wallet?',
-        buttonLabels: ['Backup via Email', 'Backup on Storage'],
-        addCancelButtonWithLabel: 'Cancel',
-        androidEnableCancelButton : true,
-        winphoneEnableCancelButton : true
-        //addDestructiveButtonWithLabel : 'Delete it'
-      };
-
-
-      document.addEventListener("deviceready", function () {
-        $cordovaActionSheet.show(options)
-          .then(function(btnIndex) {
-            var index = btnIndex;
-            switch(index){
-                case 1:
-                    console.log('Backup via Email');
-                    walletViaEmail();
-                    break;
-                case 2:
-                    console.log('Backup on Storage');
-                    walletInStorage();
-                    break;
-            }            
-          });
-      }, false);
-    };
-
-    var walletInStorage = function(){
-      var keystoreFilename = "leth_keystore.json";
-      
-      $cordovaFile.writeFile(cordova.file.dataDirectory,
-             keystoreFilename,
-             localStorage.AppKeys,
-             true)
-          .then(function (success) {
-            console.log('wallet stored!');
-          }, function () {
-          // not available
-        });
-    };
-
-    var walletFromStorage = function(){
+    var importStorageWallet = function(){
       /*
       var fileList=[];
       window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (dirEntry) {
@@ -570,17 +566,83 @@ angular.module('leth.controllers', [])
           localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
 
           refresh();
+ 
+          var alertPopup = $ionicPopup.alert({
+            title: 'Import Wallet',
+            template: 'Wallet imported successfully!'
+          });
+
+          alertPopup.then(function(res) {
+            console.log('test wallet imported');
+          });
         }, function (error) {
           // error
           console.log(error);
       });
     };
 
+    var backupWalletToStorage = function(){
+      var keystoreFilename = "leth_keystore.json";
+      
+      $cordovaFile.writeFile(cordova.file.dataDirectory,
+             keystoreFilename,
+             localStorage.AppKeys,
+             true)
+          .then(function (success) {
+            var alertPopup = $ionicPopup.alert({
+               title: 'Backup Wallet',
+               template: 'Wallet backuped successfully!'
+             });
+
+            alertPopup.then(function(res) {
+              console.log('wallet backuped');
+            });
+          }, function () {
+          // not available
+        });
+    };
+
+    $scope.backupWallet = function () {
+      var options = {
+        title: 'How do you want to backup your wallet?',
+        buttonLabels: ['Backup via Email', 'Backup on Storage'],
+        addCancelButtonWithLabel: 'Cancel',
+        androidEnableCancelButton : true,
+        winphoneEnableCancelButton : true
+        //addDestructiveButtonWithLabel : 'Delete it'
+      };
+
+
+      document.addEventListener("deviceready", function () {
+        $cordovaActionSheet.show(options)
+          .then(function(btnIndex) {
+            var index = btnIndex;
+            switch(index){
+                case 1:
+                    console.log('Backup via Email');
+                    walletViaEmail();
+                    break;
+                case 2:
+                    console.log('Backup on Storage');
+                    walletInStorage();
+                    break;
+            }            
+          });
+      }, false);
+    };
+
     var walletViaEmail = function(){
       //backup wallet to email
       var keystoreFilename = global_keystore.addresses[0] + "_lethKeystore.json";
+      var directorySave=cordova.file.dataDirectory;
+      var directoryAttach=cordova.file.dataDirectory.replace('file://','');
       
-      $cordovaFile.writeFile(cordova.file.dataDirectory,
+      if(ionic.Platform.isAndroid()) {
+        directorySave = cordova.file.externalDataDirectory;
+        directoryAttach = cordova.file.externalDataDirectory;
+      }
+ 
+      $cordovaFile.writeFile(directorySave,
                              keystoreFilename,
                              JSON.stringify(global_keystore.serialize()),
                              true)
@@ -588,8 +650,7 @@ angular.module('leth.controllers', [])
           $cordovaEmailComposer.isAvailable().then(function() {
             var emailOpts = {
               to: [''],
-              attachments: ['' +
-                            cordova.file.dataDirectory.replace('file://','') + keystoreFilename],
+              attachments: ['' + directoryAttach + keystoreFilename],
               subject: 'Backup LETH Wallet',
               body: 'A LETH backup wallet is attached.<br>powerd by Ethereum from <b>Inzhoop</b>',
               isHtml: true
@@ -607,44 +668,6 @@ angular.module('leth.controllers', [])
           // not available
         });
     };
-
-    $scope.editHost = function (addr) {
-      localStorage.NodeHost = addr;
-      AppService.setWeb3Provider(global_keystore);
-    };
-
-    $scope.confirmImport = function () {
-      var confirmPopup = $ionicPopup.confirm({
-        title: 'Recover wallet',
-        template: 'Are you sure you want to import a wallet from backup and overwrite the current? '
-      });
-      confirmPopup.then(function (res) {
-        if (res) {
-          $scope.importWallet();
-          console.log('Import wallet from backup');
-          refresh();
-        } else {
-          console.log('Do not import wallet');
-        }
-      });
-    };
-
-    $scope.confirmBackup = function () {
-      var confirmPopup = $ionicPopup.confirm({
-        title: 'Backup wallet',
-        template: 'Backup your wallet to email?'
-      });
-      confirmPopup.then(function (res) {
-        if (res) {
-          $scope.backupWallet();
-          console.log('Backup wallet');
-          refresh();
-        } else {
-          console.log('Do not backup wallet');
-        }
-      });
-    };
-
   })
 
   .controller('ItemsCtrl', function ($scope,  $state, Items, $ionicSwipeCardDelegate, $timeout, FeedService) {
@@ -728,7 +751,6 @@ angular.module('leth.controllers', [])
       $state.go('tab.wallet');
       $scope.addrTo = $scope.friend.addr;
     }
-
   })
 
   .controller('FriendCtrl', function ($scope, $stateParams) {
@@ -754,15 +776,12 @@ angular.module('leth.controllers', [])
       };
       web3.shh.post(message);
     }
-
   })
 
   .controller('TransactionCtrl', function ($scope) {
-
   })
 
-  .controller('AboutCtrl', function ($scope, angularLoad) {      
-   
+  .controller('AboutCtrl', function ($scope, angularLoad) {
   })
 
   .controller('ApplethCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http,CountDapp) {
@@ -815,6 +834,4 @@ angular.module('leth.controllers', [])
         updateData(); //defined in external js
         $scope.$broadcast('scroll.refreshComplete');
       }
-
-
   });
