@@ -5,7 +5,7 @@ localStorage.PinOn="false";
 if (typeof localStorage.NodeHost == 'undefined') {
   localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
 }
-angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
+angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionicLetterAvatarSelector', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('FeedEndpoint', {
     //url: '/feed'
     url: 'http://us11.campaign-archive1.com/feed'

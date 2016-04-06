@@ -1,5 +1,5 @@
-var contrAddr = '0x911c94cb2ddbb14136d538cb4739edf48500b049';
-var contrAbi = eval('[{ constant: false, inputs: [{ name: "addr", type: "address" }], name: "enableAddr", outputs: [], type: "function" }, { constant: true, inputs: [], name: "getMinBal", outputs: [{ name: "bal", type: "uint256" }], type: "function" }, { constant: true, inputs: [], name: "getEnabledCount", outputs: [{ name: "r", type: "uint256" }], type: "function" }, { constant: true, inputs: [], name: "getSubscriptionCost", outputs: [{ name: "cost", type: "uint256" }], type: "function" }, { constant: false, inputs: [], name: "open4", outputs: [], type: "function" }, { constant: false, inputs: [], name: "subscribe", outputs: [], type: "function" }, { constant: true, inputs: [], name: "getNumMaxOp", outputs: [{ name: "maxOp", type: "uint256" }], type: "function" }, { constant: false, inputs: [], name: "open1", outputs: [], type: "function" }, { constant: false, inputs: [], name: "open3", outputs: [], type: "function" }, { constant: false, inputs: [], name: "open2", outputs: [], type: "function" }, { constant: false, inputs: [], name: "reset", outputs: [], type: "function" }, { constant: true, inputs: [{ name: "addr", type: "address" }], name: "getRemainingShot", outputs: [{ name: "count", type: "uint256" }], type: "function" }, { constant: true, inputs: [{ name: "addr", type: "address" }], name: "itsEnabled", outputs: [{ name: "enabledV", type: "bool" }], type: "function" }, { constant: false, inputs: [{ name: "mimBal", type: "uint256" }, { name: "regCost", type: "uint256" }, { name: "numOp", type: "uint256" }], name: "config", outputs: [], type: "function" }, { inputs: [], type: "constructor" }, { anonymous: false, inputs: [{ indexed: false, name: "id", type: "uint256" }], name: "Open", type: "event" }, { anonymous: false, inputs: [{ indexed: false, name: "msg", type: "string" }], name: "OperationDenied", type: "event" }, { anonymous: false, inputs: [{ indexed: false, name: "msg", type: "string" }], name: "Log", type: "event" }]');
+var contrAddr = '0xd58cae29b2ecc6e25cb3d180fec570ea4fbc0096';
+var contrAbi = eval('[{"constant":false,"inputs":[{"name":"addr","type":"address"}],"name":"enableAddr","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"getMinBal","outputs":[{"name":"bal","type":"uint256"}],"type":"function"},{"constant":true,"inputs":[],"name":"getEnabledCount","outputs":[{"name":"r","type":"uint256"}],"type":"function"},{"constant":true,"inputs":[],"name":"getSubscriptionCost","outputs":[{"name":"cost","type":"uint256"}],"type":"function"},{"constant":true,"inputs":[],"name":"getCurrentCaller","outputs":[{"name":"r","type":"address"}],"type":"function"},{"constant":false,"inputs":[{"name":"status","type":"uint256"}],"name":"__callback","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"x","type":"address"}],"name":"save","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"idOp","type":"uint256"}],"name":"open","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"oracleFornoAddr","type":"address"}],"name":"setOracle","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"isBusy","outputs":[{"name":"r","type":"bool"}],"type":"function"},{"constant":true,"inputs":[],"name":"getProgramSelected","outputs":[{"name":"r","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[],"name":"subscribe","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"getNumMaxOp","outputs":[{"name":"maxOp","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[],"name":"reset","outputs":[],"type":"function"},{"constant":true,"inputs":[{"name":"addr","type":"address"}],"name":"getRemainingShot","outputs":[{"name":"count","type":"uint256"}],"type":"function"},{"constant":true,"inputs":[{"name":"addr","type":"address"}],"name":"itsEnabled","outputs":[{"name":"enabledV","type":"bool"}],"type":"function"},{"constant":false,"inputs":[{"name":"mimBal","type":"uint256"},{"name":"regCost","type":"uint256"},{"name":"numOp","type":"uint256"}],"name":"config","outputs":[],"type":"function"},{"inputs":[{"name":"oracleFornoAddr","type":"address"}],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"id","type":"uint256"}],"name":"Open","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"msg","type":"string"}],"name":"OperationDenied","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"msg","type":"string"}],"name":"Log","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"msg","type":"string"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Log2","type":"event"}]');
 var contract = web3.eth.contract(contrAbi).at(contrAddr);
 
 angular.element(document).ready(function() {
@@ -40,8 +40,16 @@ contract.Log().watch(function (error, result) {
 
 });
 
+contract.Log2().watch(function (error, result) {
+    var msg = result.args.msg;
+    var val = result.args.value;
+    console.log("msg: " + msg + " value:"+ val); 
+    angular.element(document.querySelector('#log')).html(msg);
+
+});
+
 contract.OperationDenied().watch(function (error, result) {
-    var msg = result.args.state;
+    var msg = result.args.msg;
     console.log("msg: " + msg); 
     if(msg!==""){
         alert(msg);
@@ -51,6 +59,8 @@ contract.OperationDenied().watch(function (error, result) {
 });
 
 function updateData(){
+    var checkbox = isBusy() == 1 ? 0 : 1;
+    angular.element(document.querySelector('#toggleState')).attr("checked",checkbox);
 	angular.element(document.querySelector('#counter')).html(getRemainingShot());
 	angular.element(document.querySelector('#shots')).html(getShots());
     angular.element(document.querySelector('#wei')).html(getSubscriptionCost());
@@ -68,6 +78,9 @@ function isEnabled(){
 	 return contract.itsEnabled('0x' + global_keystore.addresses[0]);
 }
 
+function isBusy(){
+     return contract.isBusy();
+}
 
 function getRemainingShot() {
     return contract.getRemainingShot('0x' + global_keystore.addresses[0]);
@@ -77,68 +90,19 @@ function getSubscriptionCost(){
     return parseFloat(contract.getSubscriptionCost()) / 1.0e18;
 }
 
-
-function doOne() {
+function doOpen(program) {
     var fromAddr = global_keystore.addresses[0];
-    var functionName = 'open1';
+    var functionName = 'open';
     var args = JSON.parse('[]');
     var gasPrice = 50000000000;
     var gas = 3000000;
-    args.push({from: fromAddr, gasPrice: gasPrice, gas: gas});
+    args.push(program,{from: fromAddr, gasPrice: gasPrice, gas: gas});
     var callback = function (err, txhash) {
         console.log('error: ' + err);
         console.log('txhash: ' + txhash);
     }
     args.push(callback);
-    contract['open1'].apply(this, args);
-    return true;
-}
-
-function doTwo() {
-    var fromAddr = global_keystore.addresses[0];
-    var functionName = 'open2';
-    var args = JSON.parse('[]');
-    var gasPrice = 50000000000;
-    var gas = 3000000;
-    args.push({from: fromAddr, gasPrice: gasPrice, gas: gas});
-    var callback = function (err, txhash) {
-        console.log('error: ' + err);
-        console.log('txhash: ' + txhash);
-    }
-    args.push(callback);
-    contract['open2'].apply(this, args);
-    return true;
-}
-
-function doThree() {
-    var fromAddr = global_keystore.addresses[0];
-    var functionName = 'open3';
-    var args = JSON.parse('[]');
-    var gasPrice = 50000000000;
-    var gas = 3000000;
-    args.push({from: fromAddr, gasPrice: gasPrice, gas: gas});
-    var callback = function (err, txhash) {
-        console.log('error: ' + err);
-        console.log('txhash: ' + txhash);
-    }
-    args.push(callback);
-    contract['open3'].apply(this, args);
-    return true;
-}
-
-function doFour() {
-    var fromAddr = global_keystore.addresses[0];
-    var functionName = 'open4';
-    var args = JSON.parse('[]');
-    var gasPrice = 50000000000;
-    var gas = 3000000;
-    args.push({from: fromAddr, gasPrice: gasPrice, gas: gas});
-    var callback = function (err, txhash) {
-        console.log('error: ' + err);
-        console.log('txhash: ' + txhash);
-    }
-    args.push(callback);
-    contract['open4'].apply(this, args);
+    contract['open'].apply(this, args);
     return true;
 }
 

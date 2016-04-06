@@ -36,7 +36,7 @@
         </button>
         <label class="item item-input item-stacked-label item-button-right item-button-left">
           <span class="input-label">Address To </span>
-          <input type="text" ng-model="addrTo" placeholder="type address or use camera to scan" ng-required="true" on-hold="clearAddrTo()">
+          <input type="text" ng-model="addrTo" placeholder="type address or use camera to scan" ng-required="true">
         </label>
 
         <label class="item item-input  item-stacked-label">
@@ -46,7 +46,7 @@
             <option value="0.1" selected>Finney</option>
             <option value="0.11">Wei</option>
           </select-->
-          <input type="number" pattern="^[0-9]+(\.[0-9]{1,2})?$" ng-model="amountTo" placeholder="0,00 eth" ng-required="true">
+          <input type="number" ng-model="amountTo" placeholder="0,00 eth" ng-required="true">
         </label>
         <button ng-disabled="!wallet.$valid" class="button button-block button-energized"
                 ng-click="confirmSend(addrTo,amountTo)">Send

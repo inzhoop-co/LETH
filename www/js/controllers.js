@@ -1,6 +1,6 @@
 angular.module('leth.controllers', [])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state,  $cordovaContacts, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
     window.refresh = function () {
       $scope.balance = AppService.balance();
       $scope.account = AppService.account();
@@ -61,15 +61,33 @@ angular.module('leth.controllers', [])
         codeModal.show();
       });
     };
+
     var createSaveAddressModal = function(address) {
       $ionicModal.fromTemplateUrl('templates/addFriend.html', {
         scope: $scope,
         animation: 'slide-in-up'
       }).then(function (modal) {
+
+        $cordovaContacts.pickContact().then(function (contactPicked) {
+          console.log(JSON.stringify(contactPicked));
+          $scope.name = contactPicked.name.formatted;
+          $scope.surname = contactPicked.familyName.formatted;
+
+          var options = {
+            replaceLineBreaks: false, // true to replace \n by a new line, false by default
+            android: {
+                intent: 'INTENT'  // send SMS with the native android SMS messaging
+                //intent: '' // send SMS without open any other app
+            }
+          };
+        });
+
         if(address != undefined) {
           $scope.addr = address;
         }
+        
         saveAddressModal = modal;
+        
         saveAddressModal.show();
       });
     };
@@ -88,6 +106,18 @@ angular.module('leth.controllers', [])
         .scan()
         .then(function (barcodeData) {
           $state.go('app.wallet', {addr: barcodeData.text});
+          console.log('Success! ' + barcodeData.text);
+        }, function (error) {
+          // An error occurred
+          console.log('Error!' + error);
+        });
+    };
+
+    $scope.scanAddr = function () {
+      $cordovaBarcodeScanner
+        .scan()
+        .then(function (barcodeData) {
+          $scope.addr = barcodeData.text;
           console.log('Success! ' + barcodeData.text);
         }, function (error) {
           // An error occurred
@@ -216,8 +246,8 @@ angular.module('leth.controllers', [])
       saveAddressModal.remove();
     }
 
-    $scope.saveAddr = function(name,comment,addr){
-      var friend = {"addr": addr, "comment": comment, "name": name};
+    $scope.saveAddr = function(name, surname,addr, comment){
+      var friend = {"addr": addr, "comment": comment, "name": name, "surname": surname};
       $scope.friends.push(friend);
       localStorage.Friends = JSON.stringify($scope.friends);
       saveAddressModal.remove();
@@ -756,6 +786,7 @@ angular.module('leth.controllers', [])
   .controller('FriendCtrl', function ($scope, $stateParams) {
     $scope.friend = JSON.parse($stateParams.Friend);
     
+    /*
      $scope.sendMessage = function () {
       web3.setProvider(new web3.providers.HttpProvider(localStorage.NodeHost));
       var identity = web3.shh.newIdentity();
@@ -776,6 +807,7 @@ angular.module('leth.controllers', [])
       };
       web3.shh.post(message);
     }
+    */
   })
 
   .controller('TransactionCtrl', function ($scope) {

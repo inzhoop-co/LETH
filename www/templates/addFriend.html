@@ -1,28 +1,36 @@
 <ion-modal-view>
   <ion-header-bar class="bar-stable bar-assertive">
-    <h1 class="title">Add New Friend</h1>
-    <div class="buttons">
-      <button class="button button-clear ion-ios-close" ng-click="closeSaveAddressModal()"></button>
+    <h1 class="title">Add to Addressbook</h1>
+    <div class="buttons button-rigth button-left">
+      <button class="button button-clear" ng-click="scanAddr()" ng-hide="fromAddressBook">
+        <i class="icon ion-ios-camera"></i>
+      </button>
+      <button class="button button-clear" ng-click="closeSaveAddressModal()">
+        <i class="icon ion-ios-camera ion-ios-close"></i>
+      </button>
     </div>
   </ion-header-bar>
   <ion-content class="has-header" padding="'true'">
     <div class="list list-borderless">
-
       <div class="item">
-        <form ng-submit="saveAddr(name,comment,addr)">
+        <form ng-submit="saveAddr(name,surname,addr,comment)">
           <label class="item item-input item-floating-label">
-            <span class="input-label">Nickname</span>
-            <input type="text" ng-model="name" placeholder="Nickname">
+            <span class="input-label">Name</span>
+            <input type="text" ng-model="name" placeholder="Name">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Surname</span>
+            <input type="text" ng-model="surname" placeholder="Surname">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Wallet Address</span>
+            <input type="text" ng-model="addr" placeholder="Wallet Address">            
           </label>
           <label class="item item-input item-floating-label">
             <span class="input-label">Comment</span>
             <input type="text" ng-model="comment" placeholder="Comment">
-          </label>
-          <label class="item item-input item-floating-label">
-            <span class="input-label">Address</span>
-            <input type="text" ng-model="addr" placeholder="Address">
-          </label>
-          <button class="button button-block button-assertive" type="submit">Save</button>
+          </label>          
+          <button class="button button-block button-energizer" type="submit">Save to Add</button>
         </form>
       </div>
     </div>

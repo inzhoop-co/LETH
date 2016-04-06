@@ -3,6 +3,15 @@
 </div>
 <div class="item item-body label-right">
    <span class="item item-icon-left" href="#">
+     <i class="icon ion-gear-a"></i> Microwave state
+     <label class="toggle">
+          <input type="checkbox" disabled="true" id="toggleState">
+          <div class="track">
+              <div class="handle"></div>
+          </div>
+     </label>
+   </span>
+   <span class="item item-icon-left" href="#">
         <i class="icon ion-pizza"></i>
         Available shot!
         <span class="badge badge-energized" id="counter">{{counter}}</span>
@@ -12,10 +21,10 @@
         TIMER
    </span> 
    <div class="icon item">
-        <button class="button button-outline button-assertive" onclick="doOne()">1:00</button>
-        <button class="button button-outline button-assertive" onclick="doTwo()">1:30</button>
-        <button class="button button-outline button-assertive" onclick="doThree()">2:20</button>
-        <button class="button button-outline button-assertive" onclick="doFour()">3:00</button>
+        <button class="button button-outline button-assertive" onclick="doOpen(1)">1:00</button>
+        <button class="button button-outline button-assertive" onclick="doOpen(2)">1:30</button>
+        <button class="button button-outline button-assertive" onclick="doOpen(3)">2:20</button>
+        <button class="button button-outline button-assertive" onclick="doOpen(4)">3:00</button>
    </div>
 </div>
 <button id="btnRegister" class="button button-block button-balanced" ng-if="!isEnabled()" onclick="doRegister()">Register and buy <span id="shots"></span> shots at <span id="wei"></span> ETH</button>
