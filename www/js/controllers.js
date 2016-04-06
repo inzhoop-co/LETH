@@ -71,7 +71,6 @@ angular.module('leth.controllers', [])
         $cordovaContacts.pickContact().then(function (contactPicked) {
           console.log(JSON.stringify(contactPicked));
           $scope.name = contactPicked.name.formatted;
-          $scope.surname = contactPicked.familyName.formatted;
 
           var options = {
             replaceLineBreaks: false, // true to replace \n by a new line, false by default
@@ -246,8 +245,8 @@ angular.module('leth.controllers', [])
       saveAddressModal.remove();
     }
 
-    $scope.saveAddr = function(name, surname,addr, comment){
-      var friend = {"addr": addr, "comment": comment, "name": name, "surname": surname};
+    $scope.saveAddr = function(name,addr, comment){
+      var friend = {"addr": addr, "comment": comment, "name": name};
       $scope.friends.push(friend);
       localStorage.Friends = JSON.stringify($scope.friends);
       saveAddressModal.remove();
@@ -785,29 +784,7 @@ angular.module('leth.controllers', [])
 
   .controller('FriendCtrl', function ($scope, $stateParams) {
     $scope.friend = JSON.parse($stateParams.Friend);
-    
-    /*
-     $scope.sendMessage = function () {
-      web3.setProvider(new web3.providers.HttpProvider(localStorage.NodeHost));
-      var identity = web3.shh.newIdentity();
-      var topic = "Lottery";
-      var filter = web3.shh.filter([topic]);
-      filter.watch(function (error, result) {
-        if (!error)
-          console.log(result.payload);
-      });
 
-      var payload = 'ciao mondo!';
-      var message = {
-        from: identity,
-        topics: [topic],
-        payload: payload,
-        ttl: 100,
-        workToProve: 100
-      };
-      web3.shh.post(message);
-    }
-    */
   })
 
   .controller('TransactionCtrl', function ($scope) {

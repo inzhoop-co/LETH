@@ -6,21 +6,17 @@
         <i class="icon ion-ios-camera"></i>
       </button>
       <button class="button button-clear" ng-click="closeSaveAddressModal()">
-        <i class="icon ion-ios-camera ion-ios-close"></i>
+        <i class="icon ion-android-close"></i>
       </button>
     </div>
   </ion-header-bar>
   <ion-content class="has-header" padding="'true'">
     <div class="list list-borderless">
       <div class="item">
-        <form ng-submit="saveAddr(name,surname,addr,comment)">
+        <form ng-submit="saveAddr(name,familyName,addr,comment)">
           <label class="item item-input item-floating-label">
             <span class="input-label">Name</span>
             <input type="text" ng-model="name" placeholder="Name">
-          </label>
-          <label class="item item-input item-floating-label">
-            <span class="input-label">Surname</span>
-            <input type="text" ng-model="surname" placeholder="Surname">
           </label>
           <label class="item item-input item-floating-label">
             <span class="input-label">Wallet Address</span>
@@ -30,7 +26,7 @@
             <span class="input-label">Comment</span>
             <input type="text" ng-model="comment" placeholder="Comment">
           </label>          
-          <button class="button button-block button-energizer" type="submit">Save to Add</button>
+          <button class="button button-block button-energized" type="submit">Save to Add</button>
         </form>
       </div>
     </div>
