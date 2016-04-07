@@ -12,7 +12,7 @@ angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionicLetterAvata
   .constant('DappPath',{
     url : "http://www.inzhoop.com/dappleths"
   })
-  .constant('CountDapp',4)
+  .constant('CountDapp',2)
 
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,$lockScreen,$state,$window) {
     $ionicPlatform.ready(function () {
