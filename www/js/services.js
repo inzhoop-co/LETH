@@ -1,7 +1,5 @@
 angular.module('leth.services', [])
   .factory('Friends', function ($rootScope, $http, $q) {
-    // Might use a resource here that returns a JSON array
-
     var apiURL = 'http://ipfs.io/ipfs';
 
     return {

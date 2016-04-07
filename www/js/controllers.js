@@ -92,7 +92,7 @@ angular.module('leth.controllers', [])
         saveAddressModal.show();
       });
     };
-    
+
     var loadFriends = function(friendsHash){
       angular.forEach(friendsHash, function (key, value) {
         Friends.getFromIpfs(key).then(function (response) {
@@ -104,19 +104,22 @@ angular.module('leth.controllers', [])
     };
 
     $scope.scanTo = function () {
-      $cordovaBarcodeScanner
-        .scan()
-        .then(function (barcodeData) {
-          $state.go('app.wallet', {addr: barcodeData.text});
-          console.log('Success! ' + barcodeData.text);
-        }, function (error) {
-          // An error occurred
-          console.log('Error!' + error);
-        });
+      document.addEventListener("deviceready", function () {      
+        $cordovaBarcodeScanner
+          .scan()
+          .then(function (barcodeData) {
+            $state.go('app.wallet', {addr: barcodeData.text});
+            console.log('Success! ' + barcodeData.text);
+          }, function (error) {
+            // An error occurred
+            console.log('Error!' + error);
+          });
+      }, false);          
     };
 
     $scope.scanAddr = function () {
-      $cordovaBarcodeScanner
+      document.addEventListener("deviceready", function () {  
+       $cordovaBarcodeScanner
         .scan()
         .then(function (barcodeData) {
           $scope.addr = barcodeData.text;
@@ -125,6 +128,7 @@ angular.module('leth.controllers', [])
           // An error occurred
           console.log('Error!' + error);
         });
+      }, false);
     };
 
     $scope.hasLogged = false;
@@ -406,54 +410,59 @@ angular.module('leth.controllers', [])
       var amount = c;
       var content = "My address is ethereum://" + $scope.qrcodeString + '@' + amount;
       var phonenumber="";
-      $cordovaContacts.pickContact().then(function (contactPicked) {
-          console.log(JSON.stringify(contactPicked));
-          phonenumber = contactPicked.phoneNumbers[0].value;
+      document.addEventListener("deviceready", function () {      
+        $cordovaContacts.pickContact().then(function (contactPicked) {
+            console.log(JSON.stringify(contactPicked));
+            phonenumber = contactPicked.phoneNumbers[0].value;
 
-          var options = {
-            replaceLineBreaks: false, // true to replace \n by a new line, false by default
-            android: {
-                intent: 'INTENT'  // send SMS with the native android SMS messaging
-                //intent: '' // send SMS without open any other app
-            }
-          };
-        
-          $cordovaSms
-          .send(phonenumber, content, options)
-          .then(function() {
-            // Success! SMS was sent
-            console.log("SMS to " + phonenumber + " with text :" + content + " sent.");
-          }, function(error) {
-            // An error occurred
-            console.log("ERROR sending SMS to " + phonenumber + " with text :" + content + " sent.");
+            var options = {
+              replaceLineBreaks: false, // true to replace \n by a new line, false by default
+              android: {
+                  intent: 'INTENT'  // send SMS with the native android SMS messaging
+                  //intent: '' // send SMS without open any other app
+              }
+            };
+
+            $cordovaSms
+            .send(phonenumber, content, options)
+            .then(function() {
+              // Success! SMS was sent
+              console.log("SMS to " + phonenumber + " with text :" + content + " sent.");
+            }, function(error) {
+              // An error occurred
+              console.log("ERROR sending SMS to " + phonenumber + " with text :" + content + " sent.");
+            });
+
           });
-      });      
+      }, false);      
     }
 
     $scope.shareByEmail = function(c){
         var amount = c;
         var imgQrcode = angular.element(document.querySelector('qr > img')).attr('ng-src');
+        document.addEventListener("deviceready", function () {
+          $cordovaEmailComposer.isAvailable().then(function() {
+            var emailOpts = {
+              to: [''],
+              subject: 'Please Pay me',
+              body: 'Please send me ETH to this Wallet Address: </br><a href="ethereum://' + $scope.qrcodeString + '@' + amount + '"/>' + $scope.qrcodeString + '@' + amount + '</br><img src="' + imgQrcode + '"</img></br>',
+              isHtml: true
+            };
 
-        $cordovaEmailComposer.isAvailable().then(function() {
-          var emailOpts = {
-            to: [''],
-            subject: 'Please Pay me',
-            body: 'Please send me ETH to this Wallet Address: </br><a href="ethereum://' + $scope.qrcodeString + '@' + amount + '"/>' + $scope.qrcodeString + '@' + amount + '</br><img src="' + imgQrcode + '"</img></br>',
-            isHtml: true
-          };
+            $cordovaEmailComposer.open(emailOpts).then(null, function () {
+              console.log('email view dismissed');
+            });
 
-          $cordovaEmailComposer.open(emailOpts).then(null, function () {
-            console.log('email view dismissed');
+            return;
+          }, function (error) {
+            console.log("cordovaEmailComposer not available");
+            return;
           });
-
-          return;
-        }, function (error) {
-          console.log("cordovaEmailComposer not available");
-          return;
-        });
+        }, false);         
     }
 
     $scope.copyAddr = function(){
+      document.addEventListener("deviceready", function () {  
         $cordovaClipboard
         .copy($scope.qrcodeString)
         .then(function () {
@@ -471,6 +480,7 @@ angular.module('leth.controllers', [])
           // error
           console.log('Copy error');
         });
+      }, false);         
     }
   })
 

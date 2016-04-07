@@ -1,8 +1,8 @@
 <ion-modal-view>
   <ion-header-bar class="bar-stable bar-assertive">
-    <h1 class="title">Change Code</h1>
-    <div class="buttons">
-      <button class="button button-clear ion-android-close" ng-click="closeChangeCodeModal()"></button>
+    <div class="buttons bar-header">
+      <button class="button button-clear icon ion-android-close" ng-click="closeChangeCodeModal()"></button>
+      <div class="h1 title">Change Code</div>
     </div>
   </ion-header-bar>
   <ion-content class="has-header" padding="'true'">
@@ -24,7 +24,7 @@
             <span class="input-label">Confirm New Code</span>
             <input type="password" pattern="[0-9]*" ng-model="confirmNewCode" required="true">
           </label>
-          <button ng-disabled="!changeCode.$valid || confirmNewCode!=newCode"  class="button button-block button-assertive" type="submit" ng-disabled="">Change</button>
+          <button ng-disabled="!changeCode.$valid || confirmNewCode!=newCode"  class="button button-block button-energized" type="submit" ng-disabled="">Change</button>
         </form>
       </div>
 

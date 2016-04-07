@@ -7,11 +7,9 @@ if (typeof localStorage.NodeHost == 'undefined') {
 }
 angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionicLetterAvatarSelector', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('FeedEndpoint', {
-    //url: '/feed'
     url: 'http://us11.campaign-archive1.com/feed'
   })
   .constant('DappPath',{
-    //url : "/dappleth" 
     url : "http://www.inzhoop.com/dappleths"
   })
   .constant('CountDapp',4)
@@ -62,23 +60,7 @@ angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionicLetterAvata
     });
   })
   /*
-  .directive('noScroll', function($document) {
-  return {
-    restrict: 'A',
-    link: function($scope, $element, $attr) {
-
-        $document.on('touchmove', function(e) {
-          e.preventDefault();
-        });
-      }
-    }
-  })
-*/
   .directive("templapp", function($compile){
-      //recupera quello che ti serve da un servizio angular
-
-      //definisciti lo scope
-
       return{
           link: function(scope, element){
               var template = "<button ng-click='doSomething()'>{{label}}</button>";
@@ -87,8 +69,9 @@ angular.module('leth', ['oc.lazyLoad', 'ionic', 'angularLoad', 'ionicLetterAvata
               element.append(content);
           }
       }
-/**/
-  })
+
+  }) 
+  */
   .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
       .state('app', {
