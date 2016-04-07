@@ -1,7 +1,7 @@
 <ion-modal-view>
   <ion-header-bar class="bar-stable bar-assertive">
-    <div class="buttons bar-header">
-      <button class="button button-clear icon ion-android-close" ng-click="closeChangeCodeModal()"></button>
+    <div class="buttons icon bar-header">
+      <button class="button button-clear ion-ios-close-empty" ng-click="closeChangeCodeModal()"></button>
       <div class="h1 title">Change Code</div>
     </div>
   </ion-header-bar>
@@ -27,8 +27,6 @@
           <button ng-disabled="!changeCode.$valid || confirmNewCode!=newCode"  class="button button-block button-energized" type="submit" ng-disabled="">Change</button>
         </form>
       </div>
-
     </div>
-
   </ion-content>
 </ion-modal-view>
