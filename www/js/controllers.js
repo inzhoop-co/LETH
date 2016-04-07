@@ -68,28 +68,31 @@ angular.module('leth.controllers', [])
         animation: 'slide-in-up'
       }).then(function (modal) {
 
-        $cordovaContacts.pickContact().then(function (contactPicked) {
-          console.log(JSON.stringify(contactPicked));
-          $scope.name = contactPicked.name.formatted;
+        document.addEventListener("deviceready", function () {
+          $cordovaContacts.pickContact().then(function (contactPicked) {
+            console.log(JSON.stringify(contactPicked));
+            $scope.name = contactPicked.name.formatted;
 
-          var options = {
-            replaceLineBreaks: false, // true to replace \n by a new line, false by default
-            android: {
-                intent: 'INTENT'  // send SMS with the native android SMS messaging
-                //intent: '' // send SMS without open any other app
-            }
-          };
-        });
+            var options = {
+              replaceLineBreaks: false, // true to replace \n by a new line, false by default
+              android: {
+                  intent: 'INTENT'  // send SMS with the native android SMS messaging
+                  //intent: '' // send SMS without open any other app
+              }
+            };
+          });
+        }, false);
 
         if(address != undefined) {
           $scope.addr = address;
         }
-        
+          
         saveAddressModal = modal;
-        
+          
         saveAddressModal.show();
       });
     };
+    
     var loadFriends = function(friendsHash){
       angular.forEach(friendsHash, function (key, value) {
         Friends.getFromIpfs(key).then(function (response) {

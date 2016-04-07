@@ -12,8 +12,8 @@
   </div>
   <ion-list class="list">
     <ion-item class="item-remove-animate item-icon-right" ng-repeat="friend in friends track by $index "
-          type="item-text-wrap" href="#/app/friends/{{friend}}" letters-of="{{ friend.name }} {{friend.surname}}">
-          <h2><b>{{friend.name}} {{friend.surname}}</b></h2>
+          type="item-text-wrap" href="#/app/friends/{{friend}}" letters-of="{{ friend.name }}">
+          <h2><b>{{friend.name}}</b></h2>
           <p>{{friend.comment}}</p>
           <p><{{friend.addr}}></p>
           <i class="icon ion-chevron-right icon-accessory"></i>
