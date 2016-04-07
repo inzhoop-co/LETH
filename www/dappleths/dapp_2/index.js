@@ -15,7 +15,8 @@ function updateData(){
 function buy(address,amount)
 {
     var fromAddr = global_keystore.addresses[0];
-	var coin = amount.value*1;
+	//var coin = amount.value*1; 
+    var coin = parseFloat(angular.element(document.querySelector('#amountCoins')).val());
 	var toAddr = address.value;
 	var functionName = 'transfer';
     var args = JSON.parse('[]');
@@ -28,11 +29,12 @@ function buy(address,amount)
     }
     args.push(callback);
     riacecoin['transfer'].apply(this, args);
-
-    angular.element(document.querySelector('#amountCoins')).value(0);
-	updateData();
+      
+    
+	 updateData(); 
 	//0xc92af685c058197f22f432e33756409a7b10fb55
 	//0xd1324ada7e026211d0cacd90cae5777e340de948
+    angular.element(document.querySelector('#amountCoins')).val('');
     return true;
 	
 }
