@@ -58,6 +58,9 @@
         },
         "de.appplant.cordova.plugin.email-composer": {
             "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-email-composer": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },
     "dependent_plugins": {}

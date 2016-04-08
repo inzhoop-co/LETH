@@ -247,7 +247,6 @@ angular.module('leth.services', [])
 
       }
     }
-
   })
   .factory('Transactions', function () {
     var transactions;

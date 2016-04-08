@@ -1,16 +1,17 @@
 angular.module('leth.controllers', [])
 
   .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state,  $cordovaContacts, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
-    window.refresh = function () {
+     window.refresh = function () {
       $scope.balance = AppService.balance();
       $scope.account = AppService.account();
       $scope.qrcodeString = AppService.account();
-
+      $scope.getNetwork();
       //temp
       $scope.transactions = Transactions.all();
       localStorage.Transactions = JSON.stringify($scope.transactions);
-    };
-    window.customPasswordProvider = function (callback) {
+     };
+
+     window.customPasswordProvider = function (callback) {
       var pw;
       PasswordPopup.open("Inserisci Una Password", "Inserisci La tua password").then(
         function (result) {
@@ -34,9 +35,9 @@ angular.module('leth.controllers', [])
         function (err) {
           pw = "";
         })
-    };
+     };
 
-
+    
     var loginModal;
     var codeModal;
     var saveAddressModal;
@@ -52,6 +53,7 @@ angular.module('leth.controllers', [])
         loginModal.show();
       });
     };
+
     var createCodeModal = function() {
       $ionicModal.fromTemplateUrl('templates/changeCode.html', {
         scope: $scope,
@@ -116,6 +118,26 @@ angular.module('leth.controllers', [])
           });
       }, false);          
     };
+
+    $scope.getNetwork = function(){
+      web3.eth.getBlock(0, function(e, res){
+        if(!e){
+          switch(res.hash) {
+            case '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303':
+                $scope.nameNetwork = 'Testnet';
+                $scope.badgeNetwork = 'badge badge-assertive';
+                break;
+            case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
+                $scope.nameNetwork = 'Mainet';
+                $scope.badgeNetwork = 'badge badge-balanced';
+                break;
+            default:
+                $scope.nameNetwork = 'Privatenet';
+                $scope.badgeNetwork = 'badge badge-positive';              
+          }
+        }
+      });
+    }
 
     $scope.scanAddr = function () {
       document.addEventListener("deviceready", function () {  
@@ -484,7 +506,9 @@ angular.module('leth.controllers', [])
     }
   })
 
-  .controller('SettingsCtrl', function ($scope, $ionicPopup, $cordovaEmailComposer, $cordovaActionSheet, $cordovaFile, AppService) {
+  .controller('SettingsCtrl', function ($scope, $ionicPopup, $cordovaEmailComposer, $cordovaActionSheet, $cordovaFile, AppService) {    
+
+
     $scope.addrHost = localStorage.NodeHost;
 	
     $scope.pin = { checked: (localStorage.PinOn=="true") };
@@ -508,6 +532,7 @@ angular.module('leth.controllers', [])
           console.log('provider host not modified');
         }
       });
+      refresh()
     };
 
     $scope.confirmImport = function () {
@@ -710,6 +735,7 @@ angular.module('leth.controllers', [])
           // not available
         });
     };
+
   })
 
   .controller('ItemsCtrl', function ($scope,  $state, Items, $ionicSwipeCardDelegate, $timeout, FeedService) {

@@ -3,8 +3,13 @@
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-content>
-	<div class="list">
-		<h5> Host Provider Address (free to choose yours)</h5>
+  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+	<div class="list" >
+		<h5> Host Provider Address</h5>
+		<div class="item item-icon-rigth">
+			Network Host Type
+			<span class="{{badgeNetwork}}" ng-click="getNetwork()">{{nameNetwork}}</span>
+		</div>
 		<div class="item item-input">
 		    <label class="item-input-wrapper"><input type="text" ng-model="addrHost" placeholder="type host address"></label>
 		    <button class="button button-clear" ng-click="editHost(addrHost)">
