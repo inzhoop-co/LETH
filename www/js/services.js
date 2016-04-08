@@ -152,7 +152,7 @@ angular.module('leth.services', [])
       balance: function () {
         var result;
         try {
-          result = parseFloat(web3.eth.getBalance(global_keystore.addresses[0])) / 1.0e18;
+          result = (parseFloat(web3.eth.getBalance(global_keystore.addresses[0])) / 1.0e18).toFixed(4);
         }catch (e){
           result = undefined;
         }
