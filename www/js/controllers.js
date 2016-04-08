@@ -837,7 +837,7 @@ angular.module('leth.controllers', [])
       var id = $stateParams.Id;
       var path = DappPath.url + '/dapp_';
       var localpath = 'dappleths/dapp_'; 
-      path=localpath;
+      //path=localpath;
       //loading template html to inject  
       $http.get(path + id + '/index.html') //cors to load from website
         .success(function(data){
