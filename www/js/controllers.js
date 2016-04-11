@@ -142,7 +142,7 @@ angular.module('leth.controllers', [])
     $scope.sendFeedback = function(){
       var options = {
         title: 'Send your mood for the app:',
-        buttonLabels: ['Good <img src="img/inzhoop-icon.png">', 'Medium', 'Poor'],
+        buttonLabels: ['Good', 'Medium', 'Poor'],
         addCancelButtonWithLabel: 'Cancel',
         androidEnableCancelButton : true,
         winphoneEnableCancelButton : true
