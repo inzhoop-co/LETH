@@ -1,1 +1,12 @@
 /* Empty. Add your own CSS if you like */
+img#headerImage
+{
+  width: 150px;
+  height: 150px;
+
+}
+img#headerSetting
+{
+  width: 50px;
+  height: 50px;
+}

@@ -3,7 +3,7 @@
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
 	<div class="item divider padding dark" align="center">
 		<p>
-			<img ng-src="img/inzhoop.png" style="width: 50px; height: 50px;">
+			<img ng-src="img/inzhoop.png" id="headerSetting">
 		    the 1st ΞTH mobile wallet
 		</p>
 	</div>
@@ -24,7 +24,7 @@
 		    Backup your Wallet
 		    <button class="button button-clear" ng-click="backupWallet()">
 		        <i class="icon ion-ios-cloud-download"></i>
-		    </button>		    
+		    </button>
 		</div>
 		<div class="item item-button-right">
 		    Import a Wallet
@@ -37,14 +37,14 @@
 		    Change Code
 		    <button class="button button-clear" ng-click="openChangeCodeModal()">
 		        <i class="icon ion-lock-combination"></i>
-		    </button>		    
+		    </button>
 		</div>
 	    <ion-toggle  ng-model="pin.checked" ng-checked="pin.checked">
 			Enabled
 		</ion-toggle>
 		<div class="divider dark" align="center">
 			<p>LΞTH v.0.1</p>
-		</div>	
-	</div>	
+		</div>
+	</div>
   </ion-content>
 </ion-view>
