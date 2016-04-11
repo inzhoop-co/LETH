@@ -1,7 +1,4 @@
 <ion-view view-title="Friends">
-  <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons>
   <ion-content class="has-header has-tabs" >
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
   <div class="item item-divider item-icon-left item-icon-right">
@@ -11,16 +8,17 @@
     <button class="icon button-icon ion-ios-personadd positive" ng-click="addAddress()"></button>
   </div>
   <ion-list class="list">
-    <ion-item class="item-remove-animate item-icon-right" ng-repeat="friend in friends track by $index "
-          type="item-text-wrap" href="#/app/friends/{{friend}}" letters-of="{{ friend.name }}">
-          <h2><b>{{friend.name}}</b></h2>
-          <p>{{friend.comment}}</p>
-          <p><{{friend.addr}}></p>
-          <i class="icon ion-chevron-right icon-accessory"></i>
-          <ion-option-button class="button-assertive" ng-click="remove($index)">
-              Delete
-          </ion-option-button>
-      </ion-item>
+    <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends track by $index "
+      type="item-text-wrap" href="#/app/friends/{{friend.addr}}">
+      <img src="{{friend.icon}}"></img>
+      <h2><b>{{friend.name}}</b></h2>
+      <p>{{friend.comment}}</p>
+      <p>{{friend.addr}}</p>
+      <i class="icon ion-chevron-right icon-accessory"></i>
+      <ion-option-button class="button-assertive" ng-click="remove($index)">
+          Delete
+      </ion-option-button>
+    </ion-item>
   </ion-list>
   </ion-content>
 </ion-view>

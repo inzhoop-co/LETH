@@ -1,16 +1,17 @@
 angular.module('leth.controllers', [])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state,  $cordovaContacts, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
-    window.refresh = function () {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $cordovaActionSheet, $cordovaContacts, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
+     window.refresh = function () {
       $scope.balance = AppService.balance();
       $scope.account = AppService.account();
-      $scope.qrcodeString = AppService.account();
-
+      $scope.qrcodeString = $scope.account;
+      $scope.getNetwork();
       //temp
       $scope.transactions = Transactions.all();
       localStorage.Transactions = JSON.stringify($scope.transactions);
-    };
-    window.customPasswordProvider = function (callback) {
+     };
+
+     window.customPasswordProvider = function (callback) {
       var pw;
       PasswordPopup.open("Inserisci Una Password", "Inserisci La tua password").then(
         function (result) {
@@ -34,9 +35,8 @@ angular.module('leth.controllers', [])
         function (err) {
           pw = "";
         })
-    };
-
-
+     };
+  
     var loginModal;
     var codeModal;
     var saveAddressModal;
@@ -52,6 +52,7 @@ angular.module('leth.controllers', [])
         loginModal.show();
       });
     };
+
     var createCodeModal = function() {
       $ionicModal.fromTemplateUrl('templates/changeCode.html', {
         scope: $scope,
@@ -108,14 +109,71 @@ angular.module('leth.controllers', [])
         $cordovaBarcodeScanner
           .scan()
           .then(function (barcodeData) {
-            $state.go('app.wallet', {addr: barcodeData.text});
-            console.log('Success! ' + barcodeData.text);
+            if(barcode!= undefined)
+              $state.go('app.wallet', {addr: barcodeData.text});
+            console.log('read code: ' + barcodeData.text);
           }, function (error) {
             // An error occurred
             console.log('Error!' + error);
           });
       }, false);          
     };
+
+    $scope.getNetwork = function(){
+      web3.eth.getBlock(0, function(e, res){
+        if(!e){
+          switch(res.hash) {
+            case '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303':
+                $scope.nameNetwork = 'Testnet';
+                $scope.badgeNetwork = 'badge badge-royal';
+                break;
+            case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
+                $scope.nameNetwork = 'Mainet';
+                $scope.badgeNetwork = 'badge badge-balanced';
+                break;
+            default:
+                $scope.nameNetwork = 'Privatenet';
+                $scope.badgeNetwork = 'badge badge-calm';              
+          }
+        }
+      });
+    }
+
+    $scope.sendFeedback = function(){
+      var options = {
+        title: 'Send your mood for the app:',
+        buttonLabels: ['Good', 'Medium', 'Poor'],
+        addCancelButtonWithLabel: 'Cancel',
+        androidEnableCancelButton : true,
+        winphoneEnableCancelButton : true
+        //addDestructiveButtonWithLabel : 'Delete it'
+      };
+
+      document.addEventListener("deviceready", function () {
+        $cordovaActionSheet.show(options)
+          .then(function(btnIndex) {
+            var mood = btnIndex;
+
+            $cordovaEmailComposer.isAvailable().then(function() {
+              var emailOpts = {
+                to: ['info@inzhoop.com'],
+                subject: 'Feedback  from LETH ' + account + ": " + mood,
+                body: '',
+                isHtml: true
+              };
+
+            $cordovaEmailComposer.open(emailOpts).then(null, function () {
+              console.log('email view dismissed');
+            });
+
+            return;
+            }, function (error) {
+              console.log("cordovaEmailComposer not available");
+              return;
+            });
+          });
+      }, false);
+    }
 
     $scope.scanAddr = function () {
       document.addEventListener("deviceready", function () {  
@@ -252,8 +310,17 @@ angular.module('leth.controllers', [])
       saveAddressModal.remove();
     }
 
-    $scope.saveAddr = function(name,addr, comment){
-      var friend = {"addr": addr, "comment": comment, "name": name};
+    $scope.saveAddr = function(name,addr,comment){
+      var icon = blockies.create({ 
+        seed: addr, 
+        //color: '#ff9933', 
+        //bgcolor: 'red', 
+        //size: 15, // width/height of the icon in blocks, default: 8
+        //scale: 2, 
+        //spotcolor: '#000' 
+      });
+
+      var friend = {"addr": addr, "comment": comment, "name": name, "icon":icon.toDataURL("image/jpeg")};
       $scope.friends.push(friend);
       localStorage.Friends = JSON.stringify($scope.friends);
       saveAddressModal.remove();
@@ -306,11 +373,11 @@ angular.module('leth.controllers', [])
       $scope.fromAddressBook = false;
     }
 
-    $scope.sendCoins = function (addr, amount) {
+    $scope.sendCoins = function (addr, amount, unit) {
       var fromAddr = $scope.account;
       var toAddr = addr;
       var valueEth = amount;
-      var value = parseFloat(valueEth) * 1.0e18;
+      var value = parseFloat(valueEth) * unit;
       var gasPrice = 50000000000;
       var gas = 50000;
 
@@ -326,7 +393,7 @@ angular.module('leth.controllers', [])
             });
           } else {
             var successPopup = $ionicPopup.alert({
-              title: 'Transazione Inoltrata',
+              title: 'Transaction sent',
               template: result[1]
 
             });
@@ -350,16 +417,16 @@ angular.module('leth.controllers', [])
         });
     };
 
-    $scope.confirmSend = function (addr, amount) {
+    $scope.confirmSend = function (addr, amount,unit) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Send Coins',
         template: 'Are you realy sure?'
       });
       confirmPopup.then(function (res) {
         if (res) {
-          $scope.sendCoins(addr, amount);
+          $scope.sendCoins(addr, amount,unit);
         } else {
-          console.log('Send coins aborted');
+          console.log('send coins aborted');
         }
       });
     };
@@ -394,6 +461,12 @@ angular.module('leth.controllers', [])
     $scope.inputMode = '';
     $scope.image = true;
 
+    $scope.onAmountChange = function(amount){
+      if($scope.amountPayment == "")
+        $scope.qrcodeString = $scope.account;
+  
+      $scope.qrcodeString = $scope.account + '@' + amount
+    }
 
     $scope.showAddress = function () {
       var alertPopup = $ionicPopup.alert({
@@ -406,9 +479,8 @@ angular.module('leth.controllers', [])
       });
     };
 
-    $scope.shareBySms = function(c) {
-      var amount = c;
-      var content = "My address is ethereum://" + $scope.qrcodeString + '@' + amount;
+    $scope.shareBySms = function() {
+      var content = "My address is ethereum://" + $scope.qrcodeString ;
       var phonenumber="";
       document.addEventListener("deviceready", function () {      
         $cordovaContacts.pickContact().then(function (contactPicked) {
@@ -437,15 +509,14 @@ angular.module('leth.controllers', [])
       }, false);      
     }
 
-    $scope.shareByEmail = function(c){
-        var amount = c;
+    $scope.shareByEmail = function(){
         var imgQrcode = angular.element(document.querySelector('qr > img')).attr('ng-src');
         document.addEventListener("deviceready", function () {
           $cordovaEmailComposer.isAvailable().then(function() {
             var emailOpts = {
               to: [''],
               subject: 'Please Pay me',
-              body: 'Please send me ETH to this Wallet Address: </br><a href="ethereum://' + $scope.qrcodeString + '@' + amount + '"/>' + $scope.qrcodeString + '@' + amount + '</br><img src="' + imgQrcode + '"</img></br>',
+              body: 'Please send me ETH to this Wallet Address: </br><a href="ethereum://' + $scope.qrcodeString + '"/>' + $scope.qrcodeString + '</br><img src="' + imgQrcode + '"</img></br>',
               isHtml: true
             };
 
@@ -484,7 +555,7 @@ angular.module('leth.controllers', [])
     }
   })
 
-  .controller('SettingsCtrl', function ($scope, $ionicPopup, $cordovaEmailComposer, $cordovaActionSheet, $cordovaFile, AppService) {
+  .controller('SettingsCtrl', function ($scope, $ionicPopup, $cordovaEmailComposer, $cordovaActionSheet, $cordovaFile, AppService) {    
     $scope.addrHost = localStorage.NodeHost;
 	
     $scope.pin = { checked: (localStorage.PinOn=="true") };
@@ -503,6 +574,7 @@ angular.module('leth.controllers', [])
         if (res) {
           localStorage.NodeHost = addr;
           AppService.setWeb3Provider(global_keystore);
+          refresh();
           console.log('provider host update to: ' + addr);
         } else {
           console.log('provider host not modified');
@@ -710,6 +782,7 @@ angular.module('leth.controllers', [])
           // not available
         });
     };
+
   })
 
   .controller('ItemsCtrl', function ($scope,  $state, Items, $ionicSwipeCardDelegate, $timeout, FeedService) {
@@ -782,10 +855,9 @@ angular.module('leth.controllers', [])
       $scope.item =  FeedService.get($scope.infoNews, $stateParams.Item);    
   })
 
-  .controller('FriendsCtrl', function ($scope, Friends) {
-
+  .controller('FriendsCtrl', function ($scope, Friends) {    
     $scope.remove = function (friend) {
-      Friends.remove($scope.friends, friend);
+      Friends.remove($scope.friends,friend);
       localStorage.Friends = JSON.stringify($scope.friends);
     };
 
@@ -795,9 +867,8 @@ angular.module('leth.controllers', [])
     }
   })
 
-  .controller('FriendCtrl', function ($scope, $stateParams) {
-    $scope.friend = JSON.parse($stateParams.Friend);
-
+  .controller('FriendCtrl', function ($scope, $stateParams, Friends) {
+    $scope.friend = Friends.get($stateParams);
   })
 
   .controller('TransactionCtrl', function ($scope) {
@@ -817,9 +888,9 @@ angular.module('leth.controllers', [])
 
     var path = DappPath.url + '/dapp_';
     var localpath = 'dappleths/dapp_';    //maybe a list  from an API of dappleth Store: sample app
-    //path=localpath; //for development
+    path=localpath; //for development
     
-    $scope.appContainer="</br>";
+    $scope.appContainer="";
 
     for(var i=1; i<=CountDapp; i++) {
       $http.get(path + i + '/app.html') 
@@ -830,14 +901,14 @@ angular.module('leth.controllers', [])
     }
   })
 
-  .controller('ApplethRunCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams, $ocLazyLoad,$timeout) {
+  .controller('ApplethRunCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
       console.log("Param " + $stateParams.Id);
 
       //load app selected
       var id = $stateParams.Id;
       var path = DappPath.url + '/dapp_';
       var localpath = 'dappleths/dapp_'; 
-      path=localpath;
+      //path=localpath;
       //loading template html to inject  
       $http.get(path + id + '/index.html') //cors to load from website
         .success(function(data){

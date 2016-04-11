@@ -23,9 +23,15 @@ angular.module('leth.services', [])
           addressbook.push(user);
         return addressbook;
       },
-      remove: function(addressbook, index) {
-        addressbook.splice(index,1);
-        //addressbook.pop(user);
+      get: function(address) {
+        var addressbook = JSON.parse(localStorage.Friends);
+        var obj = addressbook.filter(function (val) {
+          return val.addr === address.Friend;
+        });
+        return obj[0];         
+      },
+      remove: function(addressbook, address) {
+        addressbook.splice(addressbook.indexOf(address), 1);
         return addressbook;
       }
     };
@@ -152,7 +158,7 @@ angular.module('leth.services', [])
       balance: function () {
         var result;
         try {
-          result = parseFloat(web3.eth.getBalance(global_keystore.addresses[0])) / 1.0e18;
+          result = (parseFloat(web3.eth.getBalance(global_keystore.addresses[0])) / 1.0e18).toFixed(6);
         }catch (e){
           result = undefined;
         }
@@ -247,7 +253,6 @@ angular.module('leth.services', [])
 
       }
     }
-
   })
   .factory('Transactions', function () {
     var transactions;
