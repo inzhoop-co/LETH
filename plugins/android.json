@@ -19,6 +19,9 @@
         "cordova-plugin-actionsheet": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
@@ -30,6 +33,9 @@
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
         "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-email-composer": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
         "cordova-plugin-file": {
@@ -49,26 +55,7 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "phonegap-plugin-barcodescanner": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "de.appplant.cordova.plugin.email-composer": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "cordova-plugin-email-composer": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
-        "de.appplant.cordova.plugin.local-notification": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },
-    "dependent_plugins": {
-        "cordova-plugin-app-event": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        }
-    }
+    "dependent_plugins": {}
 }

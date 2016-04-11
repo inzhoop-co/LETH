@@ -1,6 +1,6 @@
 <ion-view view-title="ΞTH {{balance}}">
   <ion-content class="has-header has-tabs" >
-  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+  <!--ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher-->
     <ion-slide-box auto-play="true" does-continue="false" show-pager="true">
       <ion-slide>
         <div>
@@ -13,8 +13,12 @@
         </div>
       </ion-slide>
     </ion-slide-box>
+    <div class="button-bar padding">
+      <button class="button button-small button button-positive">ÐAppleths Store </button>
+      <button class="button button-small button-outline button-positive">Installed </button>
+    </div>
     <div ng-bind-html="appContainer">
-      <div class="list card padding"></div>
+      Nothing to install ...
     </div>
     </ion-content>
 </ion-view>

@@ -1,10 +1,16 @@
 <ion-view view-title="Settings">
   <ion-content>
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
-	<div class="list" >
+	<div class="divider padding assertive" align="center">
+		<p>
+			<img ng-src="img/inzhoop.png" style="width: 100px; height: 100px;">
+		    LΞTH v.0.1
+		</p>
+	</div>
+  	<div class="list" >
 		<div class="padding subdued">Host Provider Address</div>
 		<div class="item item-icon-rigth">
-			Network Host Type
+			Network host type
 			<span class="{{badgeNetwork}}" ng-click="getNetwork()">{{nameNetwork}}</span>
 		</div>
 		<div class="item item-input">
@@ -36,12 +42,6 @@
 	    <ion-toggle  ng-model="pin.checked" ng-checked="pin.checked">
 			Enabled
 		</ion-toggle>
-	</div>
-	<div class="divider assertive" align="center">
-		<p>
-			<img ng-src="img/inzhoop.png" style="width: 100px; height: 100px;">
-		    LΞTH v.0.1
-		</p>
 	</div>	
   </ion-content>
 </ion-view>

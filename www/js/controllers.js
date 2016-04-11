@@ -1,6 +1,6 @@
 angular.module('leth.controllers', [])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state,  $cordovaContacts, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $cordovaActionSheet, $cordovaContacts, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
      window.refresh = function () {
       $scope.balance = AppService.balance();
       $scope.account = AppService.account();
@@ -109,8 +109,9 @@ angular.module('leth.controllers', [])
         $cordovaBarcodeScanner
           .scan()
           .then(function (barcodeData) {
-            $state.go('app.wallet', {addr: barcodeData.text});
-            console.log('Success! ' + barcodeData.text);
+            if(barcode!= undefined)
+              $state.go('app.wallet', {addr: barcodeData.text});
+            console.log('read code: ' + barcodeData.text);
           }, function (error) {
             // An error occurred
             console.log('Error!' + error);
@@ -136,6 +137,42 @@ angular.module('leth.controllers', [])
           }
         }
       });
+    }
+
+    $scope.sendFeedback = function(){
+      var options = {
+        title: 'Send your mood for the app:',
+        buttonLabels: ['Good <img src="img/inzhoop-icon.png">', 'Medium', 'Poor'],
+        addCancelButtonWithLabel: 'Cancel',
+        androidEnableCancelButton : true,
+        winphoneEnableCancelButton : true
+        //addDestructiveButtonWithLabel : 'Delete it'
+      };
+
+      document.addEventListener("deviceready", function () {
+        $cordovaActionSheet.show(options)
+          .then(function(btnIndex) {
+            var mood = btnIndex;
+
+            $cordovaEmailComposer.isAvailable().then(function() {
+              var emailOpts = {
+                to: ['info@inzhoop.com'],
+                subject: 'Feedback  from LETH ' + account + ": " + mood,
+                body: '',
+                isHtml: true
+              };
+
+            $cordovaEmailComposer.open(emailOpts).then(null, function () {
+              console.log('email view dismissed');
+            });
+
+            return;
+            }, function (error) {
+              console.log("cordovaEmailComposer not available");
+              return;
+            });
+          });
+      }, false);
     }
 
     $scope.scanAddr = function () {
@@ -336,11 +373,11 @@ angular.module('leth.controllers', [])
       $scope.fromAddressBook = false;
     }
 
-    $scope.sendCoins = function (addr, amount) {
+    $scope.sendCoins = function (addr, amount, unit) {
       var fromAddr = $scope.account;
       var toAddr = addr;
       var valueEth = amount;
-      var value = parseFloat(valueEth) * 1.0e18;
+      var value = parseFloat(valueEth) * unit;
       var gasPrice = 50000000000;
       var gas = 50000;
 
@@ -356,7 +393,7 @@ angular.module('leth.controllers', [])
             });
           } else {
             var successPopup = $ionicPopup.alert({
-              title: 'Transazione Inoltrata',
+              title: 'Transaction sent',
               template: result[1]
 
             });
@@ -380,16 +417,16 @@ angular.module('leth.controllers', [])
         });
     };
 
-    $scope.confirmSend = function (addr, amount) {
+    $scope.confirmSend = function (addr, amount,unit) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Send Coins',
         template: 'Are you realy sure?'
       });
       confirmPopup.then(function (res) {
         if (res) {
-          $scope.sendCoins(addr, amount);
+          $scope.sendCoins(addr, amount,unit);
         } else {
-          console.log('Send coins aborted');
+          console.log('send coins aborted');
         }
       });
     };
@@ -472,8 +509,7 @@ angular.module('leth.controllers', [])
       }, false);      
     }
 
-    $scope.shareByEmail = function(c){
-        var amount = c;
+    $scope.shareByEmail = function(){
         var imgQrcode = angular.element(document.querySelector('qr > img')).attr('ng-src');
         document.addEventListener("deviceready", function () {
           $cordovaEmailComposer.isAvailable().then(function() {
@@ -520,8 +556,6 @@ angular.module('leth.controllers', [])
   })
 
   .controller('SettingsCtrl', function ($scope, $ionicPopup, $cordovaEmailComposer, $cordovaActionSheet, $cordovaFile, AppService) {    
-
-
     $scope.addrHost = localStorage.NodeHost;
 	
     $scope.pin = { checked: (localStorage.PinOn=="true") };
@@ -540,12 +574,12 @@ angular.module('leth.controllers', [])
         if (res) {
           localStorage.NodeHost = addr;
           AppService.setWeb3Provider(global_keystore);
+          refresh();
           console.log('provider host update to: ' + addr);
         } else {
           console.log('provider host not modified');
         }
       });
-      refresh()
     };
 
     $scope.confirmImport = function () {
@@ -854,9 +888,9 @@ angular.module('leth.controllers', [])
 
     var path = DappPath.url + '/dapp_';
     var localpath = 'dappleths/dapp_';    //maybe a list  from an API of dappleth Store: sample app
-    //path=localpath; //for development
+    path=localpath; //for development
     
-    $scope.appContainer="</br>";
+    $scope.appContainer="";
 
     for(var i=1; i<=CountDapp; i++) {
       $http.get(path + i + '/app.html') 
