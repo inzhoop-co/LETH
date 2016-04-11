@@ -1,7 +1,4 @@
 <ion-view view-title="Address">
-  <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons>
   <ion-content class="has-header has-tabs" >
     <div class="list list-borderless">
       <div class="item item-divider">
@@ -11,30 +8,18 @@
       <div class="item text-center" ng-click="showAddress()">
         <qr text="qrcodeString" type-number="typeNumber" correction-level="correctionLevel" size="size" input-mode="inputMode" image="image"></qr>
         <p class="padding">
-          <a href="#" class="subdued">{{qrcodeString}}</a>
+          <span class="subdued">{{account}}</a>
         </p>
       </div>
       <div class="item tabs item-input">
-        <label class="item item-stacked-label">ETH: </label>  
-        <input type="number" pattern="(-?[0-9]+(\.[0-9]+)?)" placeholder=" amount in eth (optional)" ng-model="amountPayment">
+        <label class="item item-stacked-label">ETH to request: </label>  
+        <input type="number" pattern="(-?[0-9]+(\.[0-9]+)?)" placeholder=" 0,00 (optional)" ng-model="amountPayment" ng-change="onAmountChange(amountPayment)" ng-maxlenth="6">
       </div>
-      <div class="item tabs tabs-secondary tabs-icon-left">
-        <!--a class="tab-item" href="#" ng-click="requestPayment()">
-          <i class="icon ion-archive"></i>
-          Request
-        </a-->              
-        <a class="tab-item" href="#" ng-click="shareByEmail(amountPayment)">
-          <i class="icon ion-ios-email-outline"></i>
-          Email
-        </a>
-        <a class="tab-item" href="#" ng-click="shareBySms(amountPayment)">
-          <i class="icon ion-ios-chatbubble-outline"></i>
-          Sms
-        </a>
-        <a class="tab-item" href="#" ng-click="copyAddr()">
-          <i class="icon ion-clipboard"></i>
-          Copy
-        </a>        
+      <div class="item tabs row"> 
+          <div class="col col-10"></div>         
+          <div class="col col-30"><button class="button button-icon icon ion-ios-email dark" ng-click="copyAddr()"></button></div>
+          <div class="col col-30"><button class="button button-icon icon ion-ios-chatbubble dark" ng-click="copyAddr()"></button></div>    
+          <div class="col col-30"><button class="button button-icon icon ion-ios-copy dark" ng-click="copyAddr()"></button></div>    
       </div>
     </div>
   </ion-content>

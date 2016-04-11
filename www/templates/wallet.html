@@ -1,7 +1,4 @@
 <ion-view view-title="Wallet">
-  <ion-nav-buttons side="left" >
-    <button menu-toggle="left" ng-hide="fromAddressBook" class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons>
   <ion-nav-buttons side="right">
     <button class="button button-clear" ng-click="scanTo()" ng-hide="fromAddressBook">
       <i class="icon ion-ios-camera"></i>
@@ -11,12 +8,12 @@
     <ion-nav-back-button ng-show="fromAddressBook">
     </ion-nav-back-button>
   </ion-nav-bar>
-  <ion-content class="has-header" padding="'true'">
+  <ion-content class="has-header" >
     <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
-    <div class="list card">
+    <div class="list">
       <div class="item item-divider">
-        <i class="icon ion-arrow-up-a"></i>
-        Send ETH
+        <i class="icon ion-ios-shuffle-strong"></i>
+        Send Payment
       </div>
     <div class="item">
       <label class="item item-input item-stacked-label">

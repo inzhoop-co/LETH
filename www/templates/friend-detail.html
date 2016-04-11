@@ -6,9 +6,12 @@
     <ion-content class="has-header has-tabs" padding="'true'">
       <div class="list card text-center">
        <div class="item">
-         <img class="rounded" ng-src="http://ipfs.io/ipfs/{{friend.face}}" style="width: 64px; height: 64px">
+         <img class="rounded" ng-src="{{friend.icon}}" style="width: 64px; height: 64px">         
          <p class="padding">
-           {{friend.name}} {{friend.surname}}
+           {{friend.name}}
+         </p>
+         <p class="padding">
+           {{friend.comment}}
          </p>
          <p class="padding">
            {{friend.addr}}

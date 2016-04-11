@@ -1,11 +1,8 @@
 <ion-view view-title="Settings">
-  <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons>
   <ion-content>
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
 	<div class="list" >
-		<h5> Host Provider Address</h5>
+		<div class="padding subdued">Host Provider Address</div>
 		<div class="item item-icon-rigth">
 			Network Host Type
 			<span class="{{badgeNetwork}}" ng-click="getNetwork()">{{nameNetwork}}</span>
@@ -16,7 +13,7 @@
 		        <i class="icon ion-edit"></i>
 		    </button>
 		</div>
-		<h5>  Backup</h5>
+		<div class="padding subdued">Backup</div>
 		<div class="item item-button-right">
 		    Backup your Wallet
 		    <button class="button button-clear" ng-click="backupWallet()">
@@ -29,7 +26,7 @@
 		        <i class="icon ion-ios-cloud-upload"></i>
 		    </button>
 		</div>
-		<h5> PIN</h5>
+		<div class="padding subdued">PIN</div>
 		<div class="item item-button-right">
 		    Change Code
 		    <button class="button button-clear" ng-click="openChangeCodeModal()">
@@ -40,5 +37,11 @@
 			Enabled
 		</ion-toggle>
 	</div>
+	<div class="divider assertive" align="center">
+		<p>
+			<img ng-src="img/inzhoop.png" style="width: 100px; height: 100px;">
+		    LΞTH v.0.1
+		</p>
+	</div>	
   </ion-content>
 </ion-view>

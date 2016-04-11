@@ -7,7 +7,7 @@
         </button>
       </ion-nav-buttons>
       <ion-nav-buttons side="left">
-        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+        <button menu-toggle="left" class="button button-icon icon inzhoop-icon"></button>
       </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-view name="menuContent" animation="slide-left-right">
@@ -24,24 +24,27 @@
         <!-- Address Tab -->
         <ion-tab title="Address" icon-off="ion-ios-barcode-outline" icon-on="ion-ios-barcode" href="#/app/address">
         </ion-tab>
+        <!-- Settings Tab -->
+        <ion-tab title="Settings" icon-off="ion-ios-cog-outline" icon-on="ion-ios-cog" href="#/app/settings">
+        </ion-tab>
       </ion-tabs>
     </ion-nav-view>
   </ion-side-menu-content>
-  <ion-side-menu side="left" id="sideMenu">
+  <!--ion-side-menu side="left" id="sideMenu">
     <ion-header-bar class="bar-stable bar-assertive">
       <h1 class="title">Menu</h1>
     </ion-header-bar>
     <ion-content>
       <ion-list class="list card">
-        <!--ion-item class="item item-icon-left" menu-close href="#/app/appleth">
+        <ion-item class="item item-icon-left" menu-close href="#/app/appleth">
           <i class="icon ion-ios-home"></i>
           Home
-        </ion-item-->
+        </ion-item>
         <ion-item class="item item-icon-left" menu-close ng-click="openLoginModal()" ng-hide="hasLogged">
           <i class="icon ion-log-in"></i>
           Login
         </ion-item>
-        <ion-item class="item item-icon-left" menu-close href="#/app/appleth">
+        <on-item class="item item-icon-left" menu-close href="#/app/appleth">
           <i class="icon ion-ios-albums"></i>
           ÐappLeth
         </ion-item>        
@@ -49,6 +52,7 @@
           <i class="icon ion-ios-lightbulb"></i>
           News
         </ion-item>
+
         <ion-item class="item item-icon-left" menu-close href="#/app/transactions">
           <i class="icon ion-arrow-graph-up-right"></i>
           Transactions
@@ -57,11 +61,11 @@
           <i class="icon ion-ios-cog"></i>
           Settings
         </ion-item>
-        <ion-item class="item item-icon-left" menu-close href="#/app/about">
+        <!ion-item class="item item-icon-left" menu-close href="#/app/about">
           <i class="icon ion-ios-help"></i>
           About
         </ion-item>
       </ion-list>
     </ion-content>
   </ion-side-menu>
-</ion-side-menus>
+</ion-side-menus-->

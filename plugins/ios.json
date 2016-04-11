@@ -55,7 +55,14 @@
         },
         "com.shazron.cordova.plugin.keychainutil": {
             "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "de.appplant.cordova.plugin.local-notification": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        }
+    }
 }

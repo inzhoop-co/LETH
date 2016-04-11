@@ -4,7 +4,7 @@ angular.module('leth.controllers', [])
      window.refresh = function () {
       $scope.balance = AppService.balance();
       $scope.account = AppService.account();
-      $scope.qrcodeString = AppService.account();
+      $scope.qrcodeString = $scope.account;
       $scope.getNetwork();
       //temp
       $scope.transactions = Transactions.all();
@@ -36,8 +36,7 @@ angular.module('leth.controllers', [])
           pw = "";
         })
      };
-
-    
+  
     var loginModal;
     var codeModal;
     var saveAddressModal;
@@ -125,7 +124,7 @@ angular.module('leth.controllers', [])
           switch(res.hash) {
             case '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303':
                 $scope.nameNetwork = 'Testnet';
-                $scope.badgeNetwork = 'badge badge-assertive';
+                $scope.badgeNetwork = 'badge badge-royal';
                 break;
             case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
                 $scope.nameNetwork = 'Mainet';
@@ -133,7 +132,7 @@ angular.module('leth.controllers', [])
                 break;
             default:
                 $scope.nameNetwork = 'Privatenet';
-                $scope.badgeNetwork = 'badge badge-positive';              
+                $scope.badgeNetwork = 'badge badge-calm';              
           }
         }
       });
@@ -274,8 +273,17 @@ angular.module('leth.controllers', [])
       saveAddressModal.remove();
     }
 
-    $scope.saveAddr = function(name,addr, comment){
-      var friend = {"addr": addr, "comment": comment, "name": name};
+    $scope.saveAddr = function(name,addr,comment){
+      var icon = blockies.create({ 
+        seed: addr, 
+        //color: '#ff9933', 
+        //bgcolor: 'red', 
+        //size: 15, // width/height of the icon in blocks, default: 8
+        //scale: 2, 
+        //spotcolor: '#000' 
+      });
+
+      var friend = {"addr": addr, "comment": comment, "name": name, "icon":icon.toDataURL("image/jpeg")};
       $scope.friends.push(friend);
       localStorage.Friends = JSON.stringify($scope.friends);
       saveAddressModal.remove();
@@ -416,6 +424,12 @@ angular.module('leth.controllers', [])
     $scope.inputMode = '';
     $scope.image = true;
 
+    $scope.onAmountChange = function(amount){
+      if($scope.amountPayment == "")
+        $scope.qrcodeString = $scope.account;
+  
+      $scope.qrcodeString = $scope.account + '@' + amount
+    }
 
     $scope.showAddress = function () {
       var alertPopup = $ionicPopup.alert({
@@ -428,9 +442,8 @@ angular.module('leth.controllers', [])
       });
     };
 
-    $scope.shareBySms = function(c) {
-      var amount = c;
-      var content = "My address is ethereum://" + $scope.qrcodeString + '@' + amount;
+    $scope.shareBySms = function() {
+      var content = "My address is ethereum://" + $scope.qrcodeString ;
       var phonenumber="";
       document.addEventListener("deviceready", function () {      
         $cordovaContacts.pickContact().then(function (contactPicked) {
@@ -467,7 +480,7 @@ angular.module('leth.controllers', [])
             var emailOpts = {
               to: [''],
               subject: 'Please Pay me',
-              body: 'Please send me ETH to this Wallet Address: </br><a href="ethereum://' + $scope.qrcodeString + '@' + amount + '"/>' + $scope.qrcodeString + '@' + amount + '</br><img src="' + imgQrcode + '"</img></br>',
+              body: 'Please send me ETH to this Wallet Address: </br><a href="ethereum://' + $scope.qrcodeString + '"/>' + $scope.qrcodeString + '</br><img src="' + imgQrcode + '"</img></br>',
               isHtml: true
             };
 
@@ -808,10 +821,9 @@ angular.module('leth.controllers', [])
       $scope.item =  FeedService.get($scope.infoNews, $stateParams.Item);    
   })
 
-  .controller('FriendsCtrl', function ($scope, Friends) {
-
+  .controller('FriendsCtrl', function ($scope, Friends) {    
     $scope.remove = function (friend) {
-      Friends.remove($scope.friends, friend);
+      Friends.remove($scope.friends,friend);
       localStorage.Friends = JSON.stringify($scope.friends);
     };
 
@@ -821,9 +833,8 @@ angular.module('leth.controllers', [])
     }
   })
 
-  .controller('FriendCtrl', function ($scope, $stateParams) {
-    $scope.friend = JSON.parse($stateParams.Friend);
-
+  .controller('FriendCtrl', function ($scope, $stateParams, Friends) {
+    $scope.friend = Friends.get($stateParams);
   })
 
   .controller('TransactionCtrl', function ($scope) {
@@ -856,7 +867,7 @@ angular.module('leth.controllers', [])
     }
   })
 
-  .controller('ApplethRunCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams, $ocLazyLoad,$timeout) {
+  .controller('ApplethRunCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
       console.log("Param " + $stateParams.Id);
 
       //load app selected
