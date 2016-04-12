@@ -35,9 +35,6 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-        "cordova-plugin-email-composer": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
         "cordova-plugin-file": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },

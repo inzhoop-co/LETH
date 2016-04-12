@@ -1,6 +1,6 @@
 angular.module('leth.controllers', [])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $cordovaActionSheet, $cordovaContacts, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $cordovaEmailComposer, $cordovaActionSheet, $cordovaContacts, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
      window.refresh = function () {
       $scope.balance = AppService.balance();
       $scope.account = AppService.account();
@@ -141,17 +141,16 @@ angular.module('leth.controllers', [])
     }
 
     $scope.sendFeedback = function(){
-      var options = {
-        title: 'Send your mood for the app:',
-        buttonLabels: ['Good', 'Medium', 'Poor'],
-        addCancelButtonWithLabel: 'Cancel',
-        androidEnableCancelButton : true,
-        winphoneEnableCancelButton : true,
-		androidTheme: window.plugins.actionsheet.ANDROID_THEMES.THEME_HOLO_LIGHT
-        //addDestructiveButtonWithLabel : 'Delete it'
-      };
-
       document.addEventListener("deviceready", function () {
+        var options = {
+          title: 'Send your mood for the app:',
+          buttonLabels: ['Good', 'Medium', 'Poor'],
+          addCancelButtonWithLabel: 'Cancel',
+          androidEnableCancelButton : true,
+          winphoneEnableCancelButton : true,
+          androidTheme: window.plugins.actionsheet.ANDROID_THEMES.THEME_HOLO_LIGHT
+          //addDestructiveButtonWithLabel : 'Delete it'
+        };
         $cordovaActionSheet.show(options)
           .then(function(btnIndex) {
             var mood = btnIndex;
