@@ -157,7 +157,7 @@ angular.module('leth.controllers', [])
         $cordovaEmailComposer.isAvailable().then(function() {
               var emailOpts = {
                 to: ['info@inzhoop.com'],
-                subject: 'Feedback  from LETH ' + account + ": " + index,
+                subject: 'Feedback  from LETH ' + $scope.account + ": " + index,
                 body: '',
                 isHtml: true
               };

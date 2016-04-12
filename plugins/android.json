@@ -34,12 +34,9 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
-<<<<<<< HEAD
-=======
         "com.verso.cordova.clipboard": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
->>>>>>> b17e2c9e9210389edaa107c76ca41f1ded0a3a44
         "cordova-plugin-file": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
