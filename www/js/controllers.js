@@ -896,8 +896,8 @@ angular.module('leth.controllers', [])
   })
 
   .controller('FriendsCtrl', function ($scope, Friends) {    
-    $scope.remove = function (friend) {
-      Friends.remove($scope.friends,friend);
+    $scope.remove = function (friendIndex) {
+      Friends.remove($scope.friends,friendIndex);
       localStorage.Friends = JSON.stringify($scope.friends);
     };
 

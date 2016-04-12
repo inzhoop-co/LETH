@@ -30,8 +30,8 @@ angular.module('leth.services', [])
         });
         return obj[0];         
       },
-      remove: function(addressbook, address) {
-        addressbook.splice(addressbook.indexOf(address), 1);
+      remove: function(addressbook, index) {
+        addressbook.splice(index, 1);
         return addressbook;
       }
     };
