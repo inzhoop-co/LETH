@@ -8,10 +8,20 @@
         "is_top_level": true,
         "variables": {}
     },
+    "de.appplant.cordova.plugin.email-composer": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/katzer/cordova-plugin-email-composer.git",
+            "subdir": ".",
+            "ref": "0.8.2"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
     "cordova-plugin-device": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-device"
+            "id": "cordova-plugin-device@~1.1.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -19,7 +29,7 @@
     "cordova-plugin-console": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-console"
+            "id": "cordova-plugin-console@~1.0.2"
         },
         "is_top_level": true,
         "variables": {}
@@ -27,7 +37,7 @@
     "cordova-plugin-splashscreen": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-splashscreen"
+            "id": "cordova-plugin-splashscreen@~3.1.0"
         },
         "is_top_level": true,
         "variables": {}
@@ -35,7 +45,7 @@
     "cordova-plugin-statusbar": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-statusbar"
+            "id": "cordova-plugin-statusbar@~2.1.0"
         },
         "is_top_level": true,
         "variables": {}
@@ -53,13 +63,13 @@
             "type": "registry",
             "id": "cordova-plugin-webserver"
         },
-        "is_top_level": false,
+        "is_top_level": true,
         "variables": {}
     },
     "cordova-plugin-whitelist": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-whitelist"
+            "id": "cordova-plugin-whitelist@~1.2.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -76,7 +86,7 @@
     "cordova-plugin-file": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-file"
+            "id": "cordova-plugin-file@~4.1.0"
         },
         "is_top_level": true,
         "variables": {}
@@ -93,7 +103,7 @@
     "cordova-plugin-contacts": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-contacts"
+            "id": "cordova-plugin-contacts@~2.0.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -129,42 +139,6 @@
         "source": {
             "type": "git",
             "url": "https://github.com/shazron/KeychainPlugin.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "de.appplant.cordova.plugin.email-composer": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/katzer/cordova-plugin-email-composer.git",
-            "subdir": ".",
-            "ref": "0.8.2"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-app-event": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-app-event"
-        },
-        "is_top_level": false,
-        "variables": {}
-    },
-    "cordova-plugin-email-composer": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/katzer/cordova-plugin-email-composer.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "de.appplant.cordova.plugin.local-notification": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/katzer/cordova-plugin-local-notifications.git",
             "subdir": "."
         },
         "is_top_level": true,

@@ -327,7 +327,7 @@
     CGRect imgBounds = (img) ? CGRectMake(0, 0, img.size.width, img.size.height) : CGRectZero;
 
     CGSize screenSize = [self.viewController.view convertRect:[UIScreen mainScreen].bounds fromView:nil].size;
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    UIInterfaceOrientation orientation = self.viewController.interfaceOrientation;
     CGAffineTransform imgTransform = CGAffineTransformIdentity;
 
     /* If and only if an iPhone application is landscape-only as per
@@ -388,19 +388,6 @@
         id splashDurationString = [self.commandDelegate.settings objectForKey: [@"SplashScreenDelay" lowercaseString]];
         float splashDuration = splashDurationString == nil ? kSplashScreenDurationDefault : [splashDurationString floatValue];
 
-        id autoHideSplashScreenValue = [self.commandDelegate.settings objectForKey:[@"AutoHideSplashScreen" lowercaseString]];
-        BOOL autoHideSplashScreen = true;
-
-        if (autoHideSplashScreenValue != nil) {
-            autoHideSplashScreen = [autoHideSplashScreenValue boolValue];
-        }
-
-        if (!autoHideSplashScreen) {
-            // CB-10412 SplashScreenDelay does not make sense if the splashscreen is hidden manually
-            splashDuration = 0;
-        }
-
-
         if (fadeSplashScreenValue == nil)
         {
             fadeSplashScreenValue = @"true";
@@ -431,14 +418,7 @@
         else
         {
             __weak __typeof(self) weakSelf = self;
-            float effectiveSplashDuration;
-
-            if (!autoHideSplashScreen) {
-                effectiveSplashDuration = (fadeDuration) / 1000;
-            } else {
-                effectiveSplashDuration = (splashDuration - fadeDuration) / 1000;
-            }
-
+            float effectiveSplashDuration = (splashDuration - fadeDuration) / 1000;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (uint64_t) effectiveSplashDuration * NSEC_PER_SEC), dispatch_get_main_queue(), CFBridgingRelease(CFBridgingRetain(^(void) {
                    [UIView transitionWithView:self.viewController.view
                                    duration:(fadeDuration / 1000)
