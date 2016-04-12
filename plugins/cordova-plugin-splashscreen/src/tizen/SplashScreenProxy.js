@@ -21,7 +21,7 @@
 
 ( function() {
 
-var win = null;
+win = null;
 
 module.exports = {
     show: function() {
