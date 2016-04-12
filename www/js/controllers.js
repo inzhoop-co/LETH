@@ -1,10 +1,6 @@
 angular.module('leth.controllers', [])
 
-<<<<<<< HEAD
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $cordovaEmailComposer, $cordovaActionSheet, $cordovaContacts, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
-=======
   .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
->>>>>>> b17e2c9e9210389edaa107c76ca41f1ded0a3a44
      window.refresh = function () {
       $scope.balance = AppService.balance();
       $scope.account = AppService.account();
@@ -145,33 +141,20 @@ angular.module('leth.controllers', [])
     }
 
     $scope.sendFeedback = function(){
-<<<<<<< HEAD
-      document.addEventListener("deviceready", function () {
-        var options = {
-          title: 'Send your mood for the app:',
-          buttonLabels: ['Good', 'Medium', 'Poor'],
-          addCancelButtonWithLabel: 'Cancel',
-          androidEnableCancelButton : true,
-          winphoneEnableCancelButton : true,
-          androidTheme: window.plugins.actionsheet.ANDROID_THEMES.THEME_HOLO_LIGHT
-          //addDestructiveButtonWithLabel : 'Delete it'
-        };
-        $cordovaActionSheet.show(options)
-=======
-		// Show the action sheet
-	   var hideSheet = $ionicActionSheet.show({
-		 buttons: [
-		   { text: '<i class="ion-happy-outline"></i> Good' },
-		   { text: '<i class="ion-sad-outline"></i> Poor'  }
-		 ],
-		 //destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
-		 titleText: 'Send your mood for this app',
-		 cancelText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
-		 cancel: function() {
-		  // add cancel code..
-		},
-		 buttonClicked: function(index) {
-		    $cordovaEmailComposer.isAvailable().then(function() {
+    // Show the action sheet
+     var hideSheet = $ionicActionSheet.show({
+     buttons: [
+       { text: '<i class="ion-happy-outline"></i> Good' },
+       { text: '<i class="ion-sad-outline"></i> Poor'  }
+     ],
+     //destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+     titleText: 'Send your mood for this app',
+     cancelText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+     cancel: function() {
+      // add cancel code..
+    },
+     buttonClicked: function(index) {
+        $cordovaEmailComposer.isAvailable().then(function() {
               var emailOpts = {
                 to: ['info@inzhoop.com'],
                 subject: 'Feedback  from LETH ' + account + ": " + index,
@@ -188,30 +171,27 @@ angular.module('leth.controllers', [])
               console.log("cordovaEmailComposer not available");
               return;
             });
-		 }
-	   });
-		 // For example's sake, hide the sheet after two seconds
+     }
+     });
+     // For example's sake, hide the sheet after two seconds
    $timeout(function() {
      hideSheet();
    }, 20000);
-		
-		/* 
+    
+    /* 
       var options = {
         title: 'Send your mood for the app:',
         buttonLabels: ['Good', 'Medium', 'Poor'],
         addCancelButtonWithLabel: 'Cancel',
         androidEnableCancelButton : true,
         winphoneEnableCancelButton : true,
-		androidTheme: window.plugins.actionsheet.ANDROID_THEMES.THEME_HOLO_LIGHT
+    androidTheme: window.plugins.actionsheet.ANDROID_THEMES.THEME_HOLO_LIGHT
         //addDestructiveButtonWithLabel : 'Delete it'
       };
-
       document.addEventListener("deviceready", function () {
         $ionicActionSheet.show(options)
->>>>>>> b17e2c9e9210389edaa107c76ca41f1ded0a3a44
           .then(function(btnIndex) {
             var mood = btnIndex;
-
             $cordovaEmailComposer.isAvailable().then(function() {
               var emailOpts = {
                 to: ['info@inzhoop.com'],
@@ -219,11 +199,9 @@ angular.module('leth.controllers', [])
                 body: '',
                 isHtml: true
               };
-
             $cordovaEmailComposer.open(emailOpts).then(null, function () {
               console.log('email view dismissed');
             });
-
             return;
             }, function (error) {
               console.log("cordovaEmailComposer not available");
@@ -232,6 +210,7 @@ angular.module('leth.controllers', [])
           });
       }, false); */
     }
+
 
     $scope.scanAddr = function () {
       document.addEventListener("deviceready", function () {  
