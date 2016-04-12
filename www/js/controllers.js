@@ -109,9 +109,10 @@ angular.module('leth.controllers', [])
         $cordovaBarcodeScanner
           .scan()
           .then(function (barcodeData) {
-            if(barcode!= undefined)
-              $state.go('app.wallet', {addr: barcodeData.text});
-            console.log('read code: ' + barcodeData.text);
+            if(barcodeData!= undefined){
+				$state.go('app.wallet', {addr: barcodeData.text});
+				console.log('read code: ' + barcodeData.text);
+			}
           }, function (error) {
             // An error occurred
             console.log('Error!' + error);
@@ -145,7 +146,8 @@ angular.module('leth.controllers', [])
         buttonLabels: ['Good', 'Medium', 'Poor'],
         addCancelButtonWithLabel: 'Cancel',
         androidEnableCancelButton : true,
-        winphoneEnableCancelButton : true
+        winphoneEnableCancelButton : true,
+		androidTheme: window.plugins.actionsheet.ANDROID_THEMES.THEME_HOLO_LIGHT
         //addDestructiveButtonWithLabel : 'Delete it'
       };
 
