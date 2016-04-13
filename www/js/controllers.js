@@ -147,7 +147,7 @@ angular.module('leth.controllers', [])
           { text: '<i class="ion-happy-outline"></i> Good' },
           { text: '<i class="ion-sad-outline"></i> Poor'  }
         ],
-        //destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         titleText: 'Send your mood for this app',
         cancelText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         cancel: function() {
@@ -560,7 +560,7 @@ angular.module('leth.controllers', [])
     }
   })
 
-  .controller('SettingsCtrl', function ($scope, $ionicPopup, $cordovaEmailComposer, $ionicActionSheet, $cordovaFile, AppService) {    
+  .controller('SettingsCtrl', function ($scope, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, AppService) {    
     $scope.addrHost = localStorage.NodeHost;
 	
     $scope.pin = { checked: (localStorage.PinOn=="true") };
@@ -604,7 +604,35 @@ angular.module('leth.controllers', [])
     };
 
     $scope.chooseImportWallet = function () {
-      var options = {
+		var hideSheet = $ionicActionSheet.show({
+        buttons: [
+          { text: '<i class="ion-happy-outline"></i> Test Wallet' },
+          { text: '<i class="ion-sad-outline"></i> From Storage'  }
+        ],
+        destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        titleText: 'Choose a wallet to import from?',
+        cancelText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        cancel: function() {
+        // add cancel code..
+        },
+        buttonClicked: function(index) {
+            switch(index){
+                case 0:
+                    console.log('importing static test wallet');
+                    importTestWallet();
+                    break;
+                case 1:
+                    console.log('Importing wallet from Storage');
+                    importStorageWallet();
+                    break;
+				}
+		         $timeout(function() {
+           hideSheet();
+          }, 20000);
+        }
+      })
+		
+     /*  var options = {
         title: 'Choose a wallet to import from?',
         buttonLabels: ['Test Wallet', 'From Storage'],
         addCancelButtonWithLabel: 'Cancel',
@@ -628,7 +656,7 @@ angular.module('leth.controllers', [])
                     break;
             }            
           });
-      }, false);
+      }, false); */
     };
 
     var importTestWallet = function () {
@@ -722,7 +750,34 @@ angular.module('leth.controllers', [])
     };
 
     $scope.backupWallet = function () {
-      var options = {
+		var hideSheet = $ionicActionSheet.show({
+        buttons: [
+          { text: '<i class="ion-happy-outline"></i> Backup via Email' },
+          { text: '<i class="ion-sad-outline"></i> Backup on Storage'  }
+        ],
+        destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        titleText: 'How do you want to backup your wallet?',
+        cancelText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        cancel: function() {
+        // add cancel code..
+        },
+        buttonClicked: function(index) {
+            switch(index){
+                case 0:
+                    console.log('Backup via Email');
+                    walletViaEmail();
+                    break;
+                case 1:
+                    console.log('Backup on Storage');
+                    walletInStorage();
+                    break;
+				}
+			$timeout(function() {
+			hideSheet();
+          }, 20000);
+        }
+      })
+      /* var options = {
         title: 'How do you want to backup your wallet?',
         buttonLabels: ['Backup via Email', 'Backup on Storage'],
         addCancelButtonWithLabel: 'Cancel',
@@ -747,7 +802,7 @@ angular.module('leth.controllers', [])
                     break;
             }            
           });
-      }, false);
+      }, false); */
     };
 
     var walletViaEmail = function(){
