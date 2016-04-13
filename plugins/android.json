@@ -7,9 +7,6 @@
         "files": {}
     },
     "installed_plugins": {
-        "de.appplant.cordova.plugin.email-composer": {
-            "PACKAGE_NAME": "com.inzhoop.leth"
-        },
         "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
@@ -57,6 +54,12 @@
             "PACKAGE_NAME": "com.inzhoop.leth"
         },
         "com.shazron.cordova.plugin.keychainutil": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "de.appplant.cordova.plugin.email-composer": {
+            "PACKAGE_NAME": "com.inzhoop.leth"
+        },
+        "cordova-plugin-email-composer": {
             "PACKAGE_NAME": "com.inzhoop.leth"
         }
     },

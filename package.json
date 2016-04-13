@@ -53,19 +53,20 @@
     {
       "locator": "https://github.com/shazron/KeychainPlugin.git",
       "id": "com.shazron.cordova.plugin.keychainutil"
-    },
-    {
-      "locator": "https://github.com/katzer/cordova-plugin-email-composer.git",
-      "id": "de.appplant.cordova.plugin.email-composer"
-    },
-    "cordova-plugin-app-event",
-    {
-      "locator": "https://github.com/katzer/cordova-plugin-local-notifications.git",
-      "id": "de.appplant.cordova.plugin.local-notification"
     }
   ],
   "cordovaPlatforms": [
     "ios",
-    "android"
+    "android",
+    {
+      "platform": "android",
+      "version": "",
+      "locator": "android"
+    },
+    {
+      "platform": "ios",
+      "version": "",
+      "locator": "ios"
+    }
   ]
 }
