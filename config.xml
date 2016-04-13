@@ -68,8 +68,8 @@
         <splash density="port-xhdpi" src="resources\android\splash\drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources\android\splash\drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources\android\splash\drawable-port-xxxhdpi-screen.png" />
+		<plugin name="de.appplant.cordova.plugin.local-notification" spec="https://github.com/katzer/cordova-plugin-email-composer.git#0.8.2" />        
     </platform>
     <icon src="resources\android\icon\drawable-xhdpi-icon.png" />
     <plugin name="phonegap-plugin-barcodescanner" spec="https://github.com/wildabeast/BarcodeScanner.git" />
-    <plugin name="de.appplant.cordova.plugin.local-notification" spec="https://github.com/katzer/cordova-plugin-email-composer.git#0.8.2" />        
 </widget>
