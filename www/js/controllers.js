@@ -147,9 +147,9 @@ angular.module('leth.controllers', [])
           { text: '<i class="ion-happy-outline"></i> Good' },
           { text: '<i class="ion-sad-outline"></i> Poor'  }
         ],
-        destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        //destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         titleText: 'Send your mood for this app',
-        cancelText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        cancelText: 'Cancel',
         cancel: function() {
         // add cancel code..
         },
