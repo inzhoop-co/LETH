@@ -2,6 +2,9 @@ web3 = new Web3();
 if (typeof localStorage.PinOn == 'undefined') {
 localStorage.PinOn="false";
 }
+if (typeof localStorage.TouchOn == 'undefined') {
+localStorage.TouchOn="false";
+}
 if (typeof localStorage.NodeHost == 'undefined') {
   localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
 }
@@ -21,7 +24,7 @@ angular.module('leth', ['ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSan
 	    if(localStorage.PinOn=="true"){
     		$lockScreen.show({
     			code: JSON.parse(localStorage.AppCode).code,
-          touchId: true,
+          touchId: JSON.parse(localStorage.TouchOn),
     			ACDelbuttons: true,
     			onCorrect: function () {
     			  console.log('correct!');

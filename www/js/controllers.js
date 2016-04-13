@@ -109,7 +109,7 @@ angular.module('leth.controllers', [])
         $cordovaBarcodeScanner
           .scan()
           .then(function (barcodeData) {
-            if(barcodeData!= ""){
+            if(barcodeData.text!= ""){
 				      $state.go('app.wallet', {addr: barcodeData.text});
 				      console.log('read code: ' + barcodeData.text);
 			      }
@@ -147,11 +147,14 @@ angular.module('leth.controllers', [])
           { text: '<i class="ion-happy-outline"></i> Good' },
           { text: '<i class="ion-sad-outline"></i> Poor'  }
         ],
-        //destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         titleText: 'Send your mood for this app',
-        cancelText: 'Cancel',
+        /*cancelText: 'Cancel',
         cancel: function() {
         // add cancel code..
+        },*/
+        destructiveButtonClicked:  function() {
+          hideSheet();
         },
         buttonClicked: function(index) {
             $cordovaEmailComposer.isAvailable().then(function() {
@@ -570,6 +573,11 @@ angular.module('leth.controllers', [])
   		$scope.pin = { checked: value};
   	});
 
+    $scope.$watch('touch.checked',function(value) {
+      localStorage.TouchOn= value? "true":"false";
+      $scope.touch = { checked: value};
+    });
+
     $scope.editHost = function (addr) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Set Provider Host',
@@ -606,14 +614,17 @@ angular.module('leth.controllers', [])
     $scope.chooseImportWallet = function () {
 		var hideSheet = $ionicActionSheet.show({
         buttons: [
-          { text: '<i class="ion-happy-outline"></i> Test Wallet' },
-          { text: '<i class="ion-sad-outline"></i> From Storage'  }
+          { text: 'Test Wallet' },
+          { text: 'From Storage'  }
         ],
         destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         titleText: 'Choose a wallet to import from?',
-        cancelText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        /*cancelText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         cancel: function() {
         // add cancel code..
+        },*/
+        destructiveButtonClicked:  function() {
+          hideSheet();
         },
         buttonClicked: function(index) {
             switch(index){
@@ -752,14 +763,17 @@ angular.module('leth.controllers', [])
     $scope.backupWallet = function () {
 		var hideSheet = $ionicActionSheet.show({
         buttons: [
-          { text: '<i class="ion-happy-outline"></i> Backup via Email' },
-          { text: '<i class="ion-sad-outline"></i> Backup on Storage'  }
+          { text: 'Backup via Email' },
+          { text: 'Backup on Storage'  }
         ],
         destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         titleText: 'How do you want to backup your wallet?',
-        cancelText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        /*cancelText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         cancel: function() {
         // add cancel code..
+        },*/
+        destructiveButtonClicked:  function() {
+          hideSheet();
         },
         buttonClicked: function(index) {
             switch(index){

@@ -8,21 +8,18 @@
   <ion-content class="has-header" padding="'true'">
     <div class="list">
       <div class="item">
-        <p class="text-center">Change Your Code</p>
-      </div>
-      <div class="item">
         <form name="changeCode" ng-submit="ChangeCode(oldCode,newCode)">
           <label class="item item-input">
-            <span class="input-label">Old Code</span>
-            <input type="password" ng-model="oldCode" required="true">
+            <span class="input-label">Old code</span>
+            <input type="password" ng-model="oldCode" required="true" placeholder="input current code">
           </label>
           <label class="item item-input">
-            <span class="input-label">New Code</span>
-            <input type="password" ng-model="newCode" required="true">
+            <span class="input-label">New code</span>
+            <input type="password" ng-model="newCode" required="true" placeholder="input new code">
           </label>
           <label class="item item-input padding-bottom">
-            <span class="input-label">Confirm New Code</span>
-            <input type="password" pattern="[0-9]*" ng-model="confirmNewCode" required="true">
+            <span class="input-label">Confirm code</span>
+            <input type="password" pattern="[0-9]*" ng-model="confirmNewCode" required="true" placeholder="input new code again">
           </label>
           <button ng-disabled="!changeCode.$valid || confirmNewCode!=newCode"  class="button button-block button-energized" type="submit" ng-disabled="">Change</button>
         </form>
