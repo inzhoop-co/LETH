@@ -6,3 +6,5 @@ node_modules/
 platforms
 .gitignore
 /plugins
+/resources/ios
+/resources/android
