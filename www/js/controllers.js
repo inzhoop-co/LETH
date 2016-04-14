@@ -570,14 +570,24 @@ angular.module('leth.controllers', [])
 	
     $scope.pin = { checked: (localStorage.PinOn=="true") };
 	
+    var setPin = function(value){
+      localStorage.PinOn = value? "true":"false";
+      $scope.pin = { checked: value};
+    };
+
+    var setTouchID = function(value){
+      localStorage.TouchOn = value? "true":"false";
+      $scope.touch = { checked: value};
+    };
+
   	$scope.$watch('pin.checked',function(value) {
-  		localStorage.PinOn= value? "true":"false";
-  		$scope.pin = { checked: value};
+  		setPin(value);
   	});
 
     $scope.$watch('touch.checked',function(value) {
-      localStorage.TouchOn= value? "true":"false";
-      $scope.touch = { checked: value};
+      setTouchID(value);
+      if(value)
+        setPin(value);
     });
 
     $scope.isIOS = function(){
