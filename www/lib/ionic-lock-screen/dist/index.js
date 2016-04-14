@@ -9,7 +9,7 @@ var lockScreenService = function(n) {
                 onWrong: o.onWrong || null,
                 passcodeLabel: o.passcodeLabel || "Enter Passcode",
                 touchLabel: o.passcodeLabel || "Verify Passcode",
-                backgroundColor: o.backgroundColor || "#E42112",
+                backgroundColor: o.backgroundColor || "#FF3B30",
                 textColor: o.textColor || "#FFFFFF",
                 buttonColor: o.buttonColor || "#F8F8F8",
                 buttonTextColor: o.buttonTextColor || "#464646",

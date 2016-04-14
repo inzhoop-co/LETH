@@ -24,10 +24,10 @@
     "ionic-plugin-keyboard",
     "cordova-plugin-webserver",
     "cordova-plugin-whitelist",
-	"cordova-plugin-file",
+    "cordova-plugin-file",
     "cordova-plugin-contacts",
     "cordova-plugin-touchid",
-	{
+    {
       "locator": "https://github.com/wildabeast/BarcodeScanner.git",
       "id": "phonegap-plugin-barcodescanner"
     },
