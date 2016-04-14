@@ -569,7 +569,8 @@ angular.module('leth.controllers', [])
     $scope.addrHost = localStorage.NodeHost;
 	
     $scope.pin = { checked: (localStorage.PinOn=="true") };
-	
+	  $scope.touch = { checked: (localStorage.TouchOn=="true") };
+
     var setPin = function(value){
       localStorage.PinOn = value? "true":"false";
       $scope.pin = { checked: value};
@@ -923,10 +924,11 @@ angular.module('leth.controllers', [])
       $scope.item =  FeedService.get($scope.infoNews, $stateParams.Item);    
   })
 
-  .controller('FriendsCtrl', function ($scope, Friends) {    
+  .controller('FriendsCtrl', function ($scope, Friends, $ionicListDelegate) {    
     $scope.remove = function (friendIndex) {
       Friends.remove($scope.friends,friendIndex);
       localStorage.Friends = JSON.stringify($scope.friends);
+      $ionicListDelegate.closeOptionButtons();
     };
 
     $scope.payFriends = function () {
