@@ -17,10 +17,6 @@
     "shelljs": "^0.3.0"
   },
   "cordovaPlugins": [
-    {
-      "locator": "https://github.com/wildabeast/BarcodeScanner.git",
-      "id": "phonegap-plugin-barcodescanner"
-    },
     "cordova-plugin-device",
     "cordova-plugin-console",
     "cordova-plugin-splashscreen",
@@ -28,17 +24,21 @@
     "ionic-plugin-keyboard",
     "cordova-plugin-webserver",
     "cordova-plugin-whitelist",
+	"cordova-plugin-file",
+    "cordova-plugin-contacts",
+    "cordova-plugin-touchid",
+	{
+      "locator": "https://github.com/wildabeast/BarcodeScanner.git",
+      "id": "phonegap-plugin-barcodescanner"
+    },
     {
       "locator": "https://github.com/VersoSolutions/CordovaClipboard.git",
       "id": "com.verso.cordova.clipboard"
     },
-    "cordova-plugin-file",
     {
       "locator": "https://github.com/cordova-sms/cordova-sms-plugin.git",
       "id": "com.cordova.plugins.sms"
     },
-    "cordova-plugin-contacts",
-    "cordova-plugin-touchid",
     {
       "id": "cordova-plugin-customurlscheme",
       "locator": "cordova-plugin-customurlscheme",
