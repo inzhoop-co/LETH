@@ -157,11 +157,12 @@ angular.module('leth.controllers', [])
           hideSheet();
         },
         buttonClicked: function(index) {
+            var mood = index == 0 ? "Good" : "Poor";
             $cordovaEmailComposer.isAvailable().then(function() {
               var emailOpts = {
                 to: ['info@inzhoop.com'],
                 subject: 'Feedback  from LETH',
-                body: 'The user ' + $scope.account + " said: " +  index == 0 ? "Good" : "Poor",
+                body: 'The user ' + $scope.account + ' said: ' +  mood,
                 isHtml: true
               };
 
@@ -169,6 +170,7 @@ angular.module('leth.controllers', [])
                 console.log('email view dismissed');
               });
 
+              hideSheet();
               return;
             }, function (error) {
               console.log("cordovaEmailComposer not available");
@@ -578,6 +580,10 @@ angular.module('leth.controllers', [])
       $scope.touch = { checked: value};
     });
 
+    $scope.isIOS = function(){
+      return ionic.Platform.isIOS();
+    };
+
     $scope.editHost = function (addr) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Set Provider Host',
@@ -595,14 +601,24 @@ angular.module('leth.controllers', [])
       });
     };
 
-    $scope.confirmImport = function () {
+    var confirmImport = function (val) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Import a backuped wallet',
         template: 'Are you sure you want to import a wallet from backup and overwrite the current? '
       });
       confirmPopup.then(function (res) {
         if (res) {
-          $scope.chooseImportWallet();
+            switch(val){
+              case 0:
+                  console.log('importing static test wallet');
+                  importTestWallet();
+                  break;
+              case 1:
+                  console.log('Importing wallet from Storage');
+                  importStorageWallet();
+                  break;
+            }
+
           console.log('importing wallet from backup');
           refresh();
         } else {
@@ -627,48 +643,16 @@ angular.module('leth.controllers', [])
           hideSheet();
         },
         buttonClicked: function(index) {
-            switch(index){
-                case 0:
-                    console.log('importing static test wallet');
-                    importTestWallet();
-                    break;
-                case 1:
-                    console.log('Importing wallet from Storage');
-                    importStorageWallet();
-                    break;
-				}
-		         $timeout(function() {
+          confirmImport(index);
+          hideSheet();
+         $timeout(function() {
            hideSheet();
           }, 20000);
         }
       })
 		
-     /*  var options = {
-        title: 'Choose a wallet to import from?',
-        buttonLabels: ['Test Wallet', 'From Storage'],
-        addCancelButtonWithLabel: 'Cancel',
-        androidEnableCancelButton : true,
-        winphoneEnableCancelButton : true
-        //addDestructiveButtonWithLabel : 'Delete it'
-      };
-
-      document.addEventListener("deviceready", function () {
-        $ionicActionSheet.show(options)
-          .then(function(btnIndex) {
-            var index = btnIndex;
-            switch(index){
-                case 1:
-                    console.log('importing static test wallet');
-                    importTestWallet();
-                    break;
-                case 2:
-                    console.log('Importing wallet from Storage');
-                    importStorageWallet();
-                    break;
-            }            
-          });
-      }, false); */
     };
+
 
     var importTestWallet = function () {
       //import wallet from (static value)

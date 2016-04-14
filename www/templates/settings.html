@@ -1,13 +1,14 @@
 <ion-view view-title="Settings">
   <ion-content>
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
-	<!--div class="item divider padding dark" align="center">
-		<p>
-			<img ng-src="img/inzhoop.png" id="headerSetting">
-		    the 1st ΞTH mobile wallet
-		</p>
-	</div-->
   	<ion-scroll class="list" >
+		<!--div class="item divider padding dark" align="center">
+			<p>
+				<img ng-src="img/inzhoop.png" id="headerSetting">
+			    the 1st ΞTH mobile wallet
+			</p>
+		</div-->
+
 		<div class="padding subdued">Host Provider Address</div>
 		<div class="item item-icon-rigth">
 			Network host type
@@ -28,7 +29,7 @@
 		</div>
 		<div class="item item-button-right">
 		    Import a Wallet
-		    <button class="button button-clear" ng-click="confirmImport()">
+		    <button class="button button-clear" ng-click="chooseImportWallet()">
 		        <i class="icon ion-ios-cloud-upload"></i>
 		    </button>
 		</div>
@@ -42,7 +43,7 @@
 	    <ion-toggle  ng-model="pin.checked" ng-checked="pin.checked">
 			Enabled
 		</ion-toggle>
-	    <ion-toggle  ng-model="touch.checked" ng-checked="touch.checked" ng-if="platform == 'ios'">
+	    <ion-toggle  ng-model="touch.checked" ng-checked="touch.checked" ng-if="isIOS()">
 			Touch ID Enabled
 		</ion-toggle> 
 		<div class="divider dark" align="center">
