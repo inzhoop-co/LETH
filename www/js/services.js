@@ -1,22 +1,8 @@
 angular.module('leth.services', [])
   .factory('Friends', function ($rootScope, $http, $q) {
-    var apiURL = 'http://ipfs.io/ipfs';
-
     return {
-      all: function (friendsHash) {
-
-      },
-      getFromIpfs: function (friendHash) {
-        var q = $q.defer();
-        $http({
-          method: 'GET',
-          url: apiURL+'/'+friendHash
-        }).then(function(response) {
-          q.resolve(response.data.user);
-        }, function(response) {
-          q.reject(response);
-        });
-        return q.promise;
+      all: function () {
+        return JSON.parse(localStorage.Friends);
       },
       add: function(addressbook,user) {
         if(Array.isArray(addressbook))
@@ -33,108 +19,17 @@ angular.module('leth.services', [])
       remove: function(addressbook, index) {
         addressbook.splice(index, 1);
         return addressbook;
+      },
+      balance: function (friend) {
+        var result;
+        try {
+          result = (parseFloat(web3.eth.getBalance(friend.addr)) / 1.0e18).toFixed(6);
+        }catch (e){
+          result = undefined;
+        }
+        return result
       }
     };
-  })
-  .factory('Items', function ($rootScope, $http, $q, $sanitize) {
-    var apiURL = 'http://ipfs.io/ipfs';
-
-    return {
-      all: function (itemsHash) {
-      },
-      getFromIpfs: function (itemHash) {
-        var q = $q.defer();
-        $http({
-          method: 'GET',
-          url: apiURL+'/'+itemHash
-        }).then(function(response) {
-          q.resolve(response.data.News);
-        }, function(response) {
-          q.reject(response);
-        });
-        return q.promise;
-      },
-      get: function(catalog, key) {
-        var obj = catalog.filter(function (val) {
-          return val.Key === key;
-        });
-        return obj[0];
-      },
-      add: function(catalog,item, key) {
-        if(Array.isArray(catalog)){
-          item.Key = key;
-          item.Logo = apiURL + "/" + item.Logo;
-          item.Revenue = Math.floor((Math.random() * 300) + 1);
-          catalog.push(item);
-          }
-        return catalog;
-      },
-      remove: function(catalog, item) {
-        catalog.pop(item);
-        return catalog;
-      }
-    };
-  })
-  .factory('FeedService', function($http, FeedEndpoint, $q){
-    var BASE_URL = FeedEndpoint.url; //"https://blog.ethereum.org/feed/";
-    var items = [];
-    
-    return {
-      GetFeed: function(){
-        return $http.get(BASE_URL+'?u=947c9b18fc27e0b00fc2ad055&id=257df01285').then(function(response){
-          var x2js = new X2JS();
-          var xmlText = response.data;
-          var jsonObj = x2js.xml_str2json( xmlText );
-          items = jsonObj;
-          return items.rss.channel.item;
-        });
-      },
-      GetNew: function(){
-        /*
-        return $http.get(BASE_URL+'?u=947c9b18fc27e0b00fc2ad055&id=257df01285').then(function(response){
-          var x2js = new X2JS();
-          var xmlText = response.data;
-          var jsonObj = x2js.xml_str2json( xmlText );
-          items = jsonObj; 
-          return items.rss.channel.item;
-        });
-        */
-      },
-      GetOld: function(){
-        /*
-        return $http.get(BASE_URL+'?u=947c9b18fc27e0b00fc2ad055&id=257df01285').then(function(response){
-          var x2js = new X2JS();
-          var xmlText = response.data;
-          var jsonObj = x2js.xml_str2json( xmlText );
-          items = jsonObj; 
-          return items.rss.channel.item;        
-        });
-        */
-      },
-      GetBonus: function(item) {
-         return alert('Bonus - ' + item);
-      },
-      get: function(catalog, index) {
-        return catalog[index];
-      },
-      remove: function(catalog, item) {
-        catalog.pop(item);
-        return catalog;
-      },
-      getApp: function(url){
-        var q = $q.defer();
-        $http({
-          method: 'GET',
-          url: 'js/contracts/appleth.html'
-        }).then(function(response) {
-          q.resolve(response.data);
-        }, function(response) {
-          q.reject(response);
-        });
-        return q.promise;
-
-      }
-    }
   })
   .service('AppService', function ($rootScope, $q) {
     return {
@@ -190,8 +85,6 @@ angular.module('leth.services', [])
           ttl: 100,
           workToProve: 100
         };
-
-
         web3.shh.post(message);
       },
       sendTransaction: function (from, to, value, gasPrice, gas) {

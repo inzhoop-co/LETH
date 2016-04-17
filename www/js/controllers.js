@@ -1,11 +1,11 @@
 angular.module('leth.controllers', [])
-
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, FeedService, $q, PasswordPopup, Transactions, Friends, Items) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends) {
      window.refresh = function () {
       $scope.balance = AppService.balance();
       $scope.account = AppService.account();
       $scope.qrcodeString = $scope.account;
       $scope.getNetwork();
+      $scope.friends = Friends.all();
       //temp
       $scope.transactions = Transactions.all();
       localStorage.Transactions = JSON.stringify($scope.transactions);
@@ -13,7 +13,7 @@ angular.module('leth.controllers', [])
 
      window.customPasswordProvider = function (callback) {
       var pw;
-      PasswordPopup.open("Inserisci Una Password", "Inserisci La tua password").then(
+      PasswordPopup.open("Digit your password", "input password of wallet").then(
         function (result) {
           pw = result;
           if (pw != undefined) {
@@ -94,6 +94,7 @@ angular.module('leth.controllers', [])
       });
     };
 
+    /*
     var loadFriends = function(friendsHash){
       angular.forEach(friendsHash, function (key, value) {
         Friends.getFromIpfs(key).then(function (response) {
@@ -103,6 +104,10 @@ angular.module('leth.controllers', [])
         })
       });
     };
+    */
+    $scope.isValidAddr = function(addr){
+      return web3.isAddress(addr);
+    }
 
     $scope.scanTo = function () {
       document.addEventListener("deviceready", function () {      
@@ -199,57 +204,8 @@ angular.module('leth.controllers', [])
       }, false);
     };
 
-    $scope.hasLogged = false;
-  
+    $scope.hasLogged = false;  
     $scope.friends = [];
-    /*********FRIENDS ********/
-    if (typeof localStorage.ipfsFriends == 'undefined') {
-      $scope.ipfsFriends = ["QmdQxP4dBKsAgZdfqH8jgX1BvhDuu742qZcgDYaCQYS13H", "QmNuBdR2D5osrPT4NgBDSvwpEo7dpR6N8gxVzhvMGNPw2S"];
-      localStorage.ipfsFriends = JSON.stringify($scope.ipfsFriends);
-    }
-
-    if (typeof localStorage.Friends == 'undefined') {
-      /*for testing purpose only*/
-      var friendsHash = JSON.parse(localStorage.ipfsFriends);
-      loadFriends(friendsHash);
-    } else {
-      $scope.friends = JSON.parse(localStorage.Friends);
-    }
-    /*********FRIENDS ********/
-
-    $scope.items = [];
-
-    var loadItems = function(itemsHash){
-      angular.forEach(itemsHash, function (key, value) {
-        Items.getFromIpfs(key).then(function (response) {
-          Items.add($scope.items, response, key);
-        }, function (err) {
-          console.log(err);
-        })
-      });
-    }
-
-    if (typeof localStorage.ipfsItems == 'undefined') {
-      $scope.ipfsItems = ["QmeUm18ySxXdDZQK18kYRZnGR6R4hd2XjTXrqFZQHcWwsu"];
-      //QmTQmAEHDzAk9i4BBES1BBhTj1v9KmF8Vcngyns1cd1XpX
-      //QmeUm18ySxXdDZQK18kYRZnGR6R4hd2XjTXrqFZQHcWwsu
-      localStorage.ipfsItems = JSON.stringify($scope.ipfsItems);
-    }
-
-    if (typeof localStorage.Items == 'undefined') {
-      var itemsHash = JSON.parse(localStorage.ipfsItems);
-      loadItems(itemsHash);
-    } else {
-      $scope.items = JSON.parse(localStorage.Items);
-    }
-
-    // NEWS
-    $scope.infoNews = [];
-    $scope.newinfo = [];
-    FeedService.GetFeed().then(function(infoNews){
-      $scope.infoNews = infoNews;
-    });
-    //
 
     $scope.openLoginModal = function () {
       loginModal.show();
@@ -367,7 +323,7 @@ angular.module('leth.controllers', [])
     }
   }) //fine AppCtrl
 
-  .controller('WalletCtrl', function ($scope, $stateParams, $ionicModal, $state, $ionicPopup, $cordovaBarcodeScanner, AppService, Transactions) {
+  .controller('WalletCtrl', function ($scope, $stateParams, $ionicModal, $state, $ionicPopup, $cordovaBarcodeScanner, $ionicActionSheet, AppService, Transactions) {
     var TrueException = {};
     var FalseException = {};
 
@@ -462,6 +418,27 @@ angular.module('leth.controllers', [])
     $scope.clearAddrTo = function(){
       $scope.fromAddressBook = false;
     }
+
+    $scope.chooseCoin = function(){
+      var hideSheet = $ionicActionSheet.show({
+        buttons: [
+          { text: '<img src="img/inzhoop-icon.png"/> ZhoopCoin' },
+          { text: '<img src="img/coinB.png"> RiaceCoin </img>'  }
+        ],
+        destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        titleText: 'Choose coins to pay with',
+        destructiveButtonClicked:  function() {
+          hideSheet();
+        },
+        buttonClicked: function(index) {
+          alert(index);
+          $timeout(function() {
+           hideSheet();
+          }, 20000);
+        }
+      })
+    };
+
   })
 
   .controller('AddressCtrl', function ($scope, AppService, $ionicPopup, $cordovaEmailComposer, $cordovaClipboard, $cordovaSms, $cordovaContacts) {
@@ -707,52 +684,55 @@ angular.module('leth.controllers', [])
       */
       //show all value fileList[]
       var keystoreFilename = "leth_keystore.json";
-      $cordovaFile.readAsText(cordova.file.dataDirectory, keystoreFilename)
-        .then(function (success) {
-          // success
-          console.log('read successfully');
-          var ls = JSON.parse(success);
-          global_keystore = new lightwallet.keystore.deserialize(ls.data);
-          global_keystore.passwordProvider = customPasswordProvider;
+      document.addEventListener("deviceready", function () {
+        $cordovaFile.readAsText(cordova.file.dataDirectory, keystoreFilename)
+          .then(function (success) {
+            // success
+            console.log('read successfully');
+            var ls = JSON.parse(success);
+            global_keystore = new lightwallet.keystore.deserialize(ls.data);
+            global_keystore.passwordProvider = customPasswordProvider;
 
-          AppService.setWeb3Provider(global_keystore);
-          localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
+            AppService.setWeb3Provider(global_keystore);
+            localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
 
-          refresh();
- 
-          var alertPopup = $ionicPopup.alert({
-            title: 'Import Wallet',
-            template: 'Wallet imported successfully!'
-          });
+            refresh();
+   
+            var alertPopup = $ionicPopup.alert({
+              title: 'Import Wallet',
+              template: 'Wallet imported successfully!'
+            });
 
-          alertPopup.then(function(res) {
-            console.log('test wallet imported');
-          });
-        }, function (error) {
-          // error
-          console.log(error);
-      });
+            alertPopup.then(function(res) {
+              console.log('test wallet imported');
+            });
+          }, function (error) {
+            // error
+            console.log(error);
+        });
+      }, false);
     };
 
     var backupWalletToStorage = function(){
       var keystoreFilename = "leth_keystore.json";
-      
-      $cordovaFile.writeFile(cordova.file.dataDirectory,
-             keystoreFilename,
-             localStorage.AppKeys,
-             true)
-          .then(function (success) {
-            var alertPopup = $ionicPopup.alert({
-               title: 'Backup Wallet',
-               template: 'Wallet backuped successfully!'
-             });
+      document.addEventListener("deviceready", function () {
+        $cordovaFile.writeFile(cordova.file.dataDirectory,
+               keystoreFilename,
+               localStorage.AppKeys,
+               true)
+            .then(function (success) {
+              var alertPopup = $ionicPopup.alert({
+                 title: 'Backup Wallet',
+                 template: 'Wallet backuped successfully!'
+               });
 
-            alertPopup.then(function(res) {
-              console.log('wallet backuped');
-            });
-          }, function () {
-          // not available
-        });
+              alertPopup.then(function(res) {
+                console.log('wallet backuped');
+              });
+            }, function () {
+            // not available
+          });
+      }, false);     
     };
 
     $scope.backupWallet = function () {
@@ -773,155 +753,61 @@ angular.module('leth.controllers', [])
         buttonClicked: function(index) {
             switch(index){
                 case 0:
-                    console.log('Backup via Email');
+                    console.log('backuping via Email');
                     walletViaEmail();
+                    hideSheet();
                     break;
                 case 1:
-                    console.log('Backup on Storage');
-                    walletInStorage();
+                    console.log('backuping on Storage');
+                    backupWalletToStorage();
+                    hideSheet();
                     break;
 				}
 			$timeout(function() {
-			hideSheet();
+			 hideSheet();
           }, 20000);
         }
       })
-      /* var options = {
-        title: 'How do you want to backup your wallet?',
-        buttonLabels: ['Backup via Email', 'Backup on Storage'],
-        addCancelButtonWithLabel: 'Cancel',
-        androidEnableCancelButton : true,
-        winphoneEnableCancelButton : true
-        //addDestructiveButtonWithLabel : 'Delete it'
-      };
-
-
-      document.addEventListener("deviceready", function () {
-        $ionicActionSheet.show(options)
-          .then(function(btnIndex) {
-            var index = btnIndex;
-            switch(index){
-                case 1:
-                    console.log('Backup via Email');
-                    walletViaEmail();
-                    break;
-                case 2:
-                    console.log('Backup on Storage');
-                    walletInStorage();
-                    break;
-            }            
-          });
-      }, false); */
     };
 
     var walletViaEmail = function(){
-      //backup wallet to email
-      var keystoreFilename = global_keystore.addresses[0] + "_lethKeystore.json";
-      var directorySave=cordova.file.dataDirectory;
-      var directoryAttach=cordova.file.dataDirectory.replace('file://','');
-      
-      if(ionic.Platform.isAndroid()) {
-        directorySave = cordova.file.externalDataDirectory;
-        directoryAttach = cordova.file.externalDataDirectory;
-      }
- 
-      $cordovaFile.writeFile(directorySave,
-                             keystoreFilename,
-                             JSON.stringify(global_keystore.serialize()),
-                             true)
-        .then(function (success) {
-          $cordovaEmailComposer.isAvailable().then(function() {
-            var emailOpts = {
-              to: [''],
-              attachments: ['' + directoryAttach + keystoreFilename],
-              subject: 'Backup LETH Wallet',
-              body: 'A LETH backup wallet is attached.<br>powerd by Ethereum from <b>Inzhoop</b>',
-              isHtml: true
-            };
+      //backup wallet to email 
+      document.addEventListener("deviceready", function () {
+        var keystoreFilename = global_keystore.addresses[0] + "_lethKeystore.json";
+        var directorySave=cordova.file.dataDirectory;
+        var directoryAttach=cordova.file.dataDirectory.replace('file://','');
+        
+        if(ionic.Platform.isAndroid()) {
+          directorySave = cordova.file.externalDataDirectory;
+          directoryAttach = cordova.file.externalDataDirectory;
+        }
+        $cordovaFile.writeFile(directorySave,
+                               keystoreFilename,
+                               JSON.stringify(global_keystore.serialize()),
+                               true)
+          .then(function (success) {
+            $cordovaEmailComposer.isAvailable().then(function() {
+              var emailOpts = {
+                to: [''],
+                attachments: ['' + directoryAttach + keystoreFilename],
+                subject: 'Backup LETH Wallet',
+                body: 'A LETH backup wallet is attached.<br>powerd by Ethereum from <b>Inzhoop</b>',
+                isHtml: true
+              };
 
-            $cordovaEmailComposer.open(emailOpts).then(null, function () {
-              // user cancelled email
+              $cordovaEmailComposer.open(emailOpts).then(null, function () {
+                // user cancelled email
+              });
+
+              return;
+            }, function (error) {
+              return;
             });
-
-            return;
-          }, function (error) {
-            return;
+          }, function () {
+            // not available
           });
-        }, function () {
-          // not available
-        });
+      }, false);     
     };
-
-  })
-
-  .controller('ItemsCtrl', function ($scope,  $state, Items, $ionicSwipeCardDelegate, $timeout, FeedService) {
-    $scope.doRefresh = function() {
-      if($scope.newinfo.length > 0){
-        $scope.infoNews = $scope.newinfo.concat($scope.infoNews);
-          
-        //Stop the ion-refresher from spinning
-        $scope.$broadcast('scroll.refreshComplete');
-        
-        $scope.newinfo = [];
-      } else {
-        FeedService.GetNew().then(function(infoNews){
-          $scope.infoNews = infoNews.concat($scope.infoNews);
-          
-          //Stop the ion-refresher from spinning
-          $scope.$broadcast('scroll.refreshComplete');
-        });
-      }
-    };
-    
-    $scope.loadMore = function(){
-      FeedService.GetOld().then(function(items) {
-        $scope.infoNews = $scope.infoNews.concat(items);
-      
-        $scope.$broadcast('scroll.infiniteScrollComplete');
-      });
-    };
-     var CheckNewInfo = function(){
-      $timeout(function(){
-        FeedService.GetNew().then(function(infoNews){
-          $scope.newinfo = infoNews.concat($scope.newinfo);
-        
-          CheckNewInfo();
-        });
-      },100000);
-     }
-    
-    //CheckNewInfo();
-
-    $scope.readNews = function(index){
-      //get bonus if exist ... later
-      //FeedService.GetBonus();
-      $state.go('app.detail',{Item: index});
-    };
-    $scope.remove = function (info) {
-      FeedService.remove($scope.infoNews, info);
-    };
-    $scope.cards = Array.prototype.slice.call($scope.items, 0, 0);
-    $scope.cardSwiped = function(index) {
-      $scope.addCard();
-    };
-    $scope.cardDestroyed = function(index) {
-      $scope.cards.splice(index, 1);
-    };
-    $scope.addCard = function() {
-      var newCard = $scope.items[Math.floor(Math.random() * $scope.items.length)];
-      newCard.id = Math.random();
-      $scope.cards.push(angular.extend({}, newCard));
-    }
-    $scope.accept = function(index) {
-        alert(index);
-    };
-  })
-
-  .controller('ItemCtrl', function ($scope, $stateParams, FeedService, Items) {
-    if($stateParams.Card){
-      $scope.item =  Items.get($scope.items, $stateParams.Card);    
-     }else
-      $scope.item =  FeedService.get($scope.infoNews, $stateParams.Item);    
   })
 
   .controller('FriendsCtrl', function ($scope, Friends, $ionicListDelegate) {    
@@ -939,15 +825,19 @@ angular.module('leth.controllers', [])
 
   .controller('FriendCtrl', function ($scope, $stateParams, Friends) {
     $scope.friend = Friends.get($stateParams);
+    $scope.friendBalance = Friends.balance($scope.friend);
   })
 
   .controller('TransactionCtrl', function ($scope) {
+    //
+
+     for (var i = 0; i < 1000; i++) $scope.transactions.push(i);
   })
 
   .controller('AboutCtrl', function ($scope, angularLoad) {
   })
 
-  .controller('ApplethCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http,CountDapp) {
+  .controller('DapplethsCtrl', function ($scope, angularLoad, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http,CountDapp) {
     $ionicSlideBoxDelegate.start();
     $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
@@ -958,7 +848,7 @@ angular.module('leth.controllers', [])
 
     var path = DappPath.url + '/dapp_';
     var localpath = 'dappleths/dapp_';    //maybe a list  from an API of dappleth Store: sample app
-    path=localpath; //for development
+    //path=localpath; //for development
     
     $scope.appContainer="";
 
@@ -971,7 +861,7 @@ angular.module('leth.controllers', [])
     }
   })
 
-  .controller('ApplethRunCtrl', function ($scope, angularLoad, FeedService, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
+  .controller('DapplethRunCtrl', function ($scope, angularLoad, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
       console.log("Param " + $stateParams.Id);
 
       //load app selected

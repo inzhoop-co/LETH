@@ -2,7 +2,7 @@
   <ion-header-bar class="bar-stable bar-assertive">
     <div class="buttons bar-header">
       <button class="button button-clear ion-ios-close" ng-click="closeChangeCodeModal()"></button>
-      <div class="h1 title">Change Code</div>
+      <div class="h1 title">Change 4 digit code</div>
     </div>
   </ion-header-bar>
   <ion-content class="has-header" padding="'true'">
@@ -11,15 +11,15 @@
         <form name="changeCode" ng-submit="ChangeCode(oldCode,newCode)">
           <label class="item item-input">
             <span class="input-label">Old code</span>
-            <input type="password" ng-model="oldCode" required="true" placeholder="input current code">
+            <input type="password" ng-model="oldCode" pattern="[0-9]*" maxlength="4" minlength="4" placeholder="input current code" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required>
           </label>
           <label class="item item-input">
             <span class="input-label">New code</span>
-            <input type="password" ng-model="newCode" required="true" placeholder="input new code">
+            <input type="password" ng-model="newCode" pattern="[0-9]*" maxlength="4" minlength="4" placeholder="input new code" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required>
           </label>
           <label class="item item-input padding-bottom">
             <span class="input-label">Confirm code</span>
-            <input type="password" pattern="[0-9]*" ng-model="confirmNewCode" required="true" placeholder="input new code again">
+            <input type="password" pattern="[0-9]*" maxlength="4" ng-model="confirmNewCode" minlength="4" placeholder="input new code again" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required>
           </label>
           <button ng-disabled="!changeCode.$valid || confirmNewCode!=newCode"  class="button button-block button-energized" type="submit" ng-disabled="">Change</button>
         </form>

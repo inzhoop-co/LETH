@@ -3,21 +3,26 @@
     <ion-nav-back-button>
     </ion-nav-back-button>
   </ion-nav-bar>
-    <ion-content class="has-header has-tabs" padding="'true'">
-      <div class="list card text-center">
-       <div class="item">
-         <img class="rounded" ng-src="{{friend.icon}}" style="width: 64px; height: 64px">         
-         <p class="padding h1">
-           {{friend.name}}
-         </p>
-         <p class="padding">
-           {{friend.comment}}
-         </p>
-         <p class="padding">
-           {{friend.addr}}
-         </p>
-         <a class="button button-positive" href="#/app/wallet/{{friend.addr}}"> Send Coins <i class="icon ion-chevron-right"></i></a>
-       </div>
+    <ion-content class="has-header has-tabs" >
+      <div class="list">
+       <div class="item item-thumbnail-left button-left">
+          <img class="rounded" ng-src="{{friend.icon}}" style="width: 64px; height: 64px"> 
+          <h2>{{friend.name}}</h2>
+          <p>{{friendBalance}} ETH</p>
+          <p>{{friend.addr}}</p>
+         <a class="button button-clear button-positive" href="#/app/wallet/{{friend.addr}}"> Send Coins <i class="icon ion-chevron-right"></i></a>
+        </div>
       </div>
+      <ion-list >
+        <ion-item collection-repeat="t in transactions | filter:{to:friend.addr}">
+          <!--ToDo: andrebbe gestito l'IN e l'OUT di Eth-->
+          <i class="icon ion-arrow-up-a assertive"></i>
+          <h2>{{t.id}}</h2>
+          <p>Value: {{t.value}}</p>
+          <p>To: {{t.to}}</p>
+          <p>Date: {{t.time}}</p>
+          <p>From: {{t.from}}</p>
+        </ion-item>
+      </ion-list>
     </ion-content>
 </ion-view>

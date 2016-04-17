@@ -1,14 +1,15 @@
 <ion-view view-title="Transactions">
-  <ion-content class="has-header has-tabs" padding="'true'">
-    <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
-    <ion-list class="list card" can-swipe="true">
-      <div class="item item-divider">
-        <i class="icon"></i>
-        Transactions
-      </div>
-      <p ng-show="transactions.length == 0" align="center"><br/>No saved transaction</p>
-      <ion-item class="item item-icon-left" ng-repeat="t in transactions">
-        <!--ToDo: andrebbe gestito l'IN e l'OUT di Eth-->
+<ion-header-bar align-title="left" class="bar-subheader">
+    <label class="item-input label-inset">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="text" placeholder="Search" ng-model="search.$">
+    </label>
+  </ion-header-bar>
+  <ion-content class="has-header has-subheader">
+  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+    <ion-list can-swipe="true">
+    <p ng-show="transactions.length == 0" align="center"><br/>No saved transaction</p>
+      <ion-item collection-repeat="t in transactions | filter:{id:sarch}">
         <i class="icon ion-arrow-up-a assertive"></i>
         <h2>{{t.id}}</h2>
         <p>Value: {{t.value}}</p>

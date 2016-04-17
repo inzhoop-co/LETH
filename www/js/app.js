@@ -1,17 +1,5 @@
 web3 = new Web3();
-if (typeof localStorage.PinOn == 'undefined') {
-localStorage.PinOn="false";
-}
-if (typeof localStorage.TouchOn == 'undefined') {
-localStorage.TouchOn="false";
-}
-if (typeof localStorage.NodeHost == 'undefined') {
-  localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
-}
 angular.module('leth', ['ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
-  .constant('FeedEndpoint', {
-    url: 'http://us11.campaign-archive1.com/feed'
-  })
   .constant('DappPath',{
     url : "http://www.inzhoop.com/dappleths"
   })
@@ -19,8 +7,18 @@ angular.module('leth', ['ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSan
 
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,$lockScreen,$state,$window) {
     $ionicPlatform.ready(function () {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
+      //global control and settings
+
+      if (typeof localStorage.PinOn == 'undefined') {
+      localStorage.PinOn="false";
+      }
+      if (typeof localStorage.TouchOn == 'undefined') {
+      localStorage.TouchOn="false";
+      }
+      if (typeof localStorage.NodeHost == 'undefined') {
+        localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
+      }
+
 	    if(localStorage.PinOn=="true"){
     		$lockScreen.show({
     			code: JSON.parse(localStorage.AppCode).code,
@@ -105,7 +103,8 @@ angular.module('leth', ['ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSan
         url: '/transactions',
         views: {
           'menuContent': {
-            templateUrl: 'templates/transactions.html'
+            templateUrl: 'templates/transactions.html',
+            controller: 'TransactionCtrl'
           }
         }
       })
@@ -118,21 +117,21 @@ angular.module('leth', ['ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSan
           }
         }
       })
-      .state('app.appleth', {
-        url: '/appleth',
+      .state('app.dappleths', {
+        url: '/dappleths',
         views: {
           'menuContent': {
-            templateUrl: 'templates/appleth.html',
-            controller: "ApplethCtrl"
+            templateUrl: 'templates/dappleths.html',
+            controller: "DapplethsCtrl"
           }
         }
       }) 
-      .state('app.appleth-run', {
-        url: '/appleth-run/:Id',
+      .state('app.dappleth-run', {
+        url: '/dappleth-run/:Id',
         views: {
           'menuContent': {
-            templateUrl: 'templates/appleth-run.html',
-            controller: "ApplethRunCtrl"
+            templateUrl: 'templates/dappleth-run.html',
+            controller: "DapplethRunCtrl"
           }
         }
       })      
@@ -142,24 +141,6 @@ angular.module('leth', ['ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSan
           'menuContent': {
             templateUrl: 'templates/address.html',
             controller: 'AddressCtrl'
-          }
-        }
-      })
-      .state('app.items', {
-        url: '/items',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/items.html',
-            controller: 'ItemsCtrl'
-          }
-        }
-      })
-      .state('app.detail', {
-        url: '/items/:Item/:Card',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/item-detail.html',
-            controller: 'ItemCtrl'
           }
         }
       })
@@ -182,7 +163,7 @@ angular.module('leth', ['ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSan
         }
       });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/appleth');
+    $urlRouterProvider.otherwise('/app/dappleths');
   })
   .config(function($ionicConfigProvider) {
     $ionicConfigProvider.tabs.position('bottom');

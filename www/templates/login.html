@@ -8,25 +8,24 @@
   <ion-content class="has-header" padding="'true'">
     <div class="list">
       <div class="item">
-        <p class="text-center">Choose a strong password to encrypt <br>
-          your wallet.<br>
-          Set a 4 digit password for rapid access</p>
+        <p class="text-center">Set strong password to encrypt your wallet.<br>
+          Set a 4 digit password for rapid access.</p>
       </div>
       <div class="item">
         <form name="login" ng-submit="Login(password,code)">
           <label class="item item-input">
             <span class="input-label">Password</span>
-            <input type="password" ng-model="password" required="true">
+            <input type="password" ng-model="password" placeholder="8 to 20 digit alphanumeric" required="true" ng-minlength="8" ng-maxlength="20" ng-pattern="/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])/" required>
           </label>
           <label class="item item-input">
-            <span class="input-label">Confirm Password</span>
-            <input type="password" ng-model="confirmPassword" required="true">
+            <span class="input-label">Confirm</span>
+            <input type="password" ng-model="confirmPassword" placeholder="enter password again" required="true" ng-minlength="8" ng-maxlength="20" ng-pattern="/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])/" required>
           </label>
           <label class="item item-input padding-bottom">
             <span class="input-label">Code</span>
-            <input type="password" ng-model="code" required="true">
+            <input type="password" ng-model="code" pattern="[0-9]*" maxlength="4" minlength="4" placeholder="4 digit code" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required>
           </label>
-          <button ng-disabled="!login.$valid || confirmPassword!=password"   class="button button-block button-energized" type="submit" ng-disabled="">Start</button>
+          <button ng-disabled="!login.$valid || confirmPassword!=password"   class="button button-block button-energized" type="submit">Start</button>
         </form>
       </div>
     </div>
