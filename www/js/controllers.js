@@ -496,8 +496,9 @@ angular.module('leth.controllers', [])
       }, false);      
     }
 
-     $scope.shareByEmail = function(){
-		if ($scope.images != null && $scope.images.length > 0) {
+        $scope.shareByEmail = function(){
+		
+		 
 			var mailImages = [];
 			var imgQrcode = angular.element(document.querySelector('qr > img')).attr('ng-src');
 		 	mailImages.push(imgQrcode);
@@ -518,7 +519,7 @@ angular.module('leth.controllers', [])
 					return;
 			  });
 			}, false);         
-		}
+	 
 	}
 
     $scope.copyAddr = function(){
