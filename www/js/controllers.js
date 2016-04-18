@@ -11,7 +11,7 @@ angular.module('leth.controllers', [])
       localStorage.Transactions = JSON.stringify($scope.transactions);
      };
 
-     window.customPasswordProvider = function (callback) {
+    window.customPasswordProvider = function (callback) {
       var pw;
       PasswordPopup.open("Digit your password", "input password of wallet").then(
         function (result) {
@@ -327,6 +327,11 @@ angular.module('leth.controllers', [])
     var TrueException = {};
     var FalseException = {};
 
+    AppService.getStoreApps().then(function(response){
+      console.log("coins loaded: " + response);
+      $scope.storeCoins = response.coins;
+    });
+
     $scope.fromAddressBook = false;
 
     if($stateParams.addr){
@@ -420,10 +425,16 @@ angular.module('leth.controllers', [])
     }
 
     $scope.chooseCoin = function(){
+      /*
+      var buttonsGroup = [];
+      for (var i = 0; i < $scope.storeCoins.length; i++) {
+        var text = "{text:'ZhoopCoin'}";
+        buttonsGroup.push(text);
+      }
+      */
       var hideSheet = $ionicActionSheet.show({
         buttons: [
-          { text: '<img src="img/inzhoop-icon.png"/> ZhoopCoin' },
-          { text: '<img src="img/coinB.png"> RiaceCoin </img>'  }
+            { text: $scope.storeCoins[0].Symbol + " " + $scope.storeCoins[0].Name }
         ],
         destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         titleText: 'Choose coins to pay with',
@@ -837,7 +848,7 @@ angular.module('leth.controllers', [])
   .controller('AboutCtrl', function ($scope, angularLoad) {
   })
 
-  .controller('DapplethsCtrl', function ($scope, angularLoad, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http,CountDapp) {
+  .controller('DapplethsCtrl', function ($scope, angularLoad, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, CountDapp, AppService) {
     $ionicSlideBoxDelegate.start();
     $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
@@ -846,6 +857,18 @@ angular.module('leth.controllers', [])
       $ionicSlideBoxDelegate.previous();
     };
 
+    $scope.appContainer="";
+    //load dappleths dinamicamente   
+    $scope.storeApp = AppService.getStoreApps().then(function(response){
+      angular.forEach(response.dappleths, function(value, key){
+        $http.get(value.AppUrl) 
+          .success(function(data){
+          $scope.appContainer += $sce.trustAsHtml(data);
+        })
+      });
+    });
+
+    /*
     var path = DappPath.url + '/dapp_';
     var localpath = 'dappleths/dapp_';    //maybe a list  from an API of dappleth Store: sample app
     //path=localpath; //for development
@@ -859,6 +882,7 @@ angular.module('leth.controllers', [])
 
       })
     }
+    */
   })
 
   .controller('DapplethRunCtrl', function ($scope, angularLoad, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
@@ -866,6 +890,7 @@ angular.module('leth.controllers', [])
 
       //load app selected
       var id = $stateParams.Id;
+      //TO DO : install dappleths on localStorage and readFrom   
       var path = DappPath.url + '/dapp_';
       var localpath = 'dappleths/dapp_'; 
       //path=localpath;

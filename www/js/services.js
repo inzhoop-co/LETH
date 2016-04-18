@@ -31,8 +31,25 @@ angular.module('leth.services', [])
       }
     };
   })
-  .service('AppService', function ($rootScope, $q) {
+  .service('AppService', function ($rootScope, $http, $q) {
     return {
+      getStore: function(){
+        $http.get('http://www.inzhoop.com/dappleths/Store.json').then(function(response){
+          return response.data;
+        });
+      },
+      getStoreApps: function () {
+        var q = $q.defer();
+        $http({
+          method: 'GET',
+          url: 'http://www.inzhoop.com/dappleths/Store.json'
+        }).then(function(response) {
+          q.resolve(response.data);
+        }, function(response) {
+          q.reject(response);
+        });
+        return q.promise;
+      },
       setWeb3Provider: function (keys) {
         var web3Provider = new HookedWeb3Provider({
           host: localStorage.NodeHost,
