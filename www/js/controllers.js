@@ -507,28 +507,31 @@ angular.module('leth.controllers', [])
       }, false);      
     }
 
-    $scope.shareByEmail = function(){
-        var imgQrcode = angular.element(document.querySelector('qr > img')).attr('ng-src');
-        document.addEventListener("deviceready", function () {
-          $cordovaEmailComposer.isAvailable().then(function() {
-            var emailOpts = {
-              to: [''],
-              subject: 'Please Pay me',
-              body: 'Please send me ETH to this Wallet Address: </br><a href="ethereum://' + $scope.qrcodeString + '"/>' + $scope.qrcodeString + '</br><img src="' + imgQrcode + '"</img></br>',
-              isHtml: true
-            };
+        $scope.shareByEmail = function(){
+		
+		 
+			var mailImages = [];
+			var imgQrcode = angular.element(document.querySelector('qr > img')).attr('ng-src');
+		 	mailImages.push(imgQrcode);
+			document.addEventListener("deviceready", function () {
+				$cordovaEmailComposer.isAvailable().then(function() {
+				var emailOpts = {
+					to: [''],
+					attachments: mailImages,
+					subject: 'Please Pay me',
+					body: 'Please send me ETH to this Wallet Address: </br><a href="ethereum://' + $scope.qrcodeString + '"/>' + $scope.qrcodeString + '</br>',
+					isHtml: true
+				};
 
-            $cordovaEmailComposer.open(emailOpts).then(null, function () {
-              console.log('email view dismissed');
-            });
-
-            return;
-          }, function (error) {
-            console.log("cordovaEmailComposer not available");
-            return;
-          });
-        }, false);         
-    }
+				$cordovaEmailComposer.open(emailOpts).then(null, function () { console.log('email view dismissed');	});
+						return;
+				}, function (error) {
+					console.log("cordovaEmailComposer not available");
+					return;
+			  });
+			}, false);         
+	 
+	}
 
     $scope.copyAddr = function(){
       document.addEventListener("deviceready", function () {  
