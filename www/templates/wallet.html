@@ -20,9 +20,9 @@
       </div>
       <ion-list class="list" can-swipe="true">
       <ion-item class="item item-thumbnail-left item-icon-right">
-        <img src="img/ethereum-icon.png">
-        <label ng-click="refresh()"><b>ΞTH {{balance}}</b></label>
-        <p>Eth from main wallet</p>
+        <img src="{{logoCoin}}">
+        <label ng-click="refresh()" id="{{idCoin}}"><b>{{symbolCoin}} {{balance}}</b></label>
+        <p>{{descCoin}}</p>
         <span><i class="icon ion-android-more-vertical" ng-click="chooseCoin()"></i></span>
       </ion-item>
       </ion-list>
@@ -44,7 +44,7 @@
             </select>
           </div>
           <button ng-disabled="!wallet.$valid || !isValidAddr(addrTo)" class="button button-block button-energized"
-                  ng-click="confirmSend(addrTo,amountTo,unit)"><i class="icon ion-paper-airplane"></i> Send
+                  ng-click="confirmSend(addrTo,amountTo,unit,idCoin)"><i class="icon ion-paper-airplane"></i> Send
           </button>
         </form>
       </div>    
