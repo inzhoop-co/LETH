@@ -325,18 +325,23 @@ angular.module('leth.controllers', [])
         $scope.descCoin = "Eth from main wallet";
         $scope.symbolCoin = "Ξ";
         $scope.balance = AppService.balance();
-
+		$scope.listUnit = [
+			{multiplier: "1.0e18", unitName: "Ether"},
+			{multiplier: "1.0e15", unitName: "Finney"},
+			{multiplier: "1", unitName: "Wei"}
+		];
       }
       else{
-    		$scope.getNetwork();
-  		  var activeCoins=$scope.storeCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork;} );
-        scope.idCoin = index;
+    	$scope.getNetwork();
+  		var activeCoins=$scope.storeCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork;} );
+        $scope.idCoin = index;
         $scope.logoCoin = activeCoins[index-1].Logo;
         $scope.descCoin = activeCoins[index-1].Abstract;
         $scope.symbolCoin = activeCoins[index-1].Symbol;
         $scope.methodSend = activeCoins[index-1].Send;
         $scope.contractCoin = web3.eth.contract(activeCoins[index-1].ABI).at(activeCoins[index-1].Address);
         $scope.balance = $scope.contractCoin.balanceOf('0x' + $scope.account)*1;
+		$scope.listUnit = activeCoins[index-1].Units;
       }
 
     }
