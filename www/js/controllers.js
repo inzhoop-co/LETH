@@ -328,9 +328,9 @@ angular.module('leth.controllers', [])
 
       }
       else{
-		$scope.getNetwork();
-		var activeCoins=$scope.storeCoins.filter( function isOnThisNetwork(obj) {return obj.Network==$scope.nameNetwork;} );
-        $scope.idCoin = index;
+    		$scope.getNetwork();
+  		  var activeCoins=$scope.storeCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork;} );
+        scope.idCoin = index;
         $scope.logoCoin = activeCoins[index-1].Logo;
         $scope.descCoin = activeCoins[index-1].Abstract;
         $scope.symbolCoin = activeCoins[index-1].Symbol;
@@ -450,7 +450,7 @@ angular.module('leth.controllers', [])
 		  $scope.getNetwork();
       var buttonsGroup = [{text: 'ETH'}];
 
-	   var activeCoins=$scope.storeCoins.filter( function isOnThisNetwork(obj) {return obj.Network==$scope.nameNetwork;} );
+	   var activeCoins=$scope.storeCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork;} );
       for (var i = 0; i < activeCoins.length; i++) {
         var text = {text: activeCoins[i].Symbol + " " + activeCoins[i].Name};
         buttonsGroup.push(text);
