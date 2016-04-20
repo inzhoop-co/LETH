@@ -150,7 +150,7 @@ angular.module('leth.services', [])
         $rootScope.secureData = {};
 
         var myPopup = $ionicPopup.show({
-          template: '<input type="password" ng-model="secureData.password">',
+          template: '<input type="password" ng-model="secureData.password" autofocus="true">',
           title: msg,
           subTitle: defaultMessage,
           scope: $rootScope,
@@ -161,7 +161,7 @@ angular.module('leth.services', [])
               type: 'button-positive',
               onTap: function (e) {
                 if (!$rootScope.secureData.password) {
-                  //don't allow the user to close unless he enters wifi password
+                  //don't allow the user to close unless he enters password
                   e.preventDefault();
                 } else {
                   return $rootScope.secureData.password;
@@ -172,6 +172,7 @@ angular.module('leth.services', [])
         });
 
         myPopup.then(function (res) {
+
           q.resolve(res);
         });
 

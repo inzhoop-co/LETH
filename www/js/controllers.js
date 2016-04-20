@@ -1,6 +1,7 @@
 angular.module('leth.controllers', [])
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, $ionicLoading) {
     window.refresh = function () {
+      $ionicLoading.show();
       $scope.balance = AppService.balance();
       $scope.account = AppService.account();
       $scope.qrcodeString = $scope.account;
@@ -9,6 +10,7 @@ angular.module('leth.controllers', [])
       //temp
       $scope.transactions = Transactions.all();
       localStorage.Transactions = JSON.stringify($scope.transactions);
+      //$ionicLoading.hide();
      };
 
     window.customPasswordProvider = function (callback) {
@@ -312,7 +314,7 @@ angular.module('leth.controllers', [])
     }
   }) //fine AppCtrl
 
-  .controller('WalletCtrl', function ($scope, $stateParams, $ionicModal, $state, $ionicPopup, $cordovaBarcodeScanner, $ionicActionSheet, $timeout, AppService, Transactions) {
+  .controller('WalletCtrl', function ($scope, $stateParams, $ionicLoading, $ionicModal, $state, $ionicPopup, $cordovaBarcodeScanner, $ionicActionSheet, $timeout, AppService, Transactions) {
     var TrueException = {};
     var FalseException = {};
 
@@ -323,6 +325,7 @@ angular.module('leth.controllers', [])
         $scope.descCoin = "Eth from main wallet";
         $scope.symbolCoin = "Ξ";
         $scope.balance = AppService.balance();
+
       }
       else{
 		$scope.getNetwork();
@@ -335,6 +338,7 @@ angular.module('leth.controllers', [])
         $scope.contractCoin = web3.eth.contract(activeCoins[index-1].ABI).at(activeCoins[index-1].Address);
         $scope.balance = $scope.contractCoin.balanceOf('0x' + $scope.account)*1;
       }
+
     }
 
     //set Eth for default
@@ -409,7 +413,7 @@ angular.module('leth.controllers', [])
     $scope.confirmSend = function (addr, amount,unit) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Send Coins',
-        template: 'Are you realy sure?'
+        template: 'Are you really sure?'
       });
       confirmPopup.then(function (res) {
         if (res) {

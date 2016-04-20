@@ -1,10 +1,11 @@
 web3 = new Web3();
-angular.module('leth', ['ionic', 'angularLoad', 'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
+angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('DappPath',{
     url : "http://www.inzhoop.com/dappleths"
   })
-  .constant('CountDapp',2)
-
+  .constant('$ionicLoadingConfig', {
+    template: 'Loading...'
+  })
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,$lockScreen,$state,$window) {
     $ionicPlatform.ready(function () {
       //global control and settings
