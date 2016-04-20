@@ -12,7 +12,7 @@
     </ion-nav-buttons>
   </ion-nav-bar>
   <ion-content class="has-header" >
-    <!--ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher-->
+    <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
     <div class="list">
       <div class="item item-divider">
         <i class="icon ion-ios-shuffle-strong"></i>
@@ -28,7 +28,6 @@
         <span><i class="icon ion-android-more-vertical" ng-click="chooseCoin()"></i>
           <!--i class="ion-ios-refresh-empty" ng-click="refresh()"/></i-->
         </span>
-
       </ion-item>
       </ion-list>
       <div class="item">
@@ -45,11 +44,6 @@
 			<select class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit = options[0]">
 				<option ng-repeat="uni in listUnit" value="uni.multiplier" ng-selected="$index==0">{{uni.unitName}}</option>
 			</select>
-            <!--<select class="item-select padding" ng-model="unit" ng-required="true">
-              <option value="1.0e18">Ether</option>
-              <option value="1.0e15" selected>Finney</option>
-              <option value="1">Wei</option>
-            </select> -->
           </div>
           <button ng-disabled="!wallet.$valid || !isValidAddr(addrTo)" class="button button-block button-energized"
                   ng-click="confirmSend(addrTo,amountTo,unit,idCoin)"><i class="icon ion-paper-airplane"></i> Send

@@ -1,4 +1,13 @@
-<ion-view view-title="ΞTH {{balance}}">
+<ion-view view-title="Ξ {{balance}}">
+  <ion-nav-buttons side="right">
+    <button class="button button-clear" on-touch="scanTo()" ng-hide="fromAddressBook">
+      <i class="icon ion-ios-camera"></i>
+    </button>
+  </ion-nav-buttons>
+  <ion-nav-bar class="bar-stable bar-assertive">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+  </ion-nav-bar>  
   <ion-content class="has-header has-tabs" >
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
     <div ng-bind-html="appContainer">
