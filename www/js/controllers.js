@@ -195,7 +195,7 @@ angular.module('leth.controllers', [])
        $cordovaBarcodeScanner
         .scan()
         .then(function (barcodeData) {
-          $scope.addr = barcodeData.text;
+          $scope.addr = '0x'+barcodeData.text;
           console.log('Success! ' + barcodeData.text);
         }, function (error) {
           // An error occurred
@@ -361,7 +361,7 @@ angular.module('leth.controllers', [])
       var addr = $stateParams.addr.split('@')[0];
       var coins = $stateParams.addr.split('@')[1];
       $scope.addrTo = addr;
-      $scope.amountTo = coins;
+      $scope.amountTo = parseFloat(coins||0);
       $scope.fromAddressBook = true;
     }else {
       $scope.fromAddressBook = false;
