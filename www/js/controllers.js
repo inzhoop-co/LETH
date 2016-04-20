@@ -1,5 +1,5 @@
 angular.module('leth.controllers', [])
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, $ionicLoading) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, $ionicLoading, $ionicLoadingConfig) {
     window.refresh = function () {
       $ionicLoading.show();
       $scope.balance = AppService.balance();
@@ -10,7 +10,7 @@ angular.module('leth.controllers', [])
       //temp
       $scope.transactions = Transactions.all();
       localStorage.Transactions = JSON.stringify($scope.transactions);
-      //$ionicLoading.hide();
+      $timeout(function() {$ionicLoading.hide();}, 1000);
      };
 
     window.customPasswordProvider = function (callback) {
