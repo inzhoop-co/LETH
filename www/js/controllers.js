@@ -881,7 +881,7 @@ angular.module('leth.controllers', [])
   .controller('AboutCtrl', function ($scope, angularLoad) {
   })
 
-  .controller('DapplethsCtrl', function ($scope, angularLoad, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, CountDapp, AppService) {
+  .controller('DapplethsCtrl', function ($scope, angularLoad, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, AppService) {
     $ionicSlideBoxDelegate.start();
     $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
