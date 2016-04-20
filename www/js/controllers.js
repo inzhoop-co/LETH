@@ -363,7 +363,7 @@ angular.module('leth.controllers', [])
       $scope.addrTo = addr;
       $scope.amountTo = parseFloat(coins||0);
       $scope.fromAddressBook = true;
-    }else {
+    }else { 
       $scope.fromAddressBook = false;
     }
 
