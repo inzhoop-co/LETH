@@ -42,7 +42,7 @@
           </label>
           <div class="item  item-input item-select">
             <input type="number" pattern="-?\d+(\.\d+)?" ng-model="amountTo" placeholder="0.00" ng-required="true">
-			<select class="item-select padding" ng-model="unit" ng-required="true">
+			<select class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit = options[0]">
 				<option ng-repeat="uni in listUnit" value="uni.multiplier">{{uni.unitName}}</option>
 			</select>
             <!--<select class="item-select padding" ng-model="unit" ng-required="true">
