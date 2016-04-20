@@ -119,7 +119,7 @@ angular.module('leth.controllers', [])
         if(!e){
           switch(res.hash) {
             case '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303':
-                $scope.nameNetwork = 'Testnet';
+                $scope.nameNetwork = 'Morden';
                 $scope.badgeNetwork = 'badge badge-royal';
                 break;
             case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
@@ -127,7 +127,7 @@ angular.module('leth.controllers', [])
                 $scope.badgeNetwork = 'badge badge-balanced';
                 break;
             default:
-                $scope.nameNetwork = 'Privatenet';
+                $scope.nameNetwork = 'Private';
                 $scope.badgeNetwork = 'badge badge-calm';              
           }
         }
@@ -325,13 +325,15 @@ angular.module('leth.controllers', [])
         $scope.balance = AppService.balance();
       }
       else{
+		$scope.getNetwork();
+		var activeCoins=$scope.storeCoins.filter( function isOnThisNetwork(obj) {return obj.Network==$scope.nameNetwork;} );
         $scope.idCoin = index;
-        $scope.logoCoin = $scope.storeCoins[$scope.idCoin-1].Logo;
-        $scope.descCoin = $scope.storeCoins[$scope.idCoin-1].Abstract;
-        $scope.symbolCoin = $scope.storeCoins[$scope.idCoin-1].Symbol;
-        $scope.methodSend = $scope.storeCoins[$scope.idCoin-1].Send;
-        $scope.contractCoin = web3.eth.contract($scope.storeCoins[$scope.idCoin-1].ABI).at($scope.storeCoins[$scope.idCoin-1].Address);
-        $scope.balance = parseFloat($scope.contractCoin.balanceOf('0x' + $scope.account)).toFixed(4);
+        $scope.logoCoin = activeCoins[index-1].Logo;
+        $scope.descCoin = activeCoins[index-1].Abstract;
+        $scope.symbolCoin = activeCoins[index-1].Symbol;
+        $scope.methodSend = activeCoins[index-1].Send;
+        $scope.contractCoin = web3.eth.contract(activeCoins[index-1].ABI).at(activeCoins[index-1].Address);
+        $scope.balance = $scope.contractCoin.balanceOf('0x' + $scope.account)*1;
       }
     }
 
@@ -352,7 +354,7 @@ angular.module('leth.controllers', [])
       $scope.addrTo = addr;
       $scope.amountTo = parseFloat(coins||0);
       $scope.fromAddressBook = true;
-    }else {
+    }else { 
       $scope.fromAddressBook = false;
     }
 
@@ -441,9 +443,12 @@ angular.module('leth.controllers', [])
     }
 
     $scope.chooseCoin = function(){  
+		  $scope.getNetwork();
       var buttonsGroup = [{text: 'ETH'}];
-      for (var i = 0; i < $scope.storeCoins.length; i++) {
-        var text = {text: $scope.storeCoins[i].Symbol + " " + $scope.storeCoins[i].Name};
+
+	   var activeCoins=$scope.storeCoins.filter( function isOnThisNetwork(obj) {return obj.Network==$scope.nameNetwork;} );
+      for (var i = 0; i < activeCoins.length; i++) {
+        var text = {text: activeCoins[i].Symbol + " " + activeCoins[i].Name};
         buttonsGroup.push(text);
       }
 

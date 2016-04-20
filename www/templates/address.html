@@ -13,7 +13,7 @@
       </div>
       <div class="item tabs item-input">
         <label class="item item-stacked-label">ETH to request: </label>  
-        <input type="number" pattern="(-?[0-9]+(\.[0-9]+)?)" placeholder=" 0,00 (optional)" ng-model="amountPayment" ng-change="onAmountChange(amountPayment)" ng-maxlenth="6">
+        <input type="number" pattern="-?\d+(\.\d+)?" placeholder=" 0.00 (optional)" ng-model="amountPayment" ng-change="onAmountChange(amountPayment)" ng-maxlenth="6">
       </div>
       <div class="item tabs row"> 
           <div class="col col-10"></div>         

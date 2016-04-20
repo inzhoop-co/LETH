@@ -41,7 +41,7 @@
             <input type="text" ng-model="addrTo" placeholder="Type address or use camera to scan" ng-required="true">
           </label>
           <div class="item  item-input item-select">
-            <input type="number" ng-model="amountTo" placeholder="0,00" ng-required="true">
+            <input type="number" pattern="-?\d+(\.\d+)?" ng-model="amountTo" placeholder="0.00" ng-required="true">
             <select class="item-select padding" ng-model="unit" ng-required="true">
               <option value="1.0e18">Ether</option>
               <option value="1.0e15" selected>Finney</option>
