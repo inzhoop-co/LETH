@@ -19,11 +19,16 @@
         Send Payment
       </div>
       <ion-list class="list" can-swipe="true">
-      <ion-item class="item item-thumbnail-left item-icon-right">
+      <ion-item class="item item-avatar-left  item-icon-right item-avatar-right">
         <img src="{{logoCoin}}">
-        <label ng-click="refresh()" id="{{idCoin}}"><b>{{symbolCoin}} {{balance}}</b></label>
-        <p>{{descCoin}}</p>
-        <span><i class="icon ion-android-more-vertical" ng-click="chooseCoin()"></i></span>
+        <label id="{{idCoin}}" ng-click="refresh()"><b>{{symbolCoin}} {{balance}}</b></label>
+        <p>
+          <label >{{descCoin}}</labe>
+        </p>
+        <span><i class="icon ion-android-more-vertical" ng-click="chooseCoin()"></i>
+          <!--i class="ion-ios-refresh-empty" ng-click="refresh()"/></i-->
+        </span>
+
       </ion-item>
       </ion-list>
       <div class="item">

@@ -104,11 +104,14 @@ angular.module('leth.services', [])
         };
         web3.shh.post(message);
       },
-      transferCoin: function (contract, nameSend, data) {
-          var fromAddr = data.from;
+      transferCoin: function (contract, nameSend, from, to, amount ) {
+          var fromAddr = '0x' + from;
+          var toAddr = to;
           var functionName = nameSend;
           var args = JSON.parse('[]');
-          args.push(data.amount,{from: fromAddr, to: data.to});
+          var gasPrice = web3.eth.gasPrice;
+          var gas = 3000000;
+          args.push(toAddr,amount,{from: fromAddr, gasPrice: gasPrice, gas: gas});
           var callback = function (err, txhash) {
               console.log('error: ' + err);
               console.log('txhash: ' + txhash);

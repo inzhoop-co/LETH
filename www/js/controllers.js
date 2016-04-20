@@ -1,6 +1,6 @@
 angular.module('leth.controllers', [])
   .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends) {
-     window.refresh = function () {
+    window.refresh = function () {
       $scope.balance = AppService.balance();
       $scope.account = AppService.account();
       $scope.qrcodeString = $scope.account;
@@ -94,17 +94,6 @@ angular.module('leth.controllers', [])
       });
     };
 
-    /*
-    var loadFriends = function(friendsHash){
-      angular.forEach(friendsHash, function (key, value) {
-        Friends.getFromIpfs(key).then(function (response) {
-          Friends.add($scope.friends, response[0], key);
-        }, function (err) {
-          console.log(err);
-        })
-      });
-    };
-    */
     $scope.isValidAddr = function(addr){
       return web3.isAddress(addr);
     }
@@ -332,17 +321,17 @@ angular.module('leth.controllers', [])
         $scope.idCoin = 0;
         $scope.logoCoin = "img/ethereum-icon.png";
         $scope.descCoin = "Eth from main wallet";
-        $scope.symbolCoin = "ΞTH";
+        $scope.symbolCoin = "Ξ";
         $scope.balance = AppService.balance();
       }
       else{
         $scope.idCoin = index;
-        $scope.logoCoin = $scope.storeCoins[index-1].Logo;
-        $scope.descCoin = $scope.storeCoins[index-1].Abstract;
-        $scope.symbolCoin = $scope.storeCoins[index-1].Symbol;
-        $scope.methodSend = $scope.storeCoins[index-1].Send;
-        $scope.contractCoin = web3.eth.contract($scope.storeCoins[index-1].ABI).at($scope.storeCoins[index-1].Address);
-        $scope.balance = $scope.contractCoin.balanceOf('0x' + $scope.account)*1;
+        $scope.logoCoin = $scope.storeCoins[$scope.idCoin-1].Logo;
+        $scope.descCoin = $scope.storeCoins[$scope.idCoin-1].Abstract;
+        $scope.symbolCoin = $scope.storeCoins[$scope.idCoin-1].Symbol;
+        $scope.methodSend = $scope.storeCoins[$scope.idCoin-1].Send;
+        $scope.contractCoin = web3.eth.contract($scope.storeCoins[$scope.idCoin-1].ABI).at($scope.storeCoins[$scope.idCoin-1].Address);
+        $scope.balance = parseFloat($scope.contractCoin.balanceOf('0x' + $scope.account)).toFixed(4);
       }
     }
 
@@ -368,7 +357,7 @@ angular.module('leth.controllers', [])
     }
 
     $scope.sendCoins = function (addr, amount, unit, idCoin) {
-      if(idCoin!=0){
+      if( $scope.idCoin!=0){
         AppService.transferCoin($scope.contractCoin, $scope.methodSend, $scope.account, addr, amount);
       }
       else{
@@ -454,7 +443,7 @@ angular.module('leth.controllers', [])
     $scope.chooseCoin = function(){  
       var buttonsGroup = [{text: 'ETH'}];
       for (var i = 0; i < $scope.storeCoins.length; i++) {
-        var text = {text: $scope.storeCoins[0].Symbol + " " + $scope.storeCoins[0].Name};
+        var text = {text: $scope.storeCoins[i].Symbol + " " + $scope.storeCoins[i].Name};
         buttonsGroup.push(text);
       }
 
