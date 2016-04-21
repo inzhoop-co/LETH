@@ -17,8 +17,16 @@
       <button class="button button-small button button-positive">ÐAppleths Store </button>
       <button class="button button-small button-outline button-positive">Installed </button>
     </div>
+    <ion-list>
+      <ion-item  class="item item-thumbnail-left item-icon-right" ng-repeat="dapp in storeApp | filter:{Network:nameNetwork}"
+          type="item-text-wrap" href="#/app/dappleth-run/{{dapp.GUID}}">  
+          <img src="{{dapp.Logo}}"/>
+            <h2>{{dapp.Company}}</h2>
+            <p>{{dapp.Description}}</p>
+            <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+    </ion-list>
     <div ng-bind-html="appContainer">
-      Nothing to install ...
     </div>
     </ion-content>
 </ion-view>

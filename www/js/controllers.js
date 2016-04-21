@@ -1,5 +1,6 @@
 angular.module('leth.controllers', [])
   .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, $ionicLoading, $ionicLoadingConfig) {
+   
     window.refresh = function () {
       $ionicLoading.show();
       $scope.balance = AppService.balance();
@@ -7,11 +8,11 @@ angular.module('leth.controllers', [])
       $scope.qrcodeString = $scope.account;
       $scope.getNetwork();
       $scope.friends = Friends.all();
-      //temp
       $scope.transactions = Transactions.all();
       localStorage.Transactions = JSON.stringify($scope.transactions);
+      loadStore();
       $timeout(function() {$ionicLoading.hide();}, 1000);
-     };
+    };
 
     window.customPasswordProvider = function (callback) {
       var pw;
@@ -37,8 +38,15 @@ angular.module('leth.controllers', [])
         function (err) {
           pw = "";
         })
-     };
+    };
   
+    var loadStore = function(){
+      AppService.getStoreApps().then(function(response){
+          $scope.storeCoins = response.coins;
+         $scope.storeApp = response.dappleths;
+      })
+    };
+
     var loginModal;
     var codeModal;
     var saveAddressModal;
@@ -341,7 +349,7 @@ angular.module('leth.controllers', [])
         $scope.methodSend = activeCoins[index-1].Send;
         $scope.contractCoin = web3.eth.contract(activeCoins[index-1].ABI).at(activeCoins[index-1].Address);
         $scope.balance = $scope.contractCoin.balanceOf('0x' + $scope.account)*1;
-		$scope.listUnit = activeCoins[index-1].Units;
+    		$scope.listUnit = activeCoins[index-1].Units;
       }
 
     }
@@ -349,11 +357,12 @@ angular.module('leth.controllers', [])
     //set Eth for default
     setCoin(0);
 
-
+    /*
     AppService.getStoreApps().then(function(response){
       console.log("coins loaded: " + response);
       $scope.storeCoins = response.coins;
     });
+    */
 
     $scope.fromAddressBook = false;
 
@@ -873,9 +882,6 @@ angular.module('leth.controllers', [])
   })
 
   .controller('TransactionCtrl', function ($scope) {
-    //
-
-     for (var i = 0; i < 1000; i++) $scope.transactions.push(i);
   })
 
   .controller('AboutCtrl', function ($scope, angularLoad) {
@@ -889,42 +895,25 @@ angular.module('leth.controllers', [])
     $scope.prevSlide = function() {
       $ionicSlideBoxDelegate.previous();
     };
-
-    $scope.appContainer="";
-    //load dappleths dinamicamente   
-    $scope.storeApp = AppService.getStoreApps().then(function(response){
-      angular.forEach(response.dappleths, function(value, key){
-        $http.get(value.AppUrl) 
-          .success(function(data){
-          $scope.appContainer += $sce.trustAsHtml(data);
-        })
-      });
-    });
   })
 
   .controller('DapplethRunCtrl', function ($scope, angularLoad, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
       console.log("Param " + $stateParams.Id);
-
       //load app selected
       var id = $stateParams.Id;
-      //TO DO : install dappleths on localStorage and readFrom   
-      var path = DappPath.url + '/dapp_';
-      var localpath = 'dappleths/dapp_'; 
-      //path=localpath;
-      //loading template html to inject  
-      $http.get(path + id + '/index.html') //cors to load from website
+      var activeApp = $scope.storeApp.filter( function(app) {return app.GUID==id;} )[0];
+
+      $http.get(activeApp.TemplateUrl) 
         .success(function(data){
           $scope.appContainer = $sce.trustAsHtml(data);
-          //setting contract jscript
-          var script = path + id +  "/index.js" ;
-
-          angularLoad.loadScript(script).then(function() {
-              console.log('loading ' + script);
+          angularLoad.loadScript(activeApp.ScriptUrl).then(function() {
+              console.log('loading ' + activeApp.ScriptUrl);
           }).catch(function() {
-                console.log('ERROR :' + script );
+                console.log('ERROR :' + activeApp.ScriptUrl);
             });
       });
 
+ 
       $scope.refresh = function() {
         updateData(); //defined in external js
         $scope.$broadcast('scroll.refreshComplete');

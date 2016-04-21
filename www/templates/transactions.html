@@ -11,10 +11,10 @@
     <p ng-show="transactions.length == 0" align="center"><br/>No saved transaction</p>
       <ion-item collection-repeat="t in transactions | filter:{id:sarch}">
         <i class="icon ion-arrow-up-a assertive"></i>
-        <h2>{{t.id}}</h2>
+        <h2>{{t.id}} wei</h2>
         <p>Value: {{t.value}}</p>
         <p>To: {{t.to}}</p>
-        <p>Date: {{t.time}}</p>
+        <p>Date: {{t.time | date: "yyyy-MM-ddTHH:mm:ss"}}</p>
         <p>From: {{t.from}}</p>
         <ion-option-button class="button-info" ng-click="edit(item)">CheckStatus</ion-option-button>
       </ion-item>

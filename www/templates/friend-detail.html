@@ -13,14 +13,13 @@
          <a class="button button-clear button-positive" href="#/app/wallet/{{friend.addr}}"> Send Coins <i class="icon ion-chevron-right"></i></a>
         </div>
       </div>
-      <ion-list >
+      <ion-list class="list" >
         <ion-item collection-repeat="t in transactions | filter:{to:friend.addr}">
-          <!--ToDo: andrebbe gestito l'IN e l'OUT di Eth-->
           <i class="icon ion-arrow-up-a assertive"></i>
-          <h2>{{t.id}}</h2>
-          <p>Value: {{t.value}}</p>
+          <h2>{{t.id}} wei</h2>
+          <p>Value: {{t.value | currency:"":0}}</p>
           <p>To: {{t.to}}</p>
-          <p>Date: {{t.time}}</p>
+          <p>Date: {{t.time | date: "yyyy-MM-ddTHH:mm:ss"}}</p>
           <p>From: {{t.from}}</p>
         </ion-item>
       </ion-list>
