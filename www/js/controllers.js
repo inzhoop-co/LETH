@@ -920,7 +920,7 @@ angular.module('leth.controllers', [])
       console.log("Param " + $stateParams.Id);
       //load app selected
       var id = $stateParams.Id;
-      var activeApp = $scope.storeApp.filter( function(app) {return app.GUID==id;} )[0];
+      var activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
 
       $http.get(activeApp.TemplateUrl) 
         .success(function(data){
