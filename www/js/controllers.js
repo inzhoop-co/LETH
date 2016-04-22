@@ -1,6 +1,5 @@
 angular.module('leth.controllers', [])
   .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, $ionicLoading, $ionicLoadingConfig) {
-   
     window.refresh = function () {
       $ionicLoading.show();
       $scope.balance = AppService.balance();
@@ -10,7 +9,7 @@ angular.module('leth.controllers', [])
       $scope.friends = Friends.all();
       $scope.transactions = Transactions.all();
       localStorage.Transactions = JSON.stringify($scope.transactions);
-      loadStore();
+      loadApps(flagApps);
       $timeout(function() {$ionicLoading.hide();}, 1000);
     };
 
@@ -39,13 +38,31 @@ angular.module('leth.controllers', [])
           pw = "";
         })
     };
-  
-    var loadStore = function(){
-      AppService.getStoreApps().then(function(response){
-          $scope.storeCoins = response.coins;
-         $scope.storeApp = response.dappleths;
-      })
+    
+    var loadApps = function(store){
+      if(store){
+        $scope.filterStoreApps = 'button button-small button button-positive';
+        $scope.filterLocalApps = 'button button-small button-outline button-positive';
+        AppService.getStoreApps().then(function(response){
+          $scope.listCoins = response.coins;
+          $scope.listApps = response.dappleths;
+        }) 
+      }else{
+        $scope.filterStoreApps = 'button button-small button-outline button-positive';
+        $scope.filterLocalApps = 'button button-small button button-positive';
+        $scope.listCoins = localStorage.Coins;
+        $scope.listApps = localStorage.Apps;
+      }
     };
+
+    $scope.fromStore = function(value){
+      flagApps = value;
+      loadApps(flagApps);
+    }  
+    
+    $scope.fromStore(true);
+
+   
 
     var loginModal;
     var codeModal;
@@ -341,7 +358,7 @@ angular.module('leth.controllers', [])
       }
       else{
     	$scope.getNetwork();
-  		var activeCoins=$scope.storeCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork;} );
+  		var activeCoins=$scope.listCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork;} );
         $scope.idCoin = index;
         $scope.logoCoin = activeCoins[index-1].Logo;
         $scope.descCoin = activeCoins[index-1].Abstract;
@@ -360,7 +377,7 @@ angular.module('leth.controllers', [])
     /*
     AppService.getStoreApps().then(function(response){
       console.log("coins loaded: " + response);
-      $scope.storeCoins = response.coins;
+      $scope.listCoins = response.coins;
     });
     */
 
@@ -462,11 +479,11 @@ angular.module('leth.controllers', [])
 
     $scope.chooseCoin = function(){  
 		  $scope.getNetwork();
-      var buttonsGroup = [{text: 'ETH'}];
+      var buttonsGroup = [{text: 'Ether [Ξ]'}];
 
-	   var activeCoins=$scope.storeCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork;} );
+	   var activeCoins=$scope.listCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork;} );
       for (var i = 0; i < activeCoins.length; i++) {
-        var text = {text: activeCoins[i].Symbol + " " + activeCoins[i].Name};
+        var text = {text: activeCoins[i].Name + " [" + activeCoins[i].Symbol + "]"};
         buttonsGroup.push(text);
       }
 
@@ -895,6 +912,8 @@ angular.module('leth.controllers', [])
     $scope.prevSlide = function() {
       $ionicSlideBoxDelegate.previous();
     };
+
+
   })
 
   .controller('DapplethRunCtrl', function ($scope, angularLoad, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
