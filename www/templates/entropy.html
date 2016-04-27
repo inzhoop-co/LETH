@@ -1,0 +1,17 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-stable bar-assertive">
+    <h1 class="title">Start with Entropy</h1>
+    <div class="buttons">
+      <button class="button button-clear ion-ios-close" ng-click="exitApp()"></button>
+    </div>
+  </ion-header-bar>
+  <ion-content class="has-header" padding="'true'" >
+    <div class="list">
+        <div class="item item-avatar item-icon-left">
+        <span class="input-label">Shake to start!</span>
+        <span class="badge badge-balanced">- {{shakeCounter}}</span>
+        <img class="{{classShake}}" src="img/shake{{shakeCounter}}.png"/>
+        </div>
+    </div>
+  </ion-content>
+</ion-modal-view>
