@@ -61,7 +61,7 @@ angular.module('leth.services', [])
       account: function () {
         var result;
         try {
-          result = global_keystore.addresses[0];
+          result = global_keystore.getAddresses()[0];
         }catch(e) {
           result = undefined;
         }
@@ -70,7 +70,7 @@ angular.module('leth.services', [])
       balance: function () {
         var result;
         try {
-          result = (parseFloat(web3.eth.getBalance(global_keystore.addresses[0])) / 1.0e18).toFixed(6);
+          result = (parseFloat(web3.eth.getBalance(global_keystore.getAddresses()[0])) / 1.0e18).toFixed(6);
         }catch (e){
           result = undefined;
         }

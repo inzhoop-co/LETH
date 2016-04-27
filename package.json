@@ -53,7 +53,8 @@
     {
       "locator": "https://github.com/shazron/KeychainPlugin.git",
       "id": "com.shazron.cordova.plugin.keychainutil"
-    }
+    },
+    "cordova-plugin-device-motion"
   ],
   "cordovaPlatforms": [
     "android",

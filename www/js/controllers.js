@@ -1,5 +1,5 @@
 angular.module('leth.controllers', [])
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, $ionicLoading, $ionicLoadingConfig) {
+  .controller('AppCtrl', function ($scope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, $ionicLoading, $ionicLoadingConfig) {
     window.refresh = function () {
       $ionicLoading.show();
       $scope.balance = AppService.balance();
@@ -62,10 +62,9 @@ angular.module('leth.controllers', [])
     
     $scope.fromStore(true);
 
-   
-
     var loginModal;
     var codeModal;
+    var entropyModal;
     var saveAddressModal;
     var password;
     var code;
@@ -73,10 +72,25 @@ angular.module('leth.controllers', [])
     var createLoginModal = function () {
       $ionicModal.fromTemplateUrl('templates/login.html', {
         scope: $scope,
-        animation: 'slide-in-up'
+        animation: 'slide-in-up',
+        backdropClickToClose: false,
+        hardwareBackButtonClose: false
       }).then(function (modal) {
         loginModal = modal;
         loginModal.show();
+      });
+    };
+
+    var createEntropyModal = function () {
+      $ionicModal.fromTemplateUrl('templates/entropy.html', {
+        scope: $scope,
+        animation: 'slide-in-down',
+        backdropClickToClose: false,
+        hardwareBackButtonClose: false
+      }).then(function (modal) {
+        entropyModal = modal;
+        entropyModal.show();
+        startWatching();
       });
     };
 
@@ -247,26 +261,27 @@ angular.module('leth.controllers', [])
 
       password = pw;
       code = cod;
+      
+      lightwallet.keystore.deriveKeyFromPassword(password, function (err, pwDerivedKey) {
+        global_keystore = new lightwallet.keystore(randomSeed, pwDerivedKey);
+        global_keystore.generateNewAddress(pwDerivedKey, 1);
+        global_keystore.passwordProvider = customPasswordProvider;
 
-      global_keystore = new lightwallet.keystore(randomSeed, password);
-      global_keystore.generateNewAddress(password, 1);
-      global_keystore.passwordProvider = customPasswordProvider;
+        AppService.setWeb3Provider(global_keystore);
 
-      AppService.setWeb3Provider(global_keystore);
+        localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
+        localStorage.AppCode = JSON.stringify({code: code});
+        localStorage.HasLogged = JSON.stringify(true);
+        localStorage.Transactions = JSON.stringify({});
+        localStorage.Friends = JSON.stringify($scope.friends);
 
-      localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
-      localStorage.AppCode = JSON.stringify({code: code});
-      localStorage.HasLogged = JSON.stringify(true);
-      localStorage.Transactions = JSON.stringify({});
-      localStorage.Friends = JSON.stringify($scope.friends);
-      localStorage.Items = JSON.stringify($scope.items);
+        loginModal.remove();
+        $scope.hasLogged = true;
+        $scope.qrcodeString = AppService.account();
 
-      loginModal.remove();
-      $scope.hasLogged = true;
-      $scope.qrcodeString = AppService.account();
+        refresh();
 
-      refresh();
-
+      });
     }
 
     $scope.ChangeCode = function(oldCode, newCode) {
@@ -311,18 +326,8 @@ angular.module('leth.controllers', [])
     $scope.transactions = Transactions.all();
 
     if (typeof localStorage.AppKeys == 'undefined') {
-
-      // create keystore and account and store them
-      var extraEntropy = "Devouring Time";
-      var randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
-
-      //console.log('randomSeed: ' + randomSeed);
-
-      var infoString = 'Your keystore seed is: "' + randomSeed +
-        '". Please write it down on paper or in a password manager, you will need it to access your keystore. Do not let anyone see this seed or they can take your Ether. ' +
-        'Please enter a password to encrypt your seed and you account while in the mobile phone.';
-
-      createLoginModal();
+      createEntropyModal();
+      //createLoginModal();
     }
     else {
       //retreive from localstorage
@@ -335,10 +340,133 @@ angular.module('leth.controllers', [])
       global_keystore.passwordProvider = customPasswordProvider;
       AppService.setWeb3Provider(global_keystore);
       $scope.qrcodeString = AppService.account();
+
       refresh();
     }
-  }) //fine AppCtrl
 
+    //shake start
+    var goLogin = function(){
+      // create keystore and account and store them
+      var extraEntropy = $scope.randomString.toString();
+      $scope.randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
+      
+      //randomSeed = "occur appear stock great sport remain athlete remain return embody team jazz";
+
+      createLoginModal();
+    }
+
+    // watch Acceleration options
+    $scope.options = { 
+        frequency: 500, // Measure every 100ms
+        deviation : 30  // We'll use deviation to determine the shake event, best values in the range between 25 and 30
+    };
+    // Current measurements
+    $scope.measurements = {
+        x : null,
+        y : null,
+        z : null,
+        timestamp : null
+    }
+    // Previous measurements    
+    $scope.previousMeasurements = {
+        x : null,
+        y : null,
+        z : null,
+        timestamp : null
+    }   
+    // Watcher object
+    $scope.watch = null;
+    $scope.randomString="";
+    $scope.shakeCounter=3;
+    
+    var hashCode = function(text) {
+      var hash = 0, i, chr, len;
+      if (text.length === 0) return hash;
+      for (i = 0, len = text.length; i < len; i++) {
+        chr   = text.charCodeAt(i);
+        hash  = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+      }
+      return hash;
+    };
+
+    var startWatching = function() {     
+        $scope.watch = $cordovaDeviceMotion.watchAcceleration($scope.options);
+        $scope.watch.then(null, function(error) {
+            console.log('Error');
+        },function(result) {
+            // Set current data  
+            $scope.measurements.x = result.x;
+            $scope.measurements.y = result.y;
+            $scope.measurements.z = result.z;
+            $scope.measurements.timestamp = result.timestamp;  
+            // Detecta shake  
+            detectShake(result);   
+        });     
+    };       
+
+    var stopWatching = function() {  
+        $scope.watch.clearWatch();      
+    }       
+  
+    var detectShake = function(result) {  
+      var measurementsChange = {};
+      // Calculate measurement change only if we have two sets of data, current and old
+      if ($scope.previousMeasurements.x !== null) {
+          measurementsChange.x = Math.abs($scope.previousMeasurements.x, result.x);
+          measurementsChange.y = Math.abs($scope.previousMeasurements.y, result.y);
+          measurementsChange.z = Math.abs($scope.previousMeasurements.z, result.z);
+      }
+
+      console.log(measurementsChange.x + measurementsChange.y + measurementsChange.z);
+
+      if (measurementsChange.x + measurementsChange.y + measurementsChange.z > $scope.options.deviation) {
+          stopWatching();  // Stop watching because it will start triggering like hell
+          console.log('Shake detected'); 
+          $scope.classShake = "shakeit";       
+          $scope.shakeCounter--;
+
+          if ($scope.shakeCounter>0)
+           setTimeout(startWatching(), 800);  // Again start watching after 1 sec
+  
+          $scope.randomString+=result.x+result.y+result.z;
+
+          // Clean previous measurements after succesfull shake detection, so we can do it next time
+          $scope.previousMeasurements = { 
+              x: null, 
+              y: null, 
+              z: null
+          } 
+
+         if($scope.shakeCounter==0){
+            $scope.randomString = hashCode($scope.randomString);
+             goLogin();
+          }
+
+      } else if (measurementsChange.x + measurementsChange.y + measurementsChange.z > $scope.options.deviation/2) {
+          $scope.classShake = "shakeit"; 
+          $scope.previousMeasurements = {
+              x: result.x,
+              y: result.y,
+              z: result.z
+          }
+      } else {
+        // On first measurements set it as the previous one
+        $scope.classShake = ""; 
+        $scope.previousMeasurements = {
+            x: result.x,
+            y: result.y,
+            z: result.z
+        }
+      }           
+    }        
+
+
+    $scope.$on('$ionicView.beforeLeave', function(){
+        $scope.watch.clearWatch(); 
+    }); 
+
+  }) //fine AppCtrl
   .controller('WalletCtrl', function ($scope, $stateParams, $ionicLoading, $ionicModal, $state, $ionicPopup, $cordovaBarcodeScanner, $ionicActionSheet, $timeout, AppService, Transactions) {
     var TrueException = {};
     var FalseException = {};
@@ -843,7 +971,7 @@ angular.module('leth.controllers', [])
     var walletViaEmail = function(){
       //backup wallet to email 
       document.addEventListener("deviceready", function () {
-        var keystoreFilename = global_keystore.addresses[0] + "_lethKeystore.json";
+        var keystoreFilename = global_keystore.getAddresses()[0] + "_lethKeystore.json";
         var directorySave=cordova.file.dataDirectory;
         var directoryAttach=cordova.file.dataDirectory.replace('file://','');
         
@@ -904,7 +1032,7 @@ angular.module('leth.controllers', [])
   .controller('AboutCtrl', function ($scope, angularLoad) {
   })
 
-  .controller('DapplethsCtrl', function ($scope, angularLoad, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, AppService) {
+  .controller('DapplethsCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, AppService) {
     $ionicSlideBoxDelegate.start();
     $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
@@ -916,7 +1044,7 @@ angular.module('leth.controllers', [])
 
   })
 
-  .controller('DapplethRunCtrl', function ($scope, angularLoad, DappPath, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
+  .controller('DapplethRunCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
       console.log("Param " + $stateParams.Id);
       //load app selected
       var id = $stateParams.Id;

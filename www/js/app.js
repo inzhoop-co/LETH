@@ -1,8 +1,5 @@
 web3 = new Web3();
 angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
-  .constant('DappPath',{
-    url : "http://www.inzhoop.com/dappleths"
-  })
   .constant('$ionicLoadingConfig', {
     template: 'Loading...'
   })
@@ -61,19 +58,6 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
       });
     });
   })
-  /*
-  .directive("templapp", function($compile){
-      return{
-          link: function(scope, element){
-              var template = "<button ng-click='doSomething()'>{{label}}</button>";
-              var linkFn = $compile(template);
-              var content = linkFn(scope);
-              element.append(content);
-          }
-      }
-
-  }) 
-  */
   .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
       .state('app', {

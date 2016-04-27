@@ -10,3 +10,41 @@ img#headerSetting
   width: 50px;
   height: 50px;
 }
+
+@-webkit-keyframes shakeit {
+0% { -webkit-transform: rotate(0deg) translate(3px, 1px); }
+10% { -webkit-transform: rotate(4deg) translate(1px, 4px); }
+20% { -webkit-transform: rotate(-4deg) translate(4px, 0px) ; }
+30% { -webkit-transform: rotate(0deg) translate(0px, -4px); }
+40% { -webkit-transform: rotate(-4deg) translate(-1px, 1px); }
+50% { -webkit-transform: rotate(4deg) translate(1px, -4px); }
+60% { -webkit-transform: rotate(0deg) translate(4px, -1px); }
+70% { -webkit-transform: rotate(4deg) translate(-3px, -1px); }
+80% { -webkit-transform: rotate(-4deg) translate(1px, 1px); }
+90% { -webkit-transform: rotate(0deg) translate(-3px, -3px); }
+100% { -webkit-transform: rotate(4deg) translate(-1px, 4px); }
+}
+@keyframes shakeit {
+0% { transform: rotate(0deg) translate(3px, 1px); }
+10% { transform: rotate(4deg) translate(1px, 4px); }
+20% { transform: rotate(-4deg) translate(4px, 0px) ; }
+30% { transform: rotate(0deg) translate(0px, -4px); }
+40% { transform: rotate(-4deg) translate(-1px, 1px); }
+50% { transform: rotate(4deg) translate(1px, -4px); }
+60% { transform: rotate(0deg) translate(4px, -1px); }
+70% { transform: rotate(4deg) translate(-3px, -1px); }
+80% { transform: rotate(-4deg) translate(1px, 1px); }
+90% { transform: rotate(0deg) translate(-3px, -3px); }
+100% { transform: rotate(4deg) translate(-1px, 4px); }
+}
+
+.shakeit{
+	-webkit-animation-name: shakeit;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-iteration-count: infinite;
+	animation-name: shakeit;
+	animation-duration: 1s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
