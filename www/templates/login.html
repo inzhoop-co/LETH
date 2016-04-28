@@ -33,9 +33,9 @@
             <span class="input-label">Code</span>
             <input type="password" ng-model="code" pattern="[0-9]*" maxlength="4" minlength="4" placeholder="4 digit code" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required>
           </label>
+          <button ng-disabled="!login.$valid || confirmPassword!=password"   class="button button-block button-energized" type="submit">Start</button>
+        </form>
       </div>
-      <button ng-disabled="!login.$valid || confirmPassword!=password"   class="button button-block button-energized" type="submit">Start</button>
-      </form>
     </div>
   </ion-content>
 </ion-modal-view>

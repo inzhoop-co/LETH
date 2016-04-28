@@ -263,7 +263,7 @@ angular.module('leth.controllers', [])
       code = cod;
       
       lightwallet.keystore.deriveKeyFromPassword(password, function (err, pwDerivedKey) {
-        global_keystore = new lightwallet.keystore(randomSeed, pwDerivedKey);
+        global_keystore = new lightwallet.keystore($scope.randomSeed, pwDerivedKey);
         global_keystore.generateNewAddress(pwDerivedKey, 1);
         global_keystore.passwordProvider = customPasswordProvider;
 
@@ -345,7 +345,7 @@ angular.module('leth.controllers', [])
     }
 
     //shake start
-    var goLogin = function(){
+    $scope.goLogin = function(){
       // create keystore and account and store them
       var extraEntropy = $scope.randomString.toString();
       $scope.randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
@@ -440,7 +440,7 @@ angular.module('leth.controllers', [])
 
          if($scope.shakeCounter==0){
             $scope.randomString = hashCode($scope.randomString);
-             goLogin();
+            $scope.goLogin();
           }
 
       } else if (measurementsChange.x + measurementsChange.y + measurementsChange.z > $scope.options.deviation/2) {
