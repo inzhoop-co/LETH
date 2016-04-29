@@ -1,0 +1,39 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-stable bar-assertive">
+    <div class="buttons bar-header">
+      <button class="button button-clear ion-ios-close" ng-click="closeSeedModal()"></button>
+      <div class="h1 title">Import from Seed</div>
+      <button class="button button-clear icon ion-ios-camera" on-touch="scanSeed()"></button>
+    </div>
+  </ion-header-bar>
+  <ion-content class="has-header" padding="'true'">
+  <form name="formImport" ng-submit="importSeedWallet(formImport)">
+    <div class="list">
+      <label class="item item-input">
+        <textarea ng-model="formImport.seed"  rows="5" placeholder="insert seed passphrase or scan your backup"></textarea>
+      </label>
+    </div>  
+    <div class="card">
+      <label class="item item-text-wrap">
+        Set strong password to encrypt your wallet.
+        Set a 4 digit password for rapid access.
+      </label>
+      <label class="item item-input">
+        <span class="input-label">Password</span>
+        <input type="password" ng-model="formImport.password" placeholder="8 to 20 digit alphanumeric" required="true" ng-minlength="8" ng-maxlength="20" ng-pattern="/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])/" required>
+      </label>
+      <label class="item item-input">
+        <span class="input-label">Confirm</span>
+        <input type="password" ng-model="formImport.confirmPassword" placeholder="enter password again" required="true" ng-minlength="8" ng-maxlength="20" ng-pattern="/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])/" required>
+      </label>
+      <label class="item item-input padding-bottom">
+        <span class="input-label">Code</span>
+        <input type="password" ng-model="formImport.code" pattern="[0-9]*" maxlength="4" minlength="4" placeholder="4 digit code" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required>
+      </label>
+      <button ng-disabled="!formImport.$valid || confirmPassword!=password"   class="button button-block button-energized" type="submit">Import</button>
+    </div>
+  </form>    
+  </ion-content>
+</ion-modal-view>
+
+

@@ -1,19 +1,20 @@
 <ion-modal-view>
   <ion-header-bar class="bar-stable bar-assertive">
-    <h1 class="title">Create New Wallet</h1>
-    <div class="buttons">
+    <h1 class="title">Create Wallet</h1>
+    <!--div class="buttons">
       <button class="button button-clear ion-ios-close" ng-click="exitApp()"></button>
-    </div>
+    </div-->
   </ion-header-bar>
   <ion-content class="has-header" >
     <div class="list">
-      <div class="card">
+      <div class="card button-rigth">
         <div class="item item-text-wrap">
-          <p>Your keystore seed is</p>
-          <p><b>{{randomSeed}}</b></p>
-          <p>Please write it down on paper or in a password manager, you will need it to access your keystore. Do not let anyone see this seed or they can take your Ether.
-          </p>
+          <p>Your keystore seed is</p><br/>
+          <p><b>{{randomSeed}}</b></p><br/>
+          <p class="subdued">Please write it down on paper or send via email and store in a password manager, you will need it to restore your keystore.
+          <br/>Do not let anyone see this seed or they can take your Ether.</p>          
         </div>
+        <button class="button button-icon icon ion-ios-email" ng-click="sendSeedByEmail()"> Send via Email</button>
       </div>
       <div class="card">          
         <label class="item item-text-wrap">

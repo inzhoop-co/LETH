@@ -58,21 +58,12 @@ angular.module('leth.controllers', [])
     $scope.fromStore = function(value){
       flagApps = value;
       loadApps(flagApps);
-    }  
-    
-    $scope.fromStore(true);
-
-    var loginModal;
-    var codeModal;
-    var entropyModal;
-    var saveAddressModal;
-    var password;
-    var code;
+    }     
 
     var createLoginModal = function () {
       $ionicModal.fromTemplateUrl('templates/login.html', {
         scope: $scope,
-        animation: 'slide-in-up',
+        animation: 'slide-in-right',
         backdropClickToClose: false,
         hardwareBackButtonClose: false
       }).then(function (modal) {
@@ -184,10 +175,6 @@ angular.module('leth.controllers', [])
         ],
         destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         titleText: 'Send your mood for this app',
-        /*cancelText: 'Cancel',
-        cancel: function() {
-        // add cancel code..
-        },*/
         destructiveButtonClicked:  function() {
           hideSheet();
         },
@@ -219,6 +206,28 @@ angular.module('leth.controllers', [])
       })
     };
 
+    $scope.sendSeedByEmail = function(){
+      document.addEventListener("deviceready", function () {  
+        $cordovaEmailComposer.isAvailable().then(function() {
+        var emailOpts = {
+          to: [''],
+          subject: 'Backup your Seed from LETH',
+          body: 'Please write it down on paper or in a password manager, you will need it to access your keystore. Do not let anyone see this seed or they can take your Ether.<br/><br/>' + $scope.randomSeed,
+          isHtml: true
+        };
+
+        $cordovaEmailComposer.open(emailOpts).then(null, function () {
+          console.log('email view dismissed');
+        });
+
+        hideSheet();
+        return;
+        }, function (error) {
+          console.log("cordovaEmailComposer not available");
+          return;
+        }); 
+      }, false);        
+    };
 
     $scope.scanAddr = function () {
       document.addEventListener("deviceready", function () {  
@@ -234,15 +243,16 @@ angular.module('leth.controllers', [])
       }, false);
     };
 
-    $scope.hasLogged = false;  
-    $scope.friends = [];
-
     $scope.openLoginModal = function () {
       loginModal.show();
     };
 
     $scope.openChangeCodeModal = function () {
       createCodeModal();
+    };
+
+    $scope.closeEntropyModal = function () {
+      entropyModal.hide();
     };
 
     $scope.closeLoginModal = function () {
@@ -257,13 +267,9 @@ angular.module('leth.controllers', [])
       ionic.Platform.exitApp();
     }
 
-    $scope.Login = function (pw, cod) {
-
-      password = pw;
-      code = cod;
-      
+    $scope.createWallet = function (seed, password, code) {      
       lightwallet.keystore.deriveKeyFromPassword(password, function (err, pwDerivedKey) {
-        global_keystore = new lightwallet.keystore($scope.randomSeed, pwDerivedKey);
+        global_keystore = new lightwallet.keystore(seed, pwDerivedKey);
         global_keystore.generateNewAddress(pwDerivedKey, 1);
         global_keystore.passwordProvider = customPasswordProvider;
 
@@ -275,13 +281,15 @@ angular.module('leth.controllers', [])
         localStorage.Transactions = JSON.stringify({});
         localStorage.Friends = JSON.stringify($scope.friends);
 
-        loginModal.remove();
         $scope.hasLogged = true;
         $scope.qrcodeString = AppService.account();
-
-        refresh();
-
       });
+    }
+
+    $scope.Login = function (pw, cod) {      
+      $scope.createWallet($scope.randomSeed, pw, cod);
+      loginModal.remove();
+      refresh();
     }
 
     $scope.ChangeCode = function(oldCode, newCode) {
@@ -322,30 +330,14 @@ angular.module('leth.controllers', [])
       localStorage.Friends = JSON.stringify($scope.friends);
       saveAddressModal.remove();
     }
-    //temp
-    $scope.transactions = Transactions.all();
-
-    if (typeof localStorage.AppKeys == 'undefined') {
-      createEntropyModal();
-      //createLoginModal();
-    }
-    else {
-      //retreive from localstorage
-      var ls = JSON.parse(localStorage.AppKeys);
-      code = JSON.parse(localStorage.AppCode).code;
-      $scope.hasLogged = JSON.parse(localStorage.HasLogged);
-      $scope.transactions = JSON.parse(localStorage.Transactions);
-
-      global_keystore = new lightwallet.keystore.deserialize(ls.data);
-      global_keystore.passwordProvider = customPasswordProvider;
-      AppService.setWeb3Provider(global_keystore);
-      $scope.qrcodeString = AppService.account();
-
-      refresh();
-    }
 
     //shake start
+    // Watcher object
+    $scope.watch = null;
+    $scope.randomString="";
+    $scope.shakeCounter=3;
     $scope.goLogin = function(){
+      entropyModal.remove();
       // create keystore and account and store them
       var extraEntropy = $scope.randomString.toString();
       $scope.randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
@@ -374,10 +366,6 @@ angular.module('leth.controllers', [])
         z : null,
         timestamp : null
     }   
-    // Watcher object
-    $scope.watch = null;
-    $scope.randomString="";
-    $scope.shakeCounter=3;
     
     var hashCode = function(text) {
       var hash = 0, i, chr, len;
@@ -461,10 +449,42 @@ angular.module('leth.controllers', [])
       }           
     }        
 
-
     $scope.$on('$ionicView.beforeLeave', function(){
         $scope.watch.clearWatch(); 
     }); 
+
+
+    //init
+    $scope.hasLogged = false;  
+    $scope.friends = [];    
+    $scope.transactions = Transactions.all();
+    $scope.fromStore(true);
+
+    var loginModal;
+    var codeModal;
+    var entropyModal;
+    var saveAddressModal;
+    //var password;
+    //var code;
+
+    if (typeof localStorage.AppKeys == 'undefined') {
+        console.log("wallet not found");
+        createEntropyModal();
+    }
+    else {
+      //retreive from localstorage
+      var ls = JSON.parse(localStorage.AppKeys);
+      code = JSON.parse(localStorage.AppCode).code;
+      $scope.hasLogged = JSON.parse(localStorage.HasLogged);
+      $scope.transactions = JSON.parse(localStorage.Transactions);
+
+      global_keystore = new lightwallet.keystore.deserialize(ls.data);
+      global_keystore.passwordProvider = customPasswordProvider;
+      AppService.setWeb3Provider(global_keystore);
+      $scope.qrcodeString = AppService.account();
+
+      refresh();
+    }
 
   }) //fine AppCtrl
   .controller('WalletCtrl', function ($scope, $stateParams, $ionicLoading, $ionicModal, $state, $ionicPopup, $cordovaBarcodeScanner, $ionicActionSheet, $timeout, AppService, Transactions) {
@@ -501,13 +521,6 @@ angular.module('leth.controllers', [])
 
     //set Eth for default
     setCoin(0);
-
-    /*
-    AppService.getStoreApps().then(function(response){
-      console.log("coins loaded: " + response);
-      $scope.listCoins = response.coins;
-    });
-    */
 
     $scope.fromAddressBook = false;
 
@@ -740,11 +753,26 @@ angular.module('leth.controllers', [])
     }
   })
 
-  .controller('SettingsCtrl', function ($scope, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, AppService) {    
+  .controller('SettingsCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, AppService) {    
     $scope.addrHost = localStorage.NodeHost;
 	
     $scope.pin = { checked: (localStorage.PinOn=="true") };
 	  $scope.touch = { checked: (localStorage.TouchOn=="true") };
+
+    var seedModal;
+    var createSeedModal = function () {
+      $ionicModal.fromTemplateUrl('templates/seed.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+      }).then(function (modal) {
+        seedModal = modal;
+        seedModal.show();
+      });
+    };
+
+    $scope.closeSeedModal = function () {
+      seedModal.hide();
+    };
 
     var setPin = function(value){
       localStorage.PinOn = value? "true":"false";
@@ -800,7 +828,11 @@ angular.module('leth.controllers', [])
                   importTestWallet();
                   break;
               case 1:
-                  console.log('Importing wallet from Storage');
+                  console.log('importing wallet from seed');
+                  createSeedModal();
+                  break;
+              case 2:
+                  console.log('importing wallet from Storage');
                   importStorageWallet();
                   break;
             }
@@ -817,14 +849,11 @@ angular.module('leth.controllers', [])
 		var hideSheet = $ionicActionSheet.show({
         buttons: [
           { text: 'Test Wallet' },
+          { text: 'From Seed' },
           { text: 'From Storage'  }
         ],
         destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         titleText: 'Choose a wallet to import from?',
-        /*cancelText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
-        cancel: function() {
-        // add cancel code..
-        },*/
         destructiveButtonClicked:  function() {
           hideSheet();
         },
@@ -839,6 +868,21 @@ angular.module('leth.controllers', [])
 		
     };
 
+    $scope.importSeedWallet = function (form) {
+      seedModal.remove();
+      console.log(form);
+      $scope.createWallet(form.seed,form.password,form.code);
+
+      var alertPopup = $ionicPopup.alert({
+         title: 'Import Wallet',
+         template: 'Wallet imported successfully!'
+       });
+
+       alertPopup.then(function(res) {
+         console.log('wallet imported from seed');
+         refresh();
+       });
+    };
 
     var importTestWallet = function () {
       //import wallet from (static value)

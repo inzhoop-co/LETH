@@ -1,6 +1,6 @@
 {
   "name": "leth",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "description": "LETH: the 1st Eth mobile wallet",
   "dependencies": {
     "gulp": "^3.5.6",
