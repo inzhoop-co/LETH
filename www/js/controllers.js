@@ -378,19 +378,21 @@ angular.module('leth.controllers', [])
       return hash;
     };
 
-    var startWatching = function() {     
-        $scope.watch = $cordovaDeviceMotion.watchAcceleration($scope.options);
-        $scope.watch.then(null, function(error) {
-            console.log('Error');
-        },function(result) {
-            // Set current data  
-            $scope.measurements.x = result.x;
-            $scope.measurements.y = result.y;
-            $scope.measurements.z = result.z;
-            $scope.measurements.timestamp = result.timestamp;  
-            // Detecta shake  
-            detectShake(result);   
-        });     
+    var startWatching = function() { 
+      $ionicPlatform.ready(function() {    
+          $scope.watch = $cordovaDeviceMotion.watchAcceleration($scope.options);
+          $scope.watch.then(null, function(error) {
+              console.log('Error');
+          },function(result) {
+              // Set current data  
+              $scope.measurements.x = result.x;
+              $scope.measurements.y = result.y;
+              $scope.measurements.z = result.z;
+              $scope.measurements.timestamp = result.timestamp;  
+              // Detecta shake  
+              detectShake(result);   
+          });   
+      });
     };       
 
     var stopWatching = function() {  
