@@ -181,7 +181,8 @@ angular.module('leth.controllers', [])
       ionic.Platform.exitApp();
     };
 
-    $scope.createWallet = function (seed, password, code) {      
+    $scope.createWallet = function (seed, password, code) {   
+      $ionicLoading.show();
       lightwallet.keystore.deriveKeyFromPassword(password, function (err, pwDerivedKey) {
         global_keystore = new lightwallet.keystore(seed, pwDerivedKey);
         global_keystore.generateNewAddress(pwDerivedKey, 1);
@@ -199,6 +200,8 @@ angular.module('leth.controllers', [])
 
         refresh();
         $state.go('app.dappleths');
+
+        $timeout(function() {$ionicLoading.hide();}, 1000);
       });
     };
 
@@ -316,7 +319,7 @@ angular.module('leth.controllers', [])
           measurementsChange.z = Math.abs($scope.previousMeasurements.z, result.z);
       }
 
-      console.log(measurementsChange.x + measurementsChange.y + measurementsChange.z);
+      //console.log(measurementsChange.x + measurementsChange.y + measurementsChange.z);
 
       if (measurementsChange.x + measurementsChange.y + measurementsChange.z > $scope.options.deviation) {
           stopWatching();  // Stop watching because it will start triggering like hell
