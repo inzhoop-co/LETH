@@ -3,9 +3,35 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
   .constant('$ionicLoadingConfig', {
     template: 'Loading...'
   })
-  .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,$lockScreen,$state,$window) {
+  .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,$lockScreen,$state,$window, $location) {
     $ionicPlatform.ready(function () {
       //global control and settings
+
+      window.customPasswordProvider = function (callback) {
+        var pw;
+        PasswordPopup.open("Digit your password", "input password of wallet").then(
+          function (result) {
+            pw = result;
+            if (pw != undefined) {
+              try {
+                callback(null, pw);
+
+              } catch (err) {
+                var alertPopup = $ionicPopup.alert({
+                  title: 'Error',
+                  template: err.message
+
+                });
+                alertPopup.then(function (res) {
+                  console.log(err);
+                });
+              }
+            }
+          },
+          function (err) {
+            pw = "";
+          })
+      };
 
       if (typeof localStorage.PinOn == 'undefined') {
       localStorage.PinOn="false";
@@ -30,7 +56,32 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
     			},
   		  });
 		  }
-	  
+
+
+      if (typeof localStorage.AppKeys == 'undefined') {
+        console.log("wallet not found");
+        $rootScope.hasLogged = false;
+        localStorage.HasLogged = $rootScope.hasLogged;          
+        $location.path('/app/login');
+      }
+      else {
+        console.log("login successfully");
+        $rootScope.hasLogged = true;  
+        localStorage.HasLogged = $rootScope.hasLogged;
+
+        var ls = JSON.parse(localStorage.AppKeys);
+        global_keystore = new lightwallet.keystore.deserialize(ls.data);
+        global_keystore.passwordProvider = customPasswordProvider;
+
+        var web3Provider = new HookedWeb3Provider({
+          host: localStorage.NodeHost,
+          transaction_signer: global_keystore
+        });
+        web3.setProvider(web3Provider);
+  
+        $location.path('/app/dappleths');
+      }	  
+
       if (window.cordova && window.cordova.plugins.Keyboard) {
         //cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         cordova.plugins.Keyboard.disableScroll(true);
@@ -66,6 +117,15 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
         templateUrl: 'templates/menu.html',
         controller: 'AppCtrl'
       })
+      .state('app.login', {
+        url: '/login',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/login.html',
+            controller: 'LoginCtrl',
+          }
+        }
+      }) 
       .state('app.wallet', {
         url: '/wallet/:addr',
         views: {
@@ -148,7 +208,7 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
         }
       });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/dappleths');
+    $urlRouterProvider.otherwise('/app/login');
   })
   .config(function($ionicConfigProvider) {
     $ionicConfigProvider.tabs.position('bottom');

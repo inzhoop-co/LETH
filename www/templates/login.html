@@ -14,14 +14,14 @@
           <p class="subdued">Please write it down on paper or send via email and store in a password manager, you will need it to restore your keystore.
           <br/>Do not let anyone see this seed or they can take your Ether.</p>          
         </div>
-        <button class="button button-icon icon ion-ios-email" ng-click="sendSeedByEmail()"> Send via Email</button>
+        <button class="button button-icon icon ion-ios-email"  ng-click="sendSeedByEmail()" > Send via Email</button>
       </div>
       <div class="card">          
         <label class="item item-text-wrap">
           Set strong password to encrypt your wallet.
           Set a 4 digit password for rapid access.
         </label>
-        <form name="login" ng-submit="Login(password,code)">
+        <form name="login" ng-submit="Login(randomSeed,password,code)">
           <label class="item item-input">
             <span class="input-label">Password</span>
             <input type="password" ng-model="password" placeholder="8 to 20 digit alphanumeric" required="true" ng-minlength="8" ng-maxlength="20" ng-pattern="/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])/" required>

@@ -1,5 +1,5 @@
 angular.module('leth.controllers', [])
-  .controller('AppCtrl', function ($scope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, $ionicLoading, $ionicLoadingConfig) {
+  .controller('AppCtrl', function ($scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, $ionicLoading, $ionicLoadingConfig) {
     window.refresh = function () {
       $ionicLoading.show();
       $scope.balance = AppService.balance();
@@ -11,32 +11,6 @@ angular.module('leth.controllers', [])
       localStorage.Transactions = JSON.stringify($scope.transactions);
       loadApps(flagApps);
       $timeout(function() {$ionicLoading.hide();}, 1000);
-    };
-
-    window.customPasswordProvider = function (callback) {
-      var pw;
-      PasswordPopup.open("Digit your password", "input password of wallet").then(
-        function (result) {
-          pw = result;
-          if (pw != undefined) {
-            try {
-              callback(null, pw);
-
-            } catch (err) {
-              var alertPopup = $ionicPopup.alert({
-                title: 'Error',
-                template: err.message
-
-              });
-              alertPopup.then(function (res) {
-                console.log(err);
-              });
-            }
-          }
-        },
-        function (err) {
-          pw = "";
-        })
     };
     
     var loadApps = function(store){
@@ -60,30 +34,6 @@ angular.module('leth.controllers', [])
       loadApps(flagApps);
     }     
 
-    var createLoginModal = function () {
-      $ionicModal.fromTemplateUrl('templates/login.html', {
-        scope: $scope,
-        animation: 'slide-in-right',
-        backdropClickToClose: false,
-        hardwareBackButtonClose: false
-      }).then(function (modal) {
-        loginModal = modal;
-        loginModal.show();
-      });
-    };
-
-    var createEntropyModal = function () {
-      $ionicModal.fromTemplateUrl('templates/entropy.html', {
-        scope: $scope,
-        animation: 'slide-in-down',
-        backdropClickToClose: false,
-        hardwareBackButtonClose: false
-      }).then(function (modal) {
-        entropyModal = modal;
-        entropyModal.show();
-        startWatching();
-      });
-    };
 
     var createCodeModal = function() {
       $ionicModal.fromTemplateUrl('templates/changeCode.html', {
@@ -206,29 +156,6 @@ angular.module('leth.controllers', [])
       })
     };
 
-    $scope.sendSeedByEmail = function(){
-      document.addEventListener("deviceready", function () {  
-        $cordovaEmailComposer.isAvailable().then(function() {
-        var emailOpts = {
-          to: [''],
-          subject: 'Backup your Seed from LETH',
-          body: 'Please write it down on paper or in a password manager, you will need it to access your keystore. Do not let anyone see this seed or they can take your Ether.<br/><br/>' + $scope.randomSeed,
-          isHtml: true
-        };
-
-        $cordovaEmailComposer.open(emailOpts).then(null, function () {
-          console.log('email view dismissed');
-        });
-
-        hideSheet();
-        return;
-        }, function (error) {
-          console.log("cordovaEmailComposer not available");
-          return;
-        }); 
-      }, false);        
-    };
-
     $scope.scanAddr = function () {
       document.addEventListener("deviceready", function () {  
        $cordovaBarcodeScanner
@@ -244,19 +171,11 @@ angular.module('leth.controllers', [])
     };
 
     $scope.openLoginModal = function () {
-      loginModal.show();
+      $scope.loginModal.show();
     };
 
     $scope.openChangeCodeModal = function () {
       createCodeModal();
-    };
-
-    $scope.closeEntropyModal = function () {
-      entropyModal.hide();
-    };
-
-    $scope.closeLoginModal = function () {
-      loginModal.hide();
     };
 
     $scope.closeChangeCodeModal = function () {
@@ -281,16 +200,18 @@ angular.module('leth.controllers', [])
         localStorage.Transactions = JSON.stringify({});
         localStorage.Friends = JSON.stringify($scope.friends);
 
-        $scope.hasLogged = true;
-        $scope.qrcodeString = AppService.account();
+        $rootScope.hasLogged = true;
+
+        refresh();
+        $state.go('app.dappleths');
       });
+
     }
 
-    $scope.Login = function (pw, cod) {      
-      $scope.createWallet($scope.randomSeed, pw, cod);
-      loginModal.remove();
-      refresh();
-    }
+    $scope.Login = function (seed, pw, cod) {      
+      $scope.createWallet(seed, pw, cod)
+    };
+
 
     $scope.ChangeCode = function(oldCode, newCode) {
       if(code !== newCode && code === oldCode) {
@@ -331,6 +252,53 @@ angular.module('leth.controllers', [])
       saveAddressModal.remove();
     }
 
+    
+    //init
+    $scope.hasLogged = false;  
+    $scope.friends = [];    
+    $scope.transactions = Transactions.all();
+    $scope.fromStore(true);
+
+    //var loginModal;
+    var codeModal;
+    var saveAddressModal;
+    
+    $scope.loadWallet = function(){
+      var ls = JSON.parse(localStorage.AppKeys);
+      code = JSON.parse(localStorage.AppCode).code;
+      $rootScope.hasLogged = JSON.parse(localStorage.HasLogged);
+      $scope.transactions = JSON.parse(localStorage.Transactions);
+
+      global_keystore = new lightwallet.keystore.deserialize(ls.data);
+      global_keystore.passwordProvider = customPasswordProvider;
+      AppService.setWeb3Provider(global_keystore);
+      $scope.qrcodeString = AppService.account();
+
+      //$scope.loginModal.remove();
+
+      refresh();      
+      $state.go('app.dappleths');
+    }
+
+
+
+  }) //fine AppCtrl
+  .controller('LoginCtrl', function ($scope, $rootScope, $ionicModal, $state, $cordovaDeviceMotion, $ionicPlatform, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner,  $cordovaEmailComposer,  AppService,  $ionicLoading, $ionicLoadingConfig) {
+    console.log("status login: " + $rootScope.hasLogged)
+
+    $scope.loginModal;
+    $scope.createLoginModal = function() {
+      $ionicModal.fromTemplateUrl('templates/login.html', {
+        scope: $scope,
+        animation: 'slide-in-right',
+        backdropClickToClose: false,
+        hardwareBackButtonClose: false
+      }).then(function (modal) {
+        $scope.loginModal = modal;
+        $scope.loginModal.show();
+      });
+    };
+
     //shake start
     // Watcher object
     $scope.watch = null;
@@ -341,10 +309,9 @@ angular.module('leth.controllers', [])
       // create keystore and account and store them
       var extraEntropy = $scope.randomString.toString();
       $scope.randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
-      
       //randomSeed = "occur appear stock great sport remain athlete remain return embody team jazz";
 
-      createLoginModal();
+      $scope.createLoginModal();
     }
 
     // watch Acceleration options
@@ -453,26 +420,57 @@ angular.module('leth.controllers', [])
         $scope.watch.clearWatch(); 
     }); 
 
-
-    //init
-    $scope.hasLogged = false;  
-    $scope.friends = [];    
-    $scope.transactions = Transactions.all();
-    $scope.fromStore(true);
-
-    var loginModal;
-    var codeModal;
     var entropyModal;
-    var saveAddressModal;
-    //var password;
-    //var code;
+    var createEntropyModal = function () {
+      $ionicModal.fromTemplateUrl('templates/entropy.html', {
+        scope: $scope,
+        animation: 'slide-in-down',
+        backdropClickToClose: false,
+        hardwareBackButtonClose: false
+      }).then(function (modal) {
+        entropyModal = modal;
+        entropyModal.show();
+        startWatching();
+      });
+    };
+    $scope.closeEntropyModal = function () {
+      entropyModal.hide();
+    };
 
+
+    $scope.sendSeedByEmail = function(){
+      document.addEventListener("deviceready", function () {  
+        $cordovaEmailComposer.isAvailable().then(function() {
+        var emailOpts = {
+          to: [''],
+          subject: 'Backup your Seed from LETH',
+          body: 'Please write it down on paper or in a password manager, you will need it to access your keystore. Do not let anyone see this seed or they can take your Ether.<br/><br/>' + $scope.randomSeed,
+          isHtml: true
+        };
+
+        $cordovaEmailComposer.open(emailOpts).then(null, function () {
+          console.log('email view dismissed');
+        });
+
+        hideSheet();
+        return;
+        }, function (error) {
+          console.log("cordovaEmailComposer not available");
+          return;
+        }); 
+      }, false);        
+    };
+
+    createEntropyModal();
+
+
+    /*
     if (typeof localStorage.AppKeys == 'undefined') {
-        console.log("wallet not found");
-        createEntropyModal();
+      console.log("wallet not found");
+      createEntropyModal();
     }
     else {
-      //retreive from localstorage
+      console.log("login successfully");
       var ls = JSON.parse(localStorage.AppKeys);
       code = JSON.parse(localStorage.AppCode).code;
       $scope.hasLogged = JSON.parse(localStorage.HasLogged);
@@ -483,10 +481,14 @@ angular.module('leth.controllers', [])
       AppService.setWeb3Provider(global_keystore);
       $scope.qrcodeString = AppService.account();
 
-      refresh();
-    }
+      //$scope.loginModal.remove();
 
-  }) //fine AppCtrl
+      refresh();      
+      $state.go('app.dappleths');
+    }
+    */
+
+  })//end ctrl
   .controller('WalletCtrl', function ($scope, $stateParams, $ionicLoading, $ionicModal, $state, $ionicPopup, $cordovaBarcodeScanner, $ionicActionSheet, $timeout, AppService, Transactions) {
     var TrueException = {};
     var FalseException = {};
@@ -653,7 +655,8 @@ angular.module('leth.controllers', [])
     $scope.typeNumber = 6;
     $scope.inputMode = '';
     $scope.image = true;
-
+    $scope.qrcodeString = AppService.account();
+    
     $scope.onAmountChange = function(amount){
       if($scope.amountPayment == "")
         $scope.qrcodeString = $scope.account;
@@ -1085,6 +1088,7 @@ angular.module('leth.controllers', [])
       $ionicSlideBoxDelegate.previous();
     };
 
+    refresh();
 
   })
 
