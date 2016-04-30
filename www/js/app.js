@@ -6,7 +6,7 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,$lockScreen,$state,$window, $location) {
     $ionicPlatform.ready(function () {
       //global control and settings
-
+/*
       window.customPasswordProvider = function (callback) {
         var pw;
         PasswordPopup.open("Digit your password", "input password of wallet").then(
@@ -32,7 +32,7 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
             pw = "";
           })
       };
-
+*/
       if (typeof localStorage.PinOn == 'undefined') {
       localStorage.PinOn="false";
       }
@@ -68,7 +68,8 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
         console.log("login successfully");
         $rootScope.hasLogged = true;  
         localStorage.HasLogged = $rootScope.hasLogged;
-
+        $location.path('/app/dappleths');
+/*
         var ls = JSON.parse(localStorage.AppKeys);
         global_keystore = new lightwallet.keystore.deserialize(ls.data);
         global_keystore.passwordProvider = customPasswordProvider;
@@ -79,7 +80,8 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
         });
         web3.setProvider(web3Provider);
   
-        $location.path('/app/dappleths');
+
+        */
       }	  
 
       if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -121,8 +123,7 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
         url: '/login',
         views: {
           'menuContent': {
-            templateUrl: 'templates/login.html',
-            controller: 'LoginCtrl',
+            templateUrl: 'templates/login.html'
           }
         }
       }) 
@@ -208,7 +209,7 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
         }
       });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/login');
+    $urlRouterProvider.otherwise('/app/appleths');
   })
   .config(function($ionicConfigProvider) {
     $ionicConfigProvider.tabs.position('bottom');

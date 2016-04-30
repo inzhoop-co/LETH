@@ -13,6 +13,32 @@ angular.module('leth.controllers', [])
       $timeout(function() {$ionicLoading.hide();}, 1000);
     };
     
+    window.customPasswordProvider = function (callback) {
+      var pw;
+      PasswordPopup.open("Digit your password", "input password of wallet").then(
+        function (result) {
+          pw = result;
+          if (pw != undefined) {
+            try {
+              callback(null, pw);
+
+            } catch (err) {
+              var alertPopup = $ionicPopup.alert({
+                title: 'Error',
+                template: err.message
+
+              });
+              alertPopup.then(function (res) {
+                console.log(err);
+              });
+            }
+          }
+        },
+        function (err) {
+          pw = "";
+        })
+    };
+
     var loadApps = function(store){
       if(store){
         $scope.filterStoreApps = 'button button-small button button-positive';
@@ -198,7 +224,6 @@ angular.module('leth.controllers', [])
 
         $rootScope.hasLogged = true;
 
-        refresh();
         $state.go('app.dappleths');
 
         $timeout(function() {$ionicLoading.hide();}, 1000);
@@ -243,13 +268,6 @@ angular.module('leth.controllers', [])
       saveAddressModal.remove();
     };
     
-    //init
-    //$scope.hasLogged = false;  
-    $scope.friends = [];    
-    $scope.transactions = Transactions.all();
-    $scope.fromStore(true);
-  }) //fine AppCtrl
-  .controller('LoginCtrl', function ($scope, $rootScope, $ionicModal, $state, $cordovaDeviceMotion, $ionicPlatform, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner,  $cordovaEmailComposer,  AppService,  $ionicLoading, $ionicLoadingConfig) {
     console.log("status login: " + $rootScope.hasLogged)
 
     //shake start
@@ -341,7 +359,7 @@ angular.module('leth.controllers', [])
 
          if($scope.shakeCounter==0){
             $scope.randomString = hashCode($scope.randomString);
-            $scope.goLogin();
+            $scope.goLogin($scope.randomString);
           }
 
       } else if (measurementsChange.x + measurementsChange.y + measurementsChange.z > $scope.options.deviation/2) {
@@ -402,10 +420,10 @@ angular.module('leth.controllers', [])
       loginModal.hide();
     };
 
-    $scope.goLogin = function(){
+    $scope.goLogin = function(random){
       closeEntropyModal();
       // create keystore and account and store them
-      var extraEntropy = $scope.randomString.toString();
+      var extraEntropy = random.toString();
       $scope.randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
       //randomSeed = "occur appear stock great sport remain athlete remain return embody team jazz";
 
@@ -440,19 +458,14 @@ angular.module('leth.controllers', [])
       }, false);        
     };
 
-    createEntropyModal();
+    //init
+    $scope.friends = [];    
+    $scope.transactions = Transactions.all();
+    $scope.fromStore(true);
 
-
-    /*
-    if (typeof localStorage.AppKeys == 'undefined') {
-      console.log("wallet not found");
-      createEntropyModal();
-    }
-    else {
-      console.log("login successfully");
+    if($rootScope.hasLogged ){
       var ls = JSON.parse(localStorage.AppKeys);
       code = JSON.parse(localStorage.AppCode).code;
-      $scope.hasLogged = JSON.parse(localStorage.HasLogged);
       $scope.transactions = JSON.parse(localStorage.Transactions);
 
       global_keystore = new lightwallet.keystore.deserialize(ls.data);
@@ -460,14 +473,13 @@ angular.module('leth.controllers', [])
       AppService.setWeb3Provider(global_keystore);
       $scope.qrcodeString = AppService.account();
 
-      //$scope.loginModal.remove();
-
-      refresh();      
-      $state.go('app.dappleths');
+      //closeEntropyModal();
+      //$scope.closeLoginModal();
+    }else{
+      createEntropyModal();
     }
-    */
 
-  })//end ctrl
+  }) //fine AppCtrl
   .controller('WalletCtrl', function ($scope, $stateParams, $ionicLoading, $ionicModal, $state, $ionicPopup, $cordovaBarcodeScanner, $ionicActionSheet, $timeout, AppService, Transactions) {
     var TrueException = {};
     var FalseException = {};
