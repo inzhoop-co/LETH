@@ -32,9 +32,9 @@ angular.module('leth.controllers', [])
     $scope.fromStore = function(value){
       flagApps = value;
       loadApps(flagApps);
-    }     
+    };     
 
-
+    var codeModal;
     var createCodeModal = function() {
       $ionicModal.fromTemplateUrl('templates/changeCode.html', {
         scope: $scope,
@@ -44,7 +44,14 @@ angular.module('leth.controllers', [])
         codeModal.show();
       });
     };
+    $scope.openChangeCodeModal = function () {
+      createCodeModal();
+    };
+    $scope.closeChangeCodeModal = function () {
+      codeModal.hide();
+    };
 
+    var saveAddressModal;
     var createSaveAddressModal = function(address) {
       $ionicModal.fromTemplateUrl('templates/addFriend.html', {
         scope: $scope,
@@ -78,7 +85,7 @@ angular.module('leth.controllers', [])
 
     $scope.isValidAddr = function(addr){
       return web3.isAddress(addr);
-    }
+    };
 
     $scope.scanTo = function () {
       document.addEventListener("deviceready", function () {      
@@ -114,7 +121,7 @@ angular.module('leth.controllers', [])
           }
         }
       });
-    }
+    };
 
     $scope.sendFeedback = function(){
       // Show the action sheet
@@ -170,21 +177,9 @@ angular.module('leth.controllers', [])
       }, false);
     };
 
-    $scope.openLoginModal = function () {
-      $scope.loginModal.show();
-    };
-
-    $scope.openChangeCodeModal = function () {
-      createCodeModal();
-    };
-
-    $scope.closeChangeCodeModal = function () {
-      codeModal.hide();
-    };
-
     $scope.exitApp = function () {
       ionic.Platform.exitApp();
-    }
+    };
 
     $scope.createWallet = function (seed, password, code) {      
       lightwallet.keystore.deriveKeyFromPassword(password, function (err, pwDerivedKey) {
@@ -205,13 +200,7 @@ angular.module('leth.controllers', [])
         refresh();
         $state.go('app.dappleths');
       });
-
-    }
-
-    $scope.Login = function (seed, pw, cod) {      
-      $scope.createWallet(seed, pw, cod)
     };
-
 
     $scope.ChangeCode = function(oldCode, newCode) {
       if(code !== newCode && code === oldCode) {
@@ -219,9 +208,8 @@ angular.module('leth.controllers', [])
        localStorage.AppCode = JSON.stringify({code: code});
         codeModal.hide();
         codeModal.remove();
-
       }
-    }
+    };
 
     $scope.refresh = function () {
       refresh();
@@ -250,69 +238,22 @@ angular.module('leth.controllers', [])
       $scope.friends.push(friend);
       localStorage.Friends = JSON.stringify($scope.friends);
       saveAddressModal.remove();
-    }
-
+    };
     
     //init
-    $scope.hasLogged = false;  
+    //$scope.hasLogged = false;  
     $scope.friends = [];    
     $scope.transactions = Transactions.all();
     $scope.fromStore(true);
-
-    //var loginModal;
-    var codeModal;
-    var saveAddressModal;
-    
-    $scope.loadWallet = function(){
-      var ls = JSON.parse(localStorage.AppKeys);
-      code = JSON.parse(localStorage.AppCode).code;
-      $rootScope.hasLogged = JSON.parse(localStorage.HasLogged);
-      $scope.transactions = JSON.parse(localStorage.Transactions);
-
-      global_keystore = new lightwallet.keystore.deserialize(ls.data);
-      global_keystore.passwordProvider = customPasswordProvider;
-      AppService.setWeb3Provider(global_keystore);
-      $scope.qrcodeString = AppService.account();
-
-      //$scope.loginModal.remove();
-
-      refresh();      
-      $state.go('app.dappleths');
-    }
-
-
-
   }) //fine AppCtrl
   .controller('LoginCtrl', function ($scope, $rootScope, $ionicModal, $state, $cordovaDeviceMotion, $ionicPlatform, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner,  $cordovaEmailComposer,  AppService,  $ionicLoading, $ionicLoadingConfig) {
     console.log("status login: " + $rootScope.hasLogged)
-
-    $scope.loginModal;
-    $scope.createLoginModal = function() {
-      $ionicModal.fromTemplateUrl('templates/login.html', {
-        scope: $scope,
-        animation: 'slide-in-right',
-        backdropClickToClose: false,
-        hardwareBackButtonClose: false
-      }).then(function (modal) {
-        $scope.loginModal = modal;
-        $scope.loginModal.show();
-      });
-    };
 
     //shake start
     // Watcher object
     $scope.watch = null;
     $scope.randomString="";
     $scope.shakeCounter=3;
-    $scope.goLogin = function(){
-      entropyModal.remove();
-      // create keystore and account and store them
-      var extraEntropy = $scope.randomString.toString();
-      $scope.randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
-      //randomSeed = "occur appear stock great sport remain athlete remain return embody team jazz";
-
-      $scope.createLoginModal();
-    }
 
     // watch Acceleration options
     $scope.options = { 
@@ -435,10 +376,43 @@ angular.module('leth.controllers', [])
         startWatching();
       });
     };
-    $scope.closeEntropyModal = function () {
+    var closeEntropyModal = function () {
       entropyModal.hide();
     };
 
+    var loginModal;
+    var createLoginModal = function() {
+      $ionicModal.fromTemplateUrl('templates/login.html', {
+        scope: $scope,
+        animation: 'slide-in-right',
+        backdropClickToClose: false,
+        hardwareBackButtonClose: false
+      }).then(function (modal) {
+        loginModal = modal;
+        loginModal.show();
+      });
+    };
+    $scope.openLoginModal = function () {
+      loginModal.show();
+    };
+    $scope.closeLoginModal = function () {
+      loginModal.hide();
+    };
+
+    $scope.goLogin = function(){
+      closeEntropyModal();
+      // create keystore and account and store them
+      var extraEntropy = $scope.randomString.toString();
+      $scope.randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
+      //randomSeed = "occur appear stock great sport remain athlete remain return embody team jazz";
+
+      createLoginModal();
+    }
+
+    $scope.Login = function (seed, pw, cod) {      
+      $scope.createWallet(seed, pw, cod);
+      $scope.closeLoginModal();
+    };
 
     $scope.sendSeedByEmail = function(){
       document.addEventListener("deviceready", function () {  
