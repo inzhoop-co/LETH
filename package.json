@@ -54,7 +54,8 @@
       "locator": "https://github.com/shazron/KeychainPlugin.git",
       "id": "com.shazron.cordova.plugin.keychainutil"
     },
-    "cordova-plugin-device-motion"
+    "cordova-plugin-device-motion",
+    "de.appplant.cordova.plugin.email-composer"
   ],
   "cordovaPlatforms": [
     "android",
