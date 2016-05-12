@@ -749,6 +749,7 @@ angular.module('leth.controllers', [])
 
   .controller('SettingsCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, AppService) {    
     $scope.addrHost = localStorage.NodeHost;
+	$scope.hostsList= JSON.parse(localStorage.HostsList);
 	
     $scope.pin = { checked: (localStorage.PinOn=="true") };
 	  $scope.touch = { checked: (localStorage.TouchOn=="true") };
@@ -801,10 +802,42 @@ angular.module('leth.controllers', [])
         if (res) {
           localStorage.NodeHost = addr;
           AppService.setWeb3Provider(global_keystore);
+		  if(!$scope.hostsList.includes(addr)) {
+			  $scope.hostsList.push(addr);
+			  localStorage.HostsList=JSON.stringify($scope.hostsList);
+		  }
           refresh();
           console.log('provider host update to: ' + addr);
         } else {
           console.log('provider host not modified');
+        }
+      });
+    };
+	
+	$scope.deleteHost = function (addr) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Delete Provider Host',
+        template: 'Are you sure you want to delete the provider host? '
+      });
+      confirmPopup.then(function (res) {
+        if (res) {
+		  if($scope.hostsList.includes(addr) && $scope.hostsList.length>1 ) {
+			  $scope.hostsList.pop(addr);
+			  localStorage.HostsList=JSON.stringify($scope.hostsList);
+			  localStorage.NodeHost=$scope.hostsList[0];
+			  AppService.setWeb3Provider(global_keystore);
+			  refresh();
+				console.log('provider <' + addr + '> deleted');
+		  }
+		  if ($scope.hostsList.length==1){
+			  var confirmPopup = $ionicPopup.alert({
+				title: 'Operation Denied',
+				template: 'It\'s not possible to remove your unique provider. '
+			});
+			console.log('provider host not deleted');
+		  }
+        } else {
+          console.log('provider host not deleted');
         }
       });
     };

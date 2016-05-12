@@ -18,8 +18,16 @@
 		    <label class="item-input-wrapper"><input type="text" ng-model="addrHost" placeholder="type host address"></label>
 		    <button class="button button-clear" ng-click="editHost(addrHost)">
 		        <i class="icon ion-edit"></i>
+			<button class="button button-clear" ng-click="deleteHost(addrHost)">
+				<i class="icon ion-ios-trash"></i>
 		    </button>
 		</div>
+		<div class="item  item-input item-select">
+            <label class="item-button-right">Select </label>
+			<select class="item-select padding" ng-model="addrHost" ng-required="true" ng-init="addrHost" ng-change="editHost(addrHost)">
+				<option ng-repeat="host in hostsList" value="{{host}}" ng-selected="addrHost==host">{{host}}</option>
+			</select>
+          </div>
 		<div class="padding subdued">Backup</div>
 		<div class="item item-button-right">
 		    Backup your Wallet

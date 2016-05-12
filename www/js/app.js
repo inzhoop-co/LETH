@@ -41,6 +41,8 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
       }
       if (typeof localStorage.NodeHost == 'undefined') {
         localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
+		localStorage.HostsList=[];
+		localStorage.HostsList=JSON.stringify([localStorage.NodeHost]);
       }
 
 	    if(localStorage.PinOn=="true"){
