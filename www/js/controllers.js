@@ -820,22 +820,23 @@ angular.module('leth.controllers', [])
         template: 'Are you sure you want to delete the provider host? '
       });
       confirmPopup.then(function (res) {
-        if (res) {
-		  if($scope.hostsList.includes(addr) && $scope.hostsList.length>1 ) {
-			  $scope.hostsList.pop(addr);
-			  localStorage.HostsList=JSON.stringify($scope.hostsList);
-			  localStorage.NodeHost=$scope.hostsList[0];
-			  AppService.setWeb3Provider(global_keystore);
-			  refresh();
-				console.log('provider <' + addr + '> deleted');
-		  }
-		  if ($scope.hostsList.length==1){
-			  var confirmPopup = $ionicPopup.alert({
-				title: 'Operation Denied',
-				template: 'It\'s not possible to remove your unique provider. '
-			});
-			console.log('provider host not deleted');
-		  }
+        if (res) 
+        {
+    		  if($scope.hostsList.includes(addr) && $scope.hostsList.length>1 ) {
+    			  $scope.hostsList.pop(addr);
+    			  localStorage.HostsList=JSON.stringify($scope.hostsList);
+    			  localStorage.NodeHost=$scope.hostsList[0];
+    			  AppService.setWeb3Provider(global_keystore);
+    			  refresh();
+    				console.log('provider <' + addr + '> deleted');
+    		  }
+    		  else if ($scope.hostsList.length==1){
+    			  var confirmPopup = $ionicPopup.alert({
+    				title: 'Operation Denied',
+    				template: 'It\'s not possible to remove your unique provider. '
+      			});
+            console.log('unique provider host could not be deleted');
+    		  }
         } else {
           console.log('provider host not deleted');
         }

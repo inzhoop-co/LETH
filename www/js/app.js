@@ -6,45 +6,20 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,$lockScreen,$state,$window, $location) {
     $ionicPlatform.ready(function () {
       //global control and settings
-/*
-      window.customPasswordProvider = function (callback) {
-        var pw;
-        PasswordPopup.open("Digit your password", "input password of wallet").then(
-          function (result) {
-            pw = result;
-            if (pw != undefined) {
-              try {
-                callback(null, pw);
-
-              } catch (err) {
-                var alertPopup = $ionicPopup.alert({
-                  title: 'Error',
-                  template: err.message
-
-                });
-                alertPopup.then(function (res) {
-                  console.log(err);
-                });
-              }
-            }
-          },
-          function (err) {
-            pw = "";
-          })
-      };
-*/
       if (typeof localStorage.PinOn == 'undefined') {
-      localStorage.PinOn="false";
+        localStorage.PinOn="false";
       }
       if (typeof localStorage.TouchOn == 'undefined') {
-      localStorage.TouchOn="false";
+        localStorage.TouchOn="false";
       }
       if (typeof localStorage.NodeHost == 'undefined') {
         localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
-		localStorage.HostsList=[];
-		localStorage.HostsList=JSON.stringify([localStorage.NodeHost]);
+    
       }
-
+      if (typeof localStorage.HostsList == 'undefined') {
+        localStorage.HostsList=JSON.stringify([localStorage.NodeHost]);
+      }
+      
 	    if(localStorage.PinOn=="true"){
     		$lockScreen.show({
     			code: JSON.parse(localStorage.AppCode).code,
