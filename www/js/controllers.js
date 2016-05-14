@@ -86,7 +86,6 @@ angular.module('leth.controllers', [])
 
         document.addEventListener("deviceready", function () {
           $cordovaContacts.pickContact().then(function (contactPicked) {
-            console.log(JSON.stringify(contactPicked));
             $scope.name = contactPicked.name.formatted;
 
             var options = {
@@ -128,21 +127,23 @@ angular.module('leth.controllers', [])
           });
       }, false);          
     };
-
     $scope.getNetwork = function(){
       web3.eth.getBlock(0, function(e, res){
         if(!e){
           switch(res.hash) {
             case '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303':
                 $scope.nameNetwork = 'Morden';
+                $scope.classNetwork = 'royal';                
                 $scope.badgeNetwork = 'badge badge-royal';
                 break;
             case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
                 $scope.nameNetwork = 'Mainet';
+                $scope.classNetwork = 'balanced';                
                 $scope.badgeNetwork = 'badge badge-balanced';
                 break;
             default:
                 $scope.nameNetwork = 'Private';
+                $scope.classNetwork = 'calm';                
                 $scope.badgeNetwork = 'badge badge-calm';              
           }
         }
@@ -380,9 +381,9 @@ angular.module('leth.controllers', [])
       }           
     }        
 
-    $scope.$on('$ionicView.beforeLeave', function(){
-        $scope.watch.clearWatch(); 
-    }); 
+    //$scope.$on('$ionicView.beforeLeave', function(){
+    //    $scope.watch.clearWatch(); 
+    //}); 
 
     var entropyModal;
     var createEntropyModal = function () {
@@ -671,7 +672,6 @@ angular.module('leth.controllers', [])
       var phonenumber="";
       document.addEventListener("deviceready", function () {      
         $cordovaContacts.pickContact().then(function (contactPicked) {
-            console.log(JSON.stringify(contactPicked));
             phonenumber = contactPicked.phoneNumbers[0].value;
 
             var options = {
@@ -748,8 +748,9 @@ angular.module('leth.controllers', [])
   })
 
   .controller('SettingsCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, AppService) {    
+    $scope.editableHost = false;
     $scope.addrHost = localStorage.NodeHost;
-	$scope.hostsList= JSON.parse(localStorage.HostsList);
+	  $scope.hostsList= JSON.parse(localStorage.HostsList);
 	
     $scope.pin = { checked: (localStorage.PinOn=="true") };
 	  $scope.touch = { checked: (localStorage.TouchOn=="true") };
@@ -793,6 +794,14 @@ angular.module('leth.controllers', [])
       return ionic.Platform.isIOS();
     };
 
+    $scope.enableEditHost = function(value){
+      $scope.editableHost = value;
+    };
+
+    $scope.showEditHost = function(){
+      return $scope.editableHost;
+    };
+
     $scope.editHost = function (addr) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Set Provider Host',
@@ -802,10 +811,12 @@ angular.module('leth.controllers', [])
         if (res) {
           localStorage.NodeHost = addr;
           AppService.setWeb3Provider(global_keystore);
+          $scope.addrHost = localStorage.NodeHost;
 		  if(!$scope.hostsList.includes(addr)) {
 			  $scope.hostsList.push(addr);
 			  localStorage.HostsList=JSON.stringify($scope.hostsList);
 		  }
+          $scope.editableHost = false;      
           refresh();
           console.log('provider host update to: ' + addr);
         } else {
@@ -827,6 +838,8 @@ angular.module('leth.controllers', [])
     			  localStorage.HostsList=JSON.stringify($scope.hostsList);
     			  localStorage.NodeHost=$scope.hostsList[0];
     			  AppService.setWeb3Provider(global_keystore);
+            $scope.addrHost = localStorage.NodeHost;            
+            $scope.editableHost = false;          
     			  refresh();
     				console.log('provider <' + addr + '> deleted');
     		  }

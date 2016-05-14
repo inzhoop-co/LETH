@@ -8,26 +8,30 @@
 			    the 1st ΞTH mobile wallet
 			</p>
 		</div-->
-
-		<div class="padding subdued">Host Provider Address</div>
-		<div class="item item-icon-rigth">
+   	 	<div class="padding subdued">Host Provider Address</div>
+		<div class="item">
 			Network host type
-			<span class="{{badgeNetwork}}" ng-click="getNetwork()">{{nameNetwork}}</span>
+			  <span class="{{badgeNetwork}}">
+			  	{{nameNetwork}} ...  
+			  	<span class="icon ion-edit" ng-click="enableEditHost(!editableHost)"></span>
+			  </span>
+			  
 		</div>
-		<div class="item item-input">
+		<div class="item item-input" ng-if="showEditHost()">
 		    <label class="item-input-wrapper"><input type="text" ng-model="addrHost" placeholder="type host address"></label>
 		    <button class="button button-clear" ng-click="editHost(addrHost)">
-		        <i class="icon ion-edit"></i>
+		        <i class="icon ion-plus-circled"></i>
+		     </button>
 			<button class="button button-clear" ng-click="deleteHost(addrHost)">
-				<i class="icon ion-ios-trash"></i>
+				<i class="icon ion-minus-circled"></i>
 		    </button>
 		</div>
-		<div class="item  item-input item-select">
-            <label class="item-button-right">Select </label>
-			<select class="item-select padding" ng-model="addrHost" ng-required="true" ng-init="addrHost" ng-change="editHost(addrHost)">
+		<div class="item item-select">
+				Host
+			<select class="item-select" ng-model="addrHost" ng-required="true" ng-init="addrHost" ng-change="editHost(addrHost)">
 				<option ng-repeat="host in hostsList" value="{{host}}" ng-selected="addrHost==host">{{host}}</option>
-			</select>
-          </div>
+			</select>		
+		</div>
 		<div class="padding subdued">Backup</div>
 		<div class="item item-button-right">
 		    Backup your Wallet
