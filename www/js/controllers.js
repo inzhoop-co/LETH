@@ -101,9 +101,8 @@ angular.module('leth.controllers', [])
         if(address != undefined) {
           $scope.addr = address;
         }
-          
+
         saveAddressModal = modal;
-          
         saveAddressModal.show();
       });
     };
@@ -250,6 +249,9 @@ angular.module('leth.controllers', [])
     }
 
     $scope.closeSaveAddressModal = function() {
+      $scope.name = "";
+      $scope.addr = "";
+      $scope.comment ="";
       saveAddressModal.remove();
     }
 
@@ -492,15 +494,15 @@ angular.module('leth.controllers', [])
         $scope.descCoin = "Eth from main wallet";
         $scope.symbolCoin = "Ξ";
         $scope.balance = AppService.balance();
-		$scope.listUnit = [
-			{multiplier: "1.0e18", unitName: "Ether"},
-			{multiplier: "1.0e15", unitName: "Finney"},
-			{multiplier: "1", unitName: "Wei"}
-		];
+        $scope.listUnit = [
+    			{multiplier: "1.0e18", unitName: "Ether"},
+    			{multiplier: "1.0e15", unitName: "Finney"},
+    			{multiplier: "1", unitName: "Wei"}
+    		];
       }
-      else{
-    	$scope.getNetwork();
-  		var activeCoins=$scope.listCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork;} );
+      else {
+      	$scope.getNetwork();
+    		var activeCoins=$scope.listCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork;} );
         $scope.idCoin = index;
         $scope.logoCoin = activeCoins[index-1].Logo;
         $scope.descCoin = activeCoins[index-1].Abstract;
@@ -510,8 +512,11 @@ angular.module('leth.controllers', [])
         $scope.balance = $scope.contractCoin.balanceOf('0x' + $scope.account)*1;
     		$scope.listUnit = activeCoins[index-1].Units;
       }
-
     }
+
+    $scope.$on('$ionicView.enter', function() {
+      refresh();
+    })
 
     //set Eth for default
     setCoin(0);
@@ -649,6 +654,12 @@ angular.module('leth.controllers', [])
     $scope.image = true;
     $scope.qrcodeString = AppService.account();
     
+    $scope.listUnit = [
+      {multiplier: "1.0e18", unitName: "Ether"},
+      {multiplier: "1.0e15", unitName: "Finney"},
+      {multiplier: "1", unitName: "Wei"}
+    ];
+
     $scope.onAmountChange = function(amount){
       if($scope.amountPayment == "")
         $scope.qrcodeString = $scope.account;

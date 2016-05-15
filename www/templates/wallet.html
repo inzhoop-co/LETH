@@ -41,9 +41,9 @@
           </label>
           <div class="item  item-input item-select">
             <input type="number" pattern="-?\d+(\.\d+)?" ng-model="amountTo" placeholder="0.00" ng-required="true">
-			<select class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit = options[0]">
-				<option ng-repeat="uni in listUnit" value="{{uni.multiplier}}" ng-selected="$index==0">{{uni.unitName}}</option>
-			</select>
+      			<select class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit = options[0]">
+      				<option ng-repeat="uni in listUnit" value="{{uni.multiplier}}" ng-selected="$index==0">{{uni.unitName}}</option>
+      			</select>
           </div>
           <button ng-disabled="!wallet.$valid || !isValidAddr(addrTo)" class="button button-block button-energized"
                   ng-click="confirmSend(addrTo,amountTo,unit,idCoin)"><i class="icon ion-paper-airplane"></i> Send

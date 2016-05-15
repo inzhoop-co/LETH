@@ -46,20 +46,20 @@
 		    </button>
 		</div>
 		<div class="padding subdued">PIN</div>
+	    <ion-toggle  ng-model="pin.checked" ng-checked="pin.checked">
+			Enable
+		</ion-toggle>
+	    <ion-toggle  ng-model="touch.checked" ng-checked="touch.checked" ng-if="isIOS()">
+			Touch ID 
+		</ion-toggle>
 		<div class="item item-button-right">
-		    Change Code
+		    Change PIN code
 		    <button class="button button-clear" ng-click="openChangeCodeModal()">
 		        <i class="icon ion-lock-combination"></i>
 		    </button>
-		</div>
-	    <ion-toggle  ng-model="pin.checked" ng-checked="pin.checked">
-			Enabled
-		</ion-toggle>
-	    <ion-toggle  ng-model="touch.checked" ng-checked="touch.checked" ng-if="isIOS()">
-			Touch ID Enabled
-		</ion-toggle> 
+		</div> 
 		<div class="divider dark" align="center">
-			<p>LΞTH v.0.5.0</p>
+			<p>LΞTH v.0.5.1</p>
 		</div>
 	</ion-scroll>
   </ion-content>

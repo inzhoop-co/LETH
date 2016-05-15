@@ -1,14 +1,16 @@
 <ion-view view-title="Friends">
   <ion-content class="has-header has-tabs">
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
-  <div class="item item-divider item-icon-left item-icon-right">
-    <i class="icon ion-ios-person-outline"></i>
-    Address book 
-    <!--button class="icon button-icon ion-ios-plus-outline positive" ng-click="addContact()"></button-->
-    <button class="icon button-icon ion-ios-personadd positive" ng-click="addAddress()"></button>
+  <div class="item item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Search" ng-model="search.name">     
+    </label>
+    <button class="icon button-icon ion-ios-close-empty dark" ng-if="search.name.length > 0" on-touch="search.name=''"></button>
+    <button class="icon button-icon ion-ios-personadd positive" ng-click="addAddress()"></button>  
   </div>
   <ion-list class="list">
-    <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends track by $index "
+    <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends | filter:search track by $index"
       type="item-text-wrap" href="#/app/friends/{{friend.addr}}">
       <img src="{{friend.icon}}"></img>
       <h2><b>{{friend.name}}</b></h2>

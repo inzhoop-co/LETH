@@ -46,38 +46,21 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
         $rootScope.hasLogged = true;  
         localStorage.HasLogged = $rootScope.hasLogged;
         $location.path('/app/dappleths');
-/*
-        var ls = JSON.parse(localStorage.AppKeys);
-        global_keystore = new lightwallet.keystore.deserialize(ls.data);
-        global_keystore.passwordProvider = customPasswordProvider;
-
-        var web3Provider = new HookedWeb3Provider({
-          host: localStorage.NodeHost,
-          transaction_signer: global_keystore
-        });
-        web3.setProvider(web3Provider);
-  
-
-        */
       }	  
 
       if (window.cordova && window.cordova.plugins.Keyboard) {
-        //cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         cordova.plugins.Keyboard.disableScroll(true);
       }
       if (window.StatusBar) {
-        // org.apache.cordova.statusbar required
         StatusBar.styleDefault();
       }
 
       $rootScope.$on('loading:show', function () {
         $ionicLoading.show({template: 'Loading...'})
-        //console.log("Carico");
       })
 
       $rootScope.$on('loading:hide', function () {
         $ionicLoading.hide()
-        //console.log("Completo");
       })
 
       $window.addEventListener('LaunchUrl', function(event) {
