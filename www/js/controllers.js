@@ -383,9 +383,10 @@ angular.module('leth.controllers', [])
       }           
     }        
 
-    //$scope.$on('$ionicView.beforeLeave', function(){
-    //    $scope.watch.clearWatch(); 
-    //}); 
+    $scope.$on('$ionicView.beforeLeave', function(){
+        if($scope.watch != undefined)
+          $scope.watch.clearWatch(); 
+    }); 
 
     var entropyModal;
     var createEntropyModal = function () {
