@@ -4,7 +4,7 @@ angular.element(document).ready(function() {
 
 function getBalance()
 {
-    var balance = "Total Balance "  + parseFloat(web3.eth.getBalance("0xbb9bc244d798123fde783fcc1c72d3bb8c189413")).toFixed(6);
+    var balance = "TOTAL ETH "  + parseFloat(web3.eth.web3.fromWei(web3.eth.getBalance("0xbb9bc244d798123fde783fcc1c72d3bb8c189413"))).toFixed(0);
     angular.element(document.querySelector('#balance')).html(balance);
 
 }

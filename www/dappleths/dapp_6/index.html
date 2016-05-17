@@ -28,6 +28,7 @@
 }
 .labelText{
   color: #FFFFFF;
+  font-weight: bold;
 }
 
 </style>
@@ -36,12 +37,12 @@
     <img src="http://www.inzhoop.com/dappleths/dapp_6/thedao.png"> 
   </div>
 </div>
-<div class="bg-grad-stellar">
+<div class="bg-grad-stellar text-centered">
     <span id="balance" class="labelText"></span>
-    <img src="https://daohub.org/_assets/img/home/map.png" style="height: 250px; width:100%;">
+    <img src="https://daohub.org/_assets/img/home/map.png" style="height: 250px;">
 </div>
 <div class="item tabs item-input item-icon-right assertive">
   <label class="item item-stacked-label">Eth: </label>  
   <input type="number" pattern="(-?[0-9]+(\.[0-9]+)?)" placeholder="0,00" id="amount" length="5">
-  <a class="icon ion-bag assertive" onclick="buy(amount)"><i></i></a>  
+  <a class="icon ion-bag assertive" ng-click="buy(amount>)"></a>  
 </div>
