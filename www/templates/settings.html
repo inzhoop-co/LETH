@@ -58,6 +58,12 @@
 		        <i class="icon ion-lock-combination"></i>
 		    </button>
 		</div> 
+		<div class="padding subdued">Exchange</div>
+		<div class="item item-select">
+				Base Currency
+		   	<select class="item-select" ng-model="baseCurrency" ng-init="baseCurrency" ng-change="setCurrency(baseCurrency)">
+				<option ng-repeat="c in currencies" value="{{c}}" ng-selected="c==baseCurrency">{{c.name}} {{c.symbol}}</option>
+		</div>
 		<div class="divider dark" align="center">
 			<p>LΞTH v.0.5.1</p>
 		</div>

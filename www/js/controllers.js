@@ -1,8 +1,11 @@
 angular.module('leth.controllers', [])
-  .controller('AppCtrl', function ($scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, $ionicLoading, $ionicLoadingConfig) {
+  .controller('AppCtrl', function ($scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, ExchangeService, $ionicLoading, $ionicLoadingConfig) {
     window.refresh = function () {
       $ionicLoading.show();
       $scope.balance = AppService.balance();
+      ExchangeService.getTicker($scope.xCoin, JSON.parse(localStorage.BaseCurrency).value).then(function(value){
+        $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat(value * $scope.balance).toFixed(2) ;
+      });
       $scope.account = AppService.account();
       $scope.qrcodeString = $scope.account;
       $scope.getNetwork();
@@ -476,6 +479,15 @@ angular.module('leth.controllers', [])
     $scope.transactions = Transactions.all();
     $scope.fromStore(true);
 
+    $scope.currencies = [
+          { name: 'EUR', symbol:'€', value: 'ZEUR'},
+          { name: 'USD', symbol:'$', value: 'ZUSD' },
+          { name: 'GBP', symbol:'£', value: 'ZGBP' },
+          { name: 'DAO', symbol:'Ð', value: 'XDAO' },
+          { name: 'BTC', symbol:'฿', value: 'XXBT' }
+    ];
+    $scope.xCoin = "XETH";
+    
     if($rootScope.hasLogged ){
       var ls = JSON.parse(localStorage.AppKeys);
       code = JSON.parse(localStorage.AppCode).code;
@@ -486,8 +498,6 @@ angular.module('leth.controllers', [])
       AppService.setWeb3Provider(global_keystore);
       $scope.qrcodeString = AppService.account();
 
-      //closeEntropyModal();
-      //$scope.closeLoginModal();
     }else{
       createEntropyModal();
     }
@@ -503,6 +513,7 @@ angular.module('leth.controllers', [])
         $scope.logoCoin = "img/ethereum-icon.png";
         $scope.descCoin = "Eth from main wallet";
         $scope.symbolCoin = "Ξ";
+        $scope.xCoin = "XETH";        
         $scope.balance = AppService.balance();
         $scope.listUnit = [
     			{multiplier: "1.0e18", unitName: "Ether"},
@@ -517,6 +528,7 @@ angular.module('leth.controllers', [])
         $scope.logoCoin = activeCoins[index-1].Logo;
         $scope.descCoin = activeCoins[index-1].Abstract;
         $scope.symbolCoin = activeCoins[index-1].Symbol;
+        $scope.xCoin = activeCoins[index-1].Exchange;          
         $scope.methodSend = activeCoins[index-1].Send;
         $scope.contractCoin = web3.eth.contract(activeCoins[index-1].ABI).at(activeCoins[index-1].Address);
         $scope.balance = $scope.contractCoin.balanceOf('0x' + $scope.account)*1;
@@ -768,13 +780,15 @@ angular.module('leth.controllers', [])
     }
   })
 
-  .controller('SettingsCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, AppService) {    
+  .controller('SettingsCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, AppService, ExchangeService) {    
     $scope.editableHost = false;
     $scope.addrHost = localStorage.NodeHost;
 	  $scope.hostsList= JSON.parse(localStorage.HostsList);
 	
     $scope.pin = { checked: (localStorage.PinOn=="true") };
 	  $scope.touch = { checked: (localStorage.TouchOn=="true") };
+
+    $scope.baseCurrency = localStorage.BaseCurrency;
 
     var seedModal;
     var createSeedModal = function () {
@@ -821,6 +835,11 @@ angular.module('leth.controllers', [])
 
     $scope.showEditHost = function(){
       return $scope.editableHost;
+    };
+
+    $scope.setCurrency = function(currency){
+      localStorage.BaseCurrency =  currency; 
+      $scope.baseCurrency = localStorage.BaseCurrency;
     };
 
     $scope.editHost = function (addr) {

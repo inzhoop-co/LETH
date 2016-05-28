@@ -21,7 +21,7 @@
       <ion-list class="list" can-swipe="true">
       <ion-item class="item item-avatar-left  item-icon-right item-avatar-right">
         <img src="{{logoCoin}}" ng-click="refresh()">
-        <label id="{{idCoin}}"><b>{{symbolCoin}} {{balance}}</b></label>
+        <label id="{{idCoin}}"><b>{{symbolCoin}} {{balance}} </b><span class="subdued" ng-show="{{balanceExc}}">({{balanceExc}})</span></label>
         <p>
           <label >{{descCoin}}</labe>
         </p>

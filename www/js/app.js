@@ -19,7 +19,9 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
       if (typeof localStorage.HostsList == 'undefined') {
         localStorage.HostsList=JSON.stringify([localStorage.NodeHost]);
       }
-      
+      if (typeof localStorage.BaseCurrency == 'undefined') {
+        localStorage.BaseCurrency = JSON.stringify({ value: 'EUR', symbol:'€' });
+      }      
 	    if(localStorage.PinOn=="true"){
     		$lockScreen.show({
     			code: JSON.parse(localStorage.AppCode).code,
