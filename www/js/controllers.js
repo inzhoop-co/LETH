@@ -255,6 +255,14 @@ angular.module('leth.controllers', [])
       saveAddressModal.remove();
     }
 
+    $scope.isFriend = function(address) {
+      var res = Friends.get(address);
+      if(res==undefined)
+        return "";
+      else
+        return res.name;
+    }
+
     $scope.saveAddr = function(name,addr,comment){
       var icon = blockies.create({ 
         seed: addr, 
@@ -264,6 +272,7 @@ angular.module('leth.controllers', [])
         //scale: 2, 
         //spotcolor: '#000' 
       });
+
 
       var friend = {"addr": addr, "comment": comment, "name": name, "icon":icon.toDataURL("image/jpeg")};
       $scope.friends.push(friend);
@@ -528,7 +537,7 @@ angular.module('leth.controllers', [])
       var addr = $stateParams.addr.split('@')[0];
       var coins = $stateParams.addr.split('@')[1];
       $scope.addrTo = addr;
-      $scope.amountTo = parseFloat(coins||0);
+      $scope.amountTo = parseFloat(coins);
       $scope.fromAddressBook = true;
     }else { 
       $scope.fromAddressBook = false;
@@ -1119,7 +1128,7 @@ angular.module('leth.controllers', [])
   })
 
   .controller('FriendCtrl', function ($scope, $stateParams, Friends) {
-    $scope.friend = Friends.get($stateParams);
+    $scope.friend = Friends.get($stateParams.Friend);
     $scope.friendBalance = Friends.balance($scope.friend);
   })
 

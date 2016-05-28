@@ -12,7 +12,7 @@ angular.module('leth.services', [])
       get: function(address) {
         var addressbook = JSON.parse(localStorage.Friends);
         var obj = addressbook.filter(function (val) {
-          return val.addr === address.Friend;
+          return val.addr === address;
         });
         return obj[0];         
       },
