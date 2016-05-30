@@ -75,7 +75,7 @@ function getShots(){
 }
 
 function isEnabled(){
-	 return contract.itsEnabled('0x' + global_keystore.addresses[0]);
+	 return contract.itsEnabled('0x' + global_keystore.getAddresses()[0]);
 }
 
 function isBusy(){
@@ -83,7 +83,7 @@ function isBusy(){
 }
 
 function getRemainingShot() {
-    return contract.getRemainingShot('0x' + global_keystore.addresses[0]);
+    return contract.getRemainingShot('0x' + global_keystore.getAddresses()[0]);
 }
 
 function getSubscriptionCost(){
@@ -91,7 +91,7 @@ function getSubscriptionCost(){
 }
 
 function doOpen(program) {
-    var fromAddr = global_keystore.addresses[0];
+    var fromAddr = global_keystore.getAddresses()[0];
     var functionName = 'open';
     var args = JSON.parse('[]');
     var gasPrice = 50000000000;
@@ -107,7 +107,7 @@ function doOpen(program) {
 }
 
 function doRegister() {
-    var fromAddr = global_keystore.addresses[0];
+    var fromAddr = global_keystore.getAddresses()[0];
     var functionName = 'subscribe';
     var args = JSON.parse('[]');
     var gasPrice = 50000000000;

@@ -15,7 +15,7 @@ function updateData(){
 
 function buy(address,amount)
 {
-    var fromAddr = global_keystore.addresses[0];
+    var fromAddr =  global_keystore.getAddresses()[0];
 	//var coin = amount.value*1; 
     var coin = parseFloat(angular.element(document.querySelector('#amountCoins')).val());
 	var toAddr = address.value;
@@ -48,7 +48,7 @@ function getPOI()
 
 function getBalance()
 {
-    var balance = "<b>" + parseFloat(riacecoin.balanceOf('0x' + global_keystore.addresses[0])).toFixed(2) + " " + riacecoin.symbol() + "</b> [" + riacecoin.name() + "]";
+    var balance = "<b>" + parseFloat(riacecoin.balanceOf('0x' +  global_keystore.getAddresses()[0])).toFixed(2) + " " + riacecoin.symbol() + "</b> [" + riacecoin.name() + "]";
     angular.element(document.querySelector('#balance')).html(balance);
 
 }

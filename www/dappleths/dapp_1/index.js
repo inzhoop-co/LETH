@@ -34,5 +34,11 @@ function writeMessage()
 {
     var m = hello.greet();
     angular.element(document.querySelector('#message')).html(m);
+}
 
+
+function test() {  
+  // Compile controller 2 html
+  var mController = angular.element(document.querySelector('#mController'));
+  mController.scope().prova();
 }

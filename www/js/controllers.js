@@ -1,5 +1,5 @@
 angular.module('leth.controllers', [])
-  .controller('AppCtrl', function ($scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, $ionicLoading, $ionicLoadingConfig) {
+  .controller('AppCtrl', function ($scope, $rootScope, $ionicModal,  $cordovaDeviceMotion,  $sce, $cordovaFile, $ionicPlatform, $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, $q, PasswordPopup, Transactions, Friends, $ionicLoading, $ionicLoadingConfig) {
     window.refresh = function () {
       $ionicLoading.show();
       $scope.balance = AppService.balance();
@@ -51,7 +51,7 @@ angular.module('leth.controllers', [])
         $scope.filterStoreApps = 'button button-small button-outline button-positive';
         $scope.filterLocalApps = 'button button-small button button-positive';
         $scope.listCoins = localStorage.Coins;
-        $scope.listApps = localStorage.Apps;
+        $scope.listApps = localStorage.DAppleths;
       }
     };
 
@@ -126,6 +126,26 @@ angular.module('leth.controllers', [])
           });
       }, false);          
     };
+
+
+    $scope.scanSesamo = function () {
+      document.addEventListener("deviceready", function () {      
+        $cordovaBarcodeScanner
+          .scan()
+          .then(function (barcodeData) {
+            if(barcodeData.text!= ""){
+              var addr = barcodeData.text.split('@')[0];
+              var session = barcodeData.text.split('@')[1];
+              AppService.loginTest(addr,session);
+              console.log('read code: ' + barcodeData.text);
+            }
+          }, function (error) {
+            // An error occurred
+            console.log('Error!' + error);
+          });
+      }, false);          
+    };
+
     $scope.getNetwork = function(){
       web3.eth.getBlock(0, function(e, res){
         if(!e){
@@ -462,6 +482,66 @@ angular.module('leth.controllers', [])
       }, false);        
     };
 
+    $scope.installDapp = function(id) {
+      var dappToInstall = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
+
+      document.addEventListener("deviceready", function () {
+        var directoryTemplate=cordova.file.dataDirectory;
+        if(ionic.Platform.isAndroid()) {
+          directoryTemplate = cordova.file.externalDataDirectory;
+        }
+        var templateName = dappToInstall.GUID + ".html";
+        var templateContent ="";
+
+        $http.get(dappToInstall.TemplateUrl) 
+        .success(function(data){
+          templateContent =  $sce.trustAsHtml(data);
+
+          angularLoad.loadScript(dappToInstall.ScriptUrl).then(function() {
+              console.log('loading ' + dappToInstall.ScriptUrl);
+          }).catch(function() {
+                console.log('ERROR :' + dappToInstall.ScriptUrl);
+            });
+        });
+
+        $cordovaFile.writeFile(directoryTemplate,
+                               templateName,
+                               templateContent,
+                               true)
+          .then(function (success) {
+            localStorage.DAppleths.push(dappToInstall);
+
+            var alertPopup = $ionicPopup.alert({
+              title: 'Install Dappleth',
+                template: 'Dappleth ' + dappToInstall.Name + ' installed successfully!'
+            });
+
+            alertPopup.then(function(res) {
+              console.log('dappleth ' + dappToInstall.Name + ' installed');
+            });
+          }, function () {
+          // not available
+        });
+      }, false);  
+    }
+
+    $scope.readDapp = function(filename){
+      document.addEventListener("deviceready", function () {
+        var directoryTemplate=cordova.file.dataDirectory;
+        if(ionic.Platform.isAndroid()) {
+          directoryTemplate = cordova.file.externalDataDirectory;
+        }
+        $cordovaFile.readAsText(directoryTemplate, filename)
+          .then(function (success) {
+            // success
+            return $sce.trustAsHtml(success);
+            console.log('read successfully');
+          }, function (error) {
+            // error
+            console.log(error);
+        });
+      }, false);
+    }
     //init
     $scope.friends = [];    
     $scope.transactions = Transactions.all();
@@ -1137,28 +1217,38 @@ angular.module('leth.controllers', [])
     $scope.prevSlide = function() {
       $ionicSlideBoxDelegate.previous();
     };
-
+        
     refresh();
 
   })
+  .controller('CustomCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
+    console.log('loaded custom ctrl');
 
-  .controller('DapplethRunCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
+    $scope.prova = function() {
+      console.log("test");
+      alert('test');
+    };
+  })  
+  .controller('DapplethRunCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $interpolate, $compile, $ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
       console.log("Param " + $stateParams.Id);
       //load app selected
       var id = $stateParams.Id;
       var activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
 
-      $http.get(activeApp.TemplateUrl) 
+      //$scope.appContainer = $scope.readDapp(activeApp.GUID + ".html");
+
+      $http.get(activeApp.InstallUrl) 
         .success(function(data){
           $scope.appContainer = $sce.trustAsHtml(data);
-          angularLoad.loadScript(activeApp.ScriptUrl).then(function() {
-              console.log('loading ' + activeApp.ScriptUrl);
-          }).catch(function() {
-                console.log('ERROR :' + activeApp.ScriptUrl);
-            });
+          $compile(data)($scope);
+      });
+ 
+      angularLoad.loadScript(activeApp.ScriptUrl).then(function() {
+          console.log('loading ' + activeApp.ScriptUrl);
+      }).catch(function() {
+            console.log('ERROR :' + activeApp.ScriptUrl);
       });
 
- 
       $scope.refresh = function() {
         updateData(); //defined in external js
         $scope.$broadcast('scroll.refreshComplete');

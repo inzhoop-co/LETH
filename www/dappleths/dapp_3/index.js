@@ -48,7 +48,7 @@ function getShots(){
 }
 
 function isEnabled(){
-	 return contract.itsEnabled('0x' + global_keystore.addresses[0]);
+	 return contract.itsEnabled('0x' + global_keystore.getAddresses()[0]);
 }
 
 function getState() {
@@ -56,11 +56,11 @@ function getState() {
 }
 
 function getOpCount() {
-    return contract.getOpCount('0x' + global_keystore.addresses[0]);
+    return contract.getOpCount('0x' + global_keystore.getAddresses()[0]);
 }
 
 function doOpen() {
-    var fromAddr = global_keystore.addresses[0];
+    var fromAddr = global_keystore.getAddresses()[0];
     var functionName = 'open';
     var args = JSON.parse('[]');
     var gasPrice = 50000000000;
@@ -76,7 +76,7 @@ function doOpen() {
 }
 
 function doClose() {
-    var fromAddr = global_keystore.addresses[0];
+    var fromAddr = global_keystore.getAddresses()[0];
     var functionName = 'close';
     var args = JSON.parse('[]');
     var gasPrice = 50000000000;
@@ -92,7 +92,7 @@ function doClose() {
 }
 
 function doRegister() {
-    var fromAddr = global_keystore.addresses[0];
+    var fromAddr = global_keystore.getAddresses()[0];
     var functionName = 'registerMe';
     var args = JSON.parse('[]');
     var gasPrice = 50000000000;
