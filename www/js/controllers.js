@@ -604,12 +604,16 @@ angular.module('leth.controllers', [])
     };
 
     $scope.confirmSend = function (addr, amount,unit) {
+      if(typeof unit === "undefined")
+            unit="1.0e18";
       var confirmPopup = $ionicPopup.confirm({
         title: 'Send Coins',
         template: 'Are you really sure?'
       });
       confirmPopup.then(function (res) {
         if (res) {
+         
+
           $scope.sendCoins(addr, amount,unit);
         } else {
           console.log('send coins aborted');

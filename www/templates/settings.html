@@ -9,13 +9,19 @@
 			</p>
 		</div-->
    	 	<div class="padding subdued">Host Provider Address</div>
-		<div class="item">
-			Network host type
-			  <span class="{{badgeNetwork}}">
-			  	{{nameNetwork}} ...  
-			  	<span class="icon ion-edit" ng-click="enableEditHost(!editableHost)"></span>
-			  </span>
-			  
+		<div class="item padding-on-borders" >
+		 	<div class="row no-bmp">
+		 		<div class="col text-left no-bmp col-50 col-center">Network host type </div>
+				 <div class="col text-left col-center col-33">
+					<span class="{{badgeNetwork}} relative-position">{{nameNetwork}}</span>
+				</div>
+				<div class="col text-right no-bmp col-20 col-center">
+					<button class="button button-clear" ng-click="enableEditHost(!editableHost)">
+				 		<i class="icon ion-edit"></i>
+				 	</button>
+				 </div>
+				
+		 	</div>
 		</div>
 		<div class="item item-input" ng-if="showEditHost()">
 		    <label class="item-input-wrapper"><input type="text" ng-model="addrHost" placeholder="type host address"></label>
@@ -27,10 +33,14 @@
 		    </button>
 		</div>
 		<div class="item item-select">
-				Host
-			<select class="item-select" ng-model="addrHost" ng-required="true" ng-init="addrHost" ng-change="editHost(addrHost)">
-				<option ng-repeat="host in hostsList" value="{{host}}" ng-selected="addrHost==host">{{host}}</option>
-			</select>		
+		<div class="row no-bmp">
+		<div class="col text-left no-bmp   col-center">Host </div>
+			<div class="col padding-on-borders  col-center">	
+				<select class="item-select full-width" ng-model="addrHost" ng-required="true" ng-init="addrHost" ng-change="editHost(addrHost)">
+					<option ng-repeat="host in hostsList" value="{{host}}" ng-selected="addrHost==host">{{host}}</option>
+				</select>
+			</div>		
+			</div>		
 		</div>
 		<div class="padding subdued">Backup</div>
 		<div class="item item-button-right">
