@@ -11,6 +11,35 @@ img#headerSetting
   height: 50px;
 }
 
+.no-bmp
+{
+  border: 0px !important;
+  margin: 0px !important; 
+  padding: 0px !important;
+ 
+}
+.relative-position
+{
+ position: relative !important;
+ top:0px !important;
+ right:0px !important;
+ /* margin: 0px;*/
+ max-width: 65px;
+  
+}
+.full-width
+{
+	 max-width: 100% !important;
+}
+.padding-on-borders
+{
+  padding-right: 16px !important;
+  padding-left: 16px !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  
+}
+
 @-webkit-keyframes shakeit {
 0% { -webkit-transform: rotate(0deg) translate(3px, 1px); }
 10% { -webkit-transform: rotate(4deg) translate(1px, 4px); }

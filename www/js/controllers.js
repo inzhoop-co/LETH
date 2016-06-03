@@ -585,7 +585,6 @@ angular.module('leth.controllers', [])
     }else{
       createEntropyModal();
     }
-
-  })
+  }) //fine AppCtrl
   .controller('TransactionCtrl', function ($scope) {
   })
