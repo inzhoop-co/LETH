@@ -1,10 +1,18 @@
 web3 = new Web3();
-angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
+angular.module('leth', ['ionic', 'oc.lazyLoad', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('$ionicLoadingConfig', {
     template: 'Loading...'
   })
-  .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,$lockScreen,$state,$window, $location) {
+  .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,
+                $lockScreen,$state,$window, $location) {
     $ionicPlatform.ready(function () {
+        /*
+        angularLoad.loadScript("http://www.inzhoop.com/dappleths/CustomCtrl.js").then(function() {
+            console.log('OK :');
+          }).catch(function(error, result) {
+            console.log('ERROR :');
+        }); 
+      */
       //global control and settings
       if (typeof localStorage.PinOn == 'undefined') {
         localStorage.PinOn="false";
@@ -19,7 +27,9 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
       if (typeof localStorage.HostsList == 'undefined') {
         localStorage.HostsList=JSON.stringify([localStorage.NodeHost]);
       }
-      
+      if (typeof localStorage.BaseCurrency == 'undefined') {
+        localStorage.BaseCurrency = JSON.stringify({ name: 'EUR', symbol:'€', value: 'ZEUR'});
+      }      
 	    if(localStorage.PinOn=="true"){
     		$lockScreen.show({
     			code: JSON.parse(localStorage.AppCode).code,
@@ -114,15 +124,6 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
           }
         }
       })
-      .state('app.about', {
-        url: '/about',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/about.html',
-            controller: "AboutCtrl"
-          }
-        }
-      })
       .state('app.dappleths', {
         url: '/dappleths',
         views: {
@@ -191,6 +192,32 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
      $httpProvider.defaults.useXDomain = true;
       delete $httpProvider.defaults.headers.common['X-Requested-With'];
   })
+  .directive('dappTemplate', ['$http','$compile', function($http,$compile){
+  return {
+      restrict : 'A',
+      scope : {},
+      controller : "@",
+      name:"controllerName",  
+      link: function(scope, element, attrs){
+        scope.message = "prima";          
+        /*
+        scope.test = function(){
+          scope.message = "test OK";
+          scope.scanTo();
+        };
+          $http.jsonp("dappleths/dapp_1/controller.js?callback=pippo").success(function(data) {
+            console.log("Request ok");
+            $compile(scope.$scope)(data.data);
+          }).error(function (data) {
+            console.error("Request failed");
+          });
+          */
+       },
+      templateUrl: function(elem,attrs) {
+           return "dappleths/" + attrs.templateUrl || 'template/notfound.html'
+      }
+    }
+  }]) 
 
   function handleOpenURL(url) {
     setTimeout(function() {
@@ -198,6 +225,7 @@ angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSani
         window.dispatchEvent(event);
     }, 0);
   }
+
   ;
 
 

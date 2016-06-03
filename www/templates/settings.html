@@ -1,13 +1,8 @@
 <ion-view view-title="Settings">
-  <ion-content>
-  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
-  	<ion-scroll class="list" >
-		<!--div class="item divider padding dark" align="center">
-			<p>
-				<img ng-src="img/inzhoop.png" id="headerSetting">
-			    the 1st ΞTH mobile wallet
-			</p>
-		</div-->
+  <ion-content class="has-header has-tabs">
+  <!--ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher-->
+  	<ion-scroll class="list">
+
    	 	<div class="padding subdued">Host Provider Address</div>
 		<div class="item">
 			Network host type
@@ -15,7 +10,6 @@
 			  	{{nameNetwork}} ...  
 			  	<span class="icon ion-edit" ng-click="enableEditHost(!editableHost)"></span>
 			  </span>
-			  
 		</div>
 		<div class="item item-input" ng-if="showEditHost()">
 		    <label class="item-input-wrapper"><input type="text" ng-model="addrHost" placeholder="type host address"></label>
@@ -58,9 +52,17 @@
 		        <i class="icon ion-lock-combination"></i>
 		    </button>
 		</div> 
-		<div class="divider dark" align="center">
-			<p>LΞTH v.0.5.1</p>
+		<div class="padding subdued">Exchange</div>
+		<div class="item item-select">
+			Base Currency
+		   	<select class="item-select" ng-model="baseCurrency" ng-init="baseCurrency" ng-change="setCurrency(baseCurrency)">
+				<option ng-repeat="c in currencies" value="{{c}}" ng-selected="baseCurrency.name==c.name">{{c.name}} {{c.symbol}}</option>
+			</select>
 		</div>
+		<div class="divider padding" align="center">
+			<p><img ng-src="img/inzhoop.png" id="headerSetting"></p>
+			<p>LΞTH v.0.6.0</p>
+		</div>		
 	</ion-scroll>
   </ion-content>
 </ion-view>

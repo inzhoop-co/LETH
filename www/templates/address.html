@@ -11,7 +11,7 @@
       </div>
       <div class="item item-input item-select">
         <div class="input-label">
-          Request
+          Request payment
         </div>
         <input type="number" pattern="-?\d+(\.\d+)?" placeholder=" 0.00 (optional)" ng-model="amountPayment" ng-change="onAmountChange(amountPayment)" ng-maxlenth="6">
         <select class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit = options[0]">
@@ -20,9 +20,9 @@
       </div>
       <div class="item tabs row"> 
           <div class="col col-10"></div>         
-          <div class="col col-30"><button class="button button-icon icon ion-ios-email dark" ng-click="shareByEmail()"></button></div>
-          <div class="col col-30"><button class="button button-icon icon ion-ios-chatbubble dark" ng-click="shareBySms()"></button></div>    
-          <div class="col col-30"><button class="button button-icon icon ion-ios-copy dark" ng-click="copyAddr()"></button></div>   
+          <div class="col col-30"><button class="button button-icon icon ion-ios-email-outline dark" ng-click="shareByEmail()"></button></div>
+          <div class="col col-30"><button class="button button-icon icon ion-ios-chatbubble-outline dark" ng-click="shareBySms()"></button></div>    
+          <div class="col col-30"><button class="button button-icon icon ion-ios-copy-outline dark" ng-click="copyAddr()"></button></div>   
       </div>
       <div class="item tabs row">      
        <button class="button button-full button-positive " ng-click="scanSesamo()"><i class="icon ion-ios-camera"></i> Sesamo Login</button>

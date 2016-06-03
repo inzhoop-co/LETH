@@ -39,6 +39,8 @@ function writeMessage()
 
 function test() {  
   // Compile controller 2 html
-  var mController = angular.element(document.querySelector('#mController'));
-  mController.scope().prova();
+  var mController = angular.element(document.querySelector('#mController')).scope();
+  mController.$apply(function(){
+    mController.msg = 'Superhero';
+  })
 }

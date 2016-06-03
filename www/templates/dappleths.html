@@ -1,6 +1,6 @@
 <ion-view view-title="LΞTH" can-swipe-back="false">
   <ion-content class="has-header has-tabs" >
-  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+  <!--ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher-->
     <ion-slide-box auto-play="true" does-continue="false" show-pager="true">
       <ion-slide>
         <div>
@@ -29,5 +29,7 @@
     </ion-list>
     <div ng-bind-html="appContainer">
     </div>
+    <div dapp-Template controller-name="AppCtrl" template-url="dapp_1/template.html"></div>
+      <div class="placeholder"></div>
     </ion-content>
 </ion-view>
