@@ -1,24 +1,23 @@
 web3 = new Web3();
-angular.module('leth', ['ionic', 'oc.lazyLoad', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
+
+//angular.element(document.querySelector('head')).append('<script src="js/CustomCtrl.js"></script>');
+
+var app = angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('$ionicLoadingConfig', {
     template: 'Loading...'
   })
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,
                 $lockScreen,$state,$window, $location) {
-    $ionicPlatform.ready(function () {
-        /*
-        angularLoad.loadScript("http://www.inzhoop.com/dappleths/CustomCtrl.js").then(function() {
-            console.log('OK :');
-          }).catch(function(error, result) {
-            console.log('ERROR :');
-        }); 
-      */
+    $ionicPlatform.ready(function () {  
       //global control and settings
       if (typeof localStorage.PinOn == 'undefined') {
         localStorage.PinOn="false";
       }
       if (typeof localStorage.TouchOn == 'undefined') {
         localStorage.TouchOn="false";
+      }
+      if (typeof localStorage.GeoOn == 'undefined') {
+        localStorage.GeoOn="false";
       }
       if (typeof localStorage.NodeHost == 'undefined') {
         localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
@@ -43,7 +42,6 @@ angular.module('leth', ['ionic', 'oc.lazyLoad', 'angularLoad','ionic.contrib.ui.
     			},
   		  });
 		  }
-
 
       if (typeof localStorage.AppKeys == 'undefined') {
         console.log("wallet not found");
@@ -192,6 +190,23 @@ angular.module('leth', ['ionic', 'oc.lazyLoad', 'angularLoad','ionic.contrib.ui.
      $httpProvider.defaults.useXDomain = true;
       delete $httpProvider.defaults.headers.common['X-Requested-With'];
   })
+  .config(function( $controllerProvider, $provide, $compileProvider ) {
+        // Since the "shorthand" methods for component 
+        // definitions are no longer valid, we can just 
+        // override them to use the providers for post-
+        // bootstrap loading.
+        console.log( "Config method executed." );
+
+        // Let's keep the older references.
+        app._controller = app.controller;
+        // Provider-based controller.
+        app.controller = function( name, constructor ) {
+
+          $controllerProvider.register( name, constructor );
+          return( this );
+
+        };
+  })
   .directive('dappTemplate', ['$http','$compile', function($http,$compile){
   return {
       restrict : 'A',
@@ -199,12 +214,16 @@ angular.module('leth', ['ionic', 'oc.lazyLoad', 'angularLoad','ionic.contrib.ui.
       controller : "@",
       name:"controllerName",  
       link: function(scope, element, attrs){
-        scope.message = "prima";          
+        scope.message = "direttiva";  
+
         /*
+        scope.message = "prima";          
+        
         scope.test = function(){
           scope.message = "test OK";
           scope.scanTo();
         };
+        
           $http.jsonp("dappleths/dapp_1/controller.js?callback=pippo").success(function(data) {
             console.log("Request ok");
             $compile(scope.$scope)(data.data);

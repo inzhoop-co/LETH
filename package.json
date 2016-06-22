@@ -55,7 +55,8 @@
       "id": "com.shazron.cordova.plugin.keychainutil"
     },
     "cordova-plugin-device-motion",
-    "de.appplant.cordova.plugin.email-composer"
+    "de.appplant.cordova.plugin.email-composer",
+    "cordova-plugin-geolocation"
   ],
   "cordovaPlatforms": [
     "android",

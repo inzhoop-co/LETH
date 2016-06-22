@@ -50,6 +50,31 @@ angular.module('leth.services', [])
         });
         return q.promise;
       },
+      getHostHood: function () {
+        var q = $q.defer();
+        $http({
+          method: 'GET',
+          url: 'https://www.ethernodes.org/network/1/data?draw=1&columns[0][data]=id&columns[1][data]=host&columns[1][orderable]=true&order[0][column]=0&order[0][dir]=asc&start=0&length=10000&search[value]=&search[regex]=false'
+        }).then(function(response) {
+          q.resolve(response.data.data);
+        }, function(response) {
+          q.reject(response);
+        });
+        return q.promise;
+      },
+       checkHostHood: function (host) {
+        var q = $q.defer();
+        $http({
+          method: 'GET',
+          url: host
+        }).then(function(response) {
+          if(response.status==200)
+            q.resolve(response.data);
+        }, function(response) {
+          q.reject(response);
+        });
+        return q.promise;
+      },      
       setWeb3Provider: function (keys) {
         var web3Provider = new HookedWeb3Provider({
           host: localStorage.NodeHost,
@@ -85,24 +110,29 @@ angular.module('leth.services', [])
          });
          */
       },
-      sendMessage: function ($scope) {
-        var identity = web3.shh.newIdentity();
-        var topic = "Lottery";
-        var filter = web3.shh.filter([topic]);
+      sendMessage: function (chat,msg) {
+        web3.shh.newIdentity(function(err,res){
+          if(!err){
+            var topic = chat;
+            var payload = msg;
+            var message = {
+              from: res,
+              //to: "0x04a49b8ce5cdaf4955f6e6a60ad725c62fe547c5085670e0eca889810974f16cd1c1090ca3f555f83d06dd80fd29413335038ee0093d981dd6b097eab0a95dbd7d",
+              topics: [topic],
+              payload: payload,
+              ttl: 10,
+              workToProve: 10
+            };
+            web3.shh.post(message);            
+          }
+        });
+      },
+      listenMessage: function($scope){
+        var filter =  web3.shh.filter({topics: ["leth"]});
         filter.watch(function (error, result) {
           if (!error)
-            console.log(result.payload);
+           $scope.$broadcast("chatMessage", result);
         });
-
-        var payload = 'ciao mondo!';
-        var message = {
-          from: identity,
-          topics: [topic],
-          payload: payload,
-          ttl: 100,
-          workToProve: 100
-        };
-        web3.shh.post(message);
       },
       transferCoin: function (contract, nameSend, from, to, amount ) {
           var fromAddr = '0x' + from;

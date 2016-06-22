@@ -1,5 +1,7 @@
 angular.module('leth.controllers')
-  .controller('WalletCtrl', function ($scope, $stateParams, $ionicLoading, $ionicModal, $state, $ionicPopup, $cordovaBarcodeScanner, $ionicActionSheet, $timeout, AppService, Transactions) {
+  .controller('WalletCtrl', function ($scope, $stateParams, $ionicLoading, $ionicModal, $state, 
+                                      $ionicPopup, $cordovaBarcodeScanner, $ionicActionSheet, 
+                                      $timeout, AppService, Transactions,ExchangeService) {
     var TrueException = {};
     var FalseException = {};
 
@@ -35,7 +37,11 @@ angular.module('leth.controllers')
     }
 
     $scope.$on('$ionicView.enter', function() {
-      refresh();
+     // refresh();
+      $scope.balance = AppService.balance();
+      ExchangeService.getTicker($scope.xCoin, JSON.parse(localStorage.BaseCurrency).value).then(function(value){
+        $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat(value * $scope.balance).toFixed(2) ;
+      });
     })
 
     //set Eth for default
@@ -163,5 +169,4 @@ angular.module('leth.controllers')
         }
       })
     };
-
   })

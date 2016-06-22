@@ -1,13 +1,27 @@
 angular.module('leth.controllers')
-  .controller('SettingsCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, AppService, ExchangeService) {    
+  .controller('SettingsCtrl', function ($scope, $interval, $ionicModal, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, $http, $cordovaGeolocation, AppService, ExchangeService) {    
     $scope.editableHost = false;
     $scope.addrHost = localStorage.NodeHost;
 	  $scope.hostsList= JSON.parse(localStorage.HostsList);
-	
+  	$scope.indexHost = $scope.hostsList.indexOf($scope.addrHost);
     $scope.pin = { checked: (localStorage.PinOn=="true") };
 	  $scope.touch = { checked: (localStorage.TouchOn=="true") };
-
+    $scope.geo = { checked: (localStorage.GeoOn=="true") };
     $scope.baseCurrency = JSON.parse(localStorage.BaseCurrency);
+
+    $scope.setIndexHost = function(index){    
+      localStorage.NodeHost = $scope.hostsList[index];
+      AppService.setWeb3Provider(global_keystore);
+      $scope.addrHost = localStorage.NodeHost;
+    }
+
+    $scope.plusIndexHost = function(){    
+      $scope.setIndexHost( $scope.hostsList.indexOf($scope.addrHost) + 1);    
+    }
+
+    $scope.minIndexHost = function(){    
+      $scope.setIndexHost( $scope.hostsList.indexOf($scope.addrHost) - 1);        
+    }
 
     var seedModal;
     var createSeedModal = function () {
@@ -34,6 +48,38 @@ angular.module('leth.controllers')
       $scope.touch = { checked: value};
     };
 
+    var watchOptions = {
+      timeout : 3000,
+      enableHighAccuracy: false // may cause errors if true
+    };
+    $scope.lat = "...";
+    var geoWatch;
+    var setGeo = function(value){
+      localStorage.GeoOn = value? "true":"false";
+      $scope.geo = { checked: value};
+      if(value){
+        geoWatch = $cordovaGeolocation.watchPosition(watchOptions);
+        geoWatch.then(
+          null,
+          function(err) {
+            // error
+            console.log("err: " + err);
+          },
+          function(position) {
+            $scope.lat  = position.coords.latitude;
+            $scope.long = position.coords.longitude;
+            console.log($scope.lat + " - " + $scope.long);
+        });
+      }
+      else if(geoWatch!=undefined){
+        geoWatch.clearWatch();        
+      }
+    };
+
+    $scope.$watch('geo.checked',function(value) {
+      setGeo(value);
+    });
+
   	$scope.$watch('pin.checked',function(value) {
   		setPin(value);
   	});
@@ -43,6 +89,7 @@ angular.module('leth.controllers')
       if(value)
         setPin(value);
     });
+
 
     $scope.isIOS = function(){
       return ionic.Platform.isIOS();
@@ -71,12 +118,13 @@ angular.module('leth.controllers')
           localStorage.NodeHost = addr;
           AppService.setWeb3Provider(global_keystore);
           $scope.addrHost = localStorage.NodeHost;
-		  if(!$scope.hostsList.includes(addr)) {
-			  $scope.hostsList.push(addr);
-			  localStorage.HostsList=JSON.stringify($scope.hostsList);
-		  }
+    		  if(!$scope.hostsList.includes(addr)) {
+    			  $scope.hostsList.push(addr);
+    			  localStorage.HostsList=JSON.stringify($scope.hostsList);
+    		  }
           $scope.editableHost = false;      
           refresh();
+          initHood(); 
           console.log('provider host update to: ' + addr);
         } else {
           console.log('provider host not modified');
@@ -93,9 +141,10 @@ angular.module('leth.controllers')
         if (res) 
         {
     		  if($scope.hostsList.includes(addr) && $scope.hostsList.length>1 ) {
-    			  $scope.hostsList.pop(addr);
+            var iHost = $scope.hostsList.indexOf(addr);
+    			  $scope.hostsList.splice(iHost,1);
     			  localStorage.HostsList=JSON.stringify($scope.hostsList);
-    			  localStorage.NodeHost=$scope.hostsList[0];
+    			  localStorage.NodeHost=$scope.hostsList[iHost];
     			  AppService.setWeb3Provider(global_keystore);
             $scope.addrHost = localStorage.NodeHost;            
             $scope.editableHost = false;          

@@ -30,12 +30,26 @@
 		<div class="row no-bmp">
 		<div class="col text-left no-bmp   col-center">Host </div>
 			<div class="col padding-on-borders  col-center">	
-				<select class="item-select full-width" ng-model="addrHost" ng-required="true" ng-init="addrHost" ng-change="editHost(addrHost)">
-					<option ng-repeat="host in hostsList" value="{{host}}" ng-selected="addrHost==host">{{host}}</option>
+				<select class="item-select " ng-model="addrHost" ng-required="true" ng-init="addrHost" ng-change="editHost(addrHost)">
+					<option ng-repeat="host in hostsList" value="{{host}}" ng-selected="addrHost==host"  ng-model="addrHost">{{host}}</option>
 				</select>
 			</div>		
 			</div>		
 		</div>
+		<div class="list">
+		  <div class="item range range-positive">
+		    <i class="icon ion-ios-pricetags-outline"></i>
+		    <input type="range" name="volume" min="0" max="{{hostsList.length}}" value="{{indexHost}}" ng-model="indexHost" ng-change="setIndexHost(indexHost)">
+		    <i class="icon ion-ios-pricetags"></i>
+		  	<button class="button button-clear" ng-click="minIndexHost()">
+				<i class="icon ion-chevron-left"></i>
+		    </button> 
+		    <button class="button button-clear" ng-click="plusIndexHost()">
+		        <i class="icon ion-chevron-right"></i>
+		    </button>
+		   </div>
+		</div>
+		
 		<div class="padding subdued">Backup</div>
 		<div class="item item-button-right">
 		    Backup your Wallet
@@ -62,13 +76,17 @@
 		        <i class="icon ion-lock-combination"></i>
 		    </button>
 		</div> 
+		<div class="padding subdued">Geolocation</div>
+	    <ion-toggle  ng-model="geo.checked" ng-checked="geo.checked">
+			{{lat}} {{long}}
+		</ion-toggle>
 		<div class="padding subdued">Exchange</div>
 		<div class="item item-select">
 			Base Currency
 		   	<select class="item-select" ng-model="baseCurrency" ng-init="baseCurrency" ng-change="setCurrency(baseCurrency)">
 				<option ng-repeat="c in currencies" value="{{c}}" ng-selected="baseCurrency.name==c.name">{{c.name}} {{c.symbol}}</option>
 			</select>
-		</div>
+		</div>		
 		<div class="divider padding" align="center">
 			<p><img ng-src="img/inzhoop.png" id="headerSetting"></p>
 			<p>LΞTH v.0.6.0</p>

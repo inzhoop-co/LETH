@@ -1,3 +1,11 @@
+  app.controller("CustomCtrl", function( $scope) {
+          $scope.message = "After app bootstrap."; 
+          $scope.test = function(){
+              $scope.message = "test OK";
+              $scope.scanTo();
+          };
+  });
+
 var helloABI = [{
     constant: false,
     inputs: [],
@@ -34,13 +42,4 @@ function writeMessage()
 {
     var m = hello.greet();
     angular.element(document.querySelector('#message')).html(m);
-}
-
-
-function test() {  
-  // Compile controller 2 html
-  var mController = angular.element(document.querySelector('#mController')).scope();
-  mController.$apply(function(){
-    mController.msg = 'Superhero';
-  })
 }

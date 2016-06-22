@@ -21,5 +21,16 @@
       </ion-option-button>
     </ion-item>
   </ion-list>
+  <div class="item" ng-model="chatMessage" ng-if="chatMessage.length > 0">
+    {{chatMessage}}
+  </div>
+  <div class="bar bar-footer bar-light item-input-inset">
+      <label class="item-input-wrapper">
+            <i class="icon ion-edit placeholder-icon"></i>
+            <input type="text" placeholder="type message" ng-model="text.message">     
+      </label>
+      <button class="icon button-icon ion-ios-close-empty dark" ng-if="text.message.length > 0" on-touch="text.message=''"></button>
+      <button class="icon button-icon ion-ios-paperplane positive" ng-click="sendMessage(text.message); text.message=''""></button>
+  </div>
   </ion-content>
 </ion-view>

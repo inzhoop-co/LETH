@@ -7,6 +7,7 @@ angular.module('leth.controllers')
     $scope.prevSlide = function() {
       $ionicSlideBoxDelegate.previous();
     };
+
     refresh();
   })
   .controller('DapplethRunCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
@@ -15,7 +16,7 @@ angular.module('leth.controllers')
       var id = $stateParams.Id;
       var activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
       
-      $scope.msg = "prima";
+      $scope.message = "DapplethRunCtrl";
       //$scope.appContainer = $scope.readDapp(activeApp.GUID + ".html");
 
       $http.get(activeApp.InstallUrl) 

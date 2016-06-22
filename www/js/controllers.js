@@ -1,5 +1,5 @@
 angular.module('leth.controllers', [])
-  .controller('AppCtrl', function ($scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, 
+  .controller('AppCtrl', function ($interval, $scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, 
                                   $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                   $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, 
                                   $q, PasswordPopup, Transactions, Friends, ExchangeService, $ionicLoading, 
@@ -45,6 +45,7 @@ angular.module('leth.controllers', [])
           pw = "";
         })
     };
+
 
     var loadApps = function(store){
       if(store){
@@ -585,6 +586,7 @@ angular.module('leth.controllers', [])
     }else{
       createEntropyModal();
     }
+
   }) //fine AppCtrl
   .controller('TransactionCtrl', function ($scope) {
   })
