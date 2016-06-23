@@ -31,6 +31,31 @@ angular.module('leth.services', [])
       }
     };
   })
+  .factory('Chat', function ($rootScope, $http, $q) {
+    var identity = web3.shh.newIdentity();
+
+    return{
+      sendMessage: function (chat,msg) {
+        var topic = chat;
+        var payload = msg;
+        var message = {
+          from: identity,
+          topics: [topic],
+          payload: payload,
+          ttl: 10,
+          workToProve: 10
+        };
+        web3.shh.post(message);            
+      },
+      listenMessage: function($scope){
+        var filter =  web3.shh.filter();
+        filter.watch(function (error, result) {
+          if (!error)
+           $scope.$broadcast("chatMessage", result);
+        });
+      }
+    }
+  })
   .service('AppService', function ($rootScope, $http, $q) {
     return {
       getStore: function(){
@@ -128,7 +153,7 @@ angular.module('leth.services', [])
         });
       },
       listenMessage: function($scope){
-        var filter =  web3.shh.filter({topics: ["leth"]});
+        var filter =  web3.shh.filter();
         filter.watch(function (error, result) {
           if (!error)
            $scope.$broadcast("chatMessage", result);

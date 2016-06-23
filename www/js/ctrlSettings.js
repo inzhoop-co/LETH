@@ -49,7 +49,7 @@ angular.module('leth.controllers')
     };
 
     var watchOptions = {
-      timeout : 3000,
+      timeout : 5000,
       enableHighAccuracy: false // may cause errors if true
     };
     $scope.lat = "...";
@@ -124,7 +124,6 @@ angular.module('leth.controllers')
     		  }
           $scope.editableHost = false;      
           refresh();
-          initHood(); 
           console.log('provider host update to: ' + addr);
         } else {
           console.log('provider host not modified');

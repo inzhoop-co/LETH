@@ -1,15 +1,24 @@
 <ion-view view-title="Friends">
-  <ion-content class="has-header has-tabs">
+  <header class="bar bar-subheader" hide-on-scroll="true">
+
+    <div class="item-avatar-left item-button-right item-text-wrap" ng-model="chatMessage" ng-if="chatMessage.length > 0">
+      <img src="{{chatIcon}}"></img>
+      <p class="subdued">{{chatMessage}}</p>
+      <span class="badge badge-energized">{{chatTime | date: "short"}}</span>
+      
+    </div>  
+  </header>
+  <ion-content class="has-header has-subheader has-footer has-tabs">
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+  <ion-list class="list">
   <div class="item item-input-inset">
-    <label class="item-input-wrapper">
+      <label class="item-input-wrapper">
       <i class="icon ion-ios-search placeholder-icon"></i>
       <input type="search" placeholder="Search" ng-model="search.name">     
     </label>
     <button class="icon button-icon ion-ios-close-empty dark" ng-if="search.name.length > 0" on-touch="search.name=''"></button>
     <button class="icon button-icon ion-ios-personadd positive" ng-click="addAddress()"></button>  
   </div>
-  <ion-list class="list">
     <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends | filter:search track by $index"
       type="item-text-wrap" href="#/app/friends/{{friend.addr}}">
       <img src="{{friend.icon}}"></img>
@@ -21,16 +30,20 @@
       </ion-option-button>
     </ion-item>
   </ion-list>
-  <div class="item" ng-model="chatMessage" ng-if="chatMessage.length > 0">
-    {{chatMessage}}
-  </div>
-  <div class="bar bar-footer bar-light item-input-inset">
+  </ion-content>
+<!--
+    <div class="item-stable item-remove-animate item-thumbnail-left item-icon-right" ng-model="chatMessage" ng-if="chatMessage.length > 0">
+      <img src="{{chatIcon}}"></img>
+      <h2>{{chatMessage}}</h2>
+      <p class="subdued">{{chatTime | date: "short"}}</p>
+    </div>  
+-->
+  <footer class="bar bar-footer bar-stable has-tabs item-input-inset">
       <label class="item-input-wrapper">
             <i class="icon ion-edit placeholder-icon"></i>
             <input type="text" placeholder="type message" ng-model="text.message">     
       </label>
       <button class="icon button-icon ion-ios-close-empty dark" ng-if="text.message.length > 0" on-touch="text.message=''"></button>
       <button class="icon button-icon ion-ios-paperplane positive" ng-click="sendMessage(text.message); text.message=''""></button>
-  </div>
-  </ion-content>
+  </footer>
 </ion-view>
