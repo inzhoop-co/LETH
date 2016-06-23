@@ -10,22 +10,7 @@ angular.module('leth.controllers')
       $state.go('tab.wallet');
       $scope.addrTo = $scope.friend.addr;
     }
-    $scope.chatMessage = "incoming message"
-    $scope.$on('chatMessage', function (e, r) {
-      $scope.chatIcon = blockies.create({ 
-        seed: r.from, 
-      }).toDataURL("image/jpeg");
-      $scope.chatTime=r.sent*1000; 
-      $scope.chatMessage=r.payload; 
-      $scope.$digest();     
-    });
 
-    //AppService.listenMessage($scope);
-    Chat.listenMessage($scope);
-    
-    $scope.sendMessage = function(msg){
-      Chat.sendMessage("leth",msg);
-    };
   })
   .controller('FriendCtrl', function ($scope, $stateParams, Friends) {
     $scope.friend = Friends.get($stateParams.Friend);

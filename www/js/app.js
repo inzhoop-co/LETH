@@ -158,6 +158,15 @@ var app = angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards
           }
         }
       })
+      .state('app.chats', {
+        url: '/chats',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/chats.html',
+            controller: 'ChatsCtrl'
+          }
+        }
+      })
       .state('app.single', {
         url: '/friends/:Friend',
         views: {

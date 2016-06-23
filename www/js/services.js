@@ -33,8 +33,12 @@ angular.module('leth.services', [])
   })
   .factory('Chat', function ($rootScope, $http, $q) {
     var identity = web3.shh.newIdentity();
-
+    var chats=[];
+    
     return{
+      find: function(){
+        return chats;
+      },
       sendMessage: function (chat,msg) {
         var topic = chat;
         var payload = msg;
@@ -50,8 +54,15 @@ angular.module('leth.services', [])
       listenMessage: function($scope){
         var filter =  web3.shh.filter();
         filter.watch(function (error, result) {
-          if (!error)
+          if (!error){
+           chats.push({
+            identity: blockies.create({ seed: result.from}).toDataURL("image/jpeg"),
+            timestamp: result.sent*1000,
+            message: result.payload,
+            from: result.from,
+           });
            $scope.$broadcast("chatMessage", result);
+          }
         });
       }
     }
@@ -134,30 +145,6 @@ angular.module('leth.services', [])
 
          });
          */
-      },
-      sendMessage: function (chat,msg) {
-        web3.shh.newIdentity(function(err,res){
-          if(!err){
-            var topic = chat;
-            var payload = msg;
-            var message = {
-              from: res,
-              //to: "0x04a49b8ce5cdaf4955f6e6a60ad725c62fe547c5085670e0eca889810974f16cd1c1090ca3f555f83d06dd80fd29413335038ee0093d981dd6b097eab0a95dbd7d",
-              topics: [topic],
-              payload: payload,
-              ttl: 10,
-              workToProve: 10
-            };
-            web3.shh.post(message);            
-          }
-        });
-      },
-      listenMessage: function($scope){
-        var filter =  web3.shh.filter();
-        filter.watch(function (error, result) {
-          if (!error)
-           $scope.$broadcast("chatMessage", result);
-        });
       },
       transferCoin: function (contract, nameSend, from, to, amount ) {
           var fromAddr = '0x' + from;

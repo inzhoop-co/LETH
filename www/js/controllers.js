@@ -590,3 +590,4 @@ angular.module('leth.controllers', [])
   }) //fine AppCtrl
   .controller('TransactionCtrl', function ($scope) {
   })
+  
