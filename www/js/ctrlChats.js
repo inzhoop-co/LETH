@@ -1,18 +1,27 @@
 angular.module('leth.controllers')  
-  .controller('ChatsCtrl', function ($scope, Friends, $ionicListDelegate, Chat) {    
+  .controller('ChatsCtrl', function ($scope, Friends, $ionicListDelegate, $ionicScrollDelegate, $timeout, Chat) {    
+    
+    $scope.inputUp = function() {
+      $timeout(function() {
+        $ionicScrollDelegate.$getByHandle('chatScroll').scrollBottom(true);
+      }, 300);
+    }
+
+    $scope.inputDown = function() {
+      $ionicScrollDelegate.$getByHandle('chatScroll').resize();
+    }
+
+    $scope.$on('$ionicView.enter', function() {
+      $scope.myidentity = Chat.identity();
+      $scope.cancelAllNotifications();
+      $scope.clearBadge();
+    })
+
     $scope.remove = function (index) {
 
       $ionicListDelegate.closeOptionButtons();
     };
 
-    Chat.listenMessage($scope);
-
-    $scope.$on('chatMessage', function (e, r) {
-     $scope.chats = Chat.find();   
-     $scope.$digest(); 
-    });
-
-    
     $scope.sendMessage = function(msg){
       Chat.sendMessage("leth",msg);
     };

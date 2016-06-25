@@ -32,14 +32,21 @@ angular.module('leth.services', [])
     };
   })
   .factory('Chat', function ($rootScope, $http, $q) {
-    var identity = web3.shh.newIdentity();
+    var identity ="0x";
     var chats=[];
     
     return{
+      identity: function(){
+        if(!web3.shh.hasIdentity(identity))
+          identity = web3.shh.newIdentity();
+        return identity;
+      },
       find: function(){
         return chats;
       },
       sendMessage: function (chat,msg) {
+        if(!web3.shh.hasIdentity(identity))
+          identity = web3.shh.newIdentity();
         var topic = chat;
         var payload = msg;
         var message = {

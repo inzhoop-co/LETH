@@ -3,7 +3,7 @@ angular.module('leth.controllers', [])
                                   $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                   $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, 
                                   $q, PasswordPopup, Transactions, Friends, ExchangeService, $ionicLoading, 
-                                  $ionicLoadingConfig) {
+                                  $ionicLoadingConfig,$cordovaLocalNotification,$cordovaBadge,Chat) {
     window.refresh = function () {
       $ionicLoading.show();
       $scope.balance = AppService.balance();
@@ -45,7 +45,6 @@ angular.module('leth.controllers', [])
           pw = "";
         })
     };
-
 
     var loadApps = function(store){
       if(store){
@@ -586,6 +585,110 @@ angular.module('leth.controllers', [])
     }else{
       createEntropyModal();
     }
+
+    $scope.setBadge = function(value) {
+      document.addEventListener("deviceready",function() {    
+        $cordovaBadge.hasPermission().then(function(result) {
+            $cordovaBadge.set(value);
+        }, function(error) {
+            console.log(error);
+        });
+      }, false);
+    }
+
+    $scope.increaseBadge = function() {
+      document.addEventListener("deviceready",function() {    
+        $cordovaBadge.hasPermission().then(function(result) {
+            $cordovaBadge.increase();
+            if(!$state.is('chats'))
+               $scope.msgCounter += 1;
+        }, function(error) {
+            console.log(error);
+        });
+      }, false);
+    }
+
+    $scope.clearBadge = function() {
+      document.addEventListener("deviceready",function() {    
+        $cordovaBadge.hasPermission().then(function(result) {
+            $cordovaBadge.clear();
+        }, function(error) {
+            console.log(error);
+        });
+      }, false);
+    }
+
+    //start listening message shh
+    Chat.listenMessage($scope);
+
+    $scope.$on('chatMessage', function (e, r) {
+     $scope.scheduleSingleNotification(r.from,r.payload);
+     $scope.chats = Chat.find();   
+     $scope.$digest(); 
+     $scope.increaseBadge();
+    });
+
+    document.addEventListener('deviceready', function () {
+      // Android customization
+      cordova.plugins.backgroundMode.setDefaults({ text:'Doing heavy tasks.'});
+      // Enable background mode
+      cordova.plugins.backgroundMode.enable();
+
+      console.log('device ready for background');
+      
+       // Called when background mode has been activated
+      cordova.plugins.backgroundMode.onactivate = function() {
+        console.log('background mode actived!');
+        $scope.$on('chatMessage', function (e, r) {
+          console.log("new message recived");
+          $scope.scheduleSingleNotification(r.from,r.payload);
+          $scope.increaseBadge();
+        });
+      }
+
+      cordova.plugins.backgroundMode.ondeactivate = function() {
+        $scope.cancelAllNotifications();
+        $scope.clearBadge();
+      };
+
+    }, false);
+
+
+    $scope.scheduleSingleNotification = function (title, text) {
+      document.addEventListener("deviceready", function () {        
+        $cordovaLocalNotification.schedule({
+            id: 1,
+            //title: title,
+            text: text,
+            //every: 'minute',
+          }).then(function (result) {
+            console.log('trigger ' + result);  
+             $cordovaBadge.increase().then(function() {
+                console.log('count increased ');
+              }, function(err) {
+                console.log('increasing error ' + err);
+              });
+            console.log('Notification 1 triggered');
+          });
+      }, false); 
+    };
+
+    $scope.cancelAllNotifications = function () {
+      document.addEventListener("deviceready", function () {        
+        $cordovaLocalNotification.cancelAll().then(function (result) {
+              $scope.msgCounter = 0;
+              console.log('All Notification Canceled');
+        });
+      }, false); 
+    };
+
+    //clear notification and badge on click (todo: add on open)
+    $rootScope.$on('$cordovaLocalNotification:click',
+      function (event, notification, state) {
+        $scope.cancelAllNotifications();
+        $scope.clearBadge();
+      }
+    );     
 
   }) //fine AppCtrl
   .controller('TransactionCtrl', function ($scope) {

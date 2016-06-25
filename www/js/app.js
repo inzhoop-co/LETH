@@ -71,6 +71,7 @@ var app = angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards
         $ionicLoading.hide()
       })
 
+
       $window.addEventListener('LaunchUrl', function(event) {
         // gets page name from url
         var page =/.*:[/]{2}([^?]*)[?]?(.*)/.exec(event.detail.url)[1];
@@ -225,28 +226,25 @@ var app = angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards
       link: function(scope, element, attrs){
         scope.message = "direttiva";  
 
-        /*
-        scope.message = "prima";          
-        
-        scope.test = function(){
-          scope.message = "test OK";
-          scope.scanTo();
-        };
-        
-          $http.jsonp("dappleths/dapp_1/controller.js?callback=pippo").success(function(data) {
-            console.log("Request ok");
-            $compile(scope.$scope)(data.data);
-          }).error(function (data) {
-            console.error("Request failed");
-          });
-          */
        },
       templateUrl: function(elem,attrs) {
            return "dappleths/" + attrs.templateUrl || 'template/notfound.html'
       }
     }
   }]) 
+  .filter('calendar', calendar);
+    function calendar () {
+      return function (time) {
+        if (! time) return;
 
+        return moment(time).calendar(null, {
+          lastDay : '[Yesterday]',
+          sameDay : 'LT',
+          lastWeek : 'dddd',
+          sameElse : 'DD/MM/YY'
+        });
+      };
+    }
   function handleOpenURL(url) {
     setTimeout(function() {
         var event = new CustomEvent('LaunchUrl', {detail: {'url': url}});

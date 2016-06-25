@@ -1,36 +1,28 @@
 <ion-view view-title="Chats">
-  <ion-header-bar class="bar bar-subheader bar-stable item-input-inset" hide-on-scroll="true">
-    <label class="item-input-wrapper">
-      <i class="icon ion-ios-search placeholder-icon"></i>
-      <input type="search" placeholder="Search" ng-model="search.name">     
-    </label>
-    <button class="icon button-icon ion-ios-close-empty dark" ng-if="search.name.length > 0" on-touch="search.name=''"></button>
-    <button class="icon button-icon ion-ios-personadd positive" ng-click="addAddress()"></button>  
-  </ion-header-bar>
-  <ion-content class="has-header has-subheader has-footer has-tabs">
-  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
-  <ion-list class="list">
-    <ion-item class="item-thumbnail-left item-icon-right item-text-wrap" ng-repeat="chat in chats | filter:search track by $index"
-      type="item-text-wrap">
-      <img class="rounded" ng-src="{{chat.identity}}" style="width: 64px; height: 64px"/>
-      <!--p>{{chat.from}}</p-->
-      <p>{{chat.message}}</p>
-      <span class="last-message-timespam">{{chat.timestamp | date: "short"}}</span>
-
-      <ion-option-button class="button-assertive" ng-click="remove($index)">
-          Delete
-      </ion-option-button>
-    </ion-item>
-  </ion-list>
+ 
+   <ion-content class="chat" delegate-handle="chatScroll">
+   <div class="message-list">
+      <div ng-repeat="chat in chats | orderBy:'chat.timestamp'"
+        class="message-wrapper">
+        <div class="message" ng-class="chat.from === myidentity ? 'message-mine' : 'message-other'">
+          <div class="message-text"><img ng-src="{{chat.identity}}"> {{chat.message}}</div>
+          <span class="message-timestamp">{{chat.timestamp | date: 'HH:MM'}}</span>
+        </div>
+      </div>
+    </div>
   </ion-content>
   <ion-footer-bar align-title="left" keyboard-attach class="bar-stable">
     <div class="bar bar-footer bar-stable has-tabs item-input-inset">
       <label class="item-input-wrapper">
             <i class="icon ion-edit placeholder-icon"></i>
-            <input type="text" placeholder="type message" ng-model="text.message">     
+            <input type="text" dir="auto" placeholder="type message" ng-model="text.message" on-focus="inputUp()"
+        on-blur="inputDown()">     
       </label>
       <button class="icon button-icon ion-ios-close-empty dark" ng-if="text.message.length > 0" on-touch="text.message=''"></button>
       <button class="icon button-icon ion-ios-paperplane positive" ng-click="sendMessage(text.message); text.message=''""></button>
     </div>
   </ion-footer-bar>
 </ion-view>
+
+        
+        
