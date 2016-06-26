@@ -4,8 +4,9 @@
    <div class="message-list">
       <div ng-repeat="chat in chats | orderBy:'chat.timestamp'"
         class="message-wrapper">
+        <img ng-src="{{chat.identity}}" ng-class="chat.from === myidentity ? 'message message-mine' : 'message message-other'">
         <div class="message" ng-class="chat.from === myidentity ? 'message-mine' : 'message-other'">
-          <div class="message-text"><img ng-src="{{chat.identity}}"> {{chat.message}}</div>
+          <div class="message-text"> {{chat.message}}</div>
           <span class="message-timestamp">{{chat.timestamp | date: 'HH:MM'}}</span>
         </div>
       </div>

@@ -586,6 +586,11 @@ angular.module('leth.controllers', [])
       createEntropyModal();
     }
 
+    /**
+    ** CHATS section
+    */
+    $scope.msgCounter = 0;
+
     $scope.setBadge = function(value) {
       document.addEventListener("deviceready",function() {    
         $cordovaBadge.hasPermission().then(function(result) {
@@ -600,8 +605,6 @@ angular.module('leth.controllers', [])
       document.addEventListener("deviceready",function() {    
         $cordovaBadge.hasPermission().then(function(result) {
             $cordovaBadge.increase();
-            if(!$state.is('chats'))
-               $scope.msgCounter += 1;
         }, function(error) {
             console.log(error);
         });
@@ -624,8 +627,10 @@ angular.module('leth.controllers', [])
     $scope.$on('chatMessage', function (e, r) {
      $scope.scheduleSingleNotification(r.from,r.payload);
      $scope.chats = Chat.find();   
-     $scope.$digest(); 
      $scope.increaseBadge();
+     if($ionicTabsDelegate.selectedIndex()!=0)
+       $scope.msgCounter += 1;
+     $scope.$digest(); 
     });
 
     document.addEventListener('deviceready', function () {

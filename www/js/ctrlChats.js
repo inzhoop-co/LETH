@@ -15,6 +15,8 @@ angular.module('leth.controllers')
       $scope.myidentity = Chat.identity();
       $scope.cancelAllNotifications();
       $scope.clearBadge();
+      $scope.$digest(); 
+
     })
 
     $scope.remove = function (index) {
