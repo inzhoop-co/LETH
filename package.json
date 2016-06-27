@@ -17,6 +17,14 @@
     "shelljs": "^0.3.0"
   },
   "cordovaPlugins": [
+    {
+      "locator": "https://github.com/wildabeast/BarcodeScanner.git",
+      "id": "phonegap-plugin-barcodescanner"
+    },
+    {
+      "locator": "https://github.com/katzer/cordova-plugin-email-composer.git",
+      "id": "cordova-plugin-email-composer"
+    },
     "cordova-plugin-device",
     "cordova-plugin-console",
     "cordova-plugin-splashscreen",
@@ -25,12 +33,9 @@
     "cordova-plugin-webserver",
     "cordova-plugin-whitelist",
     "cordova-plugin-file",
+    "cordova-plugin-compat",
     "cordova-plugin-contacts",
     "cordova-plugin-touchid",
-    {
-      "locator": "https://github.com/wildabeast/BarcodeScanner.git",
-      "id": "phonegap-plugin-barcodescanner"
-    },
     {
       "locator": "https://github.com/VersoSolutions/CordovaClipboard.git",
       "id": "com.verso.cordova.clipboard"
@@ -52,14 +57,36 @@
     },
     {
       "locator": "https://github.com/shazron/KeychainPlugin.git",
-      "id": "com.shazron.cordova.plugin.keychainutil"
+      "id": "cordova-plugin-ios-keychain"
     },
     "cordova-plugin-device-motion",
-    "de.appplant.cordova.plugin.email-composer",
-    "cordova-plugin-geolocation"
+    "cordova-plugin-geolocation",
+    {
+      "locator": "https://github.com/katzer/cordova-plugin-local-notifications.git",
+      "id": "de.appplant.cordova.plugin.local-notification"
+    },
+    "cordova-plugin-app-event",
+    {
+      "locator": "https://github.com/katzer/cordova-plugin-badge.git",
+      "id": "cordova-plugin-badge"
+    },
+    {
+      "locator": "https://github.com/katzer/cordova-plugin-background-mode.git",
+      "id": "cordova-plugin-background-mode"
+    }
   ],
   "cordovaPlatforms": [
     "android",
-    "ios"
+    "ios",
+    {
+      "platform": "android",
+      "version": "",
+      "locator": "android"
+    },
+    {
+      "platform": "ios",
+      "version": "",
+      "locator": "ios"
+    }
   ]
 }
