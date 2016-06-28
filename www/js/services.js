@@ -34,7 +34,7 @@ angular.module('leth.services', [])
   .factory('Chat', function ($rootScope, $http, $q) {
     var identity ="0x";
     var chats=[];
-    
+    var topics = [];
     return{
       identity: function(){
         if(!web3.shh.hasIdentity(identity))
@@ -44,22 +44,27 @@ angular.module('leth.services', [])
       find: function(){
         return chats;
       },
-      sendMessage: function (chat,msg) {
+      addTopic: function(t){
+        topics.push(t);
+      },
+      removeTopic: function(t){
+        topics.splice(topics.arrayOf(t),1);
+      },
+      sendMessage: function (msg) {
         if(!web3.shh.hasIdentity(identity))
           identity = web3.shh.newIdentity();
-        var topic = chat;
         var payload = msg;
         var message = {
           from: identity,
-          topics: [topic],
+          topics: ["test"],
           payload: payload,
-          ttl: 10,
-          workToProve: 10
+          ttl: 50,
+          workToProve: 50
         };
         web3.shh.post(message);            
       },
       listenMessage: function($scope){
-        var filter =  web3.shh.filter();
+        var filter =  web3.shh.filter({topics: [topics]});
         filter.watch(function (error, result) {
           if (!error){
            chats.push({
