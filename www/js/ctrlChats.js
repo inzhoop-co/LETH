@@ -84,4 +84,3 @@ angular.module('leth.controllers')
       });
     }
   }
-
