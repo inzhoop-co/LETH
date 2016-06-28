@@ -3,7 +3,7 @@ angular.module('leth.controllers', [])
                                   $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                   $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, 
                                   $q, PasswordPopup, Transactions, Friends, ExchangeService, $ionicLoading, 
-                                  $ionicLoadingConfig,$cordovaLocalNotification,$cordovaBadge,Chat) {
+                                  $ionicLoadingConfig,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,Chat) {
     window.refresh = function () {
       $ionicLoading.show();
       $scope.balance = AppService.balance();
@@ -621,13 +621,22 @@ angular.module('leth.controllers', [])
       }, false);
     }
 
+    $scope.scrollTo = function(handle,where){
+      $ionicScrollDelegate.$getByHandle(handle).resize();
+
+      $timeout(function() {
+            $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
+      }, 100);
+
+      $scope.$digest(); 
+    }
     //start listening message shh
     Chat.listenMessage($scope);
 
     $scope.$on('chatMessage', function (e, r) {
      $scope.scheduleSingleNotification(r.from,r.payload);
-     $scope.chats = Chat.find();   
-     $scope.increaseBadge();
+     $scope.chats = Chat.find(); 
+     $scope.scrollTo('chatScroll','bottom');
      if($ionicTabsDelegate.selectedIndex()!=0)
        $scope.msgCounter += 1;
      $scope.$digest(); 
@@ -643,9 +652,7 @@ angular.module('leth.controllers', [])
       
        // Called when background mode has been activated
       cordova.plugins.backgroundMode.onactivate = function() {
-        console.log('background mode actived!');
         $scope.$on('chatMessage', function (e, r) {
-          console.log("new message recived");
           $scope.scheduleSingleNotification(r.from,r.payload);
           $scope.increaseBadge();
         });

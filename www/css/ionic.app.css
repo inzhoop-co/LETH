@@ -3351,7 +3351,7 @@ img {
   font-size: 14px;
   color: #9A9898; }
 
-.chat .scroll {
+.chat  {
   background-image: url(../img/chat-background.jpg);
   background-color: #E0DAD6;
   background-repeat: no-repeat;
@@ -9811,7 +9811,7 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
-.scroll {
+.scrollBg {
   background-color: #efeff4; }
 /*
 .tabs .tab-item .icon.mcfly {
@@ -9824,5 +9824,5 @@ a.button {
 */
 
 body.keyboard-open .has-footer{ 
-bottom: 0;
+bottom: 150;
 }
