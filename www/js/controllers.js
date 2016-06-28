@@ -623,12 +623,9 @@ angular.module('leth.controllers', [])
 
     $scope.scrollTo = function(handle,where){
       $ionicScrollDelegate.$getByHandle(handle).resize();
-
       $timeout(function() {
             $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
       }, 100);
-
-      $scope.$digest(); 
     }
     //start listening message shh
     Chat.listenMessage($scope);
@@ -637,7 +634,7 @@ angular.module('leth.controllers', [])
      $scope.scheduleSingleNotification(r.from,r.payload);
      $scope.chats = Chat.find(); 
      $scope.scrollTo('chatScroll','bottom');
-     if($ionicTabsDelegate.selectedIndex()!=0)
+     if($ionicTabsDelegate.selectedIndex()!=1)
        $scope.msgCounter += 1;
      $scope.$digest(); 
     });
@@ -674,21 +671,22 @@ angular.module('leth.controllers', [])
             text: text,
             //every: 'minute',
           }).then(function (result) {
-            console.log('trigger ' + result);  
+             /*
              $cordovaBadge.increase().then(function() {
                 console.log('count increased ');
               }, function(err) {
                 console.log('increasing error ' + err);
               });
-            console.log('Notification 1 triggered');
+              */
+            //console.log('Notification 1 triggered');
           });
       }, false); 
     };
 
     $scope.cancelAllNotifications = function () {
+      $scope.msgCounter = 0;
       document.addEventListener("deviceready", function () {        
         $cordovaLocalNotification.cancelAll().then(function (result) {
-              $scope.msgCounter = 0;
               console.log('All Notification Canceled');
         });
       }, false); 

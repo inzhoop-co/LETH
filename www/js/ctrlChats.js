@@ -18,8 +18,9 @@ angular.module('leth.controllers')
         return;
       }
       Chat.sendMessage($scope.text.message);
-      $scope.text.message="";
       $scope.scrollTo('chatScroll','bottom');
+      $scope.text.message="";
+      //$scope.$digest(); 
     };
 
     $scope.addTopicFilter = function(){
@@ -83,3 +84,4 @@ angular.module('leth.controllers')
       });
     }
   }
+
