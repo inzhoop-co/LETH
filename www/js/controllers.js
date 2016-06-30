@@ -640,7 +640,7 @@ angular.module('leth.controllers', [])
       if(r.payload.image.length)
         msg = "sent image";
      }
-     $scope.scheduleSingleNotification(from,msg);
+     //$scope.scheduleSingleNotification(from,msg);
      $scope.chats = Chat.find(); 
      $scope.scrollTo('chatScroll','bottom');
      if($ionicTabsDelegate.selectedIndex()!=1)
@@ -668,7 +668,8 @@ angular.module('leth.controllers', [])
             msg = "sent image";
           }
           $scope.scheduleSingleNotification(from,msg);
-
+          if($ionicTabsDelegate.selectedIndex()!=1)
+            $scope.msgCounter += 1;
           $scope.increaseBadge();
         });
       }
