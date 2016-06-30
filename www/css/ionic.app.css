@@ -3295,7 +3295,7 @@ img {
 
 .message-list {
   margin-top: 12px;
-  padding: 0 5%; }
+  padding: 1% 2%; }
 
 .message-wrapper {
   margin-bottom: 9px; }
@@ -3306,15 +3306,16 @@ img {
 
 .message {
   display: inline-block;
+  vertical-align: bottom;
   position: relative;
   max-width: 236px;
   border-radius: 7px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); }
   .message.message-mine {
-    float: right;
+    //float: right;
     background-color: #DCF8C6; }
   .message.message-other {
-    float: left;
+    //float: left;
     background-color: #FFF; }
   .message.message-other::before, .message.message-mine::before {
     content: "";
@@ -3343,28 +3344,58 @@ img {
     right: 7px;
     color: gray;
     font-size: 12px; }
+  .image {
+    width: 32px;
+    height: 32px;
+    align-self: flex-end;
+  }
 
-.item-chat .last-message-timestamp {
-  position: absolute;
-  top: 16px;
-  right: 38px;
-  font-size: 14px;
-  color: #9A9898; }
+  .bubble {
+    display: flex;
+  }
+  .bubble-other .message{
 
-.chat  {
-  background-image: url(../img/chat-background.jpg);
-  background-color: #E0DAD6;
-  background-repeat: no-repeat;
-  background-size: 100%; }
+  } 
 
-.footer-chat .item-input-wrapper {
-  background-color: #FFF; }
-.footer-chat .button.button-icon {
-  margin: 0 10px; }
-.footer-chat .buttons-seperator {
-  color: gray;
-  font-size: 18px;
-  line-height: 32px; }
+  .bubble-other .image {
+    
+  }
+
+
+  .bubble-mine {
+    justify-content: flex-end;
+  }
+
+  .bubble-mine .message {
+  order: 1;
+  }
+
+  .bubble-mine .image {
+   order: 2;
+  }
+
+
+  .item-chat .last-message-timestamp {
+    position: absolute;
+    top: 16px;
+    right: 38px;
+    font-size: 14px;
+    color: #9A9898; }
+
+  .chat  {
+    background-image: url(../img/chat-background.jpg);
+    background-color: #E0DAD6;
+    background-repeat: no-repeat;
+    background-size: 100%; }
+
+  .footer-chat .item-input-wrapper {
+    background-color: #FFF; }
+  .footer-chat .button.button-icon {
+    margin: 0 10px; }
+  .footer-chat .buttons-seperator {
+    color: gray;
+    font-size: 18px;
+    line-height: 32px; }
 
 
 

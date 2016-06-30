@@ -1,5 +1,5 @@
 angular.module('leth.controllers')  
-  .controller('ChatsCtrl', function ($scope, Friends, $ionicListDelegate, $ionicScrollDelegate, $timeout, Chat) {    
+  .controller('ChatsCtrl', function ($scope, Friends, $ionicListDelegate, $ionicScrollDelegate, $cordovaImagePicker, $cordovaCamera, $timeout, Chat) {    
 
     Chat.addTopic("leth");
 
@@ -7,8 +7,6 @@ angular.module('leth.controllers')
       $scope.myidentity = Chat.identity();
       $scope.cancelAllNotifications();
       $scope.clearBadge();
-      //$ionicScrollDelegate.$getByHandle('chatScroll').resize();
-      //$ionicScrollDelegate.$getByHandle('chatScroll').scrollBottom(true);
       $scope.$digest(); 
 
     })
@@ -17,10 +15,20 @@ angular.module('leth.controllers')
       if ($scope.text.message.length==0) {
         return;
       }
-      Chat.sendMessage($scope.text.message);
+      var msg = {type: 'leth', text: $scope.text.message, image: '' };
+      Chat.sendMessage(msg);
       $scope.scrollTo('chatScroll','bottom');
       $scope.text.message="";
-      //$scope.$digest(); 
+    };
+
+    $scope.sendPhoto = function(img){
+      if (img==undefined) {
+        return;
+      }
+      var msg = {type: 'leth', text: '', image: img};
+      Chat.sendMessage(msg);
+      $scope.scrollTo('chatScroll','bottom');
+      //$scope.text.message="";      
     };
 
     $scope.addTopicFilter = function(){
@@ -30,6 +38,61 @@ angular.module('leth.controllers')
       Chat.addTopic($scope.topic.name);
       $scope.topic.name="";
     };
+  
+    $scope.getPhoto = function(){
+      document.addEventListener("deviceready", function () {
+        var options = {
+          quality: 50,
+          destinationType: Camera.DestinationType.DATA_URL,
+          sourceType: Camera.PictureSourceType.CAMERA,
+          allowEdit: true,
+          encodingType: Camera.EncodingType.JPEG,
+          targetWidth: 100,
+          targetHeight: 100,
+          popoverOptions: CameraPopoverOptions,
+          saveToPhotoAlbum: false,
+          correctOrientation:true
+        };
+
+        $cordovaCamera.getPicture(options).then(function(imageData) {
+          var photo = "data:image/jpeg;base64," + imageData;
+          $scope.sendPhoto(photo);
+          console.log('photo :' + photo);
+        }, function(err) {
+          // error
+        });
+
+      }, false);
+    }
+
+    $scope.getImage = function(){
+      document.addEventListener("deviceready", function () {
+        var optionsImg = {
+          maximumImagesCount: 10,
+          width: 100,
+          height: 100,
+          quality: 50
+        };
+
+        $cordovaImagePicker.getPictures(optionsImg)
+          .then(function (results) {
+            window.resolveLocalFileSystemURL(results[0], function(fileEntry){
+              fileEntry.file(function(file) {
+                  var reader = new FileReader();
+                  reader.onloadend = function(e) {
+                       $scope.sendPhoto(this.result);
+                   };
+                  reader.readAsDataURL(file);
+               }); 
+
+            }, function(e){
+              console.log(e);
+            });                        
+          }, function(error) {
+              console.log('error get img');
+        });
+      }, false);
+    }
 
   })
   .directive('input', input);

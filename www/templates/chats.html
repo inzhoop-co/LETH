@@ -11,15 +11,21 @@
    <div class="message-list">
       <div ng-repeat="chat in chats | orderBy:'chat.timestamp'"
         class="message-wrapper">
-        <img ng-src="{{chat.identity}}" ng-class="chat.from === myidentity ? 'message message-mine' : 'message message-other'">
-        <div class="message" ng-class="chat.from === myidentity ? 'message-mine' : 'message-other'">
-          <div class="message-text"> {{chat.message}}</div>
-          <span class="message-timestamp">{{chat.timestamp | date: 'HH:mm'}}</span>
-        </div>
+        <div ng-class="chat.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
+            <img ng-src="{{chat.identity}}" ng-class="chat.from === myidentity ? 'image image-mine' : 'image image-other'">
+          <div class="message" ng-class="chat.from === myidentity ? 'message-mine' : 'message-other'">
+            <div class="message-text" ng-if="chat.message.type=='leth' && chat.message.text.length">{{chat.message.text}}</div>
+            <div class="message-text" ng-hide="chat.message.type=='leth'">{{chat.message}}</div>
+              <img src="{{chat.message.image}}" ng-if="chat.message.type=='leth' && chat.message.image.length"/>
+            <span class="message-timestamp">{{chat.timestamp | date: 'HH:mm'}}</span>
+          </div>
+        </div>        
       </div>
     </div>
+    <img src="prev_img" />
   </ion-content>  
   <div align-title="left" keyboard-attach class="bar bar-footer bar-stable has-tabs item-input-inset">
+    <button class="button button-clear button-icon button-positive icon ion-ios-upload-outline" ng-click="getImage()"></button>
     <label class="item-input-wrapper">
       <input
         ng-model="text.message"
@@ -33,7 +39,7 @@
       </button>
     </span>
     <span ng-if="!text.message || text.message.length === 0">
-      <button class="button button-clear button-icon button-positive icon ion-ios-camera-outline"></button>
+      <button class="button button-clear button-icon button-positive icon ion-ios-camera-outline" ng-click="getPhoto()"></button>
       <!--i class="buttons-seperator icon ion-android-more-vertical"></i>
       <button class="button button-clear button-icon button-positive icon ion-ios-mic-outline"></button-->
     </span>

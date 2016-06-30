@@ -56,7 +56,7 @@ angular.module('leth.services', [])
         var payload = msg;
         var message = {
           from: identity,
-          topics: ["test"],
+          topics: topics,
           payload: payload,
           ttl: 50,
           workToProve: 50
@@ -70,7 +70,7 @@ angular.module('leth.services', [])
            chats.push({
             identity: blockies.create({ seed: result.from}).toDataURL("image/jpeg"),
             timestamp: result.sent*1000,
-            message: result.payload,
+            message: result.payload, 
             from: result.from,
            });
            $scope.$broadcast("chatMessage", result);

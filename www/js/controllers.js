@@ -234,6 +234,7 @@ angular.module('leth.controllers', [])
       ionic.Platform.exitApp();
     };
 
+
     $scope.createWallet = function (seed, password, code) {   
       $ionicLoading.show();
       lightwallet.keystore.deriveKeyFromPassword(password, function (err, pwDerivedKey) {
@@ -631,7 +632,15 @@ angular.module('leth.controllers', [])
     Chat.listenMessage($scope);
 
     $scope.$on('chatMessage', function (e, r) {
-     $scope.scheduleSingleNotification(r.from,r.payload);
+     var from = r.from;
+     var msg = r.payload; 
+     if(r.payload.type=='leth'){
+      if(r.payload.text.length)
+        msg = r.payload.text;
+      if(r.payload.image.length)
+        msg = "sent image";
+     }
+     $scope.scheduleSingleNotification(from,msg);
      $scope.chats = Chat.find(); 
      $scope.scrollTo('chatScroll','bottom');
      if($ionicTabsDelegate.selectedIndex()!=1)
@@ -650,7 +659,16 @@ angular.module('leth.controllers', [])
        // Called when background mode has been activated
       cordova.plugins.backgroundMode.onactivate = function() {
         $scope.$on('chatMessage', function (e, r) {
-          $scope.scheduleSingleNotification(r.from,r.payload);
+          var from = r.from;
+          var msg = r.payload; 
+          if(r.payload.type=='leth'){
+          if(r.payload.text.length)
+            msg = r.payload.text;
+          if(r.payload.image.length)
+            msg = "sent image";
+          }
+          $scope.scheduleSingleNotification(from,msg);
+
           $scope.increaseBadge();
         });
       }
@@ -668,16 +686,8 @@ angular.module('leth.controllers', [])
         $cordovaLocalNotification.schedule({
             id: 1,
             //title: title,
-            text: text,
-            //every: 'minute',
+            text: text
           }).then(function (result) {
-             /*
-             $cordovaBadge.increase().then(function() {
-                console.log('count increased ');
-              }, function(err) {
-                console.log('increasing error ' + err);
-              });
-              */
             //console.log('Notification 1 triggered');
           });
       }, false); 

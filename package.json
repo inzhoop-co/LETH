@@ -73,7 +73,12 @@
     {
       "locator": "https://github.com/katzer/cordova-plugin-background-mode.git",
       "id": "cordova-plugin-background-mode"
-    }
+    },
+    {
+      "locator": "https://github.com/wymsee/cordova-imagePicker.git",
+      "id": "cordova-plugin-image-picker"
+    },
+    "cordova-plugin-camera"
   ],
   "cordovaPlatforms": [
     "android",
