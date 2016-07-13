@@ -21,10 +21,6 @@
       "locator": "https://github.com/wildabeast/BarcodeScanner.git",
       "id": "phonegap-plugin-barcodescanner"
     },
-    {
-      "locator": "https://github.com/katzer/cordova-plugin-email-composer.git",
-      "id": "cordova-plugin-email-composer"
-    },
     "cordova-plugin-device",
     "cordova-plugin-console",
     "cordova-plugin-splashscreen",
@@ -82,16 +78,6 @@
   ],
   "cordovaPlatforms": [
     "android",
-    "ios",
-    {
-      "platform": "android",
-      "version": "",
-      "locator": "android"
-    },
-    {
-      "platform": "ios",
-      "version": "",
-      "locator": "ios"
-    }
+    "ios"
   ]
 }
