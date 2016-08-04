@@ -1,4 +1,4 @@
-# LΞTH (alfa release)
+# LΞTH (prototype)
 The First mobile LigthWallet for Ξthereum
 
 # About
@@ -10,14 +10,21 @@ Every transaction could be signed directly with the smartphone and sent to an et
 
 With LETH you could:
 
-- Create a ligthwallet 
+- Create a HD ligthwallet 
 - Add an Ethereum wallet address
 - Set an Ethereum node address private/public
-- Send ETH
-- Receive ETH
+- Send/Receive ETH
+- Send/Receive COINS
 - List your transaction
-- Earn Wei on your wallet just watching some banner (*new)
-- ... more to be defined
+- Share Address via SMS or Email
+- Request payment
+- Send message or image to friends and community using SHH protocol
+- Send private crypted message to friends (in progress)
+- Backup wallet
+- Restore wallet
+- Protect access with TouchID and PIN code
+- Currency convert via Kraken API
+- Run DAppLeth (in progress)
 
 # References
 ```
