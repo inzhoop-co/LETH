@@ -6,7 +6,7 @@
     </div-->
   </ion-header-bar>
   <ion-content class="has-header" padding="'true'" >
-    <div class="text-center"><p style="font-style:italic">"Only entropy comes easy"</p>[Anton Čechov]</div>
+    <!--div class="text-center"><p style="font-style:italic">"Only entropy comes easy"</p>[Anton Čechov]</div-->
     <div class="list card">
       <div class="item">
         <i class="badge badge-balanced">- {{shakeCounter}}</i>
@@ -17,5 +17,14 @@
       </div>
         <button class="button button-clear button-positive " ng-click="goLogin('')">skip <i class="ion-ios-fastforward"></i></button>
     </div>
+    <div class="list card">
+      <span class="item item-input">
+        <textarea ng-model="restoreSeed"  rows="2" placeholder="insert backupped seed passphrase or scan it to restore wallet"></textarea>
+      
+      <button class="button button-clear icon ion-ios-camera" on-touch="scanSeed()"></button>
+      </span>
+      <button class="button button-clear button-positive " ng-click="restoreLogin(restoreSeed)">Restore from seed</button>
+    </div> 
+
   </ion-content>
 </ion-modal-view>

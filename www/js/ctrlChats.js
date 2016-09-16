@@ -15,17 +15,35 @@ angular.module('leth.controllers')
       if ($scope.text.message.length==0) {
         return;
       }
-      var msg = {type: 'leth', text: $scope.text.message, image: '' };
+      var msg = {type: 'leth', mode: 'plain', text: $scope.text.message, image: '' };
       Chat.sendMessage(msg);
       $scope.scrollTo('chatScroll','bottom');
       $scope.text.message="";
+    };
+
+    $scope.sendMessagePrivate = function(){
+      if ($scope.text.message.length==0) {
+        return;
+      }
+      var textMsg = $scope.text.message;
+      lightwallet.keystore.deriveKeyFromPassword('Password1', function (err, pwDerivedKey) {
+        textMsg = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,textMsg, local_keystore.getPubKeys(hdPath)[0],local_keystore.getPubKeys(hdPath),hdPath);
+        console.log(textMsg);
+
+        var msg = {type: 'leth', mode: 'encrypted', from: global_keystore.getAddresses()[0], text: textMsg, image: '' };
+        Chat.sendMessage(msg);
+        $scope.scrollTo('chatScroll','bottom');
+        $scope.text.message="";
+
+      });
+
     };
 
     $scope.sendPhoto = function(img){
       if (img==undefined) {
         return;
       }
-      var msg = {type: 'leth', text: '', image: img};
+      var msg = {type: 'leth', from: global_keystore.getAddresses()[0], text: '', image: img};
       Chat.sendMessage(msg);
       $scope.scrollTo('chatScroll','bottom');
       //$scope.text.message="";      

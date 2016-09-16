@@ -242,9 +242,18 @@ angular.module('leth.controllers', [])
         global_keystore.generateNewAddress(pwDerivedKey, 1);
         global_keystore.passwordProvider = customPasswordProvider;
 
+        //add keystore for encryption
+        local_keystore = new lightwallet.keystore(seed, pwDerivedKey,hdPath);
+        var info={curve: 'curve25519', purpose: 'asymEncrypt'};
+        local_keystore.addHdDerivationPath(hdPath,pwDerivedKey,info);
+        local_keystore.generateNewEncryptionKeys(pwDerivedKey, 1, hdPath);
+        local_keystore.setDefaultHdDerivationPath(hdPath);
+        local_keystore.passwordProvider = customPasswordProvider;
+
         AppService.setWeb3Provider(global_keystore);
 
         localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
+        localStorage.EncKeys = JSON.stringify({data: local_keystore.serialize()});
         localStorage.AppCode = JSON.stringify({code: code});
         localStorage.HasLogged = JSON.stringify(true);
         localStorage.Transactions = JSON.stringify({});
@@ -467,7 +476,15 @@ angular.module('leth.controllers', [])
       var extraEntropy = random.toString();
       $scope.randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
       //randomSeed = "occur appear stock great sport remain athlete remain return embody team jazz";
+      createLoginModal();
+    }
 
+    $scope.restoreLogin = function(seed){
+      closeEntropyModal();
+      // restore keystore from seed 
+      $scope.randomSeed = seed;
+      //randomSeed = "occur appear stock great sport remain athlete remain return embody team jazz";
+      console.log($scope.randomSeed);
       createLoginModal();
     }
 
@@ -575,11 +592,16 @@ angular.module('leth.controllers', [])
     
     if($rootScope.hasLogged ){
       var ls = JSON.parse(localStorage.AppKeys);
+      var ks = JSON.parse(localStorage.EncKeys);
       code = JSON.parse(localStorage.AppCode).code;
       $scope.transactions = JSON.parse(localStorage.Transactions);
 
       global_keystore = new lightwallet.keystore.deserialize(ls.data);
       global_keystore.passwordProvider = customPasswordProvider;
+
+      local_keystore = new lightwallet.keystore.deserialize(ks.data);
+      local_keystore.passwordProvider = customPasswordProvider;
+
       AppService.setWeb3Provider(global_keystore);
       $scope.qrcodeString = AppService.account();
 
@@ -631,7 +653,41 @@ angular.module('leth.controllers', [])
     //start listening message shh
     Chat.listenMessage($scope);
 
-    $scope.$on('chatMessage', function (e, r) {
+    $scope.$on('chatMessage', function (e, r) {     
+      //se encrypted allora è un DM
+      var from = r.from;
+      var msg = r.payload; 
+      if(r.payload.mode == 'encrypted'){
+        lightwallet.keystore.deriveKeyFromPassword('Password1', function (err, pwDerivedKey) {
+          msg = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,r.payload.text, local_keystore.getPubKeys(hdPath)[0],local_keystore.getPubKeys(hdPath)[0],hdPath);        
+
+          $scope.DMchats = Chat.find(); 
+          $scope.scrollTo('chatScroll','bottom');
+          if($ionicTabsDelegate.selectedIndex()!=1)
+            $scope.msgCounter += 1;
+          $scope.$digest(); 
+
+        });
+      } else {
+
+       if(r.payload.type=='leth'){
+        if(r.payload.text.length)
+          msg = r.payload.text;
+        if(r.payload.image.length)
+          msg = "sent image";
+       }
+
+       $scope.chats = Chat.find(); 
+       $scope.scrollTo('chatScroll','bottom');
+       if($ionicTabsDelegate.selectedIndex()!=1)
+         $scope.msgCounter += 1;
+       $scope.$digest(); 
+      }
+
+    });
+
+
+    $scope.$on('chatMessageOK', function (e, r) {
      var from = r.from;
      var msg = r.payload; 
      if(r.payload.type=='leth'){
@@ -646,6 +702,31 @@ angular.module('leth.controllers', [])
      if($ionicTabsDelegate.selectedIndex()!=1)
        $scope.msgCounter += 1;
      $scope.$digest(); 
+    });
+
+    $scope.$on('chatMessagePrivate', function (e, r) {
+     var from = r.from;
+     var msg = r.payload; 
+     if(r.payload.type=='leth'){
+      if(r.payload.text.length)
+        msg = r.payload.text;
+      if(r.payload.image.length)
+        msg = "sent image";
+
+      if(r.payload.mode == 'encrypted'){
+        lightwallet.keystore.deriveKeyFromPassword('Password1', function (err, pwDerivedKey) {
+          msg = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,r.payload.text, local_keystore.getPubKeys(hdPath)[0],local_keystore.getPubKeys(hdPath)[0],hdPath);        
+
+          $scope.DMchats = Chat.find(); 
+          $scope.scrollTo('chatScroll','bottom');
+          if($ionicTabsDelegate.selectedIndex()!=1)
+            $scope.msgCounter += 1;
+          $scope.$digest(); 
+
+        });
+      }
+
+     }
     });
 
     document.addEventListener('deviceready', function () {

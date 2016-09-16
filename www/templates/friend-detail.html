@@ -3,7 +3,7 @@
     <ion-nav-back-button>
     </ion-nav-back-button>
   </ion-nav-bar>
-    <ion-content class="has-header has-tabs scrollBg" >
+    <ion-content class="has-header has-tabs chat" delegate-handle="chatScroll" >
       <div class="list">
        <div class="item item-thumbnail-left button-left">
           <img class="rounded" ng-src="{{friend.icon}}" style="width: 64px; height: 64px"> 
@@ -13,6 +13,21 @@
          <a class="button button-clear button-positive" href="#/app/wallet/{{friend.addr}}">Send Coins <i class="icon ion-chevron-right"></i></a>
         </div>
       </div>
+      <div class="message-list">
+      <div ng-repeat="chat in DMchats | orderBy:'chat.timestamp'"
+        class="message-wrapper">
+        <div ng-class="chat.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
+            <img ng-src="{{chat.identity}}" ng-class="chat.from === myidentity ? 'image image-mine' : 'image image-other'"> 
+          <div class="message" ng-class="chat.from === myidentity ? 'message-mine' : 'message-other'">
+            <div class="message-text" ng-if="chat.message.type=='leth' && chat.message.text.length">{{chat.message.text}}</div>
+            <div class="message-text" ng-hide="chat.message.type=='leth'">{{chat.message}}</div>
+              <img src="{{chat.message.image}}" ng-if="chat.message.type=='leth' && chat.message.image.length"/>
+            <span class="message-timestamp">{{chat.timestamp | date: 'HH:mm'}}</span>
+          </div>
+        </div>     
+      </div>
+    </div>
+      <!--
       <div class="padding subdued">Transactions</div>
       <ion-scroll class="list">
         <ion-item collection-repeat="t in transactions | filter:{to:friend.addr}">
@@ -23,6 +38,27 @@
           <p>Date: {{t.time | date: "yyyy-MM-ddTHH:mm:ss"}}</p>
           <p>From: {{t.from}}</p>
         </ion-item>
-      <ion-scroll class="list">
+      </ion-scroll>
+      -->
     </ion-content>
+    <div align-title="left" keyboard-attach class="bar bar-footer bar-stable has-tabs item-input-inset">
+      <button class="button button-clear button-icon button-positive icon ion-ios-upload-outline" ng-click="getImage()"></button>
+      <label class="item-input-wrapper">
+        <input
+          ng-model="text.message"
+          on-return="sendMessagePrivate(friend.addr)"
+          dir="auto"
+          type="text"/>
+      </label>
+      <span ng-if="text.message.length > 0">
+        <button ng-click="sendMessagePrivate(friend.addr)" class="button button-clear button-positive">
+            <i class="icon ion-ios-paperplane"></i>
+        </button>
+      </span>
+      <span ng-if="!text.message || text.message.length === 0">
+        <button class="button button-clear button-icon button-positive icon ion-ios-camera-outline" ng-click="getPhoto()"></button>
+        <!--i class="buttons-seperator icon ion-android-more-vertical"></i>
+        <button class="button button-clear button-icon button-positive icon ion-ios-mic-outline"></button-->
+      </span>
+    </div>
 </ion-view>
