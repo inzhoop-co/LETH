@@ -20,7 +20,7 @@
     <ion-list>
       <ion-item class="item item-thumbnail-left item-icon-right"  ng-repeat="dapp in listApps | filter:{Network:nameNetwork}"
           type="item-text-wrap" ng-href="&#35;/app/dappleth-run/{{dapp.GUID}}">
-          <img src="{{dapp.Logo}}"/>
+          <img ng-src="{{dapp.Logo}}"/>
             <h2>{{dapp.Company}}</h2>
             <p>{{dapp.Description}}</p>
             <i class="icon ion-chevron-right icon-accessory" ng-hide="!flagApps"></i>

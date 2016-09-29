@@ -12,9 +12,10 @@
   <ion-list class="list">
     <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends | filter:search track by $index"
       type="item-text-wrap" href="#/app/friends/{{friend.addr}}">
-      <img src="{{friend.icon}}"/>
+      <img ng-src="{{friend.icon}}"/>
       <h2><b>{{friend.name}}</b></h2>
       <p>{{friend.addr}}</p>
+      <span class="badge badge-energized">{{friend.unread}}</span>      
       <i class="icon ion-chevron-right icon-accessory"></i>
       <ion-option-button class="button-assertive" ng-click="remove($index)">
           Delete

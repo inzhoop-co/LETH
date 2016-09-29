@@ -2,7 +2,7 @@ web3 = new Web3();
 hdPath = "m/44'/60'/0";
 //angular.element(document.querySelector('head')).append('<script src="js/CustomCtrl.js"></script>');
 
-var app = angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
+var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('$ionicLoadingConfig', {
     template: 'Loading...'
   })
@@ -21,8 +21,7 @@ var app = angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards
         localStorage.GeoOn="false";
       }
       if (typeof localStorage.NodeHost == 'undefined') {
-        localStorage.NodeHost = "http://wallet.inzhoop.com:8545";
-    
+        localStorage.NodeHost = "http://wallet.inzhoop.com:8546";
       }
       if (typeof localStorage.HostsList == 'undefined') {
         localStorage.HostsList=JSON.stringify([localStorage.NodeHost]);
@@ -58,12 +57,13 @@ var app = angular.module('leth', ['ionic', 'angularLoad','ionic.contrib.ui.cards
       }	  
 
       if (window.cordova && window.cordova.plugins.Keyboard) {
-        cordova.plugins.Keyboard.disableScroll(true);
+        cordova.plugins.Keyboard.disableScroll(true);        
       }
       if (window.StatusBar) {
         StatusBar.styleDefault();
       }
-
+      
+      
       $rootScope.$on('loading:show', function () {
         $ionicLoading.show({template: 'Loading...'})
       })

@@ -9,6 +9,8 @@ angular.module('leth.controllers')
     $scope.geo = { checked: (localStorage.GeoOn=="true") };
     $scope.baseCurrency = JSON.parse(localStorage.BaseCurrency);
 
+    
+
     $scope.setIndexHost = function(index){    
       localStorage.NodeHost = $scope.hostsList[index];
       AppService.setWeb3Provider(global_keystore);
@@ -359,7 +361,7 @@ angular.module('leth.controllers')
     var walletViaEmail = function(){
       //backup wallet to email 
       document.addEventListener("deviceready", function () {
-        var keystoreFilename = global_keystore.getAddresses()[0] + "_lethKeystore.json";
+        var keystoreFilename = AppService.account() + "_lethKeystore.json";
         var directorySave=cordova.file.dataDirectory;
         var directoryAttach=cordova.file.dataDirectory.replace('file://','');
         

@@ -2,10 +2,10 @@ angular.module('leth.controllers')
   .controller('AddressCtrl', function ($scope, AppService, $ionicPopup, $cordovaEmailComposer, $cordovaClipboard, $cordovaSms, $cordovaContacts) {
     $scope.size = 250;
     $scope.correctionLevel = 'H';
-    $scope.typeNumber = 6;
+    $scope.typeNumber = 12;
     $scope.inputMode = '';
     $scope.image = true;
-    $scope.qrcodeString = AppService.account();
+    $scope.qrcodeString = AppService.account() + "#" + AppService.idkey();
     
     $scope.listUnit = [
       {multiplier: "1.0e18", unitName: "Ether"},
@@ -15,15 +15,16 @@ angular.module('leth.controllers')
 
     $scope.onAmountChange = function(amount){
       if($scope.amountPayment == "")
-        $scope.qrcodeString = $scope.account;
+        $scope.qrcodeString = AppService.account() + "#" + AppService.idkey(); //$scope.account;
   
-      $scope.qrcodeString = $scope.account + '@' + amount
+      $scope.qrcodeString = AppService.account() + "#" + AppService.idkey() + '@' + amount;
     }
 
     $scope.showAddress = function () {
       var alertPopup = $ionicPopup.alert({
         title: 'Wallet Address',
         template: $scope.qrcodeString
+        //template: "<div class='item text-center'><qr text='" + $scope.qrUser + "' type-number='typeNumber' correction-level='correctionLevel' size='50' input-mode='inputMode' image='image'></qr></div>"
       });
 
       alertPopup.then(function(res) {

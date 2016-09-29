@@ -1,60 +1,47 @@
 angular.module('leth.controllers')  
-  .controller('ChatsCtrl', function ($scope, Friends, $ionicListDelegate, $ionicScrollDelegate, $cordovaImagePicker, $cordovaCamera, $timeout, Chat) {    
-
-    Chat.addTopic("leth");
+  .controller('ChatsCtrl', function ($scope, Friends, $ionicListDelegate, $ionicScrollDelegate, $cordovaImagePicker, $cordovaCamera, $timeout, Chat, AppService) {    
 
     $scope.$on('$ionicView.enter', function() {
-      $scope.myidentity = Chat.identity();
-      $scope.cancelAllNotifications();
+      $scope.myidentity = AppService.account();
+      $scope.topicsList = Chat.listTopics();
+
+      $scope.cancelNotifications();
       $scope.clearBadge();
       $scope.$digest(); 
-
     })
 
     $scope.sendMessage = function(){
       if ($scope.text.message.length==0) {
         return;
       }
-      var msg = {type: 'leth', mode: 'plain', text: $scope.text.message, image: '' };
+      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: null, text: $scope.text.message, image: '' };
+      $scope.text.message="";
       Chat.sendMessage(msg);
       $scope.scrollTo('chatScroll','bottom');
-      $scope.text.message="";
-    };
-
-    $scope.sendMessagePrivate = function(){
-      if ($scope.text.message.length==0) {
-        return;
-      }
-      var textMsg = $scope.text.message;
-      lightwallet.keystore.deriveKeyFromPassword('Password1', function (err, pwDerivedKey) {
-        textMsg = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,textMsg, local_keystore.getPubKeys(hdPath)[0],local_keystore.getPubKeys(hdPath),hdPath);
-        console.log(textMsg);
-
-        var msg = {type: 'leth', mode: 'encrypted', from: global_keystore.getAddresses()[0], text: textMsg, image: '' };
-        Chat.sendMessage(msg);
-        $scope.scrollTo('chatScroll','bottom');
-        $scope.text.message="";
-
-      });
-
     };
 
     $scope.sendPhoto = function(img){
       if (img==undefined) {
         return;
       }
-      var msg = {type: 'leth', from: global_keystore.getAddresses()[0], text: '', image: img};
+      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: null, text: '', image: img};
       Chat.sendMessage(msg);
       $scope.scrollTo('chatScroll','bottom');
       //$scope.text.message="";      
     };
 
-    $scope.addTopicFilter = function(){
-      if ($scope.topic.name.length==0) {
-        return;
-      }
-      Chat.addTopic($scope.topic.name);
-      $scope.topic.name="";
+    $scope.addTopicFilter = function(topic){
+      console.log("add topic " + topic.text);
+      Chat.addTopic(topic.text);
+      $scope.topicsList = Chat.listTopics();
+      setChatFilter();
+    };
+
+    $scope.removeTopicFilter = function(topic){
+      console.log("del topic " + topic.text);
+      Chat.removeTopic(topic.text);
+      $scope.topicsList = Chat.listTopics();
+      setChatFilter();
     };
   
     $scope.getPhoto = function(){
@@ -81,7 +68,7 @@ angular.module('leth.controllers')
         });
 
       }, false);
-    }
+    };
 
     $scope.getImage = function(){
       document.addEventListener("deviceready", function () {
@@ -110,7 +97,7 @@ angular.module('leth.controllers')
               console.log('error get img');
         });
       }, false);
-    }
+    };
 
   })
   .directive('input', input);

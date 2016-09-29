@@ -11,7 +11,8 @@ angular.module('leth.controllers', [])
         $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat(value * $scope.balance).toFixed(2) ;
       });
       $scope.account = AppService.account();
-      $scope.qrcodeString = $scope.account;
+      $scope.nick = AppService.idkey();
+      $scope.qrcodeString = $scope.account + "/" + $scope.nick ;
       $scope.getNetwork();
       $scope.friends = Friends.all();
       $scope.transactions = Transactions.all();
@@ -115,7 +116,9 @@ angular.module('leth.controllers', [])
     };
 
     $scope.isValidAddr = function(addr){
-      return web3.isAddress(addr);
+      if(!web3.isAddress(addr)) {return false};
+
+      return true;
     };
 
     $scope.scanTo = function () {
@@ -221,7 +224,8 @@ angular.module('leth.controllers', [])
        $cordovaBarcodeScanner
         .scan()
         .then(function (barcodeData) {
-          $scope.addr = '0x'+barcodeData.text;
+          $scope.addr = barcodeData.text.split('#')[0];
+          $scope.idkey = barcodeData.text.split('#')[1];
           console.log('Success! ' + barcodeData.text);
         }, function (error) {
           // An error occurred
@@ -237,18 +241,20 @@ angular.module('leth.controllers', [])
 
     $scope.createWallet = function (seed, password, code) {   
       $ionicLoading.show();
+      //add keystore for encryption
+      lightwallet.keystore.deriveKeyFromPassword(code, function (err, pw2DerivedKey) {
+        local_keystore = new lightwallet.keystore(seed, pw2DerivedKey,hdPath);
+        var info={curve: 'curve25519', purpose: 'asymEncrypt'};
+        local_keystore.addHdDerivationPath(hdPath,pw2DerivedKey,info);
+        local_keystore.generateNewEncryptionKeys(pw2DerivedKey, 1, hdPath);
+        local_keystore.setDefaultHdDerivationPath(hdPath);
+        local_keystore.passwordProvider = code; //customPasswordProvider;
+      });
+
       lightwallet.keystore.deriveKeyFromPassword(password, function (err, pwDerivedKey) {
         global_keystore = new lightwallet.keystore(seed, pwDerivedKey);
         global_keystore.generateNewAddress(pwDerivedKey, 1);
         global_keystore.passwordProvider = customPasswordProvider;
-
-        //add keystore for encryption
-        local_keystore = new lightwallet.keystore(seed, pwDerivedKey,hdPath);
-        var info={curve: 'curve25519', purpose: 'asymEncrypt'};
-        local_keystore.addHdDerivationPath(hdPath,pwDerivedKey,info);
-        local_keystore.generateNewEncryptionKeys(pwDerivedKey, 1, hdPath);
-        local_keystore.setDefaultHdDerivationPath(hdPath);
-        local_keystore.passwordProvider = customPasswordProvider;
 
         AppService.setWeb3Provider(global_keystore);
 
@@ -260,6 +266,9 @@ angular.module('leth.controllers', [])
         localStorage.Friends = JSON.stringify($scope.friends);
 
         $rootScope.hasLogged = true;
+
+        var msg = {type: 'leth', mode: 'plain', from: AppService.account(), text: 'new user added', image: '' };
+        Chat.sendMessage(msg);
 
         $state.go('app.dappleths');
 
@@ -300,7 +309,7 @@ angular.module('leth.controllers', [])
         return res.name;
     }
 
-    $scope.saveAddr = function(name,addr,comment){
+    $scope.saveAddr = function(name,addr,idkey,comment){
       var icon = blockies.create({ 
         seed: addr, 
         //color: '#ff9933', 
@@ -311,7 +320,7 @@ angular.module('leth.controllers', [])
       });
 
 
-      var friend = {"addr": addr, "comment": comment, "name": name, "icon":icon.toDataURL("image/jpeg")};
+      var friend = {"addr": addr, "idkey": idkey, "comment": comment, "name": name, "icon":icon.toDataURL("image/jpeg")};
       $scope.friends.push(friend);
       localStorage.Friends = JSON.stringify($scope.friends);
       saveAddressModal.remove();
@@ -613,6 +622,9 @@ angular.module('leth.controllers', [])
     ** CHATS section
     */
     $scope.msgCounter = 0;
+    $scope.DMCounter = 0;
+    $scope.DMchats = Chat.findDM(); 
+    $scope.chats = Chat.find(); 
 
     $scope.setBadge = function(value) {
       document.addEventListener("deviceready",function() {    
@@ -625,7 +637,7 @@ angular.module('leth.controllers', [])
     }
 
     $scope.increaseBadge = function() {
-      document.addEventListener("deviceready",function() {    
+      document.addEventListener("deviceready",function() {      
         $cordovaBadge.hasPermission().then(function(result) {
             $cordovaBadge.increase();
         }, function(error) {
@@ -635,7 +647,7 @@ angular.module('leth.controllers', [])
     }
 
     $scope.clearBadge = function() {
-      document.addEventListener("deviceready",function() {    
+      document.addEventListener("deviceready",function() { 
         $cordovaBadge.hasPermission().then(function(result) {
             $cordovaBadge.clear();
         }, function(error) {
@@ -643,125 +655,6 @@ angular.module('leth.controllers', [])
         });
       }, false);
     }
-
-    $scope.scrollTo = function(handle,where){
-      $ionicScrollDelegate.$getByHandle(handle).resize();
-      $timeout(function() {
-            $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
-      }, 100);
-    }
-    //start listening message shh
-    Chat.listenMessage($scope);
-
-    $scope.$on('chatMessage', function (e, r) {     
-      //se encrypted allora è un DM
-      var from = r.from;
-      var msg = r.payload; 
-      if(r.payload.mode == 'encrypted'){
-        lightwallet.keystore.deriveKeyFromPassword('Password1', function (err, pwDerivedKey) {
-          msg = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,r.payload.text, local_keystore.getPubKeys(hdPath)[0],local_keystore.getPubKeys(hdPath)[0],hdPath);        
-
-          $scope.DMchats = Chat.find(); 
-          $scope.scrollTo('chatScroll','bottom');
-          if($ionicTabsDelegate.selectedIndex()!=1)
-            $scope.msgCounter += 1;
-          $scope.$digest(); 
-
-        });
-      } else {
-
-       if(r.payload.type=='leth'){
-        if(r.payload.text.length)
-          msg = r.payload.text;
-        if(r.payload.image.length)
-          msg = "sent image";
-       }
-
-       $scope.chats = Chat.find(); 
-       $scope.scrollTo('chatScroll','bottom');
-       if($ionicTabsDelegate.selectedIndex()!=1)
-         $scope.msgCounter += 1;
-       $scope.$digest(); 
-      }
-
-    });
-
-
-    $scope.$on('chatMessageOK', function (e, r) {
-     var from = r.from;
-     var msg = r.payload; 
-     if(r.payload.type=='leth'){
-      if(r.payload.text.length)
-        msg = r.payload.text;
-      if(r.payload.image.length)
-        msg = "sent image";
-     }
-     //$scope.scheduleSingleNotification(from,msg);
-     $scope.chats = Chat.find(); 
-     $scope.scrollTo('chatScroll','bottom');
-     if($ionicTabsDelegate.selectedIndex()!=1)
-       $scope.msgCounter += 1;
-     $scope.$digest(); 
-    });
-
-    $scope.$on('chatMessagePrivate', function (e, r) {
-     var from = r.from;
-     var msg = r.payload; 
-     if(r.payload.type=='leth'){
-      if(r.payload.text.length)
-        msg = r.payload.text;
-      if(r.payload.image.length)
-        msg = "sent image";
-
-      if(r.payload.mode == 'encrypted'){
-        lightwallet.keystore.deriveKeyFromPassword('Password1', function (err, pwDerivedKey) {
-          msg = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,r.payload.text, local_keystore.getPubKeys(hdPath)[0],local_keystore.getPubKeys(hdPath)[0],hdPath);        
-
-          $scope.DMchats = Chat.find(); 
-          $scope.scrollTo('chatScroll','bottom');
-          if($ionicTabsDelegate.selectedIndex()!=1)
-            $scope.msgCounter += 1;
-          $scope.$digest(); 
-
-        });
-      }
-
-     }
-    });
-
-    document.addEventListener('deviceready', function () {
-      // Android customization
-      cordova.plugins.backgroundMode.setDefaults({ text:'Doing heavy tasks.'});
-      // Enable background mode
-      cordova.plugins.backgroundMode.enable();
-
-      console.log('device ready for background');
-      
-       // Called when background mode has been activated
-      cordova.plugins.backgroundMode.onactivate = function() {
-        $scope.$on('chatMessage', function (e, r) {
-          var from = r.from;
-          var msg = r.payload; 
-          if(r.payload.type=='leth'){
-          if(r.payload.text.length)
-            msg = r.payload.text;
-          if(r.payload.image.length)
-            msg = "sent image";
-          }
-          $scope.scheduleSingleNotification(from,msg);
-          if($ionicTabsDelegate.selectedIndex()!=1)
-            $scope.msgCounter += 1;
-          $scope.increaseBadge();
-        });
-      }
-
-      cordova.plugins.backgroundMode.ondeactivate = function() {
-        $scope.cancelAllNotifications();
-        $scope.clearBadge();
-      };
-
-    }, false);
-
 
     $scope.scheduleSingleNotification = function (title, text) {
       document.addEventListener("deviceready", function () {        
@@ -775,6 +668,87 @@ angular.module('leth.controllers', [])
       }, false); 
     };
 
+    $scope.scrollTo = function(handle,where){
+      $ionicScrollDelegate.$getByHandle(handle).resize();
+      $timeout(function() {
+            $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
+      }, 100);
+    }
+
+    window.setChatFilter = function(){
+      //stop listening shh
+      Chat.unlistenMessage();
+      //start listening message shh
+      Chat.listenMessage($scope);
+    }
+
+    setChatFilter();
+
+    $scope.$on('incomingMessage', function (e, r) {     
+      if(r.payload.text.length)
+        msg = r.payload.text;
+      if(r.payload.image.length)
+        msg = "sent image";
+      
+      if(r.payload.to && r.payload.to.indexOf(AppService.account())!=-1){
+        //$scope.DMchats = Chat.findDM(); 
+        if($ionicTabsDelegate.selectedIndex()!=2)
+          $scope.DMCounter += 1;
+      }//broadcast
+      else{
+        //$scope.chats = Chat.find(); 
+        if($ionicTabsDelegate.selectedIndex()!=1)
+          $scope.msgCounter += 1;
+      }
+
+      $scope.scrollTo('chatScroll','bottom');
+      $scope.$digest(); 
+    });
+
+
+    document.addEventListener('deviceready', function () {
+      // Android customization
+      cordova.plugins.backgroundMode.setDefaults({ text:'Doing heavy tasks.'});
+      // Enable background mode
+      cordova.plugins.backgroundMode.enable();
+
+      console.log('device ready for background');
+      
+       // Called when background mode has been activated
+      cordova.plugins.backgroundMode.onactivate = function() {
+          console.log('backgroundMode activated');
+
+          $scope.$on('incomingMessage', function (e, r) {
+
+            if(r.payload.text.length)
+              msg = r.payload.text;
+            if(r.payload.image.length)
+              msg = "sent image";
+            
+            if(r.payload.to && r.payload.to.indexOf(AppService.account())!=-1){
+                $scope.DMCounter += 1;
+            }//broadcast
+            else{
+                $scope.msgCounter += 1;
+            }
+
+            console.log('in backgroundMode:' + msg);
+    
+            $scope.scheduleSingleNotification(r.payload.from,msg);
+            $scope.increaseBadge();
+
+          });
+      }
+
+      cordova.plugins.backgroundMode.ondeactivate = function() {
+        console.log('backgroundMode deactivated');
+
+        $scope.cancelAllNotifications();
+        $scope.clearBadge();
+      };
+
+    }, false);
+
     $scope.cancelAllNotifications = function () {
       $scope.msgCounter = 0;
       document.addEventListener("deviceready", function () {        
@@ -783,6 +757,28 @@ angular.module('leth.controllers', [])
         });
       }, false); 
     };
+
+    $scope.cancelDMNotifications = function () {
+      $scope.DMCounter = 0;      
+      document.addEventListener("deviceready", function () {        
+        $cordovaLocalNotification.cancelAll().then(function (result) {
+              console.log('DM Notification Canceled');
+        });
+      }, false); 
+    };
+    /*
+    $scope.cancelNotifications = function () {
+      $scope.msgCounter = 0;     
+      document.addEventListener("deviceready", function () {        
+        $cordovaLocalNotification.cancelAll().then(function (result) {
+              console.log('Notification Canceled');
+        });
+      }, false); 
+    };
+
+
+    
+    */
 
     //clear notification and badge on click (todo: add on open)
     $rootScope.$on('$cordovaLocalNotification:click',

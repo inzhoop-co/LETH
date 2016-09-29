@@ -1,22 +1,23 @@
 <ion-view view-title="Chats">
-<ion-header-bar class="bar bar-subheader bar-stable item-input-inset" hide-on-scroll="true">
+  <!--ion-header-bar class="bar bar-subheader bar-stable item-input-inset" hide-on-scroll="true">
     <label class="item-input-wrapper">
       <i class="icon ion-ios-search placeholder-icon"></i>
-      <input type="search" placeholder="Topics" ng-model="topic.name">     
+      <input type="search" placeholder="Topics" ng-model="topic.name">
     </label>
     <button class="icon button-icon ion-ios-close-empty dark" ng-if="topic.name.length > 0" on-touch="topic.name=''"></button>
     <button class="icon button-icon ion-ios-eye positive" ng-click="addTopicFilter()"></button>  
-  </ion-header-bar>
+  </ion-header-bar-->
    <ion-content class="chat" delegate-handle="chatScroll">
+   <tags-input ng-model="topicsList" placeholder="Add a topic" on-tag-added="addTopicFilter($tag)" on-tag-removed="removeTopicFilter($tag)"></tags-input>
    <div class="message-list">
       <div ng-repeat="chat in chats | orderBy:'chat.timestamp'"
         class="message-wrapper">
-        <div ng-class="chat.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
-            <img ng-src="{{chat.identity}}" ng-class="chat.from === myidentity ? 'image image-mine' : 'image image-other'"> 
-          <div class="message" ng-class="chat.from === myidentity ? 'message-mine' : 'message-other'">
-            <div class="message-text" ng-if="chat.message.type=='leth' && chat.message.text.length">{{chat.message.text}}</div>
-            <div class="message-text" ng-hide="chat.message.type=='leth'">{{chat.message}}</div>
-              <img src="{{chat.message.image}}" ng-if="chat.message.type=='leth' && chat.message.image.length"/>
+        <div ng-class="chat.message.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
+            <img ng-src="{{chat.identity}}" ng-class="chat.message.from === myidentity ? 'image image-mine' : 'image image-other'"> 
+          <div class="message" ng-class="chat.message.from === myidentity ? 'message-mine' : 'message-other'">
+            <div class="message-text" ng-if="chat.message.text.length">{{chat.message.text}}</div>
+            <!--div class="message-text">{{chat.message}}</div-->
+            <img src="{{chat.message.image}}" ng-if="chat.message.image.length"/>
             <span class="message-timestamp">{{chat.timestamp | date: 'HH:mm'}}</span>
           </div>
         </div>     

@@ -51,10 +51,6 @@
       "locator": "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
       "id": "cordova-plugin-actionsheet"
     },
-    {
-      "locator": "https://github.com/shazron/KeychainPlugin.git",
-      "id": "cordova-plugin-ios-keychain"
-    },
     "cordova-plugin-device-motion",
     "cordova-plugin-geolocation",
     {

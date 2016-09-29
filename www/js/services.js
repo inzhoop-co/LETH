@@ -31,51 +31,181 @@ angular.module('leth.services', [])
       }
     };
   })
-  .factory('Chat', function ($rootScope, $http, $q) {
+  .factory('Chat', function ($rootScope, $http, $q, AppService, Friends) {
     var identity ="0x";
     var chats=[];
+    var chatsDM=[];
     var topics = ["leth"];
+    var filter =  null;
+    var _decryptMessage = function(result){
+        lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
+          result.payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.text, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
+          
+          return result;
+        });
+    };
     return{
       identity: function(){
-        if(!web3.shh.hasIdentity(identity))
+        if(!web3.shh.hasIdentity(identity)){
           identity = web3.shh.newIdentity();
+          //topics.push(identity);
+        }
         return identity;
       },
       find: function(){
         return chats;
       },
+      findDM: function(){
+        return chatsDM;
+      },
       addTopic: function(t){
         topics.push(t);
       },
       removeTopic: function(t){
-        topics.splice(topics.arrayOf(t),1);
+        topics.pop(t);
+        
       },
+      listTopics: function(){
+        var list = JSON.parse( JSON.stringify( topics ) );
+        list.pop("leth"); //base topic uneditable 
+        return list;
+      },      
       sendMessage: function (msg) {
-        if(!web3.shh.hasIdentity(identity))
-          identity = web3.shh.newIdentity();
         var payload = msg;
         var message = {
-          from:  identity,
+          from:  this.identity(),
           topics: topics,
           payload: payload,
           ttl: 100,
           workToProve: 100
         };
-        web3.shh.post(message);            
+        web3.shh.post(message); 
+
+        chats.push({
+          identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
+          timestamp: Date.now(),
+          message: payload, 
+          from: message.payload.from,
+          to: null,
+          read: false
+        });
       },
+      sendCryptedMessage: function (content,toAddr,toKey) {
+        var msg = {type: 'leth', mode: 'encrypted', from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: '' };
+        var idFrom = this.identity();
+        var payload = msg;
+        var message = {
+          from:  idFrom,
+          topics: topics,
+          payload: payload,
+          ttl: 100,
+          workToProve: 100
+        };
+
+        chatsDM.push({
+            identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
+            timestamp: Date.now(),
+            message: payload, 
+            from: payload.from,
+            to: payload.to,
+            read: false
+          });
+
+        lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
+          var crptMsg = angular.copy(message);
+
+          crptMsg.payload.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
+
+          web3.shh.post(crptMsg); 
+        });
+      },
+      encryptMessage: function (msg,toAddr,toKey) {
+        lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
+          textMsg = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,textMsg, local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
+
+          var msg = {type: 'leth', mode: 'encrypted', from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: textMsg, image: '' };
+
+          return msg;    
+        });
+        return false;
+      },
+      
       listenMessage: function($scope){
-        var filter =  web3.shh.filter({topics: [topics]});
+        filter =  web3.shh.filter({topics: [topics]});
         filter.watch(function (error, result) {
-          if (!error){
-           chats.push({
-            identity: blockies.create({ seed: result.from}).toDataURL("image/jpeg"),
-            timestamp: result.sent*1000,
-            message: result.payload, 
-            from: result.from,
-           });
-           $scope.$broadcast("chatMessage", result);
+          if(error){return;};
+          if(result.payload.from == AppService.account()){return;}
+          if(result.payload.mode == 'encrypted'){
+ 
+            lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
+              result.payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.text, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
+
+              chatsDM.push({
+                  identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
+                  timestamp: result.sent*1000,
+                  message: result.payload, 
+                  from: result.payload.from,
+                  to: result.payload.to,
+                  read: false
+                });
+
+                $scope.$broadcast("incomingMessage", result);              
+            });
+          }else{
+            if(result.payload.from != AppService.account()){
+              chats.push({
+                identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
+                timestamp: result.sent*1000,
+                message: result.payload, 
+                from: result.payload.to,
+                to: null,
+                read: false
+              });
+              
+              $scope.$broadcast("incomingMessage", result);
+            }//exclude self sent              
           }
         });
+      },
+      /*
+      listenMessageOK: function($scope){
+        filter =  web3.shh.filter({topics: [topics]});
+        filter.watch(function (error, result) {
+          if (!error){
+            if(result.payload.mode == 'encrypted'){
+              lightwallet.keystore.deriveKeyFromPassword('Password1', function (err, pwDerivedKey) {
+                result.payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.text, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
+
+                chatsDM.push({
+                  identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
+                  timestamp: result.sent*1000,
+                  message: result.payload, 
+                  from: result.payload.from,
+                  to: result.payload.to,
+                  read: false
+                });
+
+                $scope.$broadcast("incomingMessage", result);
+              })
+            }else{
+              if(result.payload.from != AppService.account()){
+                chats.push({
+                  identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
+                  timestamp: result.sent*1000,
+                  message: result.payload, 
+                  from: result.payload.to,
+                  to: null,
+                  read: false
+                });
+              }//exclude self sent              
+              $scope.$broadcast("incomingMessage", result);
+            }
+          }
+        });
+      },*/
+      unlistenMessage: function(){
+        if(filter!=null)
+          filter.stopWatching();
       }
     }
   })
@@ -134,29 +264,30 @@ angular.module('leth.services', [])
       account: function () {
         var result;
         try {
-          result = global_keystore.getAddresses()[0];
+          result = "0x" + global_keystore.getAddresses()[0];
         }catch(e) {
           result = undefined;
         }
         return result;
       },
+      idkey: function () {
+        var result;
+        try {
+          result = "0x" + local_keystore.getPubKeys(hdPath)[0];
+        }catch(e) {
+          result = undefined;
+        }
+        return result;
+      },
+
       balance: function () {
         var result;
         try {
-          result = (parseFloat(web3.eth.getBalance(global_keystore.getAddresses()[0])) / 1.0e18).toFixed(6);
+          result = (parseFloat(web3.eth.getBalance(this.account())) / 1.0e18).toFixed(6);
         }catch (e){
           result = undefined;
         }
         return result
-      },
-      addListners: function ($scope) {
-        /*
-         $scope.contract.MatchStarted().watch(function (error, result) {
-         $scope.$broadcast("matchStarted", result);
-         $scope.$broadcast("updateLottery");
-
-         });
-         */
       },
       transferCoin: function (contract, nameSend, from, to, amount ) {
           var fromAddr = '0x' + from;
@@ -183,7 +314,7 @@ angular.module('leth.services', [])
         var sesamoABI = [{"constant":false,"inputs":[{"name":"site","type":"address"},{"name":"sessionId","type":"string"}],"name":"login","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"site","type":"address"},{"name":"addr","type":"address"}],"name":"enable","outputs":[],"type":"function"},{"constant":true,"inputs":[{"name":"index","type":"uint256"}],"name":"getSite","outputs":[{"name":"u","type":"address"}],"type":"function"},{"constant":true,"inputs":[],"name":"getSitesCount","outputs":[{"name":"count","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"site","type":"address"}],"name":"removeSite","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"site","type":"address"}],"name":"reset","outputs":[],"type":"function"},{"constant":true,"inputs":[{"name":"site","type":"address"}],"name":"getUsersCount","outputs":[{"name":"count","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"site","type":"address"}],"name":"addSite","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"promoteOwner","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"site","type":"address"},{"name":"addr","type":"address"}],"name":"disable","outputs":[],"type":"function"},{"constant":true,"inputs":[{"name":"site","type":"address"},{"name":"index","type":"uint256"}],"name":"getUser","outputs":[{"name":"u","type":"address"}],"type":"function"},{"inputs":[{"name":"sesamoTokenAddr","type":"address"}],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"addr","type":"address"},{"indexed":false,"name":"sessionId","type":"string"}],"name":"AuthOK","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"addr","type":"address"},{"indexed":false,"name":"sessionId","type":"string"}],"name":"AuthKO","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"msg","type":"string"},{"indexed":false,"name":"value","type":"string"},{"indexed":false,"name":"addr","type":"address"}],"name":"Log","type":"event"}]
         var sesamoLogin = web3.eth.contract(sesamoABI).at(sesamoAdr);
         
-        var fromAddr = global_keystore.getAddresses()[0];
+        var fromAddr = this.account();
         var toAddr = address;
         var functionName = 'loginToSite';
         var args = JSON.parse('[]');
@@ -203,7 +334,7 @@ angular.module('leth.services', [])
         var contractABI = [ { "constant": false, "inputs": [ { "name": "device", "type": "address" }, { "name": "sessionId", "type": "string" } ], "name": "login", "outputs": [], "type": "function" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "device", "type": "address" }, { "indexed": false, "name": "sessionId", "type": "string" }, { "indexed": false, "name": "applicant", "type": "address" } ], "name": "AuthOK", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "device", "type": "address" }, { "indexed": false, "name": "sessionId", "type": "string" }, { "indexed": false, "name": "applicant", "type": "address" } ], "name": "AuthKO", "type": "event" } ];
         var contract = web3.eth.contract(contractABI).at(contractAdr);
         
-        var fromAddr = global_keystore.getAddresses()[0];
+        var fromAddr = this.account();
         var deviceAddr = address;
         var functionName = 'login';
         var args = JSON.parse('[]');
