@@ -75,7 +75,6 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
 
       $window.addEventListener('LaunchUrl', function(event) {
         // gets page name from url
-        //TODO: split '#'' discard second enckey
         var page =/.*:[/]{2}([^?]*)[?]?(.*)/.exec(event.detail.url)[1];
         // redirects to page specified in url
         $state.go('app.wallet', {addr: page});

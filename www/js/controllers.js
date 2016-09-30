@@ -327,7 +327,8 @@ angular.module('leth.controllers', [])
       var friend = {"addr": addr, "idkey": idkey, "comment": comment, "name": name, "icon":icon.toDataURL("image/jpeg")};
       $scope.friends.push(friend);
       localStorage.Friends = JSON.stringify($scope.friends);
-      closeSaveAddressModal(); //saveAddressModal.remove();
+      $scope.closeSaveAddressModal(); 
+      //saveAddressModal.remove();
     };
     
     console.log("status login: " + $rootScope.hasLogged)
