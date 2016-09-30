@@ -43,7 +43,7 @@
       -->
     </ion-content>
     <div align-title="left" keyboard-attach class="bar bar-footer bar-stable has-tabs item-input-inset">
-      <button class="button button-clear button-icon button-positive icon ion-ios-upload-outline" ng-click="getImage()"></button>
+      <button class="button button-clear button-icon button-positive icon ion-ios-upload-outline" ng-click="getImage(friend.addr,friend.idkey)"></button>
       <label class="item-input-wrapper">
         <input
           ng-model="text.message"
@@ -57,7 +57,7 @@
         </button>
       </span>
       <span ng-if="!text.message || text.message.length === 0">
-        <button class="button button-clear button-icon button-positive icon ion-ios-camera-outline" ng-click="getPhoto()"></button>
+        <button class="button button-clear button-icon button-positive icon ion-ios-camera-outline" ng-click="getPhoto(friend.addr,friend.idkey)"></button>
         <!--i class="buttons-seperator icon ion-android-more-vertical"></i>
         <button class="button button-clear button-icon button-positive icon ion-ios-mic-outline"></button-->
       </span>

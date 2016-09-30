@@ -45,17 +45,18 @@ angular.module('leth.controllers')
 
     };
 
-     $scope.sendPhoto = function(img){
+     $scope.sendPhoto = function(img,toAddr,toKey){
       if (img==undefined) {
         return;
       }
       var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: null, text: '', image: img};
-      Chat.sendMessage(msg);
-      $scope.scrollTo('chatScroll','bottom');
-      //$scope.text.message="";      
+      //Chat.sendMessage(msg);
+      Chat.sendCryptedPhoto(img,toAddr,toKey);
+
+      $scope.scrollTo('chatScroll','bottom');    
     };
 
-    $scope.getPhoto = function(){
+    $scope.getPhoto = function(addr,idkey){
       document.addEventListener("deviceready", function () {
         var options = {
           quality: 50,
@@ -72,7 +73,7 @@ angular.module('leth.controllers')
 
         $cordovaCamera.getPicture(options).then(function(imageData) {
           var photo = "data:image/jpeg;base64," + imageData;
-          $scope.sendPhoto(photo);
+          $scope.sendPhoto(photo,addr,idkey);
           console.log('photo :' + photo);
         }, function(err) {
           // error
@@ -81,7 +82,7 @@ angular.module('leth.controllers')
       }, false);
     };
 
-    $scope.getImage = function(){
+    $scope.getImage = function(addr,idkey){
       document.addEventListener("deviceready", function () {
         var optionsImg = {
           maximumImagesCount: 10,
@@ -96,7 +97,7 @@ angular.module('leth.controllers')
               fileEntry.file(function(file) {
                   var reader = new FileReader();
                   reader.onloadend = function(e) {
-                       $scope.sendPhoto(this.result);
+                       $scope.sendPhoto(this.result,addr,idkey);
                    };
                   reader.readAsDataURL(file);
                }); 

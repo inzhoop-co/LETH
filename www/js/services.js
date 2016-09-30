@@ -119,6 +119,35 @@ angular.module('leth.services', [])
           web3.shh.post(crptMsg); 
         });
       },
+      sendCryptedPhoto: function (content,toAddr,toKey) {
+        var msg = {type: 'leth', mode: 'encrypted', from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: '', image: content };
+        var idFrom = this.identity();
+        var payload = msg;
+        var message = {
+          from:  idFrom,
+          topics: topics,
+          payload: payload,
+          ttl: 100,
+          workToProve: 100
+        };
+
+        chatsDM.push({
+            identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
+            timestamp: Date.now(),
+            message: payload, 
+            from: payload.from,
+            to: payload.to,
+            read: false
+          });
+
+        lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
+          var crptMsg = angular.copy(message);
+
+          crptMsg.payload.image = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
+
+          web3.shh.post(crptMsg); 
+        });
+      },
       encryptMessage: function (msg,toAddr,toKey) {
         lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
           textMsg = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,textMsg, local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
