@@ -86,7 +86,7 @@ angular.module('leth.controllers', [])
     };
 
     var saveAddressModal;
-    var createSaveAddressModal = function(address) {
+    var createSaveAddressModal = function(address,key) {
       $ionicModal.fromTemplateUrl('templates/addFriend.html', {
         scope: $scope,
         animation: 'slide-in-up'
@@ -108,6 +108,9 @@ angular.module('leth.controllers', [])
 
         if(address != undefined) {
           $scope.addr = address;
+        }
+        if(key != undefined) {
+          $scope.idkey = key;
         }
 
         saveAddressModal = modal;
@@ -290,14 +293,15 @@ angular.module('leth.controllers', [])
       $scope.$broadcast('scroll.refreshComplete');
     };
 
-    $scope.addAddress = function(address) {
-      createSaveAddressModal(address);
+    $scope.addAddress = function(address,key) {
+      createSaveAddressModal(address,key);
     }
 
     $scope.closeSaveAddressModal = function() {
       $scope.name = "";
       $scope.addr = "";
       $scope.comment ="";
+      $scope.idkey = "";
       saveAddressModal.remove();
     }
 
@@ -323,7 +327,7 @@ angular.module('leth.controllers', [])
       var friend = {"addr": addr, "idkey": idkey, "comment": comment, "name": name, "icon":icon.toDataURL("image/jpeg")};
       $scope.friends.push(friend);
       localStorage.Friends = JSON.stringify($scope.friends);
-      saveAddressModal.remove();
+      closeSaveAddressModal(); //saveAddressModal.remove();
     };
     
     console.log("status login: " + $rootScope.hasLogged)
@@ -724,13 +728,6 @@ angular.module('leth.controllers', [])
               msg = r.payload.text;
             if(r.payload.image.length)
               msg = "sent image";
-            
-            if(r.payload.to && r.payload.to.indexOf(AppService.account())!=-1){
-                $scope.DMCounter += 1;
-            }//broadcast
-            else{
-                $scope.msgCounter += 1;
-            }
 
             console.log('in backgroundMode:' + msg);
     

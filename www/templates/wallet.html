@@ -37,7 +37,7 @@
           </button-->
           <div class="item item-input item-stacked-label item-icon-right">
             <span class="input-label">Address To <span class="" ng-show="isFriend(addrTo)">({{isFriend(addrTo)}})</span></span>
-            <i class="icon ion-ios-personadd-outline positive" ng-show="isFriend(addrTo)=='' && isValidAddr(addrTo)" ng-click="addAddress(addrTo)"></i>
+            <i class="icon ion-ios-personadd-outline positive" ng-show="isFriend(addrTo)=='' && isValidAddr(addrTo)" ng-click="addAddress(addrTo,addrKey)"></i>
             <input type="text" ng-model="addrTo" placeholder="Type address or use camera to scan" ng-required="true">
           </div>
           <div class="item item-input item-select">

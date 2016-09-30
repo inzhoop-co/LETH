@@ -50,9 +50,11 @@ angular.module('leth.controllers')
     $scope.fromAddressBook = false;
 
     if($stateParams.addr){
-      var addr = $stateParams.addr.split('@')[0];
+      var addr = $stateParams.addr.split('#')[0].split('@')[0];
+      var idkey = $stateParams.addr.split('#')[1].split('@')[0];
       var coins = $stateParams.addr.split('@')[1];
       $scope.addrTo = addr;
+      $scope.addrKey = idkey;
       $scope.amountTo = parseFloat(coins);
       $scope.fromAddressBook = true;
     }else { 
