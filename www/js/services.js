@@ -167,7 +167,10 @@ angular.module('leth.services', [])
           if(result.payload.mode == 'encrypted'){
  
             lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
-              result.payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.text, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
+              if(result.payload.text.length)
+                result.payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.text, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
+              if(result.payload.image.length)
+                result.payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.image, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
 
               chatsDM.push({
                   identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
