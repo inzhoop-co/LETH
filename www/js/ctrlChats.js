@@ -5,7 +5,7 @@ angular.module('leth.controllers')
       $scope.myidentity = AppService.account();
       $scope.topicsList = Chat.listTopics();
 
-      $scope.cancelNotifications();
+      $scope.cancelAllNotifications();
       $scope.clearBadge();
       $scope.$digest(); 
     })
