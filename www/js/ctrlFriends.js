@@ -1,5 +1,14 @@
 angular.module('leth.controllers')  
   .controller('FriendsCtrl', function ($scope, Friends, $ionicListDelegate,  AppService, Chat) {    
+    
+     $scope.$on('$ionicView.enter', function() {
+      $scope.loadFriends();
+
+      $scope.cancelDMNotifications();
+      $scope.clearBadge();
+      $scope.$digest(); 
+    })
+
     $scope.remove = function (friendIndex) {
       Friends.remove($scope.friends,friendIndex);
       localStorage.Friends = JSON.stringify($scope.friends);
@@ -19,6 +28,7 @@ angular.module('leth.controllers')
     $scope.$on('$ionicView.enter', function() {
       $scope.myidentity = AppService.account();
       $scope.cancelDMNotifications();
+      Friends.clearUnread($scope.friend.addr);
       $scope.clearBadge();
       $scope.$digest(); 
     })

@@ -20,6 +20,24 @@ angular.module('leth.services', [])
         addressbook.splice(index, 1);
         return addressbook;
       },
+      increaseUnread: function(address) {
+        var addressbook = JSON.parse(localStorage.Friends);
+        addressbook.filter(function (val) {
+          if(val.addr === address){
+            val.unread+=1;
+            localStorage.Friends = JSON.stringify(addressbook);
+          }
+        });
+      },      
+      clearUnread: function(address) {
+        var addressbook = JSON.parse(localStorage.Friends);
+        addressbook.filter(function (val) {
+          if(val.addr === address)
+            val.unread=0;
+
+          localStorage.Friends = JSON.stringify(addressbook);
+        });
+      },      
       balance: function (friend) {
         var result;
         try {

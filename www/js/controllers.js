@@ -1,5 +1,5 @@
 angular.module('leth.controllers', [])
-  .controller('AppCtrl', function ($interval, $scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, 
+  .controller('AppCtrl', function ($ionicHistory, $interval, $scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, 
                                   $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                   $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, 
                                   $q, PasswordPopup, Transactions, Friends, ExchangeService, $ionicLoading, 
@@ -14,12 +14,17 @@ angular.module('leth.controllers', [])
       $scope.nick = AppService.idkey();
       $scope.qrcodeString = $scope.account + "/" + $scope.nick ;
       $scope.getNetwork();
-      $scope.friends = Friends.all();
+      //$scope.friends = Friends.all();
+      $scope.loadFriends();
       $scope.transactions = Transactions.all();
       localStorage.Transactions = JSON.stringify($scope.transactions);
       loadApps(flagApps);
       $timeout(function() {$ionicLoading.hide();}, 1000);
     };
+
+    $scope.loadFriends = function(){
+      $scope.friends = Friends.all();
+    }
     
     window.customPasswordProvider = function (callback) {
       var pw;
@@ -324,7 +329,7 @@ angular.module('leth.controllers', [])
       });
 
 
-      var friend = {"addr": addr, "idkey": idkey, "comment": comment, "name": name, "icon":icon.toDataURL("image/jpeg")};
+      var friend = {"addr": addr, "idkey": idkey, "comment": comment, "name": name, "icon":icon.toDataURL("image/jpeg"), "unread":0};
       $scope.friends.push(friend);
       localStorage.Friends = JSON.stringify($scope.friends);
       $scope.closeSaveAddressModal(); 
@@ -698,6 +703,12 @@ angular.module('leth.controllers', [])
       if(r.payload.to && r.payload.to.indexOf(AppService.account())!=-1){
         if($ionicTabsDelegate.selectedIndex()!=2)
           $scope.DMCounter += 1;
+
+        if($ionicHistory.currentView().stateName != "app.single"){
+          Friends.increaseUnread(r.payload.from);
+          $scope.loadFriends();
+        }
+        
       }//broadcast
       else{
         if($ionicTabsDelegate.selectedIndex()!=1)
