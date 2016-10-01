@@ -40,7 +40,7 @@ angular.module('leth.controllers')
      // refresh();
       $scope.balance = AppService.balance();
       ExchangeService.getTicker($scope.xCoin, JSON.parse(localStorage.BaseCurrency).value).then(function(value){
-        $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat(value * $scope.balance).toFixed(2) ;
+        $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat(value * $scope.balance) ;
       });
     })
 
@@ -52,8 +52,7 @@ angular.module('leth.controllers')
     if($stateParams.addr){
       //xxxx#yyy
       var addresses = $stateParams.addr.split('#');
-      var coins = $stateParams.addr.split('@').length>1 ? $stateParams.addr.split('@')[1] : 0;
-
+      var coins = $stateParams.addr.split('@').length>1 ? $stateParams.addr.split('@')[1] : "";
       var addr = addresses[0];
       var idkey = addresses.length > 1 ? addresses[1].split('@')[0] : "";
       $scope.addrTo = addr;
@@ -125,7 +124,7 @@ angular.module('leth.controllers')
         }
       });
     };
-
+    
     $scope.checkAddress = function (address) {
       try {
         angular.forEach(this.friends, function(value, key) {
@@ -174,4 +173,8 @@ angular.module('leth.controllers')
         }
       })
     };
+
+    $scope.listTransaction = function(){
+      $state.go('app.transactions');
+    }
   })

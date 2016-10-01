@@ -116,7 +116,7 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
         }
       })
       .state('app.transactions', {
-        url: '/transactions',
+        url: '/transactions/:addr',
         views: {
           'menuContent': {
             templateUrl: 'templates/transactions.html',

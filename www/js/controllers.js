@@ -661,10 +661,10 @@ angular.module('leth.controllers', [])
       }, false);
     }
 
-    $scope.scheduleSingleNotification = function (title, text) {
+    $scope.scheduleSingleNotification = function (title, text, id) {
       document.addEventListener("deviceready", function () {        
         $cordovaLocalNotification.schedule({
-            id: 1,
+            id: id,
             //title: title,
             text: text
           }).then(function (result) {
@@ -696,12 +696,10 @@ angular.module('leth.controllers', [])
         msg = "sent image";
       
       if(r.payload.to && r.payload.to.indexOf(AppService.account())!=-1){
-        //$scope.DMchats = Chat.findDM(); 
         if($ionicTabsDelegate.selectedIndex()!=2)
           $scope.DMCounter += 1;
       }//broadcast
       else{
-        //$scope.chats = Chat.find(); 
         if($ionicTabsDelegate.selectedIndex()!=1)
           $scope.msgCounter += 1;
       }
@@ -732,7 +730,7 @@ angular.module('leth.controllers', [])
 
             console.log('in backgroundMode:' + msg);
     
-            $scope.scheduleSingleNotification(r.payload.from,msg);
+            $scope.scheduleSingleNotification(r.payload.from,msg,r.hash);
             $scope.increaseBadge();
 
           });
@@ -764,19 +762,6 @@ angular.module('leth.controllers', [])
         });
       }, false); 
     };
-    /*
-    $scope.cancelNotifications = function () {
-      $scope.msgCounter = 0;     
-      document.addEventListener("deviceready", function () {        
-        $cordovaLocalNotification.cancelAll().then(function (result) {
-              console.log('Notification Canceled');
-        });
-      }, false); 
-    };
-
-
-    
-    */
 
     //clear notification and badge on click (todo: add on open)
     $rootScope.$on('$cordovaLocalNotification:click',
@@ -787,6 +772,9 @@ angular.module('leth.controllers', [])
     );     
 
   }) //fine AppCtrl
-  .controller('TransactionCtrl', function ($scope) {
+  .controller('TransactionCtrl', function ($scope, $stateParams) {
+    if($stateParams.addr){
+      $scope.filterAddr =  $stateParams.addr; 
+    }
   })
   

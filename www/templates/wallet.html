@@ -21,7 +21,7 @@
       <ion-list class="list" can-swipe="true">
       <ion-item class="item item-avatar-left  item-icon-right item-avatar-right">
         <img ng-src="{{logoCoin}}" ng-click="refresh()">
-        <label id="{{idCoin}}"><b>{{symbolCoin}} {{balance}} </b><span class="subdued" ng-show="{{balanceExc}}">({{balanceExc}})</span></label>
+        <label id="{{idCoin}}"><b>{{balance | currency:symbolCoin:6}} </b><span class="subdued" ng-show="{{balanceExc}}">({{balanceExc}})</span></label>
         <p>
           <label >{{descCoin}}</labe>
         </p>
@@ -31,10 +31,6 @@
       </ion-item>
       </ion-list>
       <div class="item">
-        <!--form name="wallet"-->
-          <!--button ng-show="addrTo.length"  class="button button-light" ng-click="addAddress(addrTo)">
-            <i class="icon ion-person-add positive"></i>
-          </button-->
           <div class="item item-input item-stacked-label item-icon-right">
             <span class="input-label">Address To <span class="" ng-show="isFriend(addrTo)">({{isFriend(addrTo)}})</span></span>
             <i class="icon ion-ios-personadd-outline positive" ng-show="isFriend(addrTo)=='' && isValidAddr(addrTo)" ng-click="addAddress(addrTo,addrKey)"></i>
@@ -49,8 +45,18 @@
           <button ng-disabled="!unit || !amountTo>0 || !isValidAddr(addrTo)" class="button button-block button-energized"
                   ng-click="confirmSend(addrTo,amountTo,unit,idCoin)"><i class="icon ion-paper-airplane"></i> Send
           </button>
-        <!--form-->
+          <button ng-disabled="!transactions.length" ng-click="listTransaction()" class="button button-clear button-dark"><i class="icon ion-ios-list-outline"></i> Transactions</button>
       </div>    
     </div>
+    <!--ion-item collection-repeat="t in transactions ">
+      <h2 class="icon ion-ios-redo-outline assertive"> {{t.time | date: "yyyy-MM-dd HH:mm:ss"}}</h2>
+      <h3>{{t.id}} wei</h3>
+      <div ng-hide="isFriend(t.from)">From: {{t.from}}</div>
+      <div class="" ng-show="isFriend(t.from)">From: {{isFriend(t.from)}}</div>
+      <div ng-hide="isFriend(t.to)">To: {{t.to}}</div>
+      <div class="" ng-show="isFriend(t.to)">To: {{isFriend(t.to)}}</div>
+      <div>Amount: {{(t.value/ 1.0e18) | currency:"Ξ ":8}}</div>        
+      <ion-option-button class="button-info" ng-click="edit(item)">CheckStatus</ion-option-button>
+    </ion-item-->
   </ion-content>
 </ion-view>

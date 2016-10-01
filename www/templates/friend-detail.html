@@ -5,13 +5,14 @@
   </ion-nav-bar>
     <ion-content class="has-header has-tabs chat" delegate-handle="chatScroll" >
       <div class="list">
-       <div class="item item-thumbnail-left button-left">
-          <img class="rounded" ng-src="{{friend.icon}}" style="width: 64px; height: 64px"> 
+       <div class="item item-thumbnail-left">
+          <img class="rounded" ng-src="{{friend.icon}}"> 
           <!--h2>{{friend.name}}</h2-->
-          <p>{{friendBalance}} ETH</p>
           <p>{{friend.addr}}</p>
-          <p>{{friend.idkey}}</p>
-         <a class="button button-clear button-positive" href="#/app/wallet/{{friend.addr}}">Send Coins <i class="icon ion-chevron-right"></i></a>
+          <div>{{friendBalance | currency:"Ξ "}}</div>
+          <!--p>{{friend.idkey}}</p-->
+          <a class="button button-icon icon ion-ios-list-outline dark" ng-href="#/app/transactions/{{friend.addr}}"> List </a>
+          <a class="button button-icon icon ion-social-bitcoin-outline balanced" ng-href="#/app/wallet/{{friend.addr}}"> Pay</a>
         </div>
       </div>
       <div class="message-list">

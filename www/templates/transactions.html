@@ -1,21 +1,26 @@
 <ion-view view-title="Transactions">
+  <ion-nav-bar class="bar-stable bar-assertive">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+  </ion-nav-bar>
 <ion-header-bar align-title="left" class="bar-subheader">
     <label class="item-input label-inset">
       <i class="icon ion-search placeholder-icon"></i>
-      <input type="text" placeholder="Search" ng-model="search.$">
+      <input type="text" placeholder="Search" ng-model="search">
     </label>
   </ion-header-bar>
   <ion-content class="has-header has-subheader scrollBg">
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
     <ion-list can-swipe="true">
     <p ng-show="transactions.length == 0" align="center"><br/>No saved transaction</p>
-      <ion-item collection-repeat="t in transactions | filter:{id:sarch}">
-        <i class="icon ion-arrow-up-a assertive"></i>
-        <h2>{{t.id}} wei</h2>
-        <p>Value: {{t.value}}</p>
-        <p>To: {{t.to}}</p>
-        <p>Date: {{t.time | date: "yyyy-MM-ddTHH:mm:ss"}}</p>
-        <p>From: {{t.from}}</p>
+      <ion-item collection-repeat="t in transactions | filter:{to:search} | filter:{to:filterAddr} | orderBy:time:true">
+        <h2 class="icon ion-ios-redo-outline assertive"> {{t.time | date: "yyyy-MM-dd HH:mm:ss"}}</h2>
+        <h3>{{t.id}} wei</h3>
+        <div ng-hide="isFriend(t.from)">From: {{t.from}}</div>
+        <div class="" ng-show="isFriend(t.from)">From: {{isFriend(t.from)}}</div>
+        <div ng-hide="isFriend(t.to)">To: {{t.to}}</div>
+        <div class="" ng-show="isFriend(t.to)">To: {{isFriend(t.to)}}</div>
+        <div>Amount: {{(t.value/ 1.0e18) | currency:"Ξ ":8}}</div>        
         <ion-option-button class="button-info" ng-click="edit(item)">CheckStatus</ion-option-button>
       </ion-item>
     </ion-list>
