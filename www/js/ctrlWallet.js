@@ -1,7 +1,7 @@
 angular.module('leth.controllers')
   .controller('WalletCtrl', function ($scope, $stateParams, $ionicLoading, $ionicModal, $state, 
                                       $ionicPopup, $cordovaBarcodeScanner, $ionicActionSheet, 
-                                      $timeout, AppService, Transactions,ExchangeService) {
+                                      $timeout, AppService, Transactions,ExchangeService, Chat) {
     var TrueException = {};
     var FalseException = {};
 
@@ -94,7 +94,12 @@ angular.module('leth.controllers')
                 $state.go('app.transactions');
               });
               //save transaction
-              $scope.transactions = Transactions.save(fromAddr, toAddr, result[1], value, new Date().getTime());
+              var newT = {from: fromAddr, to: toAddr, id: result[1], value: value, time: new Date().getTime()};
+              $scope.transactions = Transactions.add(newT);
+              
+              Chat.sendNote(newT);
+              
+              //$scope.transactions = Transactions.save(fromAddr, toAddr, result[1], value, new Date().getTime());
               refresh();
             }
           },

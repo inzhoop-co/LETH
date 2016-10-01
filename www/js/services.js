@@ -166,6 +166,28 @@ angular.module('leth.services', [])
           web3.shh.post(crptMsg); 
         });
       },
+      sendNote: function (transaction) {
+        var note = {type: 'leth', mode: 'note', from: AppService.account(), to: [transaction.to,AppService.account()], text: (transaction.value / 1.0e18).toFixed(6)+ ' Ξ sent', image: '', attach: transaction };
+        
+        var payload = note;
+        var message = {
+          from:  this.identity(),
+          topics: topics,
+          payload: payload,
+          ttl: 100,
+          workToProve: 100
+        };
+        web3.shh.post(message); 
+
+        chatsDM.push({
+          identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
+          timestamp: Date.now(),
+          message: payload, 
+          from: message.payload.from,
+          to: null,
+          read: false
+        });
+      },      
       encryptMessage: function (msg,toAddr,toKey) {
         lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
           textMsg = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,textMsg, local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
@@ -176,7 +198,6 @@ angular.module('leth.services', [])
         });
         return false;
       },
-      
       listenMessage: function($scope){
         filter =  web3.shh.filter({topics: [topics]});
         filter.watch(function (error, result) {
@@ -201,7 +222,8 @@ angular.module('leth.services', [])
 
                 $scope.$broadcast("incomingMessage", result);              
             });
-          }else{
+          };
+          if(result.payload.mode == 'plain'){
             if(result.payload.from != AppService.account()){
               chats.push({
                 identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
@@ -214,45 +236,24 @@ angular.module('leth.services', [])
               
               $scope.$broadcast("incomingMessage", result);
             }//exclude self sent              
-          }
+          };
+          if(result.payload.mode == 'note'){
+            if(result.payload.from != AppService.account()){
+
+              chatsDM.push({
+                identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
+                timestamp: result.sent*1000,
+                message: result.payload, 
+                from: result.payload.to,
+                to: null,
+                read: false
+              });
+              
+              $scope.$broadcast("incomingMessage", result);
+            }//exclude self sent              
+          }          
         });
       },
-      /*
-      listenMessageOK: function($scope){
-        filter =  web3.shh.filter({topics: [topics]});
-        filter.watch(function (error, result) {
-          if (!error){
-            if(result.payload.mode == 'encrypted'){
-              lightwallet.keystore.deriveKeyFromPassword('Password1', function (err, pwDerivedKey) {
-                result.payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.text, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
-
-                chatsDM.push({
-                  identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-                  timestamp: result.sent*1000,
-                  message: result.payload, 
-                  from: result.payload.from,
-                  to: result.payload.to,
-                  read: false
-                });
-
-                $scope.$broadcast("incomingMessage", result);
-              })
-            }else{
-              if(result.payload.from != AppService.account()){
-                chats.push({
-                  identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-                  timestamp: result.sent*1000,
-                  message: result.payload, 
-                  from: result.payload.to,
-                  to: null,
-                  read: false
-                });
-              }//exclude self sent              
-              $scope.$broadcast("incomingMessage", result);
-            }
-          }
-        });
-      },*/
       unlistenMessage: function(){
         if(filter!=null)
           filter.stopWatching();
@@ -460,9 +461,8 @@ angular.module('leth.services', [])
       }
     }
   })
-  .factory('Transactions', function () {
+  .factory('Transactions', function (Chat) {
     var transactions;
-
     if (localStorage.Transactions != undefined) {
       transactions = JSON.parse(localStorage.Transactions);
     } else {
@@ -473,11 +473,17 @@ angular.module('leth.services', [])
       all: function () {
         return transactions;
       },
-      save: function (from, to, transaction, value, timestamp) {
+      add: function (t) {
+        transactions.push(t);
+      },
+/*      save: function (from, to, transaction, value, timestamp) {
         var newT = {from: from, to: to, id: transaction, value: value, time: timestamp};
-        transactions.push(newT);
+        this.add(newT);
+        //send via shh message
+        Chat.sendNote(newT);
         return transactions;
       }
+*/
     };
   })
   .factory('ExchangeService', function ($q, $http) {

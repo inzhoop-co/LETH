@@ -708,7 +708,10 @@ angular.module('leth.controllers', [])
           Friends.increaseUnread(r.payload.from);
           $scope.loadFriends();
         }
-        
+
+        if(r.payload.mode=="note"){
+          Transactions.add(r.payload.attach);
+        }
       }//broadcast
       else{
         if($ionicTabsDelegate.selectedIndex()!=1)
@@ -784,8 +787,16 @@ angular.module('leth.controllers', [])
 
   }) //fine AppCtrl
   .controller('TransactionCtrl', function ($scope, $stateParams) {
-    if($stateParams.addr){
-      $scope.filterAddr =  $stateParams.addr; 
-    }
+    if($stateParams.addr!=null)
+      $scope.filterAddr = $stateParams.addr;
+
+    $scope.iconIn = 'icon ion-ios-undo balanced';
+    $scope.iconOut = 'icon ion-ios-redo assertive';
   })
+  /*
+  .filter('filterAddr', function() {
+    return function(value,from,to) {
+      return (value.to == to || value.from == from);
+    }
+  })*/
   
