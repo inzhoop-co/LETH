@@ -13,8 +13,8 @@
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
     <ion-list can-swipe="true">
     <p ng-show="transactions.length == 0" align="center"><br/>No saved transaction</p>
-      <ion-item collection-repeat="t in transactions | filter:{to:search} | filter:{to:filterAddr} | orderBy:time:true">
-        <h2 class="{{iconOut}}"> {{t.time | date: "yyyy-MM-dd HH:mm:ss"}}</h2>
+      <ion-item collection-repeat="t in transactions | filter:{to:search} | filter:isFromTo | orderBy:time:true">
+        <h2 ng-class="{'icon ion-arrow-graph-down-left balanced':t.to==account, 'icon ion-arrow-graph-up-right assertive':t.from==account}"> {{t.time | date: "yyyy-MM-dd HH:mm:ss"}}</h2>
         <h3>{{t.id}} wei</h3>
         <div ng-hide="isFriend(t.from)">From: {{t.from}}</div>
         <div class="" ng-show="isFriend(t.from)">From: {{isFriend(t.from)}}</div>

@@ -314,8 +314,11 @@ angular.module('leth.controllers', [])
       var res = Friends.get(address);
       if(res==undefined)
         return "";
-      else
-        return res.name;
+      else{
+        if(res.addr == AppService.account())
+          return "me" ;          
+        return res.name ;
+      }
     }
 
     $scope.saveAddr = function(name,addr,idkey,comment){
@@ -787,16 +790,19 @@ angular.module('leth.controllers', [])
 
   }) //fine AppCtrl
   .controller('TransactionCtrl', function ($scope, $stateParams) {
-    if($stateParams.addr!=null)
-      $scope.filterAddr = $stateParams.addr;
-
-    $scope.iconIn = 'icon ion-ios-undo balanced';
-    $scope.iconOut = 'icon ion-ios-redo assertive';
-  })
-  /*
-  .filter('filterAddr', function() {
-    return function(value,from,to) {
-      return (value.to == to || value.from == from);
+    $scope.isFromTo = function(item) {
+        if($stateParams.addr!="")
+          return (item.to == $stateParams.addr || item.from == $stateParams.addr);
+        return item;
     }
-  })*/
-  
+
+  })
+/*  .filter('isFromTo', function() {
+    return function(items) {
+      
+      return items.filter(function(item){
+        return (item.to == $stateParams.addr || item.from == $stateParams.addr);
+      })
+    }
+  })
+*/  

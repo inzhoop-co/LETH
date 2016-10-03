@@ -475,6 +475,7 @@ angular.module('leth.services', [])
       },
       add: function (t) {
         transactions.push(t);
+        localStorage.Transactions = JSON.stringify(transactions);
       },
 /*      save: function (from, to, transaction, value, timestamp) {
         var newT = {from: from, to: to, id: transaction, value: value, time: timestamp};
