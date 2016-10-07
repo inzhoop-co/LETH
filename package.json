@@ -52,7 +52,6 @@
       "id": "cordova-plugin-actionsheet"
     },
     "cordova-plugin-device-motion",
-    "cordova-plugin-geolocation",
     {
       "locator": "https://github.com/katzer/cordova-plugin-local-notifications.git",
       "id": "de.appplant.cordova.plugin.local-notification"
@@ -70,7 +69,8 @@
       "locator": "https://github.com/wymsee/cordova-imagePicker.git",
       "id": "cordova-plugin-image-picker"
     },
-    "cordova-plugin-camera"
+    "cordova-plugin-camera",
+    "cordova-plugin-inappbrowser"
   ],
   "cordovaPlatforms": [
     "android",

@@ -21,7 +21,8 @@ angular.module('leth.controllers')
     }
 
   })
-  .controller('FriendCtrl', function ($scope, $stateParams, $cordovaImagePicker, $cordovaCamera, Friends, Chat, AppService) {
+  .controller('FriendCtrl', function ($scope, $stateParams, $timeout, $cordovaImagePicker, $ionicActionSheet, $cordovaCamera, 
+                                      Geolocation, Friends, Chat, AppService) {
     $scope.friend = Friends.get($stateParams.Friend);
     $scope.friendBalance = Friends.balance($scope.friend);
 
@@ -42,31 +43,31 @@ angular.module('leth.controllers')
       return false;
     }
 
-    $scope.sendDirectMessage = function(toAddr,toKey){
+    $scope.sendDirectMessage = function(){
       if ($scope.text.message.length==0) {
         return;
       }
       var textMsg = $scope.text.message;
       $scope.text.message="";
       
-      Chat.sendCryptedMessage(textMsg,toAddr,toKey);
+      Chat.sendCryptedMessage(textMsg,$scope.friend.addr,$scope.friend.idkey);
 
       $scope.scrollTo('chatScroll','bottom');
 
     };
 
-     $scope.sendPhoto = function(img,toAddr,toKey){
+     $scope.sendPhoto = function(img){
       if (img==undefined) {
         return;
       }
       var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: null, text: '', image: img};
       //Chat.sendMessage(msg);
-      Chat.sendCryptedPhoto(img,toAddr,toKey);
+      Chat.sendCryptedPhoto(img,$scope.friend.addr,$scope.friend.idkey);
 
       $scope.scrollTo('chatScroll','bottom');    
     };
 
-    $scope.getPhoto = function(addr,idkey){
+    $scope.getPhoto = function(){
       document.addEventListener("deviceready", function () {
         var options = {
           quality: 50,
@@ -83,7 +84,7 @@ angular.module('leth.controllers')
 
         $cordovaCamera.getPicture(options).then(function(imageData) {
           var photo = "data:image/jpeg;base64," + imageData;
-          $scope.sendPhoto(photo,addr,idkey);
+          $scope.sendPhoto(photo);
           console.log('photo :' + photo);
         }, function(err) {
           // error
@@ -92,7 +93,7 @@ angular.module('leth.controllers')
       }, false);
     };
 
-    $scope.getImage = function(addr,idkey){
+    $scope.getImage = function(){
       document.addEventListener("deviceready", function () {
         var optionsImg = {
           maximumImagesCount: 10,
@@ -107,7 +108,7 @@ angular.module('leth.controllers')
               fileEntry.file(function(file) {
                   var reader = new FileReader();
                   reader.onloadend = function(e) {
-                       $scope.sendPhoto(this.result,addr,idkey);
+                       $scope.sendPhoto(this.result);
                    };
                   reader.readAsDataURL(file);
                }); 
@@ -121,8 +122,37 @@ angular.module('leth.controllers')
       }, false);
     };
 
-    $scope.getUnread = function(addr){
-      //chatsDM.
-    }
-
+    $scope.shareItems = function(){
+      var hideSheet = $ionicActionSheet.show({
+        buttons: [
+          { text: 'Photo' },
+          { text: 'Position'  }
+        ],
+        //destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        destructiveText: 'Cancel',
+        titleText: 'Choose to share your...',
+        destructiveButtonClicked:  function() {
+          hideSheet();
+        },
+        buttonClicked: function(index) {
+          switch(index){
+            case 0:
+                $scope.getImage($scope.friend.addr,$scope.friend.idkey);
+                break;
+            case 1:
+                Geolocation.getCurrentPosition()
+                    .then(function (position) {
+                      Chat.sendPosition($scope.friend.addr,position);
+                    }, function (err) {
+                        // error
+                    });
+                break;
+          }
+          hideSheet();
+         $timeout(function() {
+           hideSheet();
+          }, 20000);
+        }
+      })      
+    };
   })

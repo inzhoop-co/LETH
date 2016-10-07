@@ -15,7 +15,7 @@ angular.module('leth.controllers')
 
     $scope.onAmountChange = function(amount){
       if($scope.amountPayment == "")
-        $scope.qrcodeString = AppService.account() + "#" + AppService.idkey(); //$scope.account;
+        $scope.qrcodeString = AppService.account() + "#" + AppService.idkey();
   
       $scope.qrcodeString = AppService.account() + "#" + AppService.idkey() + '@' + amount;
     }
@@ -24,7 +24,7 @@ angular.module('leth.controllers')
       var alertPopup = $ionicPopup.alert({
         title: 'Wallet Address',
         template: $scope.qrcodeString
-        //template: "<div class='item text-center'><qr text='" + $scope.qrUser + "' type-number='typeNumber' correction-level='correctionLevel' size='50' input-mode='inputMode' image='image'></qr></div>"
+        //template: "<div class='item text-center'><qr text='" + $scope.qrcodeString + "' type-number='typeNumber' correction-level='correctionLevel' size='300' input-mode='inputMode' image='image'></qr></div>"
       });
 
       alertPopup.then(function(res) {

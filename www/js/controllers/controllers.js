@@ -1,9 +1,9 @@
 angular.module('leth.controllers', [])
   .controller('AppCtrl', function ($ionicHistory, $interval, $scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, 
                                   $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
-                                  $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, AppService, 
-                                  $q, PasswordPopup, Transactions, Friends, ExchangeService, $ionicLoading, 
-                                  $ionicLoadingConfig,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,Chat) {
+                                  $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
+                                  $ionicLoadingConfig,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,
+                                  AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation) {
     window.refresh = function () {
       $ionicLoading.show();
       $scope.balance = AppService.balance();
@@ -14,7 +14,6 @@ angular.module('leth.controllers', [])
       $scope.nick = AppService.idkey();
       $scope.qrcodeString = $scope.account + "/" + $scope.nick ;
       $scope.getNetwork();
-      //$scope.friends = Friends.all();
       $scope.loadFriends();
       $scope.transactions = Transactions.all();
       localStorage.Transactions = JSON.stringify($scope.transactions);
@@ -145,6 +144,26 @@ angular.module('leth.controllers', [])
       }, false);          
     };
 
+    $scope.lat = "N/A";
+    $scope.long = "";
+
+    $scope.geoWatch;    
+    $scope.watchLocation = function(){
+      $scope.geoWatch = Geolocation.watchPosition();
+      $scope.geoWatch.then(
+        null,
+        function (err) {
+          console.log(err);
+          $scope.geoWatch.clearWatch();
+          $scope.watchLocation();
+        },
+        function (position) {
+          console.log(position);
+          $scope.lat  = position.coords.latitude;
+          $scope.long = position.coords.longitude;
+          Chat.sendPosition(position);
+        });
+    }
 
     $scope.scanSesamo = function () {
       document.addEventListener("deviceready", function () {      
@@ -312,13 +331,12 @@ angular.module('leth.controllers', [])
 
     $scope.isFriend = function(address) {
       var res = Friends.get(address);
+      if(address == AppService.account())
+          return "me" ; 
       if(res==undefined)
         return "";
-      else{
-        if(res.addr == AppService.account())
-          return "me" ;          
+      else         
         return res.name ;
-      }
     }
 
     $scope.saveAddr = function(name,addr,idkey,comment){
@@ -715,6 +733,9 @@ angular.module('leth.controllers', [])
         if(r.payload.mode=="note"){
           Transactions.add(r.payload.attach);
         }
+        if(r.payload.mode=="geolocation"){
+          console.log(r);
+        }        
       }//broadcast
       else{
         if($ionicTabsDelegate.selectedIndex()!=1)

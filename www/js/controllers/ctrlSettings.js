@@ -1,5 +1,6 @@
 angular.module('leth.controllers')
-  .controller('SettingsCtrl', function ($scope, $interval, $ionicModal, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, $http, $cordovaGeolocation, AppService, ExchangeService) {    
+  .controller('SettingsCtrl', function ($scope, $interval, $ionicModal, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, $http, 
+                                        Geolocation, AppService, ExchangeService, Chat) {    
     $scope.editableHost = false;
     $scope.addrHost = localStorage.NodeHost;
 	  $scope.hostsList= JSON.parse(localStorage.HostsList);
@@ -50,33 +51,36 @@ angular.module('leth.controllers')
       $scope.touch = { checked: value};
     };
 
-    var watchOptions = {
-      timeout : 5000,
-      enableHighAccuracy: false // may cause errors if true
-    };
-    $scope.lat = "...";
-    var geoWatch;
     var setGeo = function(value){
       localStorage.GeoOn = value? "true":"false";
       $scope.geo = { checked: value};
       if(value){
-        geoWatch = $cordovaGeolocation.watchPosition(watchOptions);
-        geoWatch.then(
-          null,
-          function(err) {
-            // error
-            console.log("err: " + err);
-          },
-          function(position) {
-            $scope.lat  = position.coords.latitude;
-            $scope.long = position.coords.longitude;
-            console.log($scope.lat + " - " + $scope.long);
-        });
+        $scope.watchLocation();
       }
-      else if(geoWatch!=undefined){
-        geoWatch.clearWatch();        
+      else if($scope.geoWatch!=undefined){
+        $scope.geoWatch.clearWatch();        
       }
     };
+
+    document.addEventListener("deviceready", function () {
+      console.log('ready');
+        Geolocation
+          .getCurrentPosition()
+            .then(function (position) {
+              console.log(position);
+              $scope.lat  = position.coords.latitude;
+              $scope.long = position.coords.longitude;
+              Chat.sendPosition(position);
+            }, function (err) {
+                // error
+            });
+        /**
+         * Watches for user position.
+         */
+        $timeout(function() {
+          $scope.watchLocation();
+        }, 10000);
+    });
 
     $scope.$watch('geo.checked',function(value) {
       setGeo(value);
@@ -174,14 +178,10 @@ angular.module('leth.controllers')
         if (res) {
             switch(val){
               case 0:
-                  console.log('importing static test wallet');
-                  importTestWallet();
-                  break;
-              case 1:
                   console.log('importing wallet from seed');
                   createSeedModal();
                   break;
-              case 2:
+              case 1:
                   console.log('importing wallet from Storage');
                   importStorageWallet();
                   break;
@@ -196,9 +196,8 @@ angular.module('leth.controllers')
     };
 
     $scope.chooseImportWallet = function () {
-		var hideSheet = $ionicActionSheet.show({
+		  var hideSheet = $ionicActionSheet.show({
         buttons: [
-          { text: 'Test Wallet' },
           { text: 'From Seed' },
           { text: 'From Storage'  }
         ],
@@ -215,7 +214,6 @@ angular.module('leth.controllers')
           }, 20000);
         }
       })
-		
     };
 
     $scope.importSeedWallet = function (form) {
@@ -231,27 +229,6 @@ angular.module('leth.controllers')
        alertPopup.then(function(res) {
          console.log('wallet imported from seed');
          refresh();
-       });
-    };
-
-    var importTestWallet = function () {
-      //import wallet from (static value)
-      var datal = '{"encSeed":{"encStr":"U2FsdGVkX1/TZRr3RnGrokz0r1v1nBj+qvkSwlYOSinCGUmgAr2bg6msxh3tmXu6NzojB+TVBBBvNBoshCn43qV+XEUi4dkdsIrWUdHNivgyeYRNf8K5daMGXiAapxIh","iv":"b2237015ccb4dd55fa0571f20ad64e66","salt":"d3651af74671aba2"},"encHdRootPriv":{"encStr":"U2FsdGVkX19AGRaRLGkRMY2RVdHrI0fV3B6lr2CTlOH7k+eUya9VSANXY886laiyhxCBFVPJJeuNph9iXfjaxz5a3ktxRJ/361WeJfCx1Y6FnrjEv0LE1V9dEleXA73RWJ7MZW8NbQcgGkVmCZ64L+qh9dM9EnbpI0S/BQ52EoA=","iv":"4e4f267e357c2f4b2d51d5183eefb507","salt":"401916912c691131"},"hdIndex":1,"encPrivKeys":{"d1324ada7e026211d0cacd90cae5777e340de948":{"key":"U2FsdGVkX1+t8Y7gU4jmt9L3WXAu1GwDQioNLTpEXknHZsGzOw1aFTlqzPUCkbpwbR+PTTR71XCtwSxzUD8Lhg==","iv":"3b2bec0c28997f8a9873538ff7407160","salt":"adf18ee05388e6b7"}},"addresses":["d1324ada7e026211d0cacd90cae5777e340de948"],"keyHash":"935cb8c28d033a9e9d9d25db59db954d55990944837c1b953f4d78196995080da5f4e140c4b4b42418ed895fd3de6863d59652bb3843bf0fdfd9c241c16c04c1","salt":{"words":[1505095718,1228820528,-1025278005,853733013],"sigBytes":16}}';
-
-      global_keystore = new lightwallet.keystore.deserialize(datal);
-      global_keystore.passwordProvider = customPasswordProvider;
-
-      AppService.setWeb3Provider(global_keystore);
-      localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
-      refresh();
-
-      var alertPopup = $ionicPopup.alert({
-         title: 'Import Wallet',
-         template: 'Wallet imported successfully!'
-       });
-
-       alertPopup.then(function(res) {
-         console.log('test wallet imported');
        });
     };
 
@@ -306,6 +283,7 @@ angular.module('leth.controllers')
     };
 
     var backupWalletToStorage = function(){
+      //TODO: backup of localstorage.Enckeys
       var keystoreFilename = "leth_keystore.json";
       document.addEventListener("deviceready", function () {
         $cordovaFile.writeFile(cordova.file.dataDirectory,

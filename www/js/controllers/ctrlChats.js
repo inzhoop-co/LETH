@@ -1,5 +1,6 @@
 angular.module('leth.controllers')  
-  .controller('ChatsCtrl', function ($scope, Friends, $ionicListDelegate, $ionicScrollDelegate, $cordovaImagePicker, $cordovaCamera, $timeout, Chat, AppService) {    
+  .controller('ChatsCtrl', function ($scope, $ionicListDelegate, $ionicActionSheet, $ionicScrollDelegate, $cordovaImagePicker, $cordovaCamera, $timeout, 
+                                      Friends, Chat, AppService, Geolocation) {    
 
     $scope.$on('$ionicView.enter', function() {
       $scope.myidentity = AppService.account();
@@ -10,11 +11,15 @@ angular.module('leth.controllers')
       $scope.$digest(); 
     })
 
+$scope.test = function(){
+  alert('a');
+}
+
     $scope.sendMessage = function(){
       if ($scope.text.message.length==0) {
         return;
       }
-      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: null, text: $scope.text.message, image: '' };
+      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: [null], text: $scope.text.message, image: '' };
       $scope.text.message="";
       Chat.sendMessage(msg);
       $scope.scrollTo('chatScroll','bottom');
@@ -24,7 +29,7 @@ angular.module('leth.controllers')
       if (img==undefined) {
         return;
       }
-      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: null, text: '', image: img};
+      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: [null], text: '', image: img};
       Chat.sendMessage(msg);
       $scope.scrollTo('chatScroll','bottom');
       //$scope.text.message="";      
@@ -97,6 +102,40 @@ angular.module('leth.controllers')
               console.log('error get img');
         });
       }, false);
+    };
+
+    $scope.shareItems = function(){
+      var hideSheet = $ionicActionSheet.show({
+        buttons: [
+          { text: 'Photo' },
+          { text: 'Position'  }
+        ],
+        //destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        destructiveText: 'Cancel',
+        titleText: 'Choose to share your...',
+        destructiveButtonClicked:  function() {
+          hideSheet();
+        },
+        buttonClicked: function(index) {
+          switch(index){
+            case 0:
+                $scope.getImage();
+                break;
+            case 1:
+                Geolocation.getCurrentPosition()
+                    .then(function (position) {
+                      Chat.sendPosition(null,position);
+                    }, function (err) {
+                        // error
+                    });
+                break;
+          }
+          hideSheet();
+         $timeout(function() {
+           hideSheet();
+          }, 20000);
+        }
+      })      
     };
 
   })

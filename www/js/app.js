@@ -1,6 +1,5 @@
 web3 = new Web3();
 hdPath = "m/44'/60'/0";
-//angular.element(document.querySelector('head')).append('<script src="js/CustomCtrl.js"></script>');
 
 var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('$ionicLoadingConfig', {
@@ -9,8 +8,7 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,
                 $lockScreen,$state,$window, $location) {
     $ionicPlatform.ready(function () {  
-      //global control and settings
-      
+      //global control and settings      
       if (typeof localStorage.PinOn == 'undefined') {
         localStorage.PinOn="false";
       }

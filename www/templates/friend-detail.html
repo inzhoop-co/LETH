@@ -29,36 +29,23 @@
         </div>     
       </div>
     </div>
-      <!--
-      <div class="padding subdued">Transactions</div>
-      <ion-scroll class="list">
-        <ion-item collection-repeat="t in transactions | filter:{to:friend.addr}">
-          <i class="icon ion-arrow-up-a assertive"></i>
-          <h2>{{t.id}}</h2>
-          <p>Value: {{t.value}} wei</p>
-          <p>To: {{t.to}}</p>
-          <p>Date: {{t.time | date: "yyyy-MM-ddTHH:mm:ss"}}</p>
-          <p>From: {{t.from}}</p>
-        </ion-item>
-      </ion-scroll>
-      -->
     </ion-content>
     <div align-title="left" keyboard-attach class="bar bar-footer bar-stable has-tabs item-input-inset">
-      <button class="button button-clear button-icon button-positive icon ion-ios-upload-outline" ng-click="getImage(friend.addr,friend.idkey)"></button>
+      <button class="button button-clear button-icon button-positive icon ion-ios-upload-outline" ng-click="shareItems()"></button>
       <label class="item-input-wrapper">
         <input
           ng-model="text.message"
-          on-return="sendDirectMessage(friend.addr,friend.idkey)"
+          on-return="sendDirectMessage()"
           dir="auto"
           type="text"/>
       </label>
       <span ng-if="text.message.length > 0">
-        <button ng-click="sendDirectMessage(friend.addr,friend.idkey)" class="button button-clear button-positive">
+        <button ng-click="sendDirectMessage()" class="button button-clear button-positive">
             <i class="icon ion-ios-paperplane"></i>
         </button>
       </span>
       <span ng-if="!text.message || text.message.length === 0">
-        <button class="button button-clear button-icon button-positive icon ion-ios-camera-outline" ng-click="getPhoto(friend.addr,friend.idkey)"></button>
+        <button class="button button-clear button-icon button-positive icon ion-ios-camera-outline" ng-click="getPhoto()"></button>
         <!--i class="buttons-seperator icon ion-android-more-vertical"></i>
         <button class="button button-clear button-icon button-positive icon ion-ios-mic-outline"></button-->
       </span>
