@@ -1,5 +1,5 @@
 angular.module('leth.services')
-.factory('Chat', function ($rootScope, $http, $q, AppService, Friends) {
+.factory('Chat', function ($rootScope, $http, $q, $sce, AppService, Friends) {
   var identity ="0x";
   var chats=[];
   var chatsDM=[];
@@ -34,7 +34,7 @@ angular.module('leth.services')
     },
     listTopics: function(){
       var list = JSON.parse( JSON.stringify( topics ) );
-      list.pop("leth"); //base topic uneditable 
+      //list.pop("leth"); //base topic uneditable 
       return list;
     },      
     sendMessage: function (msg) {
@@ -106,8 +106,8 @@ angular.module('leth.services')
         web3.shh.post(crptMsg); 
       });
     },
-    sendNote: function (transaction) {
-      var note = {type: 'leth', mode: 'note', from: AppService.account(), to: [transaction.to,AppService.account()], text: (transaction.value / 1.0e18).toFixed(6)+ ' Ξ sent', image: '', attach: transaction };
+    sendTransactionNote: function (transaction) {
+      var note = {type: 'leth', mode: 'transaction', from: AppService.account(), to: [transaction.to,AppService.account()], text: (transaction.value / 1.0e18).toFixed(6)+ ' Ξ sent', image: '', attach: transaction };
       
       var payload = note;
       var message = {
@@ -126,8 +126,7 @@ angular.module('leth.services')
       });
     },      
     sendPosition: function (toAddr, position) {
-      //var toAddr = "0xd1324ada7e026211d0cacd90cae5777e340de948";
-      var note = {type: 'leth', mode: 'geolocation', from: AppService.account(), to: [toAddr,AppService.account()], text: "Lat:" + position.coords.latitude + " Long: " + position.coords.longitude , image: '', attach: position };
+      var note = {type: 'leth', mode: 'geolocation', from: AppService.account(), to: [toAddr,AppService.account()], text: "Here I'am! " + '&#x1F4CD;' , image: '', attach:  position};
       
       var payload = note;
       var message = {

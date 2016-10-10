@@ -34,14 +34,23 @@ angular.module('leth.controllers')
     		$scope.listUnit = activeCoins[index-1].Units;
         $scope.unit = $scope.listUnit[0].multiplier;
       }
+      
+      updateExchange();
     }
 
+    var updateExchange = function(){
+      if($scope.xCoin){
+        ExchangeService.getTicker($scope.xCoin, JSON.parse(localStorage.BaseCurrency).value).then(function(value){
+          $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat((value * $scope.balance).toFixed(2)) ;
+        });
+      }else{
+        $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat((0).toFixed(2)) ;
+      }
+    };
+
     $scope.$on('$ionicView.enter', function() {
-     // refresh();
-      $scope.balance = AppService.balance();
-      ExchangeService.getTicker($scope.xCoin, JSON.parse(localStorage.BaseCurrency).value).then(function(value){
-        $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat((value * $scope.balance).toFixed(2)) ;
-      });
+      $scope.balance = AppService.balance();      
+      updateExchange();
     })
 
     //set Eth for default
@@ -96,10 +105,7 @@ angular.module('leth.controllers')
               //save transaction
               var newT = {from: fromAddr, to: toAddr, id: result[1], value: value, time: new Date().getTime()};
               $scope.transactions = Transactions.add(newT);
-              
-              Chat.sendNote(newT);
-              
-              //$scope.transactions = Transactions.save(fromAddr, toAddr, result[1], value, new Date().getTime());
+              Chat.sendTransactionNote(newT);              
               refresh();
             }
           },

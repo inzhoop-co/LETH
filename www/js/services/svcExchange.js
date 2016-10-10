@@ -18,6 +18,16 @@ angular.module('leth.services')
       });
       return q.promise;
     },
+    getCurrencies: function(){
+      var c= [
+          { name: 'EUR', symbol:'€', value: 'ZEUR'},
+          { name: 'USD', symbol:'$', value: 'ZUSD' },
+          { name: 'GBP', symbol:'£', value: 'ZGBP' },
+          { name: 'DAO', symbol:'Ð', value: 'XDAO' },
+          { name: 'BTC', symbol:'฿', value: 'XXBT' }
+          ];
+      return c;
+    },
     getTicker: function(coin, pair){
       var q = $q.defer();
       $http({

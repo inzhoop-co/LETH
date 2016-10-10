@@ -11,10 +11,6 @@ angular.module('leth.controllers')
       $scope.$digest(); 
     })
 
-$scope.test = function(){
-  alert('a');
-}
-
     $scope.sendMessage = function(){
       if ($scope.text.message.length==0) {
         return;
@@ -124,7 +120,8 @@ $scope.test = function(){
             case 1:
                 Geolocation.getCurrentPosition()
                     .then(function (position) {
-                      Chat.sendPosition(null,position);
+                      var coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+                      Chat.sendPosition(null,coords);
                     }, function (err) {
                         // error
                     });

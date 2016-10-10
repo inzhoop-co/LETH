@@ -2,7 +2,7 @@ angular.module('leth.controllers', [])
   .controller('AppCtrl', function ($ionicHistory, $interval, $scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, 
                                   $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                   $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
-                                  $ionicLoadingConfig,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,
+                                  $ionicLoadingConfig, $cordovaInAppBrowser,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,
                                   AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation) {
     window.refresh = function () {
       $ionicLoading.show();
@@ -354,7 +354,6 @@ angular.module('leth.controllers', [])
       $scope.friends.push(friend);
       localStorage.Friends = JSON.stringify($scope.friends);
       $scope.closeSaveAddressModal(); 
-      //saveAddressModal.remove();
     };
     
     console.log("status login: " + $rootScope.hasLogged)
@@ -425,8 +424,6 @@ angular.module('leth.controllers', [])
           measurementsChange.y = Math.abs($scope.previousMeasurements.y, result.y);
           measurementsChange.z = Math.abs($scope.previousMeasurements.z, result.z);
       }
-
-      //console.log(measurementsChange.x + measurementsChange.y + measurementsChange.z);
 
       if (measurementsChange.x + measurementsChange.y + measurementsChange.z > $scope.options.deviation) {
           stopWatching();  // Stop watching because it will start triggering like hell
@@ -515,7 +512,6 @@ angular.module('leth.controllers', [])
       // create keystore and account and store them
       var extraEntropy = random.toString();
       $scope.randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
-      //randomSeed = "occur appear stock great sport remain athlete remain return embody team jazz";
       createLoginModal();
     }
 
@@ -523,7 +519,6 @@ angular.module('leth.controllers', [])
       closeEntropyModal();
       // restore keystore from seed 
       $scope.randomSeed = seed;
-      //randomSeed = "occur appear stock great sport remain athlete remain return embody team jazz";
       console.log($scope.randomSeed);
       createLoginModal();
     }
@@ -621,13 +616,7 @@ angular.module('leth.controllers', [])
     $scope.transactions = Transactions.all();
     $scope.fromStore(true);
 
-    $scope.currencies = [
-          { name: 'EUR', symbol:'€', value: 'ZEUR'},
-          { name: 'USD', symbol:'$', value: 'ZUSD' },
-          { name: 'GBP', symbol:'£', value: 'ZGBP' },
-          { name: 'DAO', symbol:'Ð', value: 'XDAO' },
-          { name: 'BTC', symbol:'฿', value: 'XXBT' }
-    ];
+    $scope.currencies = ExchangeService.getCurrencies();
     $scope.xCoin = "XETH";
     
     if($rootScope.hasLogged ){
@@ -715,12 +704,40 @@ angular.module('leth.controllers', [])
 
     setChatFilter();
 
+    $scope.msgAction = function(msg){
+      if(msg.mode=="geolocation" && msg.attach){
+        var pinUrl = "https://www.google.com/maps/place/" + msg.attach.latitude + "," + msg.attach.longitude
+      
+        var options = {
+          location: 'yes',
+          clearcache: 'yes',
+          toolbar: 'yes'
+        };
+
+        document.addEventListener("deviceready", function () {
+          $cordovaInAppBrowser.open(pinUrl, '_system', options)
+            .then(function(event) {
+              // success
+            })
+            .catch(function(event) {
+              // error
+            });
+            //$cordovaInAppBrowser.close();
+        }, false);
+      }
+    }
+
     $scope.$on('incomingMessage', function (e, r) {     
       if(r.payload.text.length)
         msg = r.payload.text;
       if(r.payload.image.length)
         msg = "sent image";
-      
+
+      if(r.payload.mode=="geolocation"){
+        console.log(r.payload.attach);
+      } 
+
+      //if direct to me
       if(r.payload.to && r.payload.to.indexOf(AppService.account())!=-1){
         if($ionicTabsDelegate.selectedIndex()!=2)
           $scope.DMCounter += 1;
@@ -730,17 +747,16 @@ angular.module('leth.controllers', [])
           $scope.loadFriends();
         }
 
-        if(r.payload.mode=="note"){
+        if(r.payload.mode=="transaction"){
           Transactions.add(r.payload.attach);
         }
-        if(r.payload.mode=="geolocation"){
-          console.log(r);
-        }        
+       
       }//broadcast
       else{
         if($ionicTabsDelegate.selectedIndex()!=1)
           $scope.msgCounter += 1;
       }
+
 
       $scope.scrollTo('chatScroll','bottom');
       $scope.$digest(); 
@@ -818,12 +834,3 @@ angular.module('leth.controllers', [])
     }
 
   })
-/*  .filter('isFromTo', function() {
-    return function(items) {
-      
-      return items.filter(function(item){
-        return (item.to == $stateParams.addr || item.from == $stateParams.addr);
-      })
-    }
-  })
-*/  

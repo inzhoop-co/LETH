@@ -75,8 +75,10 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
         // gets page name from url
         var page =/.*:[/]{2}([^?]*)[?]?(.*)/.exec(event.detail.url)[1];
         // redirects to page specified in url
-        $state.go('app.wallet', {addr: page});
-      });
+        if(event.detail.url.split(':')[0] == "ethereum")
+          $state.go('app.wallet', {addr: page});
+      }); 
+
     });
   })
   .config(function ($stateProvider, $urlRouterProvider) {

@@ -19,9 +19,9 @@
       <div ng-repeat="chat in DMchats | filter:isFromTo | orderBy:'chat.timestamp'"
         class="message-wrapper">
         <div ng-class="chat.message.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
-            <img ng-src="{{chat.identity}}" ng-class="chat.message.from === myidentity ? 'image image-mine' : 'image image-other'"> 
-          <div class="message" ng-class="chat.message.from === myidentity ? 'message-mine' : 'message-other'">
-            <div class="message-text" ng-if="chat.message.text.length">{{chat.message.text}}</div>
+            <img ng-src="{{chat.identity}}" ng-class="chat.message.from === myidentity ? 'image image-mine' : 'image image-other'" > 
+          <div class="message" ng-class="chat.message.from === myidentity ? 'message-mine' : 'message-other'" on-hold="msgAction(chat.message)">
+            <div class="message-text" ng-if="chat.message.text.length" ng-bind-html="chat.message.text">xxx</div>
             <!--div class="message-text" ng-hide="chat.message.type=='leth'">{{chat.message}}</div-->
             <img ng-src="{{chat.message.image}}" ng-if="chat.message.image.length"/>
             <span class="message-timestamp">{{chat.timestamp | date: 'HH:mm'}}</span>

@@ -2,7 +2,6 @@
 	"dappleths":[
 		{
 			"GUID" : "P01",
-			"TimeStamp": "12345",
 			"Name" : "HelloInzhoop",
 			"Network" : "Private",
 			"Company" : "Inzhoop",
@@ -10,7 +9,7 @@
 			"ABI" : [ { "constant": true, "inputs": [], "name": "name", "outputs": [ { "name": "", "type": "string", "value": "ZhoopCoin", "displayName": "" } ], "type": "function", "displayName": "name" }, { "constant": true, "inputs": [], "name": "totalSupply", "outputs": [ { "name": "", "type": "uint256", "value": "19000000", "displayName": "" } ], "type": "function", "displayName": "total Supply" }, { "constant": false, "inputs": [ { "name": "_from", "type": "address", "index": 0, "typeShort": "address", "bits": "", "displayName": "_from", "template": "elements_input_address" }, { "name": "_to", "type": "address", "index": 1, "typeShort": "address", "bits": "", "displayName": "_to", "template": "elements_input_address" }, { "name": "_value", "type": "uint256", "index": 2, "typeShort": "uint", "bits": "256", "displayName": "_value", "template": "elements_input_uint" } ], "name": "transferFrom", "outputs": [ { "name": "success", "type": "bool" } ], "type": "function", "displayName": "transfer From" }, { "constant": true, "inputs": [], "name": "decimals", "outputs": [ { "name": "", "type": "uint8", "value": "2", "displayName": "" } ], "type": "function", "displayName": "decimals" }, { "constant": true, "inputs": [], "name": "version", "outputs": [ { "name": "", "type": "string", "value": "1.0", "displayName": "" } ], "type": "function", "displayName": "version" }, { "constant": true, "inputs": [ { "name": "", "type": "address", "index": 0, "typeShort": "address", "bits": "", "displayName": "", "template": "elements_input_address" } ], "name": "balanceOf", "outputs": [ { "name": "", "type": "uint256", "value": "0", "displayName": "" } ], "type": "function", "displayName": "balance Of" }, { "constant": true, "inputs": [], "name": "symbol", "outputs": [ { "name": "", "type": "string", "value": "₴", "displayName": "" } ], "type": "function", "displayName": "symbol" }, { "constant": false, "inputs": [ { "name": "_to", "type": "address", "index": 0, "typeShort": "address", "bits": "", "displayName": "_to", "template": "elements_input_address" }, { "name": "_value", "type": "uint256", "index": 1, "typeShort": "uint", "bits": "256", "displayName": "_value", "template": "elements_input_uint" } ], "name": "transfer", "outputs": [], "type": "function", "displayName": "transfer" }, { "constant": false, "inputs": [ { "name": "_spender", "type": "address", "index": 0, "typeShort": "address", "bits": "", "displayName": "_spender", "template": "elements_input_address" }, { "name": "_value", "type": "uint256", "index": 1, "typeShort": "uint", "bits": "256", "displayName": "_value", "template": "elements_input_uint" }, { "name": "_extraData", "type": "bytes", "index": 2, "typeShort": "bytes", "bits": "", "displayName": "_extra Data", "template": "elements_input_bytes" } ], "name": "approveAndCall", "outputs": [ { "name": "success", "type": "bool" } ], "type": "function", "displayName": "approve And Call" }, { "constant": true, "inputs": [ { "name": "", "type": "address", "index": 0, "typeShort": "address", "bits": "", "displayName": "", "template": "elements_input_address" }, { "name": "", "type": "address", "index": 1, "typeShort": "address", "bits": "", "displayName": "", "template": "elements_input_address" } ], "name": "spentAllowance", "outputs": [ { "name": "", "type": "uint256", "value": "0", "displayName": "" } ], "type": "function", "displayName": "spent Allowance" }, { "constant": true, "inputs": [ { "name": "", "type": "address", "index": 0, "typeShort": "address", "bits": "", "displayName": "", "template": "elements_input_address" }, { "name": "", "type": "address", "index": 1, "typeShort": "address", "bits": "", "displayName": "", "template": "elements_input_address" } ], "name": "allowance", "outputs": [ { "name": "", "type": "uint256", "value": "0", "displayName": "" } ], "type": "function", "displayName": "allowance" }, { "inputs": [ { "name": "initialSupply", "type": "uint256", "index": 0, "typeShort": "uint", "bits": "256", "displayName": "initial Supply", "template": "elements_input_uint", "value": "19000000" }, { "name": "tokenName", "type": "string", "index": 1, "typeShort": "string", "bits": "", "displayName": "token Name", "template": "elements_input_string", "value": "ZhoopCoin" }, { "name": "decimalUnits", "type": "uint8", "index": 2, "typeShort": "uint", "bits": "8", "displayName": "decimal Units", "template": "elements_input_uint", "value": "2" }, { "name": "tokenSymbol", "type": "string", "index": 3, "typeShort": "string", "bits": "", "displayName": "token Symbol", "template": "elements_input_string", "value": "₴" }, { "name": "versionOfTheCode", "type": "string", "index": 4, "typeShort": "string", "bits": "", "displayName": "version Of The Code", "template": "elements_input_string", "value": "1.0" } ], "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "from", "type": "address" }, { "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" } ], "name": "Transfer", "type": "event" } ],
 			"Logo" : "http://www.inzhoop.com/dappleths/dapp_1/logo.png",
 			"Description" : "Hello to the Ethereum world",
-			"InstallUrl" : "http://www.inzhoop.com/dappleths/dapp_1/app.html",
+			"InstallUrl" : "http://www.inzhoop.com/dappleths/dapp_1/index.html",
 			"TemplateUrl" : "http://www.inzhoop.com/dappleths/dapp_1/index.html",
 			"ScriptUrl" : "http://www.inzhoop.com/dappleths/dapp_1/index.js"
 		},
@@ -91,6 +90,32 @@
 			"InstallUrl" : "http://www.inzhoop.com/dappleths/dapp_6/index.html",
 			"TemplateUrl" : "http://www.inzhoop.com/dappleths/dapp_6/index.html",
 			"ScriptUrl" : "http://www.inzhoop.com/dappleths/dapp_6/index.js"
+		},
+		{
+			"GUID" : "T07",
+			"Name" : "HelloInzhoop",
+			"Network" : "Mainet",
+			"Company" : "Inzhoop",
+			"Address" : "0xf45a8e4161007754ff0b7a85eac47ea857590836",
+			"ABI" : [{"constant":false,"inputs":[],"name":"kill","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"greet","outputs":[{"name":"","type":"string"}],"type":"function"},{"inputs":[{"name":"_greeting","type":"string"}],"type":"constructor"}],
+			"Logo" : "http://www.inzhoop.com/dappleths/dapp_1/logo.png",
+			"Description" : "Hello to the Ethereum world",
+			"InstallUrl" : "http://www.inzhoop.com/dappleths/dapp_7/index.html",
+			"TemplateUrl" : "http://www.inzhoop.com/dappleths/dapp_7/index.html",
+			"ScriptUrl" : "http://www.inzhoop.com/dappleths/dapp_7/index.js"
+		},
+		{
+			"GUID" : "T08",			
+			"Name" : "CoffeeMachine",
+			"Network" : "Morden",
+			"Company" : "Inzhoop",
+			"Address" : "0xecdfc21f6394d67713fae31f448304ce5153bda0",
+			"ABI" : [{ "constant": true, "inputs": [], "name": "getMinBal", "outputs": [{ "name": "bal", "type": "uint256" }], "type": "function" }, { "constant": true, "inputs": [], "name": "getState", "outputs": [{ "name": "r", "type": "uint256" }], "type": "function" }, { "constant": true, "inputs": [], "name": "getEnabledCount", "outputs": [{ "name": "r", "type": "uint256" }], "type": "function" }, { "constant": false, "inputs": [], "name": "close", "outputs": [], "type": "function" }, { "constant": true, "inputs": [{ "name": "addr", "type": "address" }], "name": "getOpCount", "outputs": [{ "name": "count", "type": "uint256" }], "type": "function" }, { "constant": true, "inputs": [], "name": "getNumMaxOp", "outputs": [{ "name": "maxOp", "type": "uint256" }], "type": "function" }, { "constant": false, "inputs": [], "name": "registerMe", "outputs": [], "type": "function" }, { "constant": true, "inputs": [], "name": "getRegCost", "outputs": [{ "name": "cost", "type": "uint256" }], "type": "function" }, { "constant": false, "inputs": [{ "name": "addr", "type": "address" }], "name": "registerAddr", "outputs": [], "type": "function" }, { "constant": false, "inputs": [], "name": "reset", "outputs": [], "type": "function" }, { "constant": true, "inputs": [{ "name": "addr", "type": "address" }], "name": "itsEnabled", "outputs": [{ "name": "enabledV", "type": "bool" }], "type": "function" }, { "constant": false, "inputs": [{ "name": "mimBal", "type": "uint256" }, { "name": "regCost", "type": "uint256" }, { "name": "numOp", "type": "uint256" }], "name": "config", "outputs": [], "type": "function" }, { "constant": false, "inputs": [], "name": "open", "outputs": [], "type": "function" }, { "inputs": [], "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "state", "type": "uint256" }], "name": "State", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "msg", "type": "string" }], "name": "Log", "type": "event" }],
+			"Logo" : "dappleths/dapp_8/logo.png",
+			"Description" : "Coffee Machine on Ethereum",
+			"InstallUrl" : "dappleths/dapp_8/index.html",
+			"TemplateUrl" : "dappleths/dapp_8/index.html",
+			"ScriptUrl" : "dappleths/dapp_8/index.js"
 		}
 	],
 	"coins":[

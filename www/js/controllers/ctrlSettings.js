@@ -70,7 +70,6 @@ angular.module('leth.controllers')
               console.log(position);
               $scope.lat  = position.coords.latitude;
               $scope.long = position.coords.longitude;
-              Chat.sendPosition(position);
             }, function (err) {
                 // error
             });
