@@ -724,7 +724,13 @@ angular.module('leth.controllers', [])
             });
             //$cordovaInAppBrowser.close();
         }, false);
-      }
+      }//geolocation
+      if(msg.mode=="contact" && msg.attach){
+        if($scope.isFriend(msg.attach.addr) && msg.attach.addr!=AppService.account()) //go to friend
+          $state.go('app.single', {Friend: msg.attach.addr});
+        else //add friend
+          $scope.addAddress(msg.attach.addr,msg.attach.idkey)
+      }//contact
     }
 
     $scope.$on('incomingMessage', function (e, r) {     

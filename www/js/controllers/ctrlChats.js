@@ -103,12 +103,13 @@ angular.module('leth.controllers')
     $scope.shareItems = function(){
       var hideSheet = $ionicActionSheet.show({
         buttons: [
-          { text: 'Photo' },
-          { text: 'Position'  }
+          { text: 'Photo...' },
+          { text: 'Position'  },
+          { text: 'Contact'  }
         ],
         //destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         destructiveText: 'Cancel',
-        titleText: 'Choose to share your...',
+        titleText: 'Choose to share your:',
         destructiveButtonClicked:  function() {
           hideSheet();
         },
@@ -125,6 +126,9 @@ angular.module('leth.controllers')
                     }, function (err) {
                         // error
                     });
+                break;
+            case 2:
+                Chat.sendContact();
                 break;
           }
           hideSheet();
