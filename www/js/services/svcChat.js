@@ -114,8 +114,8 @@ angular.module('leth.services')
         from:  this.identity(),
         topics: topics,
         payload: payload,
-        ttl: 100,
-        workToProve: 100
+        ttl: 10,
+        workToProve: 10
       };
       web3.shh.post(message); 
 
@@ -133,8 +133,8 @@ angular.module('leth.services')
         from:  this.identity(),
         topics: topics,
         payload: payload,
-        ttl: 100,
-        workToProve: 100
+        ttl: 10,
+        workToProve: 10
       };
       web3.shh.post(message); 
 
@@ -152,8 +152,8 @@ angular.module('leth.services')
         from:  this.identity(),
         topics: topics,
         payload: payload,
-        ttl: 100,
-        workToProve: 100
+        ttl: 10,
+        workToProve: 10
       };
       web3.shh.post(message); 
       

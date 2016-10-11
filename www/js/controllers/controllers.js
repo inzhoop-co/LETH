@@ -2,7 +2,7 @@ angular.module('leth.controllers', [])
   .controller('AppCtrl', function ($ionicHistory, $interval, $scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, 
                                   $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                   $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
-                                  $ionicLoadingConfig, $cordovaInAppBrowser,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,
+                                  $ionicLoadingConfig, $sce, $cordovaInAppBrowser,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,
                                   AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation) {
     window.refresh = function () {
       $ionicLoading.show();
@@ -148,6 +148,7 @@ angular.module('leth.controllers', [])
     $scope.long = "";
 
     $scope.geoWatch;    
+    /*
     $scope.watchLocation = function(){
       $scope.geoWatch = Geolocation.watchPosition();
       $scope.geoWatch.then(
@@ -161,9 +162,10 @@ angular.module('leth.controllers', [])
           console.log(position);
           $scope.lat  = position.coords.latitude;
           $scope.long = position.coords.longitude;
-          Chat.sendPosition(position);
+          //Chat.sendPosition(position);
         });
     }
+    */
 
     $scope.scanSesamo = function () {
       document.addEventListener("deviceready", function () {      
@@ -784,7 +786,7 @@ angular.module('leth.controllers', [])
           $scope.$on('incomingMessage', function (e, r) {
 
             if(r.payload.text.length)
-              msg = r.payload.text;
+              msg = $sce.trustAsHtml(r.payload.text);
             if(r.payload.image.length)
               msg = "sent image";
 

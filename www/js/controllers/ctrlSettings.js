@@ -55,31 +55,27 @@ angular.module('leth.controllers')
       localStorage.GeoOn = value? "true":"false";
       $scope.geo = { checked: value};
       if(value){
-        $scope.watchLocation();
-      }
+        //$scope.watchLocation();    
+        document.addEventListener("deviceready", function () {
+            Geolocation
+              .getCurrentPosition()
+                .then(function (position) {
+                  console.log(position);
+                  $scope.lat  = position.coords.latitude;
+                  $scope.long = position.coords.longitude;
+                }, function (err) {
+                    // error
+                });
+
+              $timeout(function() {
+                $scope.watchLocation();
+              }, 10000);
+          });
+        }
       else if($scope.geoWatch!=undefined){
         $scope.geoWatch.clearWatch();        
       }
     };
-
-    document.addEventListener("deviceready", function () {
-      console.log('ready');
-        Geolocation
-          .getCurrentPosition()
-            .then(function (position) {
-              console.log(position);
-              $scope.lat  = position.coords.latitude;
-              $scope.long = position.coords.longitude;
-            }, function (err) {
-                // error
-            });
-        /**
-         * Watches for user position.
-         */
-        $timeout(function() {
-          $scope.watchLocation();
-        }, 10000);
-    });
 
     $scope.$watch('geo.checked',function(value) {
       setGeo(value);
