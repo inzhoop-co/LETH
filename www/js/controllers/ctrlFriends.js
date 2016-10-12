@@ -24,10 +24,10 @@ angular.module('leth.controllers')
   .controller('FriendCtrl', function ($scope, $stateParams, $timeout, $cordovaImagePicker, $ionicActionSheet, $cordovaCamera, 
                                       Geolocation, Friends, Chat, AppService) {
     $scope.friend = Friends.get($stateParams.Friend);
-    $scope.friendBalance = Friends.balance($scope.friend);
 
     $scope.$on('$ionicView.enter', function() {
       $scope.myidentity = AppService.account();
+      $scope.friendBalance = Friends.balance($scope.friend);
       $scope.cancelDMNotifications();
       Friends.clearUnread($scope.friend.addr);
       $scope.clearBadge();

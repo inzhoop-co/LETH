@@ -53,22 +53,6 @@ angular.module('leth.services', [])
         }
         return result
       },
-      transferCoin: function (contract, nameSend, from, to, amount ) {
-          var fromAddr = '0x' + from;
-          var toAddr = to;
-          var functionName = nameSend;
-          var args = JSON.parse('[]');
-          var gasPrice = web3.eth.gasPrice;
-          var gas = 3000000; //TODO: use estimate?
-          args.push(toAddr,amount,{from: fromAddr, gasPrice: gasPrice, gas: gas});
-          var callback = function (err, txhash) {
-              console.log('error: ' + err);
-              console.log('txhash: ' + txhash);
-          }
-          args.push(callback);
-          contract[functionName].apply(this, args);
-          return true;
-      },
       loginSesamo: function(address,sessionId){
         var tokenAdr = "0xd42fda38922b5da5b3bd0b8bed6ac4cbd68c2f05";
         var tokenABI = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":false,"inputs":[{"name":"site","type":"address"},{"name":"sessionId","type":"string"}],"name":"loginToSite","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"version","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"}],"name":"returnTo","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"}],"name":"endBalance","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"}],"name":"startBalance","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"sesamoAddr","type":"address"}],"name":"linkSesamo","outputs":[],"type":"function"},{"inputs":[{"name":"tokenName","type":"string"},{"name":"decimalUnits","type":"uint8"},{"name":"tokenSymbol","type":"string"},{"name":"versionOfTheCode","type":"string"}],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"msg","type":"string"},{"indexed":false,"name":"value","type":"string"},{"indexed":false,"name":"addr","type":"address"}],"name":"Log","type":"event"}];
@@ -132,7 +116,43 @@ angular.module('leth.services', [])
             reject(e);
           }
         });
-      }
+      },
+      transferEth: function (from, to, value, gasPrice, gas) {
+        return $q(function (resolve, reject) {
+          try {
+            web3.eth.sendTransaction({
+              from: from,
+              to: to,
+              value: value,
+              gasPrice: gasPrice,
+              gas: gas
+            }, function (err, hash) {
+              var result = new Array;
+              result.push(err);
+              result.push(hash);
+              resolve(result);
+            });
+          } catch (e) {
+            reject(e);
+          }
+        });
+      },
+      transferCoin: function (contract, nameSend, from, to, amount ) {
+          var fromAddr = from;
+          var toAddr = to;
+          var functionName = nameSend;
+          var args = JSON.parse('[]');
+          var gasPrice = web3.eth.gasPrice;
+          var gas = 3000000; //TODO: use estimate?
+          args.push(toAddr,amount,{from: fromAddr, gasPrice: gasPrice, gas: gas});
+          var callback = function (err, txhash) {
+              console.log('error: ' + err);
+              console.log('txhash: ' + txhash);
+          }
+          args.push(callback);
+          contract[functionName].apply(this, args);
+          return true;
+      }            
     }
   })
   .factory('PasswordPopup', function ($rootScope, $q, $ionicPopup) {

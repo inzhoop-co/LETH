@@ -741,12 +741,8 @@ angular.module('leth.controllers', [])
       if(r.payload.image.length)
         msg = "sent image";
 
-      if(r.payload.mode=="geolocation"){
-        console.log(r.payload.attach);
-      } 
-
       //if direct to me
-      if(r.payload.to && r.payload.to.indexOf(AppService.account())!=-1){
+      if(r.payload.to[0] && r.payload.to.indexOf(AppService.account())!=-1){
         if($ionicTabsDelegate.selectedIndex()!=2)
           $scope.DMCounter += 1;
 
@@ -784,17 +780,21 @@ angular.module('leth.controllers', [])
           console.log('backgroundMode activated');
 
           $scope.$on('incomingMessage', function (e, r) {
-
             if(r.payload.text.length)
               msg = $sce.trustAsHtml(r.payload.text);
             if(r.payload.image.length)
-              msg = "sent image";
+              msg = "image sent";
 
-            console.log('in backgroundMode:' + msg);
-    
-            $scope.scheduleSingleNotification(r.payload.from,msg,r.hash);
-            $scope.increaseBadge();
+            var toNotify = false;
+            if(!r.payload.to[0] || (r.payload.to[0] && r.payload.to.indexOf(AppService.account())!=-1)){
+              toNotify=true;
+            }
 
+            //console.log('in backgroundMode:' + msg);    
+            if(toNotify){
+              $scope.scheduleSingleNotification(r.payload.from,msg,r.hash);
+              $scope.increaseBadge();
+            }
           });
       }
 
