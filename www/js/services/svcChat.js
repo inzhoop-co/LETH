@@ -107,15 +107,15 @@ angular.module('leth.services')
       });
     },
     sendTransactionNote: function (transaction) {
-      var note = {type: 'leth', mode: 'transaction', from: AppService.account(), to: [transaction.to,AppService.account()], text: 'I sent ' + (transaction.value / 1.0e18).toFixed(6)+ '&#x1F4B8;', image: '', attach: transaction };
+      var note = {type: 'leth', mode: 'transaction', from: AppService.account(), to: [transaction.to,AppService.account()], text: 'I sent ' + transaction.symbol + " " + (transaction.value / transaction.unit).toFixed(6) + '&#x1F4B8;', image: '', attach: transaction };
       
       var payload = note;
       var message = {
         from:  this.identity(),
         topics: topics,
         payload: payload,
-        ttl: 10,
-        workToProve: 10
+        ttl: 100,
+        workToProve: 100
       };
       web3.shh.post(message); 
 
@@ -133,8 +133,8 @@ angular.module('leth.services')
         from:  this.identity(),
         topics: topics,
         payload: payload,
-        ttl: 10,
-        workToProve: 10
+        ttl: 100,
+        workToProve: 100
       };
       web3.shh.post(message); 
 
@@ -152,8 +152,8 @@ angular.module('leth.services')
         from:  this.identity(),
         topics: topics,
         payload: payload,
-        ttl: 10,
-        workToProve: 10
+        ttl: 100,
+        workToProve: 100
       };
       web3.shh.post(message); 
       

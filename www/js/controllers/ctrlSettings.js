@@ -10,7 +10,6 @@ angular.module('leth.controllers')
     $scope.geo = { checked: (localStorage.GeoOn=="true") };
     $scope.baseCurrency = JSON.parse(localStorage.BaseCurrency);
 
-    
 
     $scope.setIndexHost = function(index){    
       localStorage.NodeHost = $scope.hostsList[index];

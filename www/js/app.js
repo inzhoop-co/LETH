@@ -56,11 +56,16 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
 
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.disableScroll(true);        
+
+        cordova.getAppVersion(function (version) {
+          alert(version);
+        });
       }
       if (window.StatusBar) {
         StatusBar.styleDefault();
       }
       
+
       
       $rootScope.$on('loading:show', function () {
         $ionicLoading.show({template: 'Loading...'})

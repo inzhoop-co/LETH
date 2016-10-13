@@ -74,22 +74,7 @@ angular.module('leth.controllers')
 
     $scope.sendCoins = function (addr, amount, unit, idCoin) {
       if( $scope.idCoin!=0){
-        AppService.transferCoin($scope.contractCoin, $scope.methodSend, $scope.account, addr, amount);
-      }
-      else{
-
-        /*
-        var fromAddr = $scope.account;
-        var toAddr = addr;
-        var valueEth = amount;
-        var value = parseFloat(valueEth) * unit;
-        var gasPrice = 50000000000;
-        var gas = 50000;
-        */
-        var value = parseFloat(amount) * unit;
-
-        AppService.transferEth($scope.account, addr, value, 50000000000, 50000).then(
-        //AppService.sendTransaction(fromAddr, toAddr, value, gasPrice, gas).then(
+        AppService.transferCoin($scope.contractCoin, $scope.methodSend, $scope.account, addr, amount).then(
           function (result) {
             if (result[0] != undefined) {
               var errorPopup = $ionicPopup.alert({
@@ -105,10 +90,51 @@ angular.module('leth.controllers')
                 template: result[1]
               });
               successPopup.then(function (res) {
+                $scope.amountTo = "";
                 $state.go('app.transactions');
               });
               //save transaction
-              var newT = {from: $scope.account, to: addr, id: result[1], value: value, time: new Date().getTime()};
+              var newT = {from: $scope.account, to: addr, id: result[1], value: amount, unit: unit, symbol: $scope.symbolCoin, time: new Date().getTime()};
+              $scope.transactions = Transactions.add(newT);
+              Chat.sendTransactionNote(newT);              
+              refresh();
+            }
+          },
+          function (err) {
+            var alertPopup = $ionicPopup.alert({
+              title: 'Error',
+              template: err
+
+            });
+            alertPopup.then(function (res) {
+              console.log(err);
+            });
+        });
+
+      }
+      else{
+        var value = parseFloat(amount) * unit;
+        AppService.transferEth($scope.account, addr, value, 50000000000, 50000).then(
+          function (result) {
+            if (result[0] != undefined) {
+              var errorPopup = $ionicPopup.alert({
+                title: 'Error',
+                template: result[0]
+              });
+              errorPopup.then(function (res) {
+                console.log(res);
+              });
+            } else {
+              var successPopup = $ionicPopup.alert({
+                title: 'Transaction sent',
+                template: result[1]
+              });
+              successPopup.then(function (res) {
+                $scope.amountTo = "";
+                $state.go('app.transactions');
+              });
+              //save transaction
+              var newT = {from: $scope.account, to: addr, id: result[1], value: value, unit: unit, symbol: $scope.symbolCoin, time: new Date().getTime()};
               $scope.transactions = Transactions.add(newT);
               Chat.sendTransactionNote(newT);              
               refresh();

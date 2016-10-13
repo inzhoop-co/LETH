@@ -138,6 +138,29 @@ angular.module('leth.services', [])
         });
       },
       transferCoin: function (contract, nameSend, from, to, amount ) {
+        return $q(function (resolve, reject) {
+          var fromAddr = from;
+          var toAddr = to;
+          var functionName = nameSend;
+          var args = JSON.parse('[]');
+          var gasPrice = web3.eth.gasPrice;
+          var gas = 3000000; //TODO: use estimate?
+          try {
+            args.push(toAddr,amount,{from: fromAddr, gasPrice: gasPrice, gas: gas});
+            var callback = function (err, hash) {
+              var result = new Array;
+              result.push(err);
+              result.push(hash);
+              resolve(result);
+            }
+            args.push(callback);
+            contract[functionName].apply(this, args);
+          } catch (e) {
+              reject(e);
+            }
+          });  
+      },
+      transferCoinOK: function (contract, nameSend, from, to, amount ) {
           var fromAddr = from;
           var toAddr = to;
           var functionName = nameSend;

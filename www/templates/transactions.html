@@ -20,7 +20,7 @@
         <div class="" ng-show="isFriend(t.from)">From: {{isFriend(t.from)}}</div>
         <div ng-hide="isFriend(t.to)">To: {{t.to}}</div>
         <div class="" ng-show="isFriend(t.to)">To: {{isFriend(t.to)}}</div>
-        <div>Amount: {{(t.value/ 1.0e18) | currency:"Ξ ":8}}</div>        
+        <div>Amount: {{(t.value/ t.unit) | currency:t.symbol + " ":6}}</div>        
         <ion-option-button class="button-info" ng-click="edit(item)">CheckStatus</ion-option-button>
       </ion-item>
     </ion-list>
