@@ -27,7 +27,7 @@ angular.module('leth.controllers', [])
     
     window.customPasswordProvider = function (callback) {
       var pw;
-      PasswordPopup.open("Digit your wallet password", "unlock account to sign transaction").then(
+      PasswordPopup.open("Digit your wallet password", "unlock account to proceed").then(
         function (result) {
           pw = result;
           if (pw != undefined) {
@@ -248,6 +248,8 @@ angular.module('leth.controllers', [])
       })
     };
 
+
+
     $scope.scanAddr = function () {
       document.addEventListener("deviceready", function () {  
        $cordovaBarcodeScanner
@@ -267,42 +269,56 @@ angular.module('leth.controllers', [])
       ionic.Platform.exitApp();
     };
 
+    $scope.createWallet = function (seed, password, code) { 
+      if(!lightwallet.keystore.isSeedValid(seed)){
+        var alertPopup = $ionicPopup.alert({
+          title: 'Invalid Seed',
+          template: 'The Seed provided is not valid!'
+        });
 
-    $scope.createWallet = function (seed, password, code) {   
-      $ionicLoading.show();
-      //add keystore for encryption
-      lightwallet.keystore.deriveKeyFromPassword(code, function (err, pw2DerivedKey) {
-        local_keystore = new lightwallet.keystore(seed, pw2DerivedKey,hdPath);
-        var info={curve: 'curve25519', purpose: 'asymEncrypt'};
-        local_keystore.addHdDerivationPath(hdPath,pw2DerivedKey,info);
-        local_keystore.generateNewEncryptionKeys(pw2DerivedKey, 1, hdPath);
-        local_keystore.setDefaultHdDerivationPath(hdPath);
-        local_keystore.passwordProvider = code; //customPasswordProvider;
-      });
+        alertPopup.then(function(res) {
+          createEntropyModal();
+        });
+      }else{
+        $ionicLoading.show();
+        //register inzhoop user in addressbook
+        var usrInzhoop = {"addr":"0xd1324ada7e026211d0cacd90cae5777e340de948","idkey":"0xc34293fdf389d8d5c0dd852d0e858576d367342777a57347e2407f64b1446b1c","name":"inzhoop","icon":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAgACADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD7M8D+B/8AhDPtv/E0+2fbPL/5YeXs2bv9o5zu/SuW/wCSM/8AUY/tj/t38ryv++92fN9sY754x/2kP2b/APhoP/hHf+Kz/sD+wPtf/MO+1ed5/k/9NU27fJ987u2OeW+LHxY/4ZK/sr/iQf8ACVf8JV5//L19h+zfZvL/ANiXfu+0f7ONnfPH5NkeZ/257arjcT9axGK5faYXk9n7X2d1D9+kow5IpVPdtzW5HdsvM8t/s72NLBUfY06PNyV+bn9nz2cv3bbc+dtw1vy35lax6D/yWb/qD/2P/wBvHm+b/wB8bceV75z2xz1PjjwP/wAJn9i/4mn2P7H5n/LDzN+/b/tDGNv614r8J/ix/wANa/2r/wASD/hFf+EV8j/l6+3faftPmf7EWzb9n/2s7+2Oep/Zv/Zv/wCGfP8AhIv+Kz/t/wDt/wCyf8w77L5Pked/01fdu872xt754M8zP+w/Y1cFifquIwvN7PC8ntPZe0sp/v2nGfPFup71+W/IrNBlmW/2j7aljaPtqdbl56/Nye05LuP7tNOHI0oaW5rczvc5b9sj4sf8Kv8A+EQ/4kH9p/2n/aH/AC9eT5fl/Z/9hs58z2xj3rz7/lH1/wBT7/wnv/cL+xfYf+//AJm/7Z/s7fL/AIt3HoP7ZHxY/wCFX/8ACIf8SD+0/wC0/wC0P+XryfL8v7P/ALDZz5ntjHvXlnwn+LH/AAtD+1f+JB/Zn9meR/y9ed5nmeZ/sLjHl++c+1fdcF5DHiThfAYPEV7UF7Xnpcvx/vJOPvpqUeWS5tHrs9D5ziPNZ5FnGKxdHD3m+S1Tn291J+6007p8u2m5pf8AKQX/AKkL/hAv+4p9t+3f9+PL2fY/9rd5n8O3n0H9jf4sf8LQ/wCEv/4kH9mf2Z/Z/wDy9ed5nmfaP9hcY8v3zn2ryz4sfFj/AIVf/ZX/ABIP7T/tPz/+XryfL8vy/wDYbOfM9sY969T/AGN/ix/wtD/hL/8AiQf2Z/Zn9n/8vXneZ5n2j/YXGPL9859qONMhjw3wvj8Hh696D9lyUuX4P3kXL323KXNJ82r02WgcO5rPPc4wuLrYe01z3qc+/utL3UklZLl213P/2Q==","unread":0}
+        $scope.friends.push(usrInzhoop);
 
-      lightwallet.keystore.deriveKeyFromPassword(password, function (err, pwDerivedKey) {
-        global_keystore = new lightwallet.keystore(seed, pwDerivedKey);
-        global_keystore.generateNewAddress(pwDerivedKey, 1);
-        global_keystore.passwordProvider = customPasswordProvider;
+        //add keystore for encryption
+        lightwallet.keystore.deriveKeyFromPassword(code, function (err, pw2DerivedKey) {
+          local_keystore = new lightwallet.keystore(seed, pw2DerivedKey,hdPath);
+          var info={curve: 'curve25519', purpose: 'asymEncrypt'};
+          local_keystore.addHdDerivationPath(hdPath,pw2DerivedKey,info);
+          local_keystore.generateNewEncryptionKeys(pw2DerivedKey, 1, hdPath);
+          local_keystore.setDefaultHdDerivationPath(hdPath);
+          local_keystore.passwordProvider = code; //customPasswordProvider;
+        });
 
-        AppService.setWeb3Provider(global_keystore);
+        lightwallet.keystore.deriveKeyFromPassword(password, function (err, pwDerivedKey) {
+          global_keystore = new lightwallet.keystore(seed, pwDerivedKey);
+          global_keystore.generateNewAddress(pwDerivedKey, 1);
+          global_keystore.passwordProvider = customPasswordProvider;
 
-        localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
-        localStorage.EncKeys = JSON.stringify({data: local_keystore.serialize()});
-        localStorage.AppCode = JSON.stringify({code: code});
-        localStorage.HasLogged = JSON.stringify(true);
-        localStorage.Transactions = JSON.stringify({});
-        localStorage.Friends = JSON.stringify($scope.friends);
+          AppService.setWeb3Provider(global_keystore);
 
-        $rootScope.hasLogged = true;
+          localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
+          localStorage.EncKeys = JSON.stringify({data: local_keystore.serialize()});
+          localStorage.AppCode = JSON.stringify({code: code});
+          localStorage.HasLogged = JSON.stringify(true);
+          localStorage.Transactions = JSON.stringify({});
+          localStorage.Friends = JSON.stringify($scope.friends);
 
-        var msg = {type: 'leth', mode: 'plain', from: AppService.account(), text: 'new user added', image: '' };
-        Chat.sendMessage(msg);
+          $rootScope.hasLogged = true;
 
-        $state.go('app.dappleths');
+          var msg = {type: 'leth', mode: 'plain', from: AppService.account(), text: 'new user added', image: '' };
+          Chat.sendMessage(msg);
 
-        $timeout(function() {$ionicLoading.hide();}, 1000);
-      });
+          $state.go('app.dappleths');
+
+          $timeout(function() {$ionicLoading.hide();}, 1000);
+        });
+      }
     };
 
     $scope.ChangeCode = function(oldCode, newCode) {
@@ -398,7 +414,7 @@ angular.module('leth.controllers', [])
     };
 
     var startWatching = function() { 
-      $ionicPlatform.ready(function() {    
+      document.addEventListener("deviceready", function () {   
           $scope.watch = $cordovaDeviceMotion.watchAcceleration($scope.options);
           $scope.watch.then(null, function(error) {
               console.log('Error');
@@ -521,7 +537,6 @@ angular.module('leth.controllers', [])
       closeEntropyModal();
       // restore keystore from seed 
       $scope.randomSeed = seed;
-      console.log($scope.randomSeed);
       createLoginModal();
     }
 
@@ -631,7 +646,7 @@ angular.module('leth.controllers', [])
       global_keystore.passwordProvider = customPasswordProvider;
 
       local_keystore = new lightwallet.keystore.deserialize(ks.data);
-      local_keystore.passwordProvider = customPasswordProvider;
+      local_keystore.passwordProvider = customPasswordProvider; //to verify
 
       AppService.setWeb3Provider(global_keystore);
       $scope.qrcodeString = AppService.account();

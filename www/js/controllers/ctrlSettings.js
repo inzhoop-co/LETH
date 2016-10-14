@@ -1,6 +1,6 @@
 angular.module('leth.controllers')
   .controller('SettingsCtrl', function ($scope, $interval, $ionicModal, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, $http, 
-                                        Geolocation, AppService, ExchangeService, Chat) {    
+                                        Geolocation, AppService, ExchangeService, Chat, PasswordPopup) {    
     $scope.editableHost = false;
     $scope.addrHost = localStorage.NodeHost;
 	  $scope.hostsList= JSON.parse(localStorage.HostsList);
@@ -131,7 +131,7 @@ angular.module('leth.controllers')
       });
     };
 	
-	$scope.deleteHost = function (addr) {
+	 $scope.deleteHost = function (addr) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Delete Provider Host',
         template: 'Are you sure you want to delete the provider host? '
@@ -299,9 +299,30 @@ angular.module('leth.controllers')
       }, false);     
     };
 
+    var backupSeed = function(){
+      PasswordPopup.open("Digit your wallet password", "unlock account to proceed").then(
+        function (password) {
+          lightwallet.keystore.deriveKeyFromPassword(password, function (err, pwDerivedKey) {
+            var seed = global_keystore.getSeed(pwDerivedKey);
+            var alertPopup = $ionicPopup.alert({
+               title: 'Backup securely your seed',
+               template: seed
+             });
+
+              alertPopup.then(function(res) {
+                console.log('seed backuped');
+              });
+            });
+        },
+        function (err) {
+
+        })      
+    }
+
     $scope.backupWallet = function () {
 		var hideSheet = $ionicActionSheet.show({
         buttons: [
+          { text: 'Backup Seed' },
           { text: 'Backup via Email' },
           { text: 'Backup on Storage'  }
         ],
@@ -313,12 +334,14 @@ angular.module('leth.controllers')
         buttonClicked: function(index) {
             switch(index){
                 case 0:
-                    console.log('backuping via Email');
-                    walletViaEmail();
+                    backupSeed();
                     hideSheet();
                     break;
                 case 1:
-                    console.log('backuping on Storage');
+                    walletViaEmail();
+                    hideSheet();
+                    break;
+                case 2:
                     backupWalletToStorage();
                     hideSheet();
                     break;
