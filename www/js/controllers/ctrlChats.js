@@ -107,8 +107,8 @@ angular.module('leth.controllers')
           { text: 'Position'  },
           { text: 'Contact'  }
         ],
-        //destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
-        destructiveText: 'Cancel',
+        destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+        //destructiveText: 'Cancel',
         titleText: 'Choose to share your:',
         destructiveButtonClicked:  function() {
           hideSheet();

@@ -95,7 +95,7 @@ angular.module('leth.controllers', [])
         scope: $scope,
         animation: 'slide-in-up'
       }).then(function (modal) {
-
+        /* no addressbook from phone
         document.addEventListener("deviceready", function () {
           $cordovaContacts.pickContact().then(function (contactPicked) {
             $scope.name = contactPicked.name.formatted;
@@ -109,7 +109,8 @@ angular.module('leth.controllers', [])
             };
           });
         }, false);
-
+        */
+        
         if(address != undefined) {
           $scope.addr = address;
         }
