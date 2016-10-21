@@ -14,10 +14,12 @@
       </ion-slide>
     </ion-slide-box>
     <div class="button-bar padding">
-      <button class="{{filterStoreApps}}" ng-click="fromStore(true)">ÐAppleths Store </button>
-      <button class="{{filterLocalApps}}" ng-click="fromStore(false)">Installed </button>
+      <!--button class="{{filterStoreApps}}" ng-click="fromStore(false)">ÐAppleths Store </button>
+      <button class="{{filterLocalApps}}" ng-click="fromStore(false)">Installed </button-->
+      <button class="{{filterFeed}}" ng-click="readFeedsList()">News </button>
+      <button class="{{filterStoreApps}}" ng-click="readDappsList()">ÐAppleths Store </button>
     </div>
-    <ion-list>
+    <ion-list ng-show="isDapp">
       <ion-item class="item item-thumbnail-left item-icon-right"  ng-repeat="dapp in listApps | filter:{Network:nameNetwork}"
           type="item-text-wrap" ng-href="&#35;/app/dappleth-run/{{dapp.GUID}}">
           <img ng-src="{{dapp.Logo}}"/>
@@ -26,7 +28,51 @@
             <i class="icon ion-chevron-right icon-accessory" ng-hide="!flagApps"></i>
             <i class="icon ion-ios-cloud-download-outline positive" ng-hide="flagApps" ng-click="installDapp(dapp.GUID)"></i>  
       </ion-item>
+      <!--
+      <ion-item class="item-remove-animate item-icon-right" ng-repeat="info in listFeeds track by $index" ng-click="readFeed($index)">
+          <img ng-src="{{dapp.Logo}}"/>
+          <h2 ng-bind-html="info.title"></h2>
+          <p ng-bind-html="info.abstract"></p>
+          <p ng-bind-html="info.pubDate" class="item-note"></p>
+          <i class="icon ion-chevron-right icon-accessory"></i>
+        <ion-option-button class="button-assertive" ng-click="remove($index)">
+            Delete
+        </ion-option-button>
+      </ion-item> 
+      -->     
     </ion-list>
+    
+      <swipe-cards ng-show="!isDapp">
+        <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)">
+          <div class="card" >        
+            <div class="item item-divider item-energized"> 
+              Earn zhoopcoin reading {{listFeeds.length}} news 
+              <span class="badge badge-assertive">{{card.revenue}} coins</span>
+            </div>
+            <div class="item item-text-wrap">
+              <h3>{{card.title}}</h3>
+              <p>{{card.pubDate}}</p>
+            </div>
+            <div class="item item-divider item-stable">
+               <a class="icon button button-clear button-positive" href="#/app/feed/{{$index}}/{{card.Key}}"><i class="ion-ios-pricetag"></i>  
+                Read & Earn</a>
+                <a class="icon button button-clear button-assertive"><i class="ion-arrow-graph-down-left"></i> Swipe & Skip</a>
+            </div>
+          </div> 
+        </swipe-card>
+        <swipe-card on-card-swipe="cardSwiped()" id="start-card">
+          <div class="card" >                
+            <div class="item item-divider item-energized"> 
+
+            </div>
+            <div class="item item-text-wrap">  
+              <h3>Swipe down cards, read and earn a revenue in coins! 
+              <i class="ion-arrow-graph-down-left"></i></h3>
+            </div>
+          </div>
+        </swipe-card>
+      </swipe-cards>
+    
     <div ng-bind-html="appContainer">
     </div>
     </ion-content>

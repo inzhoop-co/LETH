@@ -5,6 +5,12 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
   .constant('$ionicLoadingConfig', {
     template: 'Loading...'
   })
+  .constant('FeedEndpoint', {
+    //url: 'http://localhost:8100/feed'
+    //url: 'https://blog.ethereum.org/feed'
+    url: 'http://us11.campaign-archive1.com/feed'
+  })
+
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,
                 $lockScreen,$state,$window, $location) {
     $ionicPlatform.ready(function () {  
@@ -146,7 +152,16 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
             controller: "DapplethRunCtrl"
           }
         }
-      })      
+      }) 
+      .state('app.feed', {
+        url: '/feed/:Item/:Card',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/feed-detail.html',
+            controller: 'FeedCtrl'
+          }
+        }
+      })     
       .state('app.address', {
         url: '/address',
         views: {

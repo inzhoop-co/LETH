@@ -3,7 +3,7 @@ angular.module('leth.controllers', [])
                                   $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                   $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
                                   $ionicLoadingConfig, $sce, $cordovaInAppBrowser,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,
-                                  AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation) {
+                                  AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService) {
     window.refresh = function () {
       $ionicLoading.show();
       $scope.balance = AppService.balance();
@@ -17,7 +17,8 @@ angular.module('leth.controllers', [])
       $scope.loadFriends();
       $scope.transactions = Transactions.all();
       localStorage.Transactions = JSON.stringify($scope.transactions);
-      loadApps(flagApps);
+      //loadApps(flagApps);
+      $scope.readFeedsList();
       $timeout(function() {$ionicLoading.hide();}, 1000);
     };
 
@@ -50,20 +51,23 @@ angular.module('leth.controllers', [])
           pw = "";
         })
     };
-
+    /*
     var loadApps = function(store){
       if(store){
+        $scope.filterStoreApps = 'button button-small button-outline button-positive';
+        $scope.filterLocalApps = 'button button-small button button-positive';
+        $scope.filterFeed = 'button button-small button button-positive';
+        $scope.listCoins = localStorage.Coins;
+        $scope.listApps = localStorage.DAppleths;
+      }else{
         $scope.filterStoreApps = 'button button-small button button-positive';
         $scope.filterLocalApps = 'button button-small button-outline button-positive';
+        $scope.filterFeed = 'button button-small button-outline button-positive';
+        
         AppService.getStoreApps().then(function(response){
           $scope.listCoins = response.coins;
           $scope.listApps = response.dappleths;
         }) 
-      }else{
-        $scope.filterStoreApps = 'button button-small button-outline button-positive';
-        $scope.filterLocalApps = 'button button-small button button-positive';
-        $scope.listCoins = localStorage.Coins;
-        $scope.listApps = localStorage.DAppleths;
       }
     };
 
@@ -71,6 +75,27 @@ angular.module('leth.controllers', [])
       flagApps = value;
       loadApps(flagApps);
     };     
+    */
+    $scope.readDappsList = function(){
+      $scope.filterStoreApps = 'button button-small button button-positive';
+      $scope.filterFeed = 'button button-small button-outline button-positive';
+      $scope.isDapp = true;
+
+      AppService.getStoreApps().then(function(response){
+        $scope.listCoins = response.coins;
+        $scope.listApps = response.dappleths;
+      }) 
+    };     
+
+    $scope.readFeedsList = function(){
+      $scope.filterStoreApps = 'button button-small button-outline button-positive';
+      $scope.filterFeed = 'button button-small button button-positive';
+      $scope.isDapp = false;
+    };  
+
+    $scope.readFeed = function(index){
+      $state.go('app.feed',{Item: index});
+    };
 
     var codeModal;
     var createCodeModal = function() {
@@ -632,7 +657,8 @@ angular.module('leth.controllers', [])
     //init
     $scope.friends = [];    
     $scope.transactions = Transactions.all();
-    $scope.fromStore(true);
+    //$scope.fromStore(true);
+    $scope.readFeedsList();
 
     $scope.currencies = ExchangeService.getCurrencies();
     $scope.xCoin = "XETH";
@@ -857,4 +883,10 @@ angular.module('leth.controllers', [])
         return item;
     }
 
+  })
+  .controller('FeedCtrl', function ($scope, $stateParams, FeedService) {
+    if($stateParams.Card){
+      $scope.item =  Items.get($stateParams.Card);    
+    }else
+      $scope.item =  FeedService.get($stateParams.Item);   
   })

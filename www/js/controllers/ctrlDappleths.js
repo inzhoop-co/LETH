@@ -1,5 +1,5 @@
 angular.module('leth.controllers')  
-  .controller('DapplethsCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, AppService) {
+  .controller('DapplethsCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, AppService, FeedService) {
     $ionicSlideBoxDelegate.start();
     $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
@@ -9,6 +9,27 @@ angular.module('leth.controllers')
     };
 
     refresh();
+
+    FeedService.GetFeed().then(function(infoNews){
+      $scope.listFeeds = infoNews;
+      $scope.cards = Array.prototype.slice.call($scope.listFeeds, 0, 0);
+    });
+
+    $scope.cardSwiped = function(index) {
+      $scope.addCard();
+    };
+    $scope.cardDestroyed = function(index) {
+      $scope.cards.splice(index, 1);
+    };
+    $scope.addCard = function() {
+      var newCard = $scope.listFeeds[Math.floor(Math.random() * $scope.listFeeds.length)];
+      newCard.id = Math.random();
+      $scope.cards.push(angular.extend({}, newCard));
+    }
+    $scope.accept = function(index) {
+        alert(index);
+    };
+
   })
   .controller('DapplethRunCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
       console.log("Param " + $stateParams.Id);
