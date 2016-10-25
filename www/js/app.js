@@ -7,8 +7,8 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
   })
   .constant('FeedEndpoint', {
     //url: 'http://localhost:8100/feed'
-    //url: 'https://blog.ethereum.org/feed'
-    url: 'http://us11.campaign-archive1.com/feed'
+    url: 'https://blog.ethereum.org/feed'
+    //url: 'http://us11.campaign-archive1.com/feed'
   })
 
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,
@@ -154,7 +154,7 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
         }
       }) 
       .state('app.feed', {
-        url: '/feed/:Item/:Card',
+        url: '/feed/:Item',
         views: {
           'menuContent': {
             templateUrl: 'templates/feed-detail.html',

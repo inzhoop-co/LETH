@@ -1,5 +1,5 @@
 angular.module('leth.controllers')  
-  .controller('DapplethsCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, AppService, FeedService) {
+  .controller('DapplethsCtrl', function ($scope, $state, angularLoad, $ionicPopup, $timeout, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $cordovaInAppBrowser, AppService, FeedService) {
     $ionicSlideBoxDelegate.start();
     $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
@@ -10,11 +10,6 @@ angular.module('leth.controllers')
 
     refresh();
 
-    FeedService.GetFeed().then(function(infoNews){
-      $scope.listFeeds = infoNews;
-      $scope.cards = Array.prototype.slice.call($scope.listFeeds, 0, 0);
-    });
-
     $scope.cardSwiped = function(index) {
       $scope.addCard();
     };
@@ -22,14 +17,44 @@ angular.module('leth.controllers')
       $scope.cards.splice(index, 1);
     };
     $scope.addCard = function() {
-      var newCard = $scope.listFeeds[Math.floor(Math.random() * $scope.listFeeds.length)];
-      newCard.id = Math.random();
+      var i = Math.floor(Math.random() * $scope.listFeeds.length);
+      var newCard = $scope.listFeeds[i];
+      newCard.id = i;
       $scope.cards.push(angular.extend({}, newCard));
     }
     $scope.accept = function(index) {
         alert(index);
     };
+    $scope.earn = function(index){
+      $scope.item =  $scope.listFeeds[index]; 
 
+      var options = {
+        location: 'no',
+        clearcache: 'yes'
+      };
+
+      var earnPopup = $ionicPopup.show({
+        title: "1 coins earned!",
+        scope: $scope
+      })  
+
+      earnPopup.then(function(res){
+        document.addEventListener("deviceready", function () {      
+          $cordovaInAppBrowser.open($scope.item.link, '_system', options)
+            .then(function(event) {
+              // success
+            })
+            .catch(function(event) {
+              // error
+            });      
+        }, false); 
+      })
+
+      $timeout(function(){
+        earnPopup.close();
+         
+      }, 2000);
+    }
   })
   .controller('DapplethRunCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
       console.log("Param " + $stateParams.Id);
@@ -58,4 +83,31 @@ angular.module('leth.controllers')
         updateData(); //defined in external js
         $scope.$broadcast('scroll.refreshComplete');
       }
+  })
+  .controller('FeedCtrl', function ($scope, $stateParams, $cordovaInAppBrowser, $sce, $http, FeedService) {
+    if($stateParams.Item){
+      $scope.item =  $scope.listFeeds[$stateParams.Item]; 
+      
+    /*
+     $http.get($scope.item.link) 
+        .success(function(data){
+          $scope.brwContainer = $sce.trustAsHtml(data);          
+      });
+    */
+      var options = {
+        location: 'yes',
+        clearcache: 'yes'
+      };
+
+      $cordovaInAppBrowser.open($scope.item.link, '_system', options)
+      .then(function(event) {
+        // success
+      })
+      .catch(function(event) {
+        // error
+      });
+      
+      //window.open($scope.item.link, 'iframeName', 'location=yes');
+    }  
+
   })

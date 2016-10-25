@@ -76,6 +76,12 @@ angular.module('leth.controllers', [])
       loadApps(flagApps);
     };     
     */
+
+    FeedService.GetFeed().then(function(infoNews){
+      $scope.listFeeds = infoNews;
+      $scope.cards = Array.prototype.slice.call($scope.listFeeds, 0, 0);
+    });
+
     $scope.readDappsList = function(){
       $scope.filterStoreApps = 'button button-small button button-positive';
       $scope.filterFeed = 'button button-small button-outline button-positive';
@@ -883,10 +889,4 @@ angular.module('leth.controllers', [])
         return item;
     }
 
-  })
-  .controller('FeedCtrl', function ($scope, $stateParams, FeedService) {
-    if($stateParams.Card){
-      $scope.item =  Items.get($stateParams.Card);    
-    }else
-      $scope.item =  FeedService.get($stateParams.Item);   
   })

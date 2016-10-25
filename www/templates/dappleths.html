@@ -54,9 +54,11 @@
               <p>{{card.pubDate}}</p>
             </div>
             <div class="item item-divider item-stable">
-               <a class="icon button button-clear button-positive" href="#/app/feed/{{$index}}/{{card.Key}}"><i class="ion-ios-pricetag"></i>  
+               <!--a class="icon button button-clear button-positive" href="#/app/feed/{{card.id}}"><i class="ion-ios-pricetag"></i>  
+                Read & Earn</a-->
+               <a class="icon button button-clear button-assertive" ng-click="earn({{card.id}})"><i class="ion-ios-pricetag"></i>  
                 Read & Earn</a>
-                <a class="icon button button-clear button-assertive"><i class="ion-arrow-graph-down-left"></i> Swipe & Skip</a>
+                <a class="icon button button-clear button-stable" ng-click="cardDestroyed($index); cardSwiped($index)"><i class="ion-arrow-graph-down-left"></i> Swipe & Skip</a>
             </div>
           </div> 
         </swipe-card>
