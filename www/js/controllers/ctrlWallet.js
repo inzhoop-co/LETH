@@ -191,11 +191,11 @@ angular.module('leth.controllers')
 
     $scope.chooseCoin = function(){  
 		  $scope.getNetwork();
-      var buttonsGroup = [{text: 'Ether [Ξ]'}];
+      var buttonsGroup = [{text: '<img width="30px" heigth="30px" src="' + $scope.logoCoin + '"/> Ether [Ξ]'}];
 
 	   var activeCoins=$scope.listCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork;} );
       for (var i = 0; i < activeCoins.length; i++) {
-        var text = {text: activeCoins[i].Name + " [" + activeCoins[i].Symbol + "]"};
+        var text = {text: '<img width="30px" heigth="30px" src="' + activeCoins[i].Logo + '"/> ' + activeCoins[i].Name + " [" + activeCoins[i].Symbol + "]"};
         buttonsGroup.push(text);
       }
 

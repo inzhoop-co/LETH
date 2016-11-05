@@ -105,17 +105,17 @@
 			"ScriptUrl" : "http://www.inzhoop.com/dappleths/dapp_7/index.js"
 		},
 		{
-			"GUID" : "T08",			
-			"Name" : "CoffeeMachine",
-			"Network" : "Morden",
-			"Company" : "Inzhoop",
-			"Address" : "0xecdfc21f6394d67713fae31f448304ce5153bda0",
-			"ABI" : [{ "constant": true, "inputs": [], "name": "getMinBal", "outputs": [{ "name": "bal", "type": "uint256" }], "type": "function" }, { "constant": true, "inputs": [], "name": "getState", "outputs": [{ "name": "r", "type": "uint256" }], "type": "function" }, { "constant": true, "inputs": [], "name": "getEnabledCount", "outputs": [{ "name": "r", "type": "uint256" }], "type": "function" }, { "constant": false, "inputs": [], "name": "close", "outputs": [], "type": "function" }, { "constant": true, "inputs": [{ "name": "addr", "type": "address" }], "name": "getOpCount", "outputs": [{ "name": "count", "type": "uint256" }], "type": "function" }, { "constant": true, "inputs": [], "name": "getNumMaxOp", "outputs": [{ "name": "maxOp", "type": "uint256" }], "type": "function" }, { "constant": false, "inputs": [], "name": "registerMe", "outputs": [], "type": "function" }, { "constant": true, "inputs": [], "name": "getRegCost", "outputs": [{ "name": "cost", "type": "uint256" }], "type": "function" }, { "constant": false, "inputs": [{ "name": "addr", "type": "address" }], "name": "registerAddr", "outputs": [], "type": "function" }, { "constant": false, "inputs": [], "name": "reset", "outputs": [], "type": "function" }, { "constant": true, "inputs": [{ "name": "addr", "type": "address" }], "name": "itsEnabled", "outputs": [{ "name": "enabledV", "type": "bool" }], "type": "function" }, { "constant": false, "inputs": [{ "name": "mimBal", "type": "uint256" }, { "name": "regCost", "type": "uint256" }, { "name": "numOp", "type": "uint256" }], "name": "config", "outputs": [], "type": "function" }, { "constant": false, "inputs": [], "name": "open", "outputs": [], "type": "function" }, { "inputs": [], "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "state", "type": "uint256" }], "name": "State", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "msg", "type": "string" }], "name": "Log", "type": "event" }],
-			"Logo" : "dappleths/dapp_8/logo.png",
-			"Description" : "Coffee Machine on Ethereum",
-			"InstallUrl" : "dappleths/dapp_8/index.html",
-			"TemplateUrl" : "dappleths/dapp_8/index.html",
-			"ScriptUrl" : "dappleths/dapp_8/index.js"
+			"Name" : "AugurApp",
+			"GUID" : "T02",
+			"Network" : "Morden", 
+			"Company" : "Augur",
+			"Address" : "0x25a5F4dc8CD1D6B191865097a19f3c27f0BfB890",
+			"ABI" : [{ "name": "allowance", "type": "function", "constant": true, "inputs": [{ "name": "owner", "type": "address" }, { "name": "spender", "type": "address" }], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "approve", "type": "function", "constant": false, "inputs": [{ "name": "spender", "type": "address" }, { "name": "amount", "type": "uint256" }], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "balanceOf", "type": "function", "constant": true, "inputs": [{ "name": "address", "type": "address" }], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "decimals", "type": "function", "constant": true, "inputs": [], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "getSeeded", "type": "function", "constant": true, "inputs": [], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "name", "type": "function", "constant": true, "inputs": [], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "setSaleDistribution", "type": "function", "constant": false, "inputs": [{ "name": "addresses", "type": "address[]" }, { "name": "balances", "type": "uint256[]" }], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "symbol", "type": "function", "constant": true, "inputs": [], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "totalSupply", "type": "function", "constant": true, "inputs": [], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "transfer", "type": "function", "constant": false, "inputs": [{ "name": "receiver", "type": "address" }, { "name": "fxpValue", "type": "uint256" }], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "transferFrom", "type": "function", "constant": false, "inputs": [{ "name": "from", "type": "address" }, { "name": "receiver", "type": "address" }, { "name": "fxpValue", "type": "uint256" }], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "Approval(address,address,uint256)", "type": "event", "inputs": [{ "name": "owner", "type": "address", "indexed": true }, { "name": "spender", "type": "address", "indexed": true }, { "name": "fxpValue", "type": "uint256", "indexed": false }] }, { "name": "Transfer(address,address,uint256)", "type": "event", "inputs": [{ "name": "from", "type": "address", "indexed": true }, { "name": "to", "type": "address", "indexed": true }, { "name": "value", "type": "uint256", "indexed": false }] }],
+			"Logo" : "https://upload.wikimedia.org/wikipedia/commons/2/2d/Augur-purple-logo.png",
+			"Description" : "REPutation platform",
+			"InstallUrl" : "https://www.augur.net/",
+			"TemplateUrl" : "",
+			"ScriptUrl" : ""
 		}
 	],
 	"coins":[
@@ -132,6 +132,32 @@
 			"Eevents" : [{"Transfer":"address indexed from, address indexed to, uint256 value"},{"FrozenFunds" : "address target, bool frozen"}],
 			"Units":[{"multiplier": "1", "unitName": "Coins"}]
 		},
+		{
+			"Name" : "Augur",
+			"GUID" : "T02",
+			"Network" : "Morden", 
+			"Logo" : "https://upload.wikimedia.org/wikipedia/commons/2/2d/Augur-purple-logo.png",
+			"Symbol" : "REP",
+			"Abstract" : "REPutation coin",
+			"Address" : "0x25a5F4dc8CD1D6B191865097a19f3c27f0BfB890",
+			"ABI" : [{ "name": "allowance", "type": "function", "constant": true, "inputs": [{ "name": "owner", "type": "address" }, { "name": "spender", "type": "address" }], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "approve", "type": "function", "constant": false, "inputs": [{ "name": "spender", "type": "address" }, { "name": "amount", "type": "uint256" }], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "balanceOf", "type": "function", "constant": true, "inputs": [{ "name": "address", "type": "address" }], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "decimals", "type": "function", "constant": true, "inputs": [], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "getSeeded", "type": "function", "constant": true, "inputs": [], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "name", "type": "function", "constant": true, "inputs": [], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "setSaleDistribution", "type": "function", "constant": false, "inputs": [{ "name": "addresses", "type": "address[]" }, { "name": "balances", "type": "uint256[]" }], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "symbol", "type": "function", "constant": true, "inputs": [], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "totalSupply", "type": "function", "constant": true, "inputs": [], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "transfer", "type": "function", "constant": false, "inputs": [{ "name": "receiver", "type": "address" }, { "name": "fxpValue", "type": "uint256" }], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "transferFrom", "type": "function", "constant": false, "inputs": [{ "name": "from", "type": "address" }, { "name": "receiver", "type": "address" }, { "name": "fxpValue", "type": "uint256" }], "outputs": [{ "name": "out", "type": "uint256" }] }, { "name": "Approval(address,address,uint256)", "type": "event", "inputs": [{ "name": "owner", "type": "address", "indexed": true }, { "name": "spender", "type": "address", "indexed": true }, { "name": "fxpValue", "type": "uint256", "indexed": false }] }, { "name": "Transfer(address,address,uint256)", "type": "event", "inputs": [{ "name": "from", "type": "address", "indexed": true }, { "name": "to", "type": "address", "indexed": true }, { "name": "value", "type": "uint256", "indexed": false }] }],
+			"Send" : "transfer",
+			"Eevents" : [{"Transfer":"address indexed from, address indexed to, uint256 value"},{"FrozenFunds" : "address target, bool frozen"}],
+			"Units":[{"multiplier": "1", "unitName": "Coins"}]
+		},
+		{
+			"Name" : "SingularDTV",
+			"GUID" : "T03",
+			"Network" : "Morden", 
+			"Logo" : "https://singulardtv.com/resources/default/img/mobile-logo.svg",
+			"Symbol" : "SDTV",
+			"Abstract" : "SingularDTV coin",
+			"Address" : "0x412cda6dea6a45d0a45abc039af017bdbd543c10",
+			"ABI" : [{"inputs": [], "constant": true, "type": "function", "name": "name", "outputs": [{"type": "string", "name": ""}]}, {"inputs": [{"type": "address", "name": "_spender"}, {"type": "uint256", "name": "_value"}], "constant": false, "type": "function", "name": "approve", "outputs": [{"type": "bool", "name": "success"}]}, {"inputs": [], "constant": true, "type": "function", "name": "totalSupply", "outputs": [{"type": "uint256", "name": ""}]}, {"inputs": [{"type": "address", "name": "from"}, {"type": "address", "name": "to"}, {"type": "uint256", "name": "value"}], "constant": false, "type": "function", "name": "transferFrom", "outputs": [{"type": "bool", "name": ""}]}, {"inputs": [], "constant": true, "type": "function", "name": "decimals", "outputs": [{"type": "uint8", "name": ""}]}, {"inputs": [{"type": "address", "name": "_for"}, {"type": "uint256", "name": "tokenCount"}], "constant": false, "type": "function", "name": "issueTokens", "outputs": [{"type": "bool", "name": ""}]}, {"inputs": [{"type": "address", "name": "_owner"}], "constant": true, "type": "function", "name": "balanceOf", "outputs": [{"type": "uint256", "name": "balance"}]}, {"inputs": [], "constant": true, "type": "function", "name": "symbol", "outputs": [{"type": "string", "name": ""}]}, {"inputs": [{"type": "address", "name": "to"}, {"type": "uint256", "name": "value"}], "constant": false, "type": "function", "name": "transfer", "outputs": [{"type": "bool", "name": ""}]}, {"inputs": [{"type": "address", "name": "_owner"}, {"type": "address", "name": "_spender"}], "constant": true, "type": "function", "name": "allowance", "outputs": [{"type": "uint256", "name": "remaining"}]}, {"inputs": [], "type": "constructor"}, {"inputs": [{"indexed": true, "type": "address", "name": "from"}, {"indexed": true, "type": "address", "name": "to"}, {"indexed": false, "type": "uint256", "name": "value"}], "type": "event", "name": "Transfer", "anonymous": false}, {"inputs": [{"indexed": true, "type": "address", "name": "owner"}, {"indexed": true, "type": "address", "name": "spender"}, {"indexed": false, "type": "uint256", "name": "value"}], "type": "event", "name": "Approval", "anonymous": false}],
+			"Send" : "transfer",
+			"Eevents" : [{"Transfer":"address indexed from, address indexed to, uint256 value"},{"FrozenFunds" : "address target, bool frozen"}],
+			"Units":[{"multiplier": "1", "unitName": "Coins"}]
+		},		
 		{
 			"Name" : "RiaceCoin",
 			"GUID" : "P02",

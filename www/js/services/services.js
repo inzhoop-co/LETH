@@ -10,7 +10,7 @@ angular.module('leth.services', [])
         var q = $q.defer();
         $http({
           method: 'GET',
-          url: 'http://www.inzhoop.com/dappleths/Store.json'
+          url: '/dappleths/Store.json'
         }).then(function(response) {
           q.resolve(response.data);
         }, function(response) {
