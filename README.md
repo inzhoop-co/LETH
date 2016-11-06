@@ -5,7 +5,7 @@ The First mobile LigthWallet for Ξthereum
 LΞTH (Ligth Ξthereum Mobile Wallet) is the first hybrid mobile app to manage an Ethereum wallet built using Ionic framework.
 
 # Features
-Thanks to the great job in library of ConsenSys (eth-lightwallet), the app could manage the key-pairs securely on smartphone side without send any password out of the wallet.
+Thanks to the great job of library of ConsenSys (eth-lightwallet), the app could manage the key-pairs securely on smartphone side without send any password out of the wallet.
 Every transaction could be signed directly with the smartphone and sent to an ethereum node public/private.
 
 With LETH you could:
@@ -13,17 +13,17 @@ With LETH you could:
 - Create a HD ligthwallet 
 - Add an Ethereum wallet address
 - Set an Ethereum node address private/public
-- Send/Receive ETH
-- Send/Receive COINS
-- List your transaction
+- Send / Receive ETH
+- Send / Receive COINS
+- List your transactions
 - Share Address via SMS or Email
-- Request payment
-- Send message or image to friends and community using SHH protocol
-- Send private crypted message to friends (in progress)
-- Backup wallet
-- Restore wallet
-- Protect access with TouchID and PIN code
-- Currency convert via Kraken API
+- Share your geolocation
+- Request payments
+- Send messages / images to friends and community using SHH protocol to chat
+- Send private crypted messages to friends
+- Backup / Restore wallet
+- Protect access with TouchID / PIN code
+- Currency convertion value via Kraken API
 - Run DAppLeth (in progress)
 
 # References
@@ -54,11 +54,23 @@ ionic serve
 ```
 
 # Screenshoot
-![pay](https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/Pay.PNG)
+<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6342.PNG" width="30%">
 
-![receive](https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/Receive.PNG)
+<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6343.PNG" width="30%">
 
-![settings](https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/Settings.PNG)
+<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6344.PNG" width="30%">
+
+<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6345.PNG" width="30%">
+
+<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6346.PNG" width="30%">
+
+<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6347.PNG" width="30%">
+
+<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6348.PNG" width="30%">
+
+<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6349.PNG" width="30%">
+
+<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6350.PNG" width="30%">
 
 # License
  GNU GENERAL PUBLIC LICENSE
