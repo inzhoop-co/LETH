@@ -53,24 +53,12 @@ Test on browser in localhost:8100
 ionic serve
 ```
 
-# Screenshoot
-<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6342.PNG" width="30%">
+# Screenshoots
+<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6342.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6343.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6344.PNG" width="30%">  
 
-<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6343.PNG" width="30%">
+<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6345.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6346.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6347.PNG" width="30%">
 
-<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6344.PNG" width="30%">
-
-<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6345.PNG" width="30%">
-
-<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6346.PNG" width="30%">
-
-<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6347.PNG" width="30%">
-
-<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6348.PNG" width="30%">
-
-<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6349.PNG" width="30%">
-
-<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6350.PNG" width="30%">
+<img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6348.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6349.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/develop/resources/screenshot/v097/IMG_6350.PNG" width="30%">
 
 # License
  GNU GENERAL PUBLIC LICENSE
