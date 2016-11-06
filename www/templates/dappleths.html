@@ -17,7 +17,9 @@
       <!--button class="{{filterStoreApps}}" ng-click="fromStore(false)">ÐAppleths Store </button>
       <button class="{{filterLocalApps}}" ng-click="fromStore(false)">Installed </button-->
       <button class="{{filterFeed}}" ng-click="readFeedsList()">News </button>
-      <button class="{{filterStoreApps}}" ng-click="readDappsList()">ÐAppleths Store </button>
+      <button class="{{filterStoreCoins}}" ng-click="readCoinsList()">Coins</button>
+      <button class="{{filterStoreApps}}" ng-click="readDappsList()">ÐAppleths</button>
+          
     </div>
     <ion-list ng-show="isDapp">
       <ion-item class="item item-thumbnail-left item-icon-right"  ng-repeat="dapp in listApps | filter:{Network:nameNetwork}"
@@ -25,10 +27,27 @@
           <img ng-src="{{dapp.Logo}}"/>
             <h2>{{dapp.Company}}</h2>
             <p>{{dapp.Description}}</p>
+            <ion-spinner icon="crescent" class="icon spinner-positive" ng-show="isInstalling(dapp)"></ion-spinner>
             <i class="icon ion-chevron-right icon-accessory" ng-hide="!flagApps"></i>
             <i class="icon ion-ios-cloud-download-outline positive" ng-hide="flagApps" ng-click="installDapp(dapp.GUID)"></i>  
+      </ion-item>  
+    </ion-list>
+    <ion-list ng-show="isCoin">
+      <ion-item class="item item-avatar-left item-icon-right"  ng-repeat="coin in listCoins | filter:{Network:nameNetwork}"
+          type="item-text-wrap">
+          <img ng-src="{{coin.Logo}}"/>
+            <h2>{{coin.Company}}</h2>
+            <p>{{coin.Abstract}}</p>
+            <ion-spinner icon="ripple" class="icon spinner-positive" ng-show="coin.progress"></ion-spinner>
+            <i class="icon ion-ios-checkmark balanced" ng-hide="!coin.Installed || coin.progress"></i>  
+            <i class="icon ion-ios-cloud-download-outline positive" ng-hide="coin.Installed || coin.progress" ng-click="installCoin(coin)"></i>  
+            <ion-option-button class="button-assertive" ng-show="coin.Installed" ng-click="uninstallCoin(coin)">
+              Unistall
+            </ion-option-button>
       </ion-item>
-      <!--
+    </ion-list> 
+    <!--
+     <ion-list ng-show="isFeed">
       <ion-item class="item-remove-animate item-icon-right" ng-repeat="info in listFeeds track by $index" ng-click="readFeed($index)">
           <img ng-src="{{dapp.Logo}}"/>
           <h2 ng-bind-html="info.title"></h2>
@@ -39,15 +58,14 @@
             Delete
         </ion-option-button>
       </ion-item> 
-      -->     
-    </ion-list>
-    
-      <swipe-cards ng-show="!isDapp">
+      </ion-list> 
+      -->      
+      <swipe-cards ng-show="isFeed">
         <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)">
           <div class="card" >        
             <div class="item item-divider item-energized"> 
-              Earn zhoopcoin reading {{listFeeds.length}} news 
-              <span class="badge badge-assertive">{{card.revenue}} coins</span>
+              Read now Ethereum news 
+              <span class="badge badge-assertive">{{listFeeds.length}}</span>
             </div>
             <div class="item item-text-wrap">
               <h3>{{card.title}}</h3>

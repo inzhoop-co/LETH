@@ -1,5 +1,5 @@
 angular.module('leth.controllers')  
-  .controller('DapplethsCtrl', function ($scope, $state, angularLoad, $ionicPopup, $timeout, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $cordovaInAppBrowser, AppService, FeedService) {
+  .controller('DapplethsCtrl', function ($scope, $state, angularLoad, $ionicLoading, $ionicListDelegate, $ionicPopup, $timeout, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $cordovaInAppBrowser, AppService, FeedService) {
     $ionicSlideBoxDelegate.start();
     $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
@@ -22,9 +22,11 @@ angular.module('leth.controllers')
       newCard.id = i;
       $scope.cards.push(angular.extend({}, newCard));
     }
+    
     $scope.accept = function(index) {
         alert(index);
     };
+    
     $scope.earn = function(index){
       $scope.item =  $scope.listFeeds[index]; 
 
@@ -55,6 +57,30 @@ angular.module('leth.controllers')
          
       }, 2000);
     }
+
+    $scope.installCoin = function(coin) {
+      coin.progress = true;
+      $timeout(function() {
+        coin.Installed = true;
+        var coins = JSON.parse(localStorage.Coins);
+        coin.progress = false;
+        coins.push(coin);
+        localStorage.Coins = JSON.stringify(coins);
+      }, 3000);
+    };
+
+    $scope.uninstallCoin = function(coin) {
+      coin.progress = true;
+      $timeout(function() {
+        var coins = JSON.parse(localStorage.Coins);
+        var index = coins.indexOf(coin);
+        coins.splice(index, 1);
+        localStorage.Coins = JSON.stringify(coins);
+        coin.Installed = false;
+        coin.progress = false;
+      }, 3000);
+      $ionicListDelegate.closeOptionButtons();
+    };
   })
   .controller('DapplethRunCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
       console.log("Param " + $stateParams.Id);

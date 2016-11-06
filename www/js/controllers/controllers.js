@@ -17,7 +17,6 @@ angular.module('leth.controllers', [])
       $scope.loadFriends();
       $scope.transactions = Transactions.all();
       localStorage.Transactions = JSON.stringify($scope.transactions);
-      //loadApps(flagApps);
       $scope.readFeedsList();
       $timeout(function() {$ionicLoading.hide();}, 1000);
     };
@@ -51,52 +50,47 @@ angular.module('leth.controllers', [])
           pw = "";
         })
     };
-    /*
-    var loadApps = function(store){
-      if(store){
-        $scope.filterStoreApps = 'button button-small button-outline button-positive';
-        $scope.filterLocalApps = 'button button-small button button-positive';
-        $scope.filterFeed = 'button button-small button button-positive';
-        $scope.listCoins = localStorage.Coins;
-        $scope.listApps = localStorage.DAppleths;
-      }else{
-        $scope.filterStoreApps = 'button button-small button button-positive';
-        $scope.filterLocalApps = 'button button-small button-outline button-positive';
-        $scope.filterFeed = 'button button-small button-outline button-positive';
-        
-        AppService.getStoreApps().then(function(response){
-          $scope.listCoins = response.coins;
-          $scope.listApps = response.dappleths;
-        }) 
-      }
-    };
-
-    $scope.fromStore = function(value){
-      flagApps = value;
-      loadApps(flagApps);
-    };     
-    */
-
+    
     FeedService.GetFeed().then(function(infoNews){
       $scope.listFeeds = infoNews;
       $scope.cards = Array.prototype.slice.call($scope.listFeeds, 0, 0);
     });
 
     $scope.readDappsList = function(){
+      $scope.filterStoreCoins = 'button button-small button-outline button-positive';
       $scope.filterStoreApps = 'button button-small button button-positive';
       $scope.filterFeed = 'button button-small button-outline button-positive';
       $scope.isDapp = true;
+      $scope.isCoin = false;
+      $scope.isFeed = false;
 
       AppService.getStoreApps().then(function(response){
-        $scope.listCoins = response.coins;
-        $scope.listApps = response.dappleths;
+        $scope.listApps = response;
       }) 
-    };     
+    }; 
+
+    $scope.readCoinsList = function(){
+      $scope.filterStoreCoins = 'button button-small button button-positive';
+      $scope.filterStoreApps = 'button button-small button-outline button-positive';
+      $scope.filterFeed = 'button button-small button-outline button-positive';
+      $scope.isDapp = false;
+      $scope.isCoin = true;
+      $scope.isFeed = false;
+
+      $scope.listCoins = JSON.parse(localStorage.Coins);
+
+      AppService.getStoreCoins().then(function(response){
+        angular.merge($scope.listCoins,response);
+      }) 
+    };      
 
     $scope.readFeedsList = function(){
+      $scope.filterStoreCoins = 'button button-small button-outline button-positive';
       $scope.filterStoreApps = 'button button-small button-outline button-positive';
       $scope.filterFeed = 'button button-small button button-positive';
       $scope.isDapp = false;
+      $scope.isCoin = false;
+      $scope.isFeed = true;
     };  
 
     $scope.readFeed = function(index){
