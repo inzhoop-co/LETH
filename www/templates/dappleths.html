@@ -39,7 +39,7 @@
             <i class="icon ion-ios-checkmark balanced" ng-hide="!coin.Installed || coin.progress"></i>  
             <i class="icon ion-ios-cloud-download-outline positive" ng-hide="coin.Installed || coin.progress" ng-click="installCoin(coin)"></i>  
             <ion-option-button class="button-assertive" ng-show="coin.Installed" ng-click="uninstallCoin(coin)">
-              Unistall
+              <i class="icon ion-ios-trash-outline"></i>
             </ion-option-button>
       </ion-item>
     </ion-list> 
