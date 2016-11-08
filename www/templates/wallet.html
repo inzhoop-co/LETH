@@ -11,26 +11,61 @@
         <img ng-src="img/inzhoop-icon.png" ng-show="fromAddressBook==false" ng-click="sendFeedback()">
     </ion-nav-buttons>
   </ion-nav-bar>
+  <!--div class="tabs-striped tabs-top tabs-background-stable tabs-color-assertive">
+    <div class="tabs">
+      <a class="tab-item active" ng-click="goToSend()">
+        <i class="icon ion-arrow-up-a"></i>
+        Send
+      </a>
+      <a class="tab-item" ng-click="goToReceive()">
+        <i class="icon ion-arrow-down-a"></i>
+        Receive
+      </a>
+    </div>
+  </div has-subheader-->
   <ion-content class="has-header scrollBg" >
     <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
-    <div class="list">
-      <!--div class="item item-divider">
-        <i class="icon ion-ios-shuffle-strong"></i>
-        Send Payment
-      </div-->
-      <ion-list class="list" can-swipe="true">
-      <ion-item class="item item-divider item-avatar-left  item-icon-right item-avatar-right">
-        <img ng-src="{{logoCoin}}" ng-click="refresh()"/>
-        <label id="{{idCoin}}"><b>{{balance | currency:symbolCoin+' ':6}} </b><span class="subdued" ">({{balanceExc}})</span></label>
-        <p>
-          <label >{{descCoin}}</labe>
-        </p>
-        <span><i class="icon ion-android-more-vertical" ng-click="chooseCoin()"></i>
-          <!--i class="ion-ios-refresh-empty" ng-click="refresh()"/></i-->
-        </span>
-      </ion-item>
-      </ion-list>
-      <div class="item">
+    <ion-slides options="slideOptions">
+      <ion-slide-page>
+        <div class="item item-divider"> 
+          <p class="text-center">
+            <span class="subdued">{{account}}</span>
+          </p>
+        </div>
+        <div class="item text-center" ng-click="showAddress()">
+          <qr text="qrcodeString" type-number="typeNumber" correction-level="correctionLevel" size="size" input-mode="inputMode" image="image"></qr>
+          
+        </div>
+        <div class="item item-input item-select">
+          <div class="input-label">
+              Request payment
+          </div>
+          <input type="number" pattern="-?\d+(\.\d+)?" placeholder=" 0.00 (optional)" ng-model="amountPayment" ng-change="onAmountChange(amountPayment)" ng-maxlenth="6">
+          <select class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit = options[0]">
+            <option ng-repeat="uni in listUnit" value="{{uni.multiplier}}" ng-selected="$index==0">{{uni.unitName}}</option>
+            </select>
+        </div>
+        <div class="item tabs row"> 
+          <div class="col col-10"></div>         
+          <div class="col col-30"><button class="button button-icon icon ion-ios-email-outline dark" ng-click="shareByEmail()"> email</button></div>
+          <div class="col col-30"><button class="button button-icon icon ion-ios-chatbubble-outline dark" ng-click="shareBySms()"> sms</button></div>    
+          <div class="col col-30"><button class="button button-icon icon ion-ios-copy-outline dark" ng-click="copyAddr()"> copy</button></div>   
+        </div>
+      </ion-slide-page>      
+      <ion-slide-page>
+        <ion-list class="list" can-swipe="true">
+          <ion-item class="item item-divider item-avatar-left  item-icon-right item-avatar-right">
+            <img ng-src="{{logoCoin}}" ng-click="refresh()"/>
+            <label id="{{idCoin}}"><b>{{balance | currency:symbolCoin+' ':6}} </b><span class="subdued" ">({{balanceExc}})</span></label>
+            <p>
+              <label >{{descCoin}}</label>
+            </p>
+            <span><i class="icon ion-android-more-vertical" ng-click="chooseCoin()"></i>
+              <!--i class="ion-ios-refresh-empty" ng-click="refresh()"/></i-->
+            </span>
+          </ion-item>
+        </ion-list>  
+        <div class="item">
           <div class="item item-input item-stacked-label item-icon-right">
             <span class="input-label">Address To <span class="" ng-show="isFriend(addrTo)">({{isFriend(addrTo)}})</span></span>
             <i class="icon ion-ios-personadd-outline positive" ng-show="isFriend(addrTo)=='' && isValidAddr(addrTo)" ng-click="addAddress(addrTo,addrKey)"></i>
@@ -38,15 +73,27 @@
           </div>
           <div class="item item-input item-select">
             <input type="number" pattern="-?\d+(\.\d+)?" ng-model="amountTo" placeholder="0.00" ng-required="true">
-      			<select id="valuta" class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit">
-      				<option ng-repeat="uni in listUnit" value="{{uni.multiplier}}" ng-selected="$index==0">{{uni.unitName}}</option>
-      			</select>
+            <select id="valuta" class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit">
+              <option ng-repeat="uni in listUnit" value="{{uni.multiplier}}" ng-selected="$index==0">{{uni.unitName}}</option>
+            </select>
           </div>
           <button ng-disabled="!unit || !amountTo>0 || !isValidAddr(addrTo)" class="button button-block button-energized"
                   ng-click="confirmSend(addrTo,amountTo,unit,idCoin)"><i class="icon ion-paper-airplane"></i> Send
           </button>
-          <button ng-disabled="!transactions.length" ng-click="listTransaction()" class="button button-clear button-dark"><i class="icon ion-ios-list-outline"></i> Transactions</button>
-      </div>    
-    </div>
+          <!--button ng-disabled="!transactions.length" ng-click="listTransaction()" class="button button-clear button-dark"><i class="icon ion-ios-list-outline"></i> Transactions</button-->
+        </div> 
+        <div class="item tabs row"> 
+          <div class="col col-10"></div>         
+          <div class="col col-30">
+            <button class="button button-icon icon ion-ios-list-outline dark" ng-disabled="!transactions.length" ng-click="listTransaction()"> transactions</button>
+          </div>
+          <div class="col col-30"></div>    
+          <div class="col col-30"></div>   
+        </div>
+        <div style="margin: auto;margin-top: 50px;width: 50px;">
+          <img ng-src="img/swipe50.png"/>
+        </div>
+      </ion-slide-page>
+    </ion-slides>
   </ion-content>
 </ion-view>
