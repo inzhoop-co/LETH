@@ -11,13 +11,12 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
     //url: 'http://us11.campaign-archive1.com/feed'
   })
   .constant('StoreEndpoint', {
-    url: 'dappleths'
-    //url: 'http://www.inzhoop.com/dappleths'
+    //url: 'dappleths'
+    url: 'http://www.inzhoop.com/dappleths'
   })
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,
                 $lockScreen,$state,$window, $location) {
-    $ionicPlatform.ready(function () {  
-      //global control and settings      
+    $ionicPlatform.ready(function () {      
       if (typeof localStorage.PinOn == 'undefined') {
         localStorage.PinOn="false";
       }
@@ -77,8 +76,6 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
         StatusBar.styleDefault();
       }
       
-
-      
       $rootScope.$on('loading:show', function () {
         $ionicLoading.show({template: 'Loading...'})
       })
@@ -86,7 +83,6 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
       $rootScope.$on('loading:hide', function () {
         $ionicLoading.hide()
       })
-
 
       $window.addEventListener('LaunchUrl', function(event) {
         // gets page name from url
@@ -278,7 +274,4 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
         window.dispatchEvent(event);
     }, 0);
   }
-
-  ;
-
-
+;

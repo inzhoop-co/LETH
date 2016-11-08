@@ -14,10 +14,6 @@
   <ion-content class="has-header scrollBg" >
     <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
     <div class="list">
-      <!--div class="item item-divider">
-        <i class="icon ion-ios-shuffle-strong"></i>
-        Send Payment
-      </div-->
       <ion-list class="list" can-swipe="true">
       <ion-item class="item item-divider item-avatar-left  item-icon-right item-avatar-right">
         <img ng-src="{{logoCoin}}" ng-click="refresh()"/>
@@ -26,27 +22,33 @@
           <label >{{descCoin}}</labe>
         </p>
         <span><i class="icon ion-android-more-vertical" ng-click="chooseCoin()"></i>
-          <!--i class="ion-ios-refresh-empty" ng-click="refresh()"/></i-->
         </span>
       </ion-item>
       </ion-list>
       <div class="item">
-          <div class="item item-input item-stacked-label item-icon-right">
-            <span class="input-label">Address To <span class="" ng-show="isFriend(addrTo)">({{isFriend(addrTo)}})</span></span>
-            <i class="icon ion-ios-personadd-outline positive" ng-show="isFriend(addrTo)=='' && isValidAddr(addrTo)" ng-click="addAddress(addrTo,addrKey)"></i>
-            <input type="text" ng-model="addrTo" placeholder="Type address or use camera to scan" ng-required="true">
+        <div class="item item-input item-stacked-label item-icon-right">
+          <span class="input-label">Address To <span class="" ng-show="isFriend(addrTo)">({{isFriend(addrTo)}})</span></span>
+          <i class="icon ion-ios-personadd-outline positive" ng-show="isFriend(addrTo)=='' && isValidAddr(addrTo)" ng-click="addAddress(addrTo,addrKey)"></i>
+          <input type="text" ng-model="addrTo" placeholder="Type address or use camera to scan" ng-required="true">
+        </div>
+        <div class="item item-input item-select">
+          <input type="number" pattern="-?\d+(\.\d+)?" ng-model="amountTo" placeholder="0.00" ng-required="true">
+    			<select id="valuta" class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit">
+    				<option ng-repeat="uni in listUnit" value="{{uni.multiplier}}" ng-selected="$index==0">{{uni.unitName}}</option>
+    			</select>
+        </div>
+        <button ng-disabled="!unit || !amountTo>0 || !isValidAddr(addrTo)" class="button button-block button-energized"
+                ng-click="confirmSend(addrTo,amountTo,unit,idCoin)"><i class="icon ion-paper-airplane"></i> Send
+        </button>
+        </div> 
+        <div class="item tabs row"> 
+          <div class="col col-10"></div>         
+          <div class="col col-30">
+            <button class="button button-icon icon ion-ios-list-outline dark" ng-disabled="!transactions.length" ng-click="listTransaction()"> transactions</button>
           </div>
-          <div class="item item-input item-select">
-            <input type="number" pattern="-?\d+(\.\d+)?" ng-model="amountTo" placeholder="0.00" ng-required="true">
-      			<select id="valuta" class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit">
-      				<option ng-repeat="uni in listUnit" value="{{uni.multiplier}}" ng-selected="$index==0">{{uni.unitName}}</option>
-      			</select>
-          </div>
-          <button ng-disabled="!unit || !amountTo>0 || !isValidAddr(addrTo)" class="button button-block button-energized"
-                  ng-click="confirmSend(addrTo,amountTo,unit,idCoin)"><i class="icon ion-paper-airplane"></i> Send
-          </button>
-          <button ng-disabled="!transactions.length" ng-click="listTransaction()" class="button button-clear button-dark"><i class="icon ion-ios-list-outline"></i> Transactions</button>
-      </div>    
+          <div class="col col-30"></div>    
+          <div class="col col-30"></div>   
+        </div>    
     </div>
   </ion-content>
 </ion-view>

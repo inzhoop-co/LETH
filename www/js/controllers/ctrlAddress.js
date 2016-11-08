@@ -1,6 +1,6 @@
 angular.module('leth.controllers')
   .controller('AddressCtrl', function ($scope, AppService, $ionicPopup, $cordovaEmailComposer, $cordovaClipboard, $cordovaSms, $cordovaContacts) {
-    $scope.size = 250;
+    $scope.size = 200;
     $scope.correctionLevel = 'H';
     $scope.typeNumber = 12;
     $scope.inputMode = '';
@@ -24,7 +24,6 @@ angular.module('leth.controllers')
       var alertPopup = $ionicPopup.alert({
         title: 'Wallet Address',
         template: $scope.qrcodeString
-        //template: "<div class='item text-center'><qr text='" + $scope.qrcodeString + "' type-number='typeNumber' correction-level='correctionLevel' size='300' input-mode='inputMode' image='image'></qr></div>"
       });
 
       alertPopup.then(function(res) {

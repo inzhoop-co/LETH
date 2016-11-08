@@ -34,7 +34,9 @@ angular.module('leth.services')
     },
     listTopics: function(){
       var list = JSON.parse( JSON.stringify( topics ) );
-      //list.pop("leth"); //base topic uneditable 
+      //base topic uneditable
+      var index = list.indexOf("leth");
+      list.splice(index, 1);
       return list;
     },      
     sendMessage: function (msg) {

@@ -53,8 +53,7 @@ angular.module('leth.controllers')
     var setGeo = function(value){
       localStorage.GeoOn = value? "true":"false";
       $scope.geo = { checked: value};
-      if(value){
-        //$scope.watchLocation();    
+      if(value){   
         document.addEventListener("deviceready", function () {
             Geolocation
               .getCurrentPosition()
@@ -320,7 +319,7 @@ angular.module('leth.controllers')
     }
 
     $scope.backupWallet = function () {
-		var hideSheet = $ionicActionSheet.show({
+		  var hideSheet = $ionicActionSheet.show({
         buttons: [
           { text: 'Backup Seed' },
           { text: 'Backup via Email' },
@@ -332,20 +331,20 @@ angular.module('leth.controllers')
           hideSheet();
         },
         buttonClicked: function(index) {
-            switch(index){
-                case 0:
-                    backupSeed();
-                    hideSheet();
-                    break;
-                case 1:
-                    walletViaEmail();
-                    hideSheet();
-                    break;
-                case 2:
-                    backupWalletToStorage();
-                    hideSheet();
-                    break;
-				}
+          switch(index){
+            case 0:
+                backupSeed();
+                hideSheet();
+                break;
+            case 1:
+                walletViaEmail();
+                hideSheet();
+                break;
+            case 2:
+                backupWalletToStorage();
+                hideSheet();
+                break;
+				  }
 			$timeout(function() {
 			 hideSheet();
           }, 20000);

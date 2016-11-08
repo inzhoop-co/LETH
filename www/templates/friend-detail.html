@@ -7,10 +7,8 @@
       <div class="list">
        <div class="item item-thumbnail-left">
           <img class="rounded" ng-src="{{friend.icon}}"> 
-          <!--h2>{{friend.name}}</h2-->
           <p>{{friend.addr}}</p>
           <div>{{friendBalance | currency:"Ξ "}}</div>
-          <!--p>{{friend.idkey}}</p-->
           <a class="button button-icon icon ion-ios-list-outline dark" ng-href="#/app/transactions/{{friend.addr}}"> List </a>
           <a class="button button-icon icon ion-social-bitcoin-outline balanced" ng-href="#/app/wallet/{{friend.addr}}"> Pay</a>
         </div>
@@ -21,8 +19,7 @@
         <div ng-class="chat.message.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
             <img ng-src="{{chat.identity}}" ng-class="chat.message.from === myidentity ? 'image image-mine' : 'image image-other'" > 
           <div class="message" ng-class="chat.message.from === myidentity ? 'message-mine' : 'message-other'" on-hold="msgAction(chat.message)">
-            <div class="message-text" ng-if="chat.message.text.length" ng-bind-html="chat.message.text">xxx</div>
-            <!--div class="message-text" ng-hide="chat.message.type=='leth'">{{chat.message}}</div-->
+            <div class="message-text" ng-if="chat.message.text.length" ng-bind-html="chat.message.text"></div>
             <img ng-src="{{chat.message.image}}" ng-if="chat.message.image.length"/>
             <span class="message-timestamp">{{chat.timestamp | date: 'HH:mm'}}</span>
           </div>

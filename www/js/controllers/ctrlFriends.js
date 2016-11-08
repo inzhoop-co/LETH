@@ -129,7 +129,6 @@ angular.module('leth.controllers')
           { text: 'Position'  }
         ],
         destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
-        //destructiveText: 'Cancel',
         titleText: 'Choose to share your...',
         destructiveButtonClicked:  function() {
           hideSheet();

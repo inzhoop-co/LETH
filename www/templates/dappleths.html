@@ -14,12 +14,9 @@
       </ion-slide>
     </ion-slide-box>
     <div class="button-bar padding">
-      <!--button class="{{filterStoreApps}}" ng-click="fromStore(false)">ÐAppleths Store </button>
-      <button class="{{filterLocalApps}}" ng-click="fromStore(false)">Installed </button-->
       <button class="{{filterFeed}}" ng-click="readFeedsList()">News </button>
       <button class="{{filterStoreCoins}}" ng-click="readCoinsList()">Coins</button>
       <button class="{{filterStoreApps}}" ng-click="readDappsList()">ÐAppleths</button>
-          
     </div>
     <ion-list ng-show="isDapp">
       <ion-item class="item item-thumbnail-left item-icon-right"  ng-repeat="dapp in listApps | filter:{Network:nameNetwork}"
@@ -72,8 +69,6 @@
               <p>{{card.pubDate}}</p>
             </div>
             <div class="item item-divider item-stable">
-               <!--a class="icon button button-clear button-positive" href="#/app/feed/{{card.id}}"><i class="ion-ios-pricetag"></i>  
-                Read & Earn</a-->
                <a class="icon button button-clear button-assertive" ng-click="earn({{card.id}})"><i class="ion-ios-pricetag"></i>  
                 Read & Earn</a>
                 <a class="icon button button-clear button-stable" ng-click="cardDestroyed($index); cardSwiped($index)"><i class="ion-arrow-graph-down-left"></i> Swipe & Skip</a>

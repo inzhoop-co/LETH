@@ -89,14 +89,10 @@ angular.module('leth.controllers')
       var activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
       
       $scope.message = "DapplethRunCtrl";
-      //$scope.appContainer = $scope.readDapp(activeApp.GUID + ".html");
 
       $http.get(activeApp.InstallUrl) 
         .success(function(data){
           $scope.appContainer = $sce.trustAsHtml(data);          
-
-          //$compile(data)($scope);
-          //$scope.$digest();
       });
  
       angularLoad.loadScript(activeApp.ScriptUrl).then(function() {
