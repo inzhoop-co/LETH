@@ -125,8 +125,8 @@ angular.module('leth.controllers')
     $scope.shareItems = function(){
       var hideSheet = $ionicActionSheet.show({
         buttons: [
-          { text: '<i class="icon ion-ios-camera-outline"></i> Photo...' },
-          { text: '<i class="icon ion-ios-location-outline"></i> Position'  }
+          { text: '<i class="icon ion-ios-camera"></i> Photo...' },
+          { text: '<i class="icon ion-ios-location"></i> Position'  }
         ],
         destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         titleText: 'Choose to share your...',
