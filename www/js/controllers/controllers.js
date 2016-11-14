@@ -2,7 +2,7 @@ angular.module('leth.controllers', [])
 .controller('AppCtrl', function ($ionicHistory, $interval, $scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, 
                                 $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
-                                $ionicLoadingConfig, $sce, $cordovaInAppBrowser,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,
+                                $ionicLoadingConfig, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,
                                 AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService) {
   window.refresh = function () {
     $ionicLoading.show();
@@ -845,17 +845,17 @@ angular.module('leth.controllers', [])
      // Called when background mode has been activated
     cordova.plugins.backgroundMode.onactivate = function() {
       console.log('backgroundMode activated');
-
-      $lockScreen.show({
-        code: JSON.parse(localStorage.AppCode).code,
-        touchId: JSON.parse(localStorage.TouchOn),
-        ACDelbuttons: true,
-        onCorrect: function () {
-        },
-        onWrong: function (attemptNumber) {
-        },
-      });
-
+      if(localStorage.PinOn=="true"){
+        $lockScreen.show({
+          code: JSON.parse(localStorage.AppCode).code,
+          touchId: JSON.parse(localStorage.TouchOn),
+          ACDelbuttons: true,
+          onCorrect: function () {
+          },
+          onWrong: function (attemptNumber) {
+          },
+        });
+      }
       $scope.$on('incomingMessage', function (e, r) {
         if(r.payload.text.length)
           msg = $sce.trustAsHtml(r.payload.text);

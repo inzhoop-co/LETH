@@ -44,10 +44,10 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
           touchId: JSON.parse(localStorage.TouchOn),
     			ACDelbuttons: true,
     			onCorrect: function () {
-    			  console.log('correct!');
+    			  //console.log('correct!');
     			},
     			onWrong: function (attemptNumber) {
-    			  console.log(attemptNumber + ' wrong passcode attempt(s)');
+    			  //console.log(attemptNumber + ' wrong passcode attempt(s)');
     			},
   		  });
 		  }
