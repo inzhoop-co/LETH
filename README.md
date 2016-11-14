@@ -26,6 +26,11 @@ With LETH you could:
 - Currency convertion value via Kraken API
 - Run DAppLeth (in progress)
 
+# Beta Testers
+Become a BETA tester, install the App and help the community to grow up.
+Visit <a href="http://www.inzhoop.com">Inzhoop website</a>
+
+
 # References
 ```
 https://github.com/ConsenSys/eth-lightwallet

@@ -1,5 +1,8 @@
 angular.module('leth.services')
 .factory('Chat', function ($rootScope, $http, $q, $sce, AppService, Friends) {
+  var ttlTime = 10000;
+  var wtpTime = 100;
+
   var identity ="0x";
   var chats=[];
   var chatsDM=[];
@@ -45,8 +48,8 @@ angular.module('leth.services')
         from:  this.identity(),
         topics: topics,
         payload: payload,
-        ttl: 100,
-        workToProve: 100
+        ttl: ttlTime,
+        workToProve: wtpTime
       };
       web3.shh.post(message); 
 
@@ -64,8 +67,8 @@ angular.module('leth.services')
         from:  idFrom,
         topics: topics,
         payload: payload,
-        ttl: 100,
-        workToProve: 100
+        ttl: ttlTime,
+        workToProve: wtpTime
       };
 
       chatsDM.push({
@@ -90,8 +93,8 @@ angular.module('leth.services')
         from:  idFrom,
         topics: topics,
         payload: payload,
-        ttl: 100,
-        workToProve: 100
+        ttl: ttlTime,
+        workToProve: wtpTime
       };
 
       chatsDM.push({
@@ -116,8 +119,8 @@ angular.module('leth.services')
         from:  this.identity(),
         topics: topics,
         payload: payload,
-        ttl: 100,
-        workToProve: 100
+        ttl: ttlTime,
+        workToProve: wtpTime
       };
       web3.shh.post(message); 
 
@@ -135,8 +138,8 @@ angular.module('leth.services')
         from:  this.identity(),
         topics: topics,
         payload: payload,
-        ttl: 100,
-        workToProve: 100
+        ttl: ttlTime,
+        workToProve: wtpTime
       };
       web3.shh.post(message); 
 
@@ -154,8 +157,8 @@ angular.module('leth.services')
         from:  this.identity(),
         topics: topics,
         payload: payload,
-        ttl: 100,
-        workToProve: 100
+        ttl: ttlTime,
+        workToProve: wtpTime
       };
       web3.shh.post(message); 
       

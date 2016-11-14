@@ -1,10 +1,13 @@
 <ion-view view-title="Settings">
   <ion-content class="has-header has-tabs">
+    <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
   	<ion-scroll class="list scrollBg">
-   	 	<div class="padding subdued">Host Provider Address</div>
+   	 	<div class="padding subdued">Host Provider Address  </div>
 		<div class="item padding-on-borders" >
 		 	<div class="row no-bmp">
-		 		<div class="col text-left no-bmp col-50 col-center">Network host type </div>
+		 		<div class="col text-left no-bmp col-50 col-center">Host type 
+		 			<span class="item-note">#{{lastBlock}}</span>
+			    </div>
 				 <div class="col text-left col-center col-33">
 					<span class="{{badgeNetwork}} relative-position">{{nameNetwork}}</span>
 				</div>
@@ -42,7 +45,7 @@
 		    </button>
 		</div>
 		<div class="item item-button-right">
-		    Import a Wallet
+		    Restore a Wallet
 		    <button class="button button-clear" ng-click="chooseImportWallet()">
 		        <i class="icon ion-ios-upload"></i>
 		    </button>
@@ -73,8 +76,10 @@
 		</div>		
 		<div class="divider padding" align="center">
 			<p><img ng-src="img/inzhoop.png" id="headerSetting"></p>
-			<p>LΞTH v.0.9.10 <a ng-if="isIOS()" href="itms-services://?action=download-manifest&url=
-https://dl.dropboxusercontent.com/s/7ew63103z797tyy/manifest.plist">(update)</p>
+			<p>LΞTH v.0.9.12 
+				<a ng-if="isIOS()" href="itms-services://?action=download-manifest&url=
+https://www.inzhoop.com/download/ios/manifest.plist">(update)
+			</p>
 		</div>		
 	</ion-scroll>
   </ion-content>

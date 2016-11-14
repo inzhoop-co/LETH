@@ -2,7 +2,10 @@
   <ion-side-menu-content>
     <ion-nav-bar class="bar-stable bar-assertive">
       <ion-nav-buttons side="right">
-        <button class="button button-clear" on-touch="scanTo()">
+        <button class="button button-clear" on-touch="infoSync()">
+          <i class="{{syncStatus}}"></i>
+        </button>
+        <button class="button button-clear" on-touch="scanTo()" ng-hide="fromAddressBook">
           <i class="icon ion-ios-camera"></i>
         </button>
       </ion-nav-buttons>

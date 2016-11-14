@@ -22,7 +22,7 @@ angular.module('leth.controllers')
       }
       else {
       	$scope.getNetwork();
-    		var activeCoins=$scope.listCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork;} );
+    		var activeCoins=$scope.listCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork && obj.Installed ;} );
         $scope.idCoin = index;
         $scope.logoCoin = activeCoins[index-1].Logo;
         $scope.descCoin = activeCoins[index-1].Abstract;
@@ -190,8 +190,8 @@ angular.module('leth.controllers')
     }
 
     $scope.chooseCoin = function(){  
-		  $scope.getNetwork();
-      var buttonsGroup = [{text: '<img width="30px" heigth="30px" src="' + $scope.logoCoin + '"/> Ether [Ξ]'}];
+		  //$scope.getNetwork();
+      var buttonsGroup = [{text: '<img width="30px" heigth="30px" src="img/ethereum-icon.png"/> Ether [Ξ]'}];
 
 	   var activeCoins=$scope.listCoins.filter( function(obj) {return (obj.Network==$scope.nameNetwork) && (obj.Installed);} );
       for (var i = 0; i < activeCoins.length; i++) {
