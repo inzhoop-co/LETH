@@ -59,12 +59,27 @@ angular.module('leth.controllers', [])
   });
 
   var getSync = function(){
-    if(web3.eth.syncing)
-      $scope.syncStatus = "icon ion-eye-disabled light";
-    else
-      $scope.syncStatus = "icon ion-eye calm";
+    try {
+      if(web3.eth.syncing)
+        $scope.syncStatus = "icon ion-eye-disabled light";
+      else
+        $scope.syncStatus = "icon ion-eye calm";
 
-    $scope.lastBlock = web3.eth.blockNumber;
+      $scope.lastBlock = web3.eth.blockNumber;
+    } catch (err) {
+      var alertPopup = $ionicPopup.show({
+        title: 'Error',
+        template: 'Something is wrong! <br/>' + err.message   
+      });
+
+      alertPopup.then(function(res) {
+         alertPopup.close();
+      });
+    
+      $timeout(function() {
+         alertPopup.close(); //close the popup after x seconds for some reason
+      }, 3000);
+    }
   }
 
   $scope.infoSync = function(){
@@ -236,27 +251,31 @@ angular.module('leth.controllers', [])
   };
 
   $scope.getNetwork = function(){
-    web3.eth.getBlock(0, function(e, res){
-      if(!e){
-        switch(res.hash) {
-          case '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303':
-            $scope.nameNetwork = 'Morden';
-            $scope.classNetwork = 'royal';                
-            $scope.badgeNetwork = 'badge badge-royal';
-            break;
-          case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
-            $scope.nameNetwork = 'Mainet';
-            $scope.classNetwork = 'balanced';                
-            $scope.badgeNetwork = 'badge badge-balanced';
-            break;
-          default:
-            $scope.nameNetwork = 'Private';
-            $scope.classNetwork = 'calm';                
-            $scope.badgeNetwork = 'badge badge-calm';              
+    try{
+      web3.eth.getBlock(0, function(e, res){
+        if(!e){
+          switch(res.hash) {
+            case '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303':
+              $scope.nameNetwork = 'Morden';
+              $scope.classNetwork = 'royal';                
+              $scope.badgeNetwork = 'badge badge-royal';
+              break;
+            case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
+              $scope.nameNetwork = 'Mainet';
+              $scope.classNetwork = 'balanced';                
+              $scope.badgeNetwork = 'badge badge-balanced';
+              break;
+            default:
+              $scope.nameNetwork = 'Private';
+              $scope.classNetwork = 'calm';                
+              $scope.badgeNetwork = 'badge badge-calm';              
+          }
         }
-      }
-    });
-    getSync();
+      });
+      getSync();
+    } catch(err){
+      console.log(err.message);
+    }
   };
 
   $scope.sendFeedback = function(){
