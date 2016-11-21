@@ -14,7 +14,7 @@
       </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-view name="menuContent" > <!--animation="slide-left-right"-->
-      <ion-tabs class="tabs-icon-top tabs-color-assertive hide-on-keyboard-open">
+      <ion-tabs ng-show="showBar" class="tabs-icon-top tabs-color-assertive hide-on-keyboard-open">
         <!-- Home Tab  -->
         <ion-tab title="Store" icon-off="ion-ios-albums-outline" icon-on="ion-ios-albums" href="#/app/dappleths">
         </ion-tab>
@@ -36,3 +36,4 @@
       </ion-tabs>
     </ion-nav-view>
   </ion-side-menu-content>
+</ion-side-menus>

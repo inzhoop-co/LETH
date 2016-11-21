@@ -52,10 +52,6 @@
       "id": "cordova-plugin-actionsheet"
     },
     "cordova-plugin-device-motion",
-    {
-      "locator": "https://github.com/katzer/cordova-plugin-local-notifications.git",
-      "id": "de.appplant.cordova.plugin.local-notification"
-    },
     "cordova-plugin-app-event",
     {
       "locator": "https://github.com/katzer/cordova-plugin-badge.git",

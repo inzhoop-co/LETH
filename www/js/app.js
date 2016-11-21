@@ -11,12 +11,15 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
     //url: 'http://us11.campaign-archive1.com/feed'
   })
   .constant('StoreEndpoint', {
-    url: 'dappleths'
-    //url: 'http://www.inzhoop.com/dappleths'
+    //url: 'dappleths'
+    url: 'http://www.inzhoop.com/dappleths'
   })
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,
                 $lockScreen,$state,$window, $location) {
     $ionicPlatform.ready(function () {      
+      if (typeof localStorage.LastMsgTms == 'undefined') {
+        localStorage.LastMsgTms="";
+      }
       if (typeof localStorage.PinOn == 'undefined') {
         localStorage.PinOn="false";
       }
@@ -255,6 +258,29 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
       }
     }
   }]) 
+  .directive('appDirective', function($rootScope, Chat, AppService){
+    return {
+      restrict : 'A',
+      link: function(scope, element, attrs){
+        element.bind('dappMessage', function(e){
+          $rootScope.$broadcast('dappEvent', { data: e});
+          
+        })        
+      }
+    }
+  })  
+  /*.directive('msgDirective', function(){
+  return {
+      restrict : 'A',
+      scope : true, 
+      link: function(scope, element, attrs){
+        scope.$on('dappEvent',function(){
+          console.log('caught event from dapp');
+        });  
+
+       }
+    }
+  }) */
   .filter('calendar', calendar);
     function calendar () {
       return function (time) {

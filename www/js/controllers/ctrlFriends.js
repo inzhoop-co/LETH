@@ -34,6 +34,15 @@ angular.module('leth.controllers')
       $scope.$digest(); 
     })
 
+    $scope.$on('$ionicView.beforeEnter', function() {
+        $scope.showTabs(false);
+    })
+
+    $scope.$on('$ionicView.beforeLeave', function() {
+      $scope.showTabs(true);
+    })
+
+
     $scope.isFromTo = function(chat){
       if($scope.friend.addr == AppService.account())
         return false; //no chat with yourself

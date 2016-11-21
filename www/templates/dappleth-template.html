@@ -1,0 +1,43 @@
+<ion-view view-title="{{dappName}}">
+  <ion-header-bar class="bar bar-subheader bar-stable" hide-on-scroll="true">
+    header
+  </ion-header-bar>
+   <ion-content class="chat" delegate-handle="dappScroll">
+   <div class="message-list">
+      <div ng-repeat="bot in events | orderBy:'bot.timestamp'"
+        class="message-wrapper">
+        <div ng-class="bot.message.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
+            <img ng-src="{{dapp.identity}}" ng-class="bot.message.from === myidentity ? 'image image-mine' : 'image image-other'""> 
+          <div class="message" ng-class="bot.message.from === myidentity ? 'message-mine' : 'message-other'" on-hold="msgAction(bot.message)">
+            <div class="message-text" ng-if="bot.message.text.length" ng-bind-html="bot.message.text"></div>
+            <img ng-src="{{bot.message.image}}" ng-if="bot.message.image.length"/>
+            <span class="message-timestamp">{{isFriend(bot.message.from)}} {{chat.timestamp | date: 'HH:mm'}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>  
+  <div align-title="left" keyboard-attach class="bar bar-footer bar-stable has-tabs item-input-inset">
+    <button class="button button-clear button-icon button-positive icon ion-ios-plus-empty" ng-click="shareItems()"></button>
+    <label class="item-input-wrapper">
+      <input
+        ng-model="text.message"
+        on-return="sendMessage()"
+        dir="auto"
+        type="text"/>
+    </label>
+    <span ng-if="text.message.length > 0">
+      <button ng-click="sendMessage()" class="button button-clear button-positive">
+          <i class="icon ion-ios-paperplane"></i>
+      </button>
+    </span>
+    <span ng-if="!text.message || text.message.length === 0">
+      <button class="button button-clear button-icon button-positive icon ion-ios-camera-outline" ng-click="getPhoto()"></button>
+      <i class="buttons-seperator icon ion-android-more-vertical"></i>
+      <button class="button button-clear button-icon button-positive icon ion-ios-mic-outline"></button>
+    </span>
+  </div>
+</ion-view>
+
+        
+        

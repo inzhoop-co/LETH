@@ -6,6 +6,7 @@ angular.module('leth.controllers', [])
                                 AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService) {
   window.refresh = function () {
     $ionicLoading.show();
+    $scope.showTabs(true);    
     $scope.balance = AppService.balance();
     ExchangeService.getTicker($scope.xCoin, JSON.parse(localStorage.BaseCurrency).value).then(function(value){
       $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat(value * $scope.balance).toFixed(2) ;
@@ -21,6 +22,10 @@ angular.module('leth.controllers', [])
     $scope.readCoinsList();
     //$scope.readFeedsList();
     $timeout(function() {$ionicLoading.hide();}, 1000);
+  };
+
+  $scope.showTabs = function(val) {
+    $scope.showBar = val;
   };
 
   $scope.loadFriends = function(){
@@ -104,6 +109,7 @@ angular.module('leth.controllers', [])
     AppService.getStoreApps().then(function(response){
       $scope.listApps = response;
     }) 
+
   }; 
 
   $scope.readCoinsList = function(){
@@ -732,6 +738,7 @@ angular.module('leth.controllers', [])
   $scope.msgCounter = 0;
   $scope.DMCounter = 0;
   $scope.DMchats = Chat.findDM(); 
+  $scope.DAPPchats = Chat.findDAPP(); 
   $scope.chats = Chat.find(); 
 
   $scope.setBadge = function(value) {

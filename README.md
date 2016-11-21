@@ -19,8 +19,8 @@ With LETH you could:
 - Share Address via SMS or Email
 - Share your geolocation
 - Request payments
-- Send messages / images to friends and community using SHH protocol to chat
-- Send private crypted messages to friends
+- Send messages / images to friends and community using SHH protocol in unpersisted chat
+- Send private unpersisted crypted messages to friends
 - Backup / Restore wallet
 - Protect access with TouchID / PIN code
 - Currency convertion value via Kraken API

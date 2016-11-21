@@ -82,29 +82,42 @@ angular.module('leth.controllers')
       $ionicListDelegate.closeOptionButtons();
     };
   })
-  .controller('DapplethRunCtrl', function ($scope, angularLoad,  $templateRequest, $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout) {
-      console.log("Param " + $stateParams.Id);
-      //load app selected
-      var id = $stateParams.Id;
-      var activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
-      
-      $scope.message = "DapplethRunCtrl";
+  .controller('DapplethRunCtrl', function ($scope, $rootScope, angularLoad, $ionicLoading, $templateRequest, $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout, AppService, Chat) {
+    $scope.$on('$ionicView.beforeEnter', function() {
+      $scope.showTabs(false);
+    })
 
-      $http.get(activeApp.InstallUrl) 
-        .success(function(data){
-          $scope.appContainer = $sce.trustAsHtml(data);          
-      });
- 
-      angularLoad.loadScript(activeApp.ScriptUrl).then(function() {
-          console.log('loading ' + activeApp.ScriptUrl);
-      }).catch(function() {
-            console.log('ERROR :' + activeApp.ScriptUrl);
-      });
+    $scope.$on('$ionicView.beforeLeave', function() {
+      $scope.showTabs(true);
+    })
 
-      $scope.refresh = function() {
-        updateData(); //defined in external js
-        $scope.$broadcast('scroll.refreshComplete');
-      }
+    var id = $stateParams.Id;
+    $scope.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
+    
+    $scope.message = "DapplethRunCtrl";
+
+    $http.get($scope.activeApp.InstallUrl) 
+      .success(function(data){
+        $scope.appContainer = $sce.trustAsHtml(data);          
+    });
+    $ionicLoading.show(); 
+    angularLoad.loadScript($scope.activeApp.ScriptUrl).then(function() {
+      $ionicLoading.hide();
+        console.log('loading ' + $scope.activeApp.ScriptUrl);
+    }).catch(function() {
+        console.log('ERROR :' + $scope.activeApp.ScriptUrl);
+    });
+
+    $scope.refresh = function() {
+      updateData(); //defined in external js
+      $scope.$broadcast('scroll.refreshComplete');
+    }
+
+    $rootScope.$on('dappEvent', function(event,args){
+      var msg = {type: 'leth', mode: 'dappMessage', from: $scope.activeApp.Address, to: [null], text: args.data.detail, image: '' };
+      Chat.sendDappMessage(msg, $scope.activeApp.Identity, $scope.activeApp.Name);  
+    });
+
   })
   .controller('FeedCtrl', function ($scope, $stateParams, $cordovaInAppBrowser, $sce, $http, FeedService) {
     if($stateParams.Item){

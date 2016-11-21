@@ -19,6 +19,10 @@ contract.MatchStarted().watch(function (error, result) {
     date: new Date()
     */
     console.log("Nuova partita: " + msg); 
+
+    var e = new CustomEvent('dappMessage', { "detail": "New match started"});
+    document.body.dispatchEvent(e);
+
     angular.element(document.querySelector('#icon')).attr('src','dappleths/dapp_4/img/info.png');
     angular.element(document.querySelector('#title')).html('Nuova partita');
     angular.element(document.querySelector('#text')).html(msg);
@@ -38,6 +42,11 @@ contract.TimeElapsed().watch(function (error, result) {
     date: new Date()
     */
     console.log("TimeElapsed: " + msg); 
+    
+    var e = new CustomEvent('dappMessage', { "detail": "TimeElapsed"});
+    document.body.dispatchEvent(e);
+
+
     angular.element(document.querySelector('#icon')).attr('src','dappleths/dapp_4/img/warning.png');
     angular.element(document.querySelector('#title')).html('Game Over!');
     angular.element(document.querySelector('#text')).html('Fai partire un nuovo giro, play now!');
@@ -57,6 +66,11 @@ contract.NewBet().watch(function (error, result) {
     date: new Date()
     */
     console.log("NewBet: " + msg); 
+
+    var e = new CustomEvent('dappMessage', { "detail": "New bet"});
+    document.body.dispatchEvent(e);
+
+
     angular.element(document.querySelector('#icon')).attr('src','dappleths/dapp_4/img/info.png');
     angular.element(document.querySelector('#title')).html('New Bet!');
     angular.element(document.querySelector('#text')).html('From ' + msg);
@@ -76,6 +90,10 @@ contract.BetRefused().watch(function (error, result) {
     date: new Date()
     */
      console.log("BetRefused: " + msg);
+
+    var e = new CustomEvent('dappMessage', { detail: "Bet refused!" });
+    document.body.dispatchEvent(e);
+
     angular.element(document.querySelector('#icon')).attr('src','dappleths/dapp_4/img/alert.png');
     angular.element(document.querySelector('#title')).html('Ohooooooo!');
     angular.element(document.querySelector('#text')).html(msg);
@@ -96,6 +114,10 @@ contract.Winner().watch(function (error, result) {
     date: new Date()
     */    
     console.log("WinnerIs :" + msg); 
+
+    var e = new CustomEvent('dappMessage', { detail: "The winner is" });
+    document.body.dispatchEvent(e);
+
 
     angular.element(document.querySelector('#icon')).attr('src','dappleths/dapp_4/img/winner.png');
     angular.element(document.querySelector('#title')).html('The Winner is');
@@ -143,6 +165,7 @@ function playLottery() {
     var callback = function (err, txhash) {
         console.log('error: ' + err);
         console.log('txhash: ' + txhash);
+
     }
     args.push(callback);
     contract['play'].apply(this, args);

@@ -1,4 +1,85 @@
-<ion-view view-title="Ξ {{balance}}">
+<ion-view view-title="{{activeApp.Name}}">
+  <ion-nav-bar class="bar-stable bar-assertive">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+  </ion-nav-bar>
+  <!--ion-header-bar class="bar bar-subheader bar-stable" hide-on-scroll="true">
+    Your Balance is Ξ {{balance}}
+  </ion-header-bar-->
+
+      <div class="list has-header">
+      <div class="item item-thumbnail-left">
+        <img class="rounded" ng-src="{{activeApp.Logo}}"> 
+        <div class="row">
+          <div class="col item-divider">
+            <i class="icon ion-ios-pricetag"></i>
+            Price (wei)
+          </div>
+          <div class="col item-divider">
+            <i class="icon ion-trophy"></i>
+            Prize (wei)
+          </div>
+        </div>
+        <div class="row">
+          <div class="col item-text-wrap">
+            <p id="price">{{price}}</p>
+          </div>
+          <div class="col item-text-wrap">
+            <p id="amount">{{amount}}</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col item-divider">
+            <i class="icon ion-ios-stopwatch"></i>
+            TimeLeft
+          </div>
+          <div class="col item-divider">
+            <i class="icon ion-pound"></i>
+            Bets
+          </div>
+        </div>
+        <div class="row">
+          <div class="col item-text-wrap">
+            <p id="time">{{time}}</p>
+          </div>
+          <div class="col item-text-wrap">
+            <p id="numGiocate">{{numGiocate}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   <ion-content class="dappleth has-dappleth" delegate-handle="chatScroll">
+    <div class="bot-list">
+      <div ng-repeat="e in DAPPchats | orderBy:'bot.timestamp'"
+        class="bot-wrapper">
+        <div ng-class="e.message.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
+            <img ng-src="{{dapp.identity}}" ng-class="e.message.from === myidentity ? 'image image-mine' : 'image image-other'""> 
+          <div class="bot" ng-class="e.message.from === myidentity ? 'bot-mine' : 'bot-other'" on-hold="msgAction(e.message)">
+            <div class="bot-text" ng-if="e.message.text.length" ng-bind-html="e.message.text"></div>
+            <img ng-src="{{e.message.image}}" ng-if="e.message.image.length"/>
+            <span class="bot-timestamp">{{isFriend(e.message.from)}} {{e.timestamp | date: 'HH:mm'}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>  
+
+  <ion-footer-bar align-title="center" class="bar-assertive">
+    <div class="buttons">
+      <button class="button"></button>
+    </div>
+    <h2 class="title">
+      <button class="button button-clear button-icon icon ion-play" onclick="playLottery()"></button> Bet now
+    </h2>
+    <div class="buttons" ng-click="doSomething()">
+      <button class="button"></button>
+    </div>
+  </ion-footer-bar>
+
+</ion-view>
+<!--ion-view view-title="Ξ {{balance}}">
   <ion-nav-buttons side="right">
     <button class="button button-clear" on-touch="scanTo()" ng-hide="fromAddressBook">
       <i class="icon ion-ios-camera"></i>
@@ -13,4 +94,4 @@
     <div ng-bind-html="appContainer">
     </div>
   </ion-content>
-</ion-view>
+</ion-view-->

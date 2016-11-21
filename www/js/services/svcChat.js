@@ -6,6 +6,7 @@ angular.module('leth.services')
   var identity ="0x";
   var chats=[];
   var chatsDM=[];
+  var chatsDAPP=[];
   var topics = ["leth"];
   var filter =  null;
   var _decryptMessage = function(result){
@@ -27,6 +28,9 @@ angular.module('leth.services')
     },
     findDM: function(){
       return chatsDM;
+    },
+    findDAPP: function(){
+      return chatsDAPP;
     },
     addTopic: function(t){
       topics.push(t);
@@ -175,7 +179,24 @@ angular.module('leth.services')
           message: payload
         });
       }
-    },      
+    },
+    sendDappMessage: function (msg, identity, topic) {
+      var payload = msg;
+      var message = {
+        from:  identity,
+        topics: topics,
+        payload: payload,
+        ttl: ttlTime,
+        workToProve: wtpTime
+      };
+      web3.shh.post(message); 
+
+      chatsDAPP.push({
+        identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
+        timestamp: Date.now(),
+        message: payload
+      });
+    },
     encryptMessage: function (msg,toAddr,toKey) {
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         textMsg = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,textMsg, local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
@@ -191,6 +212,7 @@ angular.module('leth.services')
       filter.watch(function (error, result) {
         if(error){return;};
         if(result.payload.from == AppService.account()){return;}
+        if(result.sent*1000 <= localStorage.LastMsgTms){return;}
         if(result.payload.mode == 'encrypted'){
           lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
             if(result.payload.text != '')
@@ -203,7 +225,6 @@ angular.module('leth.services')
               timestamp: result.sent*1000,
               message: result.payload
             });
-
             $scope.$broadcast("incomingMessage", result);              
           });
         }
@@ -226,6 +247,7 @@ angular.module('leth.services')
             $scope.$broadcast("incomingMessage", result);
           }//exclude self sent              
         };//else
+        localStorage.LastMsgTms = result.sent*1000;
       });
     },
     unlistenMessage: function(){
