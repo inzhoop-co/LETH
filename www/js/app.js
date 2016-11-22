@@ -281,6 +281,16 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
        }
     }
   }) */
+  .filter('strLimit', ['$filter', function($filter) {
+   return function(input, beginlimit, endlimit) {
+      if (! input) return;
+      if (input.length <= beginlimit + endlimit) {
+          return input;
+      }
+
+      return $filter('limitTo')(input, beginlimit) + '...' + $filter('limitTo')(input, -endlimit) ;
+   };
+  }])
   .filter('calendar', calendar);
     function calendar () {
       return function (time) {

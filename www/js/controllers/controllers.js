@@ -266,6 +266,11 @@ angular.module('leth.controllers', [])
               $scope.classNetwork = 'royal';                
               $scope.badgeNetwork = 'badge badge-royal';
               break;
+            case '0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d':
+              $scope.nameNetwork = 'Ropsten';
+              $scope.classNetwork = 'positive';                
+              $scope.badgeNetwork = 'badge badge-positive';
+              break;
             case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
               $scope.nameNetwork = 'Mainet';
               $scope.classNetwork = 'balanced';                
@@ -937,11 +942,53 @@ angular.module('leth.controllers', [])
   );     
 
 }) //fine AppCtrl
-.controller('TransactionCtrl', function ($scope, $stateParams) {
+.controller('TransactionCtrl', function ($scope, $stateParams, $ionicPopup, $ionicListDelegate, Transactions) {
   $scope.isFromTo = function(item) {
       if($stateParams.addr!="")
         return (item.to == $stateParams.addr || item.from == $stateParams.addr);
       return item;
+  }
+
+ $scope.checkStatus = function(t){
+    web3.eth.getTransaction(t.id, function(err,res){
+      if(res){
+        t.block = res.blockNumber;
+        Transactions.upd(t);
+        $scope.transactions = Transactions.all();
+        $scope.$digest(); 
+      }
+    });
+
+    $ionicListDelegate.closeOptionButtons();
+ }
+
+  $scope.deleteTransaction = function(t){
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Delete Transaction',
+      template: 'Are you sure you want to delete this transaction?'
+    });
+
+    confirmPopup.then(function(res) {
+     if(res) {
+        Transactions.del(t);
+     }
+
+     $ionicListDelegate.closeOptionButtons();
+   });
+  }
+
+  $scope.deleteAllTransactions = function(){
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Delete Transactions',
+      template: 'Are you sure you want to delete all transactions?'
+    });
+
+    confirmPopup.then(function(res) {
+     if(res) {
+        Transactions.delAll();
+        $scope.transactions = Transactions.all();
+     }
+   });
   }
 
 })
