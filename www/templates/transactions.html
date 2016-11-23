@@ -21,10 +21,10 @@
         <h2 ng-show="t.block" ng-class="{'icon ion-arrow-graph-down-left balanced':t.to==account, 'icon ion-arrow-graph-up-right assertive':t.from==account}"> {{t.time | date: "yyyy-MM-dd HH:mm:ss"}}</h2>
         <h2 ng-show="!t.block" class="icon ion-load-d dark"> {{t.time | date: "yyyy-MM-dd HH:mm:ss"}}</h2>
         <h3>{{t.id | strLimit: 15 : 15}}</h3>
-        <div ng-show="isFriend(t.from)">From: {{t.from | strLimit: 10 : 15}}</div>
-        <div ng-hide="isFriend(t.from)">From: {{isFriend(t.from) | strLimit: 15 : 15}}</div>
-        <div ng-show="isFriend(t.to)">To: {{t.to | strLimit: 10 : 15}}</div>
-        <div ng-hide="isFriend(t.to)">To: {{isFriend(t.to) | strLimit: 15 : 15}}</div>
+        <div ng-hide="isFriend(t.from)">From: {{t.from | strLimit: 15 : 5}}</div>
+        <div ng-show="isFriend(t.from)">From: {{isFriend(t.from) | strLimit: 10 : 2}}</div>
+        <div ng-hide="isFriend(t.to)">To: {{t.to | strLimit: 15 : 5}}</div>
+        <div ng-show="isFriend(t.to)">To: {{isFriend(t.to) | strLimit: 10 : 2}}</div>
         <div><h3>Amount: {{(t.value/ t.unit) | currency:t.symbol + " ":6}}</h3></div>        
         <ion-option-button ng-show="!t.block" class="icon ion-ios-reload button-positive" ng-click="checkStatus(t)"></ion-option-button>
         <ion-option-button class="icon ion-ios-trash-outline button-assertive" ng-click="deleteTransaction(t)"></ion-option-button>

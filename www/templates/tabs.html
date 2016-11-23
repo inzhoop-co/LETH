@@ -1,0 +1,40 @@
+<ion-nav-bar class="bar-stable bar-assertive">
+  <ion-nav-buttons side="right">
+    <button class="button button-clear" on-touch="infoSync()">
+      <i class="{{syncStatus}}"></i>
+    </button>
+    <button class="button button-clear" on-touch="scanTo()" ng-hide="fromAddressBook">
+      <i class="icon ion-ios-camera-outline"></i>
+    </button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="left">
+    <img ng-src="img/inzhoop-icon.png" ng-click="sendFeedback()" >
+  </ion-nav-buttons>
+</ion-nav-bar>
+<ion-tabs class="tabs-icon-top tabs-color-assertive {{$root.hideTabs}} ">
+  <!-- Home Tab  -->
+  <ion-tab title="Store" icon-off="ion-ios-albums-outline" icon-on="ion-ios-albums" href="#/tab/
+  dappleths" >
+    <ion-nav-view name="dappleths"></ion-nav-view>
+  </ion-tab>
+  <!-- Friends Tab -->
+  <ion-tab title="DappLeths" badge="msgCounter" badge-style="badge-assertive" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes" href="#/tab/chats" >
+    <ion-nav-view name="chats"></ion-nav-view>
+  </ion-tab>
+  <!-- Friends Tab -->
+  <ion-tab title="Friends" badge="DMCounter" badge-style="badge-assertive" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" href="#/tab/friends" >
+    <ion-nav-view name="friends"></ion-nav-view>
+  </ion-tab>
+  <!-- Wallet Tab -->
+  <ion-tab title="Wallet" icon-off="ion-social-bitcoin-outline" icon-on="ion-social-bitcoin" href="#/tab/wallet/">
+    <ion-nav-view name="wallet"></ion-nav-view>
+  </ion-tab>
+  <!-- Address Tab -->
+  <ion-tab title="Address" icon-off="ion-ios-barcode-outline" icon-on="ion-ios-barcode" href="#/tab/address">
+    <ion-nav-view name="address"></ion-nav-view>
+  </ion-tab>
+  <!-- Settings Tab -->
+  <ion-tab  title="Settings" icon-off="ion-ios-cog-outline" icon-on="ion-ios-cog" href="#/tab/settings">
+    <ion-nav-view name="settings"></ion-nav-view>
+  </ion-tab>
+</ion-tabs>

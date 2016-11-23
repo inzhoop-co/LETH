@@ -1,18 +1,22 @@
-<ion-view view-title="{{friend.name}}">
+<ion-view view-title="{{friend.name | strLimit: 10 : 2}}" hide-tabs>
   <ion-nav-bar class="bar-stable bar-assertive">
     <ion-nav-back-button>
     </ion-nav-back-button>
+      <ion-nav-buttons side="right">
+        <a class="button button-clear" ng-href="#/tab/transactions/{{friend.addr}}">
+          <i class="icon ion-ios-list-outline"></i>
+        </a>
+        <a class="button button-clear" ng-hide="fromAddressBook" ng-href="#/tab/wallet/{{friend.addr}}">
+          <i class="icon ion-social-bitcoin-outline"></i>
+        </a>
+      </ion-nav-buttons>
   </ion-nav-bar>
-  <div class="list has-header">
-    <div class="item item-thumbnail-left">
-      <img class="rounded" ng-src="{{friend.icon}}"> 
-      <p>{{friend.addr}}</p>
-      <div>{{friendBalance | currency:"Ξ "}}</div>
-      <a class="button button-icon icon ion-ios-list-outline dark" ng-href="#/app/transactions/{{friend.addr}}"> List </a>
-      <a class="button button-icon icon ion-social-bitcoin-outline balanced" ng-href="#/app/wallet/{{friend.addr}}"> Pay</a>
-    </div>
-  </div>   
-  <ion-content class="has-header has-footer has-chat-header has-chat-footer chat" delegate-handle="chatScroll">    
+  <div class="bar bar-subheader bar-stable">
+    <img class="rounded" ng-src="{{friend.icon}}"> 
+    <span class="subdued">{{friend.addr | strLimit: 15 : 10}}</span>
+    <span class="item-note">{{friendBalance | currency:'Ξ '}}</span>
+  </div>
+  <ion-content class="has-header has-subheader has-footer has-chat-footer chat" delegate-handle="chatScroll">    
     <div class="message-list has-chat-header has-chat-footer">
       <div ng-repeat="chat in DMchats | filter:isFromTo | orderBy:'chat.timestamp'"
         class="message-wrapper">

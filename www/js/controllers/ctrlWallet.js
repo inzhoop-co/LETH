@@ -91,7 +91,7 @@ angular.module('leth.controllers')
               });
               successPopup.then(function (res) {
                 $scope.amountTo = "";
-                $state.go('app.transactions');
+                $state.go('tab.transall');
               });
               //save transaction
               var newT = {from: $scope.account, to: addr, id: result[1], value: amount, unit: unit, symbol: $scope.symbolCoin, time: new Date().getTime()};
@@ -131,7 +131,7 @@ angular.module('leth.controllers')
               });
               successPopup.then(function (res) {
                 $scope.amountTo = "";
-                $state.go('app.transactions');
+                $state.go('tab.transall');
               });
               //save transaction
               var newT = {from: $scope.account, to: addr, id: result[1], value: value, unit: unit, symbol: $scope.symbolCoin, time: new Date().getTime()};
@@ -217,6 +217,6 @@ angular.module('leth.controllers')
     };
 
     $scope.listTransaction = function(){
-      $state.go('app.transactions');
+      $state.go('tab.transall');
     }
   })

@@ -2,8 +2,9 @@ angular.module('leth.controllers', [])
 .controller('AppCtrl', function ($ionicHistory, $interval, $scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, 
                                 $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
-                                $ionicLoadingConfig, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,
+                                $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,
                                 AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService) {
+  
   window.refresh = function () {
     $ionicLoading.show();
     $scope.showTabs(true);    
@@ -205,7 +206,7 @@ angular.module('leth.controllers', [])
         .scan()
         .then(function (barcodeData) {
           if(barcodeData.text!= ""){
-			      $state.go('app.wallet', {addr: barcodeData.text});
+			      $state.go('tab.wallet', {addr: barcodeData.text});
 			      console.log('read code: ' + barcodeData.text);
 		      }
         }, function (error) {
@@ -827,7 +828,7 @@ angular.module('leth.controllers', [])
     }//geolocation
     if(msg.mode=="contact" && msg.attach){
       if($scope.isFriend(msg.attach.addr) && msg.attach.addr!=AppService.account()) //go to friend
-        $state.go('app.single', {Friend: msg.attach.addr});
+        $state.go('tab.single', {Friend: msg.attach.addr});
       else //add friend
         $scope.addAddress(msg.attach.addr,msg.attach.idkey)
     }//contact
@@ -844,7 +845,7 @@ angular.module('leth.controllers', [])
       if($ionicTabsDelegate.selectedIndex()!=2)
         $scope.DMCounter += 1;
 
-      if($ionicHistory.currentView().stateName != "app.single"){
+      if($ionicHistory.currentView().stateName != "tab.single"){
         Friends.increaseUnread(r.payload.from);
         $scope.loadFriends();
       }

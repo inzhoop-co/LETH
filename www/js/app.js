@@ -56,24 +56,20 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
 		  }
 
       if (typeof localStorage.AppKeys == 'undefined') {
-        console.log("wallet not found");
-        $rootScope.hasLogged = false;
-        localStorage.HasLogged = $rootScope.hasLogged;          
-        $location.path('/app/login');
-      }
-      else {
-        console.log("login successfully");
-        $rootScope.hasLogged = true;  
-        localStorage.HasLogged = $rootScope.hasLogged;
-        $location.path('/app/dappleths');
-      }	  
+          console.log("wallet not found");
+          $rootScope.hasLogged = false;
+          localStorage.HasLogged = $rootScope.hasLogged;          
+          $location.path('/tab/login');
+        }
+        else {
+          console.log("login successfully");
+          $rootScope.hasLogged = true;  
+          localStorage.HasLogged = $rootScope.hasLogged;
+          $location.path('/tab/dappleths');
+      } 
 
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.disableScroll(true);        
-
-        cordova.getAppVersion(function (version) {
-          alert(version);
-        });
       }
       if (window.StatusBar) {
         StatusBar.styleDefault();
@@ -92,119 +88,128 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
         var page =/.*:[/]{2}([^?]*)[?]?(.*)/.exec(event.detail.url)[1];
         // redirects to page specified in url
         if(event.detail.url.split(':')[0] == "ethereum")
-          $state.go('app.wallet', {addr: page});
+          $state.go('tab.wallet', {addr: page});
       }); 
 
     });
   })
   .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
-      .state('app', {
-        url: '/app',
+      .state('tab', {
+        url: '/tab',
         abstract: true,
-        templateUrl: 'templates/menu.html',
-        controller: 'AppCtrl'
+        templateUrl: 'templates/tabs.html',
+        controller: 'AppCtrl'  
       })
-      .state('app.login', {
+      .state('tab.login', {
         url: '/login',
         views: {
-          'menuContent': {
-            templateUrl: 'templates/login.html'
+          'login': {
+            templateUrl: 'templates/login.html'          
           }
         }
       }) 
-      .state('app.wallet', {
+      .state('tab.wallet', {
         url: '/wallet/:addr',
         views: {
-          'menuContent': {
+          'wallet': {
             templateUrl: 'templates/wallet.html',
             controller: 'WalletCtrl',
           }
         }
       })
-      .state('app.settings', {
+      .state('tab.settings', {
         url: '/settings',
         views: {
-          'menuContent': {
+          'settings': {
             templateUrl: 'templates/settings.html',
             controller: 'SettingsCtrl'
           }
         }
       })
-      .state('app.transactions', {
+      .state('tab.transactions', {
         url: '/transactions/:addr',
         views: {
-          'menuContent': {
+          'friends': {
             templateUrl: 'templates/transactions.html',
             controller: 'TransactionCtrl'
           }
         }
       })
-      .state('app.dappleths', {
+      .state('tab.transall', {
+        url: '/transactions/:addr',
+        views: {
+          'wallet': {
+            templateUrl: 'templates/transactions.html',
+            controller: 'TransactionCtrl'
+          }
+        }
+      })      
+      .state('tab.dappleths', {
         url: '/dappleths',
         views: {
-          'menuContent': {
+          'dappleths': {
             templateUrl: 'templates/dappleths.html',
             controller: "DapplethsCtrl"
           }
         }
       }) 
-      .state('app.dappleth-run', {
+      .state('tab.dappleth-run', {
         url: '/dappleth-run/:Id',
         views: {
-          'menuContent': {
+          'dappleths': {
             templateUrl: 'templates/dappleth-run.html',
             controller: "DapplethRunCtrl"
           }
         }
       }) 
-      .state('app.feed', {
+      .state('tab.feed', {
         url: '/feed/:Item',
         views: {
-          'menuContent': {
+          'feed': {
             templateUrl: 'templates/feed-detail.html',
             controller: 'FeedCtrl'
           }
         }
       })     
-      .state('app.address', {
+      .state('tab.address', {
         url: '/address',
         views: {
-          'menuContent': {
+          'address': {
             templateUrl: 'templates/address.html',
             controller: 'AddressCtrl'
           }
         }
       })
-      .state('app.friends', {
+      .state('tab.friends', {
         url: '/friends',
         views: {
-          'menuContent': {
+          'friends': {
             templateUrl: 'templates/friends.html',
             controller: 'FriendsCtrl'
           }
         }
       })
-      .state('app.chats', {
+      .state('tab.chats', {
         url: '/chats',
         views: {
-          'menuContent': {
+          'chats': {
             templateUrl: 'templates/chats.html',
             controller: 'ChatsCtrl'
           }
         }
       })
-      .state('app.single', {
+      .state('tab.single', {
         url: '/friends/:Friend',
         views: {
-          'menuContent': {
+          'friends': {
             templateUrl: 'templates/friend-detail.html',
             controller: 'FriendCtrl'
           }
         }
       });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/appleths');
+    $urlRouterProvider.otherwise('/tab');
   })
   .config(function($ionicConfigProvider) {
     $ionicConfigProvider.tabs.position('bottom');
@@ -242,6 +247,17 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
           return( this );
 
         };
+  })
+  .directive('hideTabs', function($rootScope) {
+    return {
+      restrict: 'A',
+      link: function($scope, $el) {
+          $rootScope.hideTabs = 'tabs-item-hide';
+          $scope.$on('$destroy', function() {
+              $rootScope.hideTabs = '';
+          });
+      }
+    };
   })
   .directive('dappTemplate', ['$http','$compile', function($http,$compile){
   return {

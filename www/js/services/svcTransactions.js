@@ -1,14 +1,15 @@
 angular.module('leth.services')
 .factory('Transactions', function (Chat) {
-  var transactions;
-  if (localStorage.Transactions != undefined) {
-    transactions = JSON.parse(localStorage.Transactions);
-  } else {
-    transactions = [];
-  }
+  var transactions = [];
 
   return {
     all: function () {
+      if (localStorage.Transactions != undefined) {
+        transactions = JSON.parse(localStorage.Transactions);
+      } else {
+        transactions = [];
+      }
+  
       return transactions;
     },
     delAll: function () {
