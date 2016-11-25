@@ -27,7 +27,7 @@
         <div ng-show="isFriend(t.to)">To: {{isFriend(t.to) | strLimit: 10 : 2}}</div>
         <div><h3>Amount: {{(t.value/ t.unit) | currency:t.symbol + " ":6}}</h3></div>        
         <ion-option-button ng-show="!t.block" class="icon ion-ios-reload button-positive" ng-click="checkStatus(t)"></ion-option-button>
-        <ion-option-button class="icon ion-ios-trash-outline button-assertive" ng-click="deleteTransaction(t)"></ion-option-button>
+        <ion-option-button class="icon ion-ios-trash button-assertive" ng-click="deleteTransaction(t)"></ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>

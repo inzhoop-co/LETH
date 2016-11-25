@@ -21,7 +21,7 @@
         </div>
         <div class="item item-input item-select">
           <input type="number" pattern="-?\d+(\.\d+)?" ng-model="amountTo" placeholder="0.00" ng-required="true">
-    			<select id="valuta" class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit">
+    			<select id="valuta" class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit" ng-change="unitChanged(unit)">
     				<option ng-repeat="uni in listUnit" value="{{uni.multiplier}}" ng-selected="$index==0">{{uni.unitName}}</option>
     			</select>
         </div>

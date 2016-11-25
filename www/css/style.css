@@ -40,6 +40,7 @@ img#headerSetting
   
 }
 
+
 @-webkit-keyframes shakeit {
 0% { -webkit-transform: rotate(0deg) translate(3px, 1px); }
 10% { -webkit-transform: rotate(4deg) translate(1px, 4px); }
@@ -81,6 +82,93 @@ img#headerSetting
 .swipe-cards {
   position: fixed;
 }
+
+
+/* 
+  ==========================================================================
+   Font Awesome Style
+  ========================================================================== 
+*/
+
+@font-face {
+    font-family: 'fontawesome';
+    src:url('../font-awesome/fonts/fontawesome-webfont.eot');
+    src:url('../font-awesome/fonts/fontawesome-webfont.eot') format('embedded-opentype'),
+        url('../font-awesome/fonts/fontawesome-webfont.woff') format('woff'),
+        url('../font-awesome/fonts/fontawesome-webfont.ttf') format('truetype'),
+        url('../font-awesome/fonts/fontawesome-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.icon-wallet:before {
+    font-family: "fontawesome";
+    content: "\f1d1";
+    font-size: 24px;
+    line-height: 0px;
+    vertical-align: sub;
+}
+
+.icon-wallet-on:before {
+    font-family: "fontawesome";
+    content: "\f1d1";
+    font-size: 24px;
+    line-height: 0px;
+    vertical-align: sub;
+    -webkit-text-stroke-width:1px;
+}
+
+.icon-chats:before {
+    font-family: "fontawesome";
+    content: "\f0e6";
+    font-size: 24px;
+    line-height: 0px;
+    vertical-align: sub;
+}
+
+.icon-chats-on:before {
+    font-family: "fontawesome";
+    content: "\f086";
+    font-size: 24px;
+    line-height: 0px;
+    vertical-align: sub;
+}
+
+.icon-cardAddress:before {
+    font-family: "fontawesome";
+    content: "\f029";
+    font-size: 24px;
+    line-height: 0px;
+    vertical-align: sub;
+}
+
+.icon-cardAddress-on:before {
+    font-family: "fontawesome";
+    content: "\f029";
+    font-size: 24px;
+    line-height: 0px;
+    vertical-align: sub;
+    -webkit-text-stroke-width:1px;
+
+}
+
+.icon-friends:before {
+    font-family: "fontawesome";
+    content: "\f0c0";
+    font-size: 24px;
+    line-height: 0px;
+    vertical-align: sub;
+}
+
+.icon-friends-on:before {
+    font-family: "fontawesome";
+    content: "\f0c0";
+    font-size: 24px;
+    line-height: 0px;
+    vertical-align: sub;
+    -webkit-text-stroke-width:1px;
+}
+
 
 /* 
   ==========================================================================

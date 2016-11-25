@@ -8,7 +8,7 @@ angular.module('leth.controllers', [])
   window.refresh = function () {
     $ionicLoading.show();
     $scope.showTabs(true);    
-    $scope.balance = AppService.balance();
+    $scope.balance = AppService.balance($scope.unit);
     ExchangeService.getTicker($scope.xCoin, JSON.parse(localStorage.BaseCurrency).value).then(function(value){
       $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat(value * $scope.balance).toFixed(2) ;
     });
@@ -870,9 +870,12 @@ angular.module('leth.controllers', [])
     // Android customization
     cordova.plugins.backgroundMode.setDefaults({ text:'Doing heavy tasks.'});
     // Enable background mode
-    cordova.plugins.backgroundMode.enable();
+    if(localStorage.BackMode=="true"){
+      cordova.plugins.backgroundMode.enable();
+      console.log('device ready for background');
+    }else
+    console.log('backmode not activated');
 
-    console.log('device ready for background');
     
      // Called when background mode has been activated
     cordova.plugins.backgroundMode.onactivate = function() {

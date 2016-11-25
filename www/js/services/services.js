@@ -63,10 +63,19 @@ angular.module('leth.services', [])
         }
         return result;
       },
-      balance: function () {
+      balance: function (unit) {
         var result;
         try {
-          result = (parseFloat(web3.eth.getBalance(this.account())) / 1.0e18).toFixed(6);
+          result = (parseFloat(web3.eth.getBalance(this.account())) / unit).toFixed(6);
+        }catch (e){
+          result = undefined;
+        }
+        return result
+      },
+      balanceOf: function (contractCoin, unit) {
+        var result;
+        try {
+          result = contractCoin.balanceOf(this.account())/ unit;
         }catch (e){
           result = undefined;
         }

@@ -12,13 +12,13 @@ angular.module('leth.controllers')
         $scope.descCoin = "Eth from main wallet";
         $scope.symbolCoin = "Ξ";
         $scope.xCoin = "XETH";        
-        $scope.balance = AppService.balance();
         $scope.listUnit = [
-    			{multiplier: "1.0e18", unitName: "Ether"},
-    			{multiplier: "1.0e15", unitName: "Finney"},
-    			{multiplier: "1",unitName: "Wei"}
+    			{multiplier: "1.0e18", unitName: "ether"},
+    			{multiplier: "1.0e15", unitName: "finney"},
+    			{multiplier: "1.0e12",unitName: "szabo"}
     		];
         $scope.unit = $scope.listUnit[0].multiplier;
+        $scope.balance = AppService.balance($scope.unit);
       }
       else {
       	$scope.getNetwork();
@@ -30,9 +30,9 @@ angular.module('leth.controllers')
         $scope.xCoin = activeCoins[index-1].Exchange;          
         $scope.methodSend = activeCoins[index-1].Send;
         $scope.contractCoin = web3.eth.contract(activeCoins[index-1].ABI).at(activeCoins[index-1].Address);
-        $scope.balance = $scope.contractCoin.balanceOf('0x' + $scope.account)*1;
     		$scope.listUnit = activeCoins[index-1].Units;
         $scope.unit = $scope.listUnit[0].multiplier;
+        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.contractCoin.decimals());
       }
       
       updateExchange();
@@ -49,7 +49,7 @@ angular.module('leth.controllers')
     };
 
     $scope.$on('$ionicView.enter', function() {
-      $scope.balance = AppService.balance();      
+      $scope.balance = AppService.balance($scope.unit);      
       updateExchange();
     })
 
@@ -153,6 +153,15 @@ angular.module('leth.controllers')
       }//else
     };
 
+    $scope.unitChanged = function(u){
+      var unt = $scope.listUnit.filter(function (val) {
+        if(val.multiplier === u)
+          return val;
+      });
+      $scope.balance = AppService.balance(unt[0].multiplier);
+      $scope.symbolCoin = unt[0].unitName;
+    }
+
     $scope.confirmSend = function (addr, amount,unit) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Confirm payment',
@@ -191,7 +200,7 @@ angular.module('leth.controllers')
 
     $scope.chooseCoin = function(){  
 		  //$scope.getNetwork();
-      var buttonsGroup = [{text: '<img width="30px" heigth="30px" src="img/ethereum-icon.png"/> Ether [Ξ]'}];
+      var buttonsGroup = [{text: '<span style="text-align:left"><img width="30px" heigth="30px" src="img/ethereum-icon.png"/> Ether [Ξ]</span>'}];
 
 	   var activeCoins=$scope.listCoins.filter( function(obj) {return (obj.Network==$scope.nameNetwork) && (obj.Installed);} );
       for (var i = 0; i < activeCoins.length; i++) {
