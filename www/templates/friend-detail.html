@@ -5,18 +5,18 @@
       <ion-nav-buttons side="right">
         <a class="button button-clear" ng-href="#/tab/transactions/{{friend.addr}}">
           <i class="icon ion-ios-list-outline"></i>
-        </a>
-        <a class="button button-clear" ng-hide="fromAddressBook" ng-href="#/tab/wallet/{{friend.addr}}">
-          <i class="icon ion-social-bitcoin-outline"></i>
+        </a>&nbsp;
+        <a class="button button-clear" ng-href="#/tab/wallet/{{friend.addr}}">
+          <i class="icon icon-pay"></i>
         </a>
       </ion-nav-buttons>
   </ion-nav-bar>
   <div class="bar bar-subheader bar-transparent">
     <span class="item-avatar">
-      {{friend.addr | strLimit: 15 : 10}}
+      {{friend.addr | strLimit: 10 : 10}}
       <img class="rounded" ng-src="{{friend.icon}}">    
     </span>
-    <span class="item-note">{{friendBalance | currency:'Ξ '}}</span>
+    <span class="item-note">{{friendBalance | currency:'Ξ ':6}}</span>
   </div>
   <ion-content class="has-header has-subheader has-footer has-chat-footer chat" delegate-handle="chatScroll">    
     <div class="message-list has-chat-header has-chat-footer">

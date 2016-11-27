@@ -1,45 +1,45 @@
-  app.controller("CustomCtrl", function( $scope) {
-          $scope.message = "After app bootstrap."; 
-          $scope.test = function(){
-              $scope.message = "test OK";
-              $scope.scanTo();
-          };
-  });
+//definition
 
-var helloABI = [{
-    constant: false,
-    inputs: [],
-    name: "mgreortal",
-    outputs: [],
-    type: "function"
-}, {
-    constant: false,
-    inputs: [],
-    name: "kill",
-    outputs: [],
-    type: "function"
-}, {
-    constant: true,
-    inputs: [],
-    name: "greet",
-    outputs: [{
-        name: "",
-        type: "string"
-    }],
-    type: "function"
-}, {
-    inputs: [{
-        name: "_greeting",
-        type: "string"
-    }],
-    type: "constructor"
-}]
-
-var helloAdr = "0x211d6b541bb55b03f9bd79a5964b1469d7928343";
-var hello = web3.eth.contract(helloABI).at(helloAdr);
-
-function writeMessage()
+function init()
 {
-    var m = hello.greet();
+	//define center button
+	var btnCenter = angular.element(document.querySelector('#centerButton'));
+	btnCenter.html(' Test me!');
+	btnCenter.attr('class','button button-smal button-icon icon ion-play');
+	btnCenter.attr('onclick','greet()');
+
+	//define left button
+	/*
+	var btnLeft = angular.element(document.querySelector('#leftButton'));
+	btnLeft.html(' left');
+	btnLeft.attr('class','button button-smal button-icon icon ion-camera');
+	btnLeft.attr('onclick','scan()');
+	*/
+
+	//define left button
+	/*
+	var btnRight = angular.element(document.querySelector('#rightButton'));
+	btnRight.html(' right');
+	btnRight.attr('class','button button-smal button-icon icon ion-ios-refresh');
+	btnRight.attr('onclick','updateData()');
+	*/
+}
+
+function updateData()
+{
+    init();
+}
+
+function scan()
+{
+    alert('how to catch scan result?');
+}
+
+// Play main function of a simlpe contract
+function greet()
+{
+    var m = "Calling contract at <br/>" +  dappContract.address + "<br/>"
+    m += "<b>"  + dappContract.greet() + "</b>";
     angular.element(document.querySelector('#message')).html(m);
+    //alert('Greet!');
 }

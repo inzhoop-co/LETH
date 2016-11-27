@@ -82,36 +82,54 @@ angular.module('leth.controllers')
       $ionicListDelegate.closeOptionButtons();
     };
   })
-  .controller('DapplethRunCtrl', function ($scope, $rootScope, angularLoad, $ionicLoading, $templateRequest, $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout, AppService, Chat) {
-    $scope.$on('$ionicView.beforeEnter', function() {
-      $scope.showTabs(false);
-    })
-
-    $scope.$on('$ionicView.beforeLeave', function() {
-      $scope.showTabs(true);
-    })
-
+  .controller('DapplethRunCtrl', function ($scope, $rootScope, $ionicHistory, angularLoad, $ionicLoading, $templateRequest, $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout, StoreEndpoint, AppService, Chat) {
     var id = $stateParams.Id;
     $scope.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
     
-    $scope.message = "DapplethRunCtrl";
-
-    $http.get($scope.activeApp.InstallUrl) 
+    $http.get(StoreEndpoint.url + $scope.activeApp.InstallUrl) 
       .success(function(data){
         $scope.appContainer = $sce.trustAsHtml(data);          
     });
+    
     $ionicLoading.show(); 
-    angularLoad.loadScript($scope.activeApp.ScriptUrl).then(function() {
+
+    dappContract = web3.eth.contract($scope.activeApp.ABI).at($scope.activeApp.Address);
+
+    angularLoad.loadScript(StoreEndpoint.url + $scope.activeApp.ScriptUrl).then(function() {
       $ionicLoading.hide();
-        console.log('loading ' + $scope.activeApp.ScriptUrl);
+        console.log('loading ' + StoreEndpoint.url + $scope.activeApp.ScriptUrl);
     }).catch(function() {
-        console.log('ERROR :' + $scope.activeApp.ScriptUrl);
+        console.log('ERROR :' + StoreEndpoint.url + $scope.activeApp.ScriptUrl);
     });
 
     $scope.refresh = function() {
       updateData(); //defined in external js
       $scope.$broadcast('scroll.refreshComplete');
     }
+
+    $scope.initDapp = function() {
+      init(); //defined in external js
+      $scope.$broadcast('scroll.refreshComplete');
+    }
+
+    $scope.scan = function() {
+      document.addEventListener("deviceready", function () {      
+      $cordovaBarcodeScanner
+        .scan()
+        .then(function (barcodeData) {
+          if(barcodeData.text!= ""){
+            console.log('read code: ' + barcodeData.text);
+          }
+        }, function (error) {
+          console.log('Error!' + error);
+        });
+      }, false);   
+    }
+
+    $scope.$on("$ionicView.enter", function () {
+       //$ionicHistory.clearCache();
+       $scope.initDapp(); 
+    });
 
     $rootScope.$on('dappEvent', function(event,args){
       var msg = {type: 'leth', mode: 'dappMessage', from: $scope.activeApp.Address, to: [null], text: args.data.detail, image: '' };

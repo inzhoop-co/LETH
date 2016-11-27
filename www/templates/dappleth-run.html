@@ -1,11 +1,9 @@
-<ion-view view-title="{{activeApp.Name}}">
+<!--ion-view view-title="{{activeApp.Name}}" hide-tabs>
   <ion-nav-bar class="bar-stable bar-assertive">
     <ion-nav-back-button>
     </ion-nav-back-button>
   </ion-nav-bar>
-  <!--ion-header-bar class="bar bar-subheader bar-stable" hide-on-scroll="true">
-    Your Balance is Ξ {{balance}}
-  </ion-header-bar-->
+
 
       <div class="list has-header">
       <div class="item item-thumbnail-left">
@@ -78,20 +76,32 @@
     </div>
   </ion-footer-bar>
 
-</ion-view>
-<!--ion-view view-title="Ξ {{balance}}">
-  <ion-nav-buttons side="right">
-    <button class="button button-clear" on-touch="scanTo()" ng-hide="fromAddressBook">
-      <i class="icon ion-ios-camera"></i>
-    </button>
-  </ion-nav-buttons>
+</ion-view-->
+
+<ion-view view-title="{{activeApp.Name}}" hide-tabs>
   <ion-nav-bar class="bar-stable bar-assertive">
     <ion-nav-back-button>
     </ion-nav-back-button>
   </ion-nav-bar>  
+  <!--ion-nav-buttons side="right">
+    <button class="button button-clear" on-touch="scan()">
+      <i class="icon ion-ios-camera-outline"></i>
+    </button>
+  </ion-nav-buttons-->
   <ion-content class="has-header has-tabs" >
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
     <div ng-bind-html="appContainer">
     </div>
   </ion-content>
-</ion-view-->
+  <ion-footer-bar align-title="center" class="bar-assertive">
+    <div id="leftButton" class="buttons" onclick="leftPlay()">
+      <button class="button"></button>
+    </div>
+    <h2 class="title">
+      <button id="centerButton" class="button"></button>
+    </h2>
+    <div class="buttons" onclick="rightPlay()">
+      <button id="rightButton" class="button"></button>
+    </div>
+  </ion-footer-bar>
+</ion-view>

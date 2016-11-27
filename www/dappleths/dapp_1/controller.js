@@ -1,1 +1,0 @@
-angular.callbacks._0({"data": "{\"scope.message\": \"dopo\";}}"});

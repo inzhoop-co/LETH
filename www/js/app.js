@@ -158,6 +158,7 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
         }
       }) 
       .state('tab.dappleth-run', {
+        cache: false,
         url: '/dappleth-run/:Id',
         views: {
           'dappleths': {
@@ -258,6 +259,12 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
           $rootScope.hideTabs = 'tabs-item-hide';
           $scope.$on('$destroy', function() {
               $rootScope.hideTabs = '';
+          });
+          $scope.$on('$ionicView.beforeLeave', function() {
+              $rootScope.hideTabs = '';
+          });
+          $scope.$on('$ionicView.beforeEnter', function() {
+              $rootScope.hideTabs = 'tabs-item-hide';
           });
       }
     };

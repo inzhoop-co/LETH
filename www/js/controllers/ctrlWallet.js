@@ -49,7 +49,11 @@ angular.module('leth.controllers')
     };
 
     $scope.$on('$ionicView.enter', function() {
-      $scope.balance = AppService.balance($scope.unit);      
+      if($scope.idCoin==0 || $scope.idCoin==undefined)    
+        $scope.balance = AppService.balance($scope.unit);
+      else
+        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.contractCoin.decimals());
+    
       updateExchange();
     })
 
@@ -70,6 +74,10 @@ angular.module('leth.controllers')
       $scope.fromAddressBook = true;
     }else { 
       $scope.fromAddressBook = false;
+    }
+
+    $scope.scrollRefresh = function(){
+      refresh();
     }
 
     $scope.sendCoins = function (addr, amount, unit, idCoin) {

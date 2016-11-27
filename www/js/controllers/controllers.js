@@ -7,8 +7,12 @@ angular.module('leth.controllers', [])
   
   window.refresh = function () {
     $ionicLoading.show();
-    $scope.showTabs(true);    
-    $scope.balance = AppService.balance($scope.unit);
+    $scope.showTabs(true);
+    if($scope.idCoin==0 || $scope.idCoin==undefined)    
+      $scope.balance = AppService.balance($scope.unit);
+    else
+      $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.contractCoin.decimals());
+
     ExchangeService.getTicker($scope.xCoin, JSON.parse(localStorage.BaseCurrency).value).then(function(value){
       $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat(value * $scope.balance).toFixed(2) ;
     });
@@ -880,17 +884,6 @@ angular.module('leth.controllers', [])
      // Called when background mode has been activated
     cordova.plugins.backgroundMode.onactivate = function() {
       console.log('backgroundMode activated');
-      if(localStorage.PinOn=="true"){
-        $lockScreen.show({
-          code: JSON.parse(localStorage.AppCode).code,
-          touchId: JSON.parse(localStorage.TouchOn),
-          ACDelbuttons: true,
-          onCorrect: function () {
-          },
-          onWrong: function (attemptNumber) {
-          },
-        });
-      }
       $scope.$on('incomingMessage', function (e, r) {
         if(r.payload.text.length)
           msg = $sce.trustAsHtml(r.payload.text);
@@ -912,9 +905,19 @@ angular.module('leth.controllers', [])
 
     cordova.plugins.backgroundMode.ondeactivate = function() {
       console.log('backgroundMode deactivated');
-
-      $scope.cancelAllNotifications();
-      $scope.clearBadge();
+      if(localStorage.PinOn=="true"){
+        $lockScreen.show({
+          code: JSON.parse(localStorage.AppCode).code,
+          touchId: JSON.parse(localStorage.TouchOn),
+          ACDelbuttons: true,
+          onCorrect: function () {
+            $scope.cancelAllNotifications();
+            $scope.clearBadge();
+          },
+          onWrong: function (attemptNumber) {
+          },
+        });
+      };
     };
 
   }, false);

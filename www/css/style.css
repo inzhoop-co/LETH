@@ -169,7 +169,13 @@ img#headerSetting
     -webkit-text-stroke-width:1px;
 }
 
-
+.icon-pay:before {
+    font-family: "fontawesome";
+    content: "\f0da";
+    font-size: 18px;
+    line-height: 0px;
+    vertical-align: sub;
+}
 /* 
   ==========================================================================
    Chat Message Style

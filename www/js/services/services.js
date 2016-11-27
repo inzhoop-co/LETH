@@ -143,23 +143,7 @@ angular.module('leth.services', [])
               reject(e);
             }
           });  
-      },
-      transferCoinOK: function (contract, nameSend, from, to, amount ) {
-          var fromAddr = from;
-          var toAddr = to;
-          var functionName = nameSend;
-          var args = JSON.parse('[]');
-          var gasPrice = web3.eth.gasPrice;
-          var gas = 3000000; //TODO: use estimate?
-          args.push(toAddr,amount,{from: fromAddr, gasPrice: gasPrice, gas: gas});
-          var callback = function (err, txhash) {
-              console.log('error: ' + err);
-              console.log('txhash: ' + txhash);
-          }
-          args.push(callback);
-          contract[functionName].apply(this, args);
-          return true;
-      }            
+      }           
     }
   })
   .factory('PasswordPopup', function ($rootScope, $q, $ionicPopup) {
