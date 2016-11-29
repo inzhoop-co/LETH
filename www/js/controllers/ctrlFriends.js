@@ -21,7 +21,7 @@ angular.module('leth.controllers')
     }
 
   })
-  .controller('FriendCtrl', function ($scope, $stateParams, $timeout, $cordovaImagePicker, $ionicActionSheet, $cordovaCamera, 
+  .controller('FriendCtrl', function ($scope, $stateParams, $ionicHistory, $state, $timeout, $cordovaImagePicker, $ionicActionSheet, $cordovaCamera, 
                                       Geolocation, Friends, Chat, AppService) {
     $scope.friend = Friends.get($stateParams.Friend);
 
@@ -69,7 +69,7 @@ angular.module('leth.controllers')
       if (img==undefined) {
         return;
       }
-      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: null, text: '', image: img};
+      //var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: null, text: '', image: img};
       //Chat.sendMessage(msg);
       Chat.sendCryptedPhoto(img,$scope.friend.addr,$scope.friend.idkey);
 
@@ -134,8 +134,8 @@ angular.module('leth.controllers')
     $scope.shareItems = function(){
       var hideSheet = $ionicActionSheet.show({
         buttons: [
-          { text: '<i class="icon ion-ios-camera"></i> Photo...' },
-          { text: '<i class="icon ion-ios-location"></i> Position'  }
+          { text: '<i class="icon ion-ios-camera-outline"></i> Photo...' },
+          { text: '<i class="icon ion-ios-location-outline"></i> Position'  }
         ],
         destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         titleText: 'Choose to share your...',

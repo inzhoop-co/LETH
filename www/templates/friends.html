@@ -13,7 +13,7 @@
     <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends | filter:search track by $index"
       type="item-text-wrap" href="#/tab/friends/{{friend.addr}}">
       <img ng-src="{{friend.icon}}"/>
-      <h2><b>{{friend.name}}</b></h2>
+      <h2><b>{{friend.name | strLimit: 15 : 5}}</b></h2>
       <p>{{friend.addr | strLimit: 15 : 5}}</p>
       <span class="badge badge-assertive" ng-hide="friend.unread==0">{{friend.unread}}</span>      
       <i class="icon ion-chevron-right icon-accessory"></i>

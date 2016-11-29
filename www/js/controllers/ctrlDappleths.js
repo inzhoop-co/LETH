@@ -109,7 +109,6 @@ angular.module('leth.controllers')
 
     $scope.initDapp = function() {
       init(); //defined in external js
-      $scope.$broadcast('scroll.refreshComplete');
     }
 
     $scope.scan = function() {

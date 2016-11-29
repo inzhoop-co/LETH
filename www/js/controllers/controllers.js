@@ -2,7 +2,8 @@ angular.module('leth.controllers', [])
 .controller('AppCtrl', function ($ionicHistory, $interval, $scope, $rootScope, $ionicModal,  $cordovaDeviceMotion, $ionicPlatform, 
                                 $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
-                                $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,$cordovaBadge,$ionicScrollDelegate,
+                                $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,
+                                $cordovaBadge,$ionicScrollDelegate, 
                                 AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService) {
   
   window.refresh = function () {
@@ -63,11 +64,13 @@ angular.module('leth.controllers', [])
       })
   };
   
+  /*
   FeedService.GetFeed().then(function(infoNews){
     $scope.listFeeds = infoNews;
     $scope.cards = Array.prototype.slice.call($scope.listFeeds, 0, 0);
   });
-
+  */
+  
   var getSync = function(){
     try {
       if(web3.eth.syncing)
@@ -397,7 +400,7 @@ angular.module('leth.controllers', [])
 
         $rootScope.hasLogged = true;
 
-        var msg = {type: 'leth', mode: 'plain', from: AppService.account(), text: 'new user added', image: '' };
+        var msg = 'new user added';
         Chat.sendMessage(msg);
 
         $state.go('app.dappleths');
@@ -794,9 +797,9 @@ angular.module('leth.controllers', [])
   };
 
   $scope.scrollTo = function(handle,where){
-    $ionicScrollDelegate.$getByHandle(handle).resize();
     $timeout(function() {
-          $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
+      $ionicScrollDelegate.$getByHandle(handle).resize();
+      $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
     }, 100);
   }
 
@@ -830,9 +833,9 @@ angular.module('leth.controllers', [])
           //$cordovaInAppBrowser.close();
       }, false);
     }//geolocation
-    if(msg.mode=="contact" && msg.attach){
+    if(msg.mode!='encrypted' && msg.attach.addr && msg.attach.idkey){
       if($scope.isFriend(msg.attach.addr) && msg.attach.addr!=AppService.account()) //go to friend
-        $state.go('tab.single', {Friend: msg.attach.addr});
+        $state.go('tab.friend', {Friend: msg.attach.addr}, { relative: $state.$current.view});
       else //add friend
         $scope.addAddress(msg.attach.addr,msg.attach.idkey)
     }//contact
@@ -842,14 +845,18 @@ angular.module('leth.controllers', [])
     if(r.payload.text.length)
       msg = r.payload.text;
     if(r.payload.image.length)
-      msg = "sent image";
+      msg = "Image sent";
 
     //if direct to me
     if(r.payload.to[0] && r.payload.to.indexOf(AppService.account())!=-1){
+      //if not a friend of mine
+      if(!$scope.isFriend(r.payload.from))
+        $scope.saveAddr(r.payload.from,r.payload.from,r.payload.senderKey,r.payload.text);
+
       if($ionicTabsDelegate.selectedIndex()!=2)
         $scope.DMCounter += 1;
 
-      if($ionicHistory.currentView().stateName != "tab.single"){
+      if($ionicHistory.currentView().stateName != "tab.friend"){
         Friends.increaseUnread(r.payload.from);
         $scope.loadFriends();
       }
@@ -888,7 +895,7 @@ angular.module('leth.controllers', [])
         if(r.payload.text.length)
           msg = $sce.trustAsHtml(r.payload.text);
         if(r.payload.image.length)
-          msg = "image sent";
+          msg = "Image sent";
 
         var toNotify = false;
         if(!r.payload.to[0] || (r.payload.to[0] && r.payload.to.indexOf(AppService.account())!=-1)){

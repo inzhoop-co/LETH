@@ -203,7 +203,7 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
           }
         }
       })
-      .state('tab.single', {
+      .state('tab.friend', {
         url: '/friends/:Friend',
         views: {
           'friends': {
@@ -211,7 +211,8 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
             controller: 'FriendCtrl'
           }
         }
-      });
+      })
+      ;
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/tab');
   })

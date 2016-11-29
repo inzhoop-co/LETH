@@ -1,5 +1,5 @@
 angular.module('leth.controllers')
-  .controller('WalletCtrl', function ($scope, $stateParams, $ionicLoading, $ionicModal, $state, 
+  .controller('WalletCtrl', function ($scope, $rootScope, $stateParams, $ionicLoading, $ionicModal, $state, 
                                       $ionicPopup, $cordovaBarcodeScanner, $ionicActionSheet, 
                                       $timeout, AppService, Transactions,ExchangeService, Chat) {
     var TrueException = {};
@@ -49,6 +49,7 @@ angular.module('leth.controllers')
     };
 
     $scope.$on('$ionicView.enter', function() {
+      $rootScope.hideTabs = ''; //patch
       if($scope.idCoin==0 || $scope.idCoin==undefined)    
         $scope.balance = AppService.balance($scope.unit);
       else
@@ -90,6 +91,7 @@ angular.module('leth.controllers')
                 template: result[0]
               });
               errorPopup.then(function (res) {
+                $ionicLoading.hide();
                 console.log(res);
               });
             } else {
@@ -98,7 +100,8 @@ angular.module('leth.controllers')
                 template: result[1]
               });
               successPopup.then(function (res) {
-                $scope.amountTo = "";
+                $ionicLoading.hide();
+
                 $state.go('tab.transall');
               });
               //save transaction
@@ -115,6 +118,7 @@ angular.module('leth.controllers')
 
             });
             alertPopup.then(function (res) {
+              $ionicLoading.hide();
               console.log(err);
             });
         });
@@ -130,6 +134,7 @@ angular.module('leth.controllers')
                 template: result[0]
               });
               errorPopup.then(function (res) {
+                $ionicLoading.hide();
                 console.log(res);
               });
             } else {
@@ -138,7 +143,8 @@ angular.module('leth.controllers')
                 template: result[1]
               });
               successPopup.then(function (res) {
-                $scope.amountTo = "";
+                $ionicLoading.hide();
+                
                 $state.go('tab.transall');
               });
               //save transaction
@@ -155,6 +161,7 @@ angular.module('leth.controllers')
 
             });
             alertPopup.then(function (res) {
+              $ionicLoading.hide();
               console.log(err);
             });
         });

@@ -3,7 +3,7 @@
     <ion-nav-back-button></ion-nav-back-button>
   </ion-nav-bar>
   <ion-nav-buttons side="right">
-    <button class="button button-clear" ng-hide="transactions.length == 0"on-touch="deleteAllTransactions()">
+    <button class="button button-clear" ng-hide="transactions.length == 0" on-touch="deleteAllTransactions()">
       <i class="icon ion-ios-trash-outline"></i>
     </button>
   </ion-nav-buttons>  
@@ -17,10 +17,11 @@
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
     <ion-list can-swipe="true">
     <p ng-show="transactions.length == 0" align="center"><br/>No saved transaction</p>
-      <ion-item collection-repeat="t in transactions | filter:{to:search} | filter:isFromTo | orderBy:time:true">
-        <h2 ng-show="t.block" ng-class="{'icon ion-arrow-graph-down-left balanced':t.to==account, 'icon ion-arrow-graph-up-right assertive':t.from==account}"> {{t.time | date: "yyyy-MM-dd HH:mm:ss"}}</h2>
-        <h2 ng-show="!t.block" class="icon ion-load-d dark"> {{t.time | date: "yyyy-MM-dd HH:mm:ss"}}</h2>
-        <h3>{{t.id | strLimit: 15 : 15}}</h3>
+      <ion-item class="item item-icon-left" collection-repeat="t in transactions | filter:{to:search} | filter:isFromTo | orderBy:time:true" ng-click="checkStatus(t)">
+        <i ng-show="t.block" ng-class="{'icon ion-arrow-graph-down-left balanced':t.to==account, 'icon ion-arrow-graph-up-right assertive':t.from==account}"></i>
+        <i ng-show="!t.block" class="icon ion-load-c dark"></i>
+        <h2 ng-class="{'balanced':t.to==account, 'assertive':t.from==account}">{{t.time | date: "yyyy-MM-dd HH:mm:ss"}}</h2>
+        <h3>{{t.id | strLimit: 15 : 10}}</h3>
         <div ng-hide="isFriend(t.from)">From: {{t.from | strLimit: 15 : 5}}</div>
         <div ng-show="isFriend(t.from)">From: {{isFriend(t.from) | strLimit: 10 : 2}}</div>
         <div ng-hide="isFriend(t.to)">To: {{t.to | strLimit: 15 : 5}}</div>

@@ -46,7 +46,26 @@ angular.module('leth.services')
       list.splice(index, 1);
       return list;
     },      
-    sendMessage: function (msg) {
+    sendMessage: function (content) {
+      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: [null], text: content, image: '', attach: {addr: AppService.account(), idkey: AppService.idkey()} };
+      var payload = msg;
+      var message = {
+        from:  this.identity(),
+        topics: topics,
+        payload: payload,
+        ttl: ttlTime,
+        workToProve: wtpTime
+      };
+      web3.shh.post(message); 
+
+      chats.push({
+        identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
+        timestamp: Date.now(),
+        message: payload
+      });
+    },
+    sendImage: function (content) {
+      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: [null], text: '', image: img};
       var payload = msg;
       var message = {
         from:  this.identity(),

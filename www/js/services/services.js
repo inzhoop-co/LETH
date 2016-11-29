@@ -146,7 +146,7 @@ angular.module('leth.services', [])
       }           
     }
   })
-  .factory('PasswordPopup', function ($rootScope, $q, $ionicPopup) {
+  .factory('PasswordPopup', function ($rootScope, $q, $ionicLoading, $ionicPopup) {
     return {
       open: function (msg, defaultMessage) {
         var q = $q.defer();
@@ -176,7 +176,7 @@ angular.module('leth.services', [])
         });
 
         myPopup.then(function (res) {
-
+          $ionicLoading.show({template: 'Sending...'});
           q.resolve(res);
         });
 

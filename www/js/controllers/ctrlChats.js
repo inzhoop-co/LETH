@@ -15,9 +15,10 @@ angular.module('leth.controllers')
       if ($scope.text.message.length==0) {
         return;
       }
-      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: [null], text: $scope.text.message, image: '' };
+      //var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: [null], text: $scope.text.message, image: '' };
+      var content = $scope.text.message;      
       $scope.text.message="";
-      Chat.sendMessage(msg);
+      Chat.sendMessage(content);
       $scope.scrollTo('chatScroll','bottom');
     };
 
@@ -25,10 +26,10 @@ angular.module('leth.controllers')
       if (img==undefined) {
         return;
       }
-      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: [null], text: '', image: img};
-      Chat.sendMessage(msg);
-      $scope.scrollTo('chatScroll','bottom');
-      //$scope.text.message="";      
+      //var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: [null], text: '', image: img};
+      //Chat.sendMessage(msg);
+      Chat.sendImage(img);
+      $scope.scrollTo('chatScroll','bottom');      
     };
 
     $scope.addTopicFilter = function(topic){
@@ -103,9 +104,9 @@ angular.module('leth.controllers')
     $scope.shareItems = function(){
       var hideSheet = $ionicActionSheet.show({
         buttons: [
-          { text: '<i class="icon ion-ios-camera"></i> Photo...' },
-          { text: '<i class="icon ion-ios-location"></i> Position'  },
-          { text: '<i class="icon ion-ios-person"></i> Contact'  }
+          { text: '<i class="icon ion-ios-camera-outline"></i> Photo...' },
+          { text: '<i class="icon ion-ios-location-outline"></i> Position'  },
+          { text: '<i class="icon ion-ios-person-outline"></i> Contact'  }
         ],
         destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         //destructiveText: 'Cancel',
