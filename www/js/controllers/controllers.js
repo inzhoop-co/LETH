@@ -168,27 +168,17 @@ angular.module('leth.controllers', [])
   };
 
   var saveAddressModal;
-  var createSaveAddressModal = function(address,key) {
+  var createSaveAddressModal = function(name,comment,address,key) {
     $ionicModal.fromTemplateUrl('templates/addFriend.html', {
       scope: $scope,
       animation: 'slide-in-up'
     }).then(function (modal) {
-      /* no addressbook from phone
-      document.addEventListener("deviceready", function () {
-        $cordovaContacts.pickContact().then(function (contactPicked) {
-          $scope.name = contactPicked.name.formatted;
-
-          var options = {
-            replaceLineBreaks: false, // true to replace \n by a new line, false by default
-            android: {
-                intent: 'INTENT'  // send SMS with the native android SMS messaging
-                //intent: '' // send SMS without open any other app
-            }
-          };
-        });
-      }, false);
-      */
-      
+      if(name != undefined) {
+        $scope.name = name;
+      }
+      if(comment != undefined) {
+        $scope.comment = comment;
+      }
       if(address != undefined) {
         $scope.addr = address;
       }
@@ -424,8 +414,8 @@ angular.module('leth.controllers', [])
     $scope.$broadcast('scroll.refreshComplete');
   };
 
-  $scope.addAddress = function(address,key) {
-    createSaveAddressModal(address,key);
+  $scope.addAddress = function(name,comment,address,key) {
+    createSaveAddressModal(name,comment,address,key);
   }
 
   $scope.closeSaveAddressModal = function() {
@@ -447,20 +437,13 @@ angular.module('leth.controllers', [])
   }
 
   $scope.saveAddr = function(name,addr,idkey,comment){
-    var icon = blockies.create({ 
-      seed: addr, 
-      //color: '#ff9933', 
-      //bgcolor: 'red', 
-      //size: 15, // width/height of the icon in blocks, default: 8
-      //scale: 2, 
-      //spotcolor: '#000' 
-    });
-
-
-    var friend = {"addr": addr, "idkey": idkey, "comment": comment, "name": name, "icon":icon.toDataURL("image/jpeg"), "unread":0};
-    $scope.friends.push(friend);
-    localStorage.Friends = JSON.stringify($scope.friends);
+    if($scope.isFriend(addr))
+      Friends.update(name,addr,idkey,comment);
+    else
+      Friends.add(name,addr,idkey,comment);
+    
     $scope.closeSaveAddressModal(); 
+    $scope.friends = Friends.all();
   };
   
   console.log("status login: " + $rootScope.hasLogged)
@@ -837,7 +820,7 @@ angular.module('leth.controllers', [])
       if($scope.isFriend(msg.attach.addr) && msg.attach.addr!=AppService.account()) //go to friend
         $state.go('tab.friend', {Friend: msg.attach.addr}, { relative: $state.$current.view});
       else //add friend
-        $scope.addAddress(msg.attach.addr,msg.attach.idkey)
+        $scope.addAddress(msg.attach.addr, msg.text, msg.attach.addr,msg.attach.idkey)
     }//contact
   }
 
@@ -850,8 +833,10 @@ angular.module('leth.controllers', [])
     //if direct to me
     if(r.payload.to[0] && r.payload.to.indexOf(AppService.account())!=-1){
       //if not a friend of mine
-      if(!$scope.isFriend(r.payload.from))
-        $scope.saveAddr(r.payload.from,r.payload.from,r.payload.senderKey,r.payload.text);
+      if(!$scope.isFriend(r.payload.from)){
+        Friends.add(r.payload.from,r.payload.from,r.payload.senderKey,r.payload.text);
+        $scope.friends = Friends.all();
+      }
 
       if($ionicTabsDelegate.selectedIndex()!=2)
         $scope.DMCounter += 1;

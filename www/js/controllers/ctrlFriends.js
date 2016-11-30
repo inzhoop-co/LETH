@@ -9,6 +9,11 @@ angular.module('leth.controllers')
       $scope.$digest(); 
     })
 
+    $scope.edit = function (friend) {
+      $scope.addAddress(friend.name, friend.comment, friend.addr,friend.idkey);
+      $ionicListDelegate.closeOptionButtons();
+    };
+
     $scope.remove = function (friendIndex) {
       Friends.remove($scope.friends,friendIndex);
       localStorage.Friends = JSON.stringify($scope.friends);

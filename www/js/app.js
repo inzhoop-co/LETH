@@ -12,7 +12,7 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
   })
   .constant('StoreEndpoint', {
     //url: 'dappleths'
-    url: 'http://www.inzhoop.com/dappleths'
+    url: 'https://www.inzhoop.com/dappleths'
   })
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,
                 $lockScreen,$state,$window, $location) {
@@ -36,7 +36,7 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
         localStorage.Coins = '[]';
       }
       if (typeof localStorage.NodeHost == 'undefined') {
-        localStorage.NodeHost = "http://wallet.inzhoop.com:8546";
+        localStorage.NodeHost = "https://eth3.augur.net";
       }
       if (typeof localStorage.HostsList == 'undefined') {
         localStorage.HostsList=JSON.stringify([localStorage.NodeHost]);
