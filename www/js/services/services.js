@@ -81,25 +81,28 @@ angular.module('leth.services', [])
         }
         return result
       },
-      sendTransaction: function (from, to, value, gasPrice, gas) {
+      transactionCall: function (fname, to, params) {
         return $q(function (resolve, reject) {
+          var fromAddr = global_keystore.getAddresses()[0];
+          var toAddr = to;
+          var functionName = fname;
+          var args = JSON.parse('[]');
+          var gasPrice = web3.eth.gasPrice;
+          var gas = web3.eth.estimateGas * gasPrice; //TODO: use estimate?
           try {
-            web3.eth.sendTransaction({
-              from: from,
-              to: to,
-              value: value,
-              gasPrice: gasPrice,
-              gas: gas
-            }, function (err, hash) {
+            args.push(params,{from: fromAddr, gasPrice: gasPrice, gas: gas});
+            var callback = function (err, hash) {
               var result = new Array;
               result.push(err);
               result.push(hash);
               resolve(result);
-            });
+            }
+            args.push(callback);
+            contract[functionName].apply(this, args);
           } catch (e) {
-            reject(e);
-          }
-        });
+              reject(e);
+            }
+          }); 
       },
       transferEth: function (from, to, value, gasPrice, gas) {
         return $q(function (resolve, reject) {

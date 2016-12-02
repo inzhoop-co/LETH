@@ -1,33 +1,53 @@
-<div class="item item-divider" ng-controller="myCtrl">
-   Amount:  <span id="balance"></span>
+<div class="item item-avatar item-divider">
+  <img src="dappleths/dapp_2/logo.png" width="80px" height="50">
+  <h2>BΞTH Lottery</h2>
+  <p>Win 50% of total round amount</p>
 </div>
-<div class="list card">
-  <div class="item item-avatar">
-    <img src="http://www.inzhoop.com/dappleths/dapp_2/logo.jpg">
-    <h2><b>Riace Coin</b></h2>
-    <p>Il Coin dei Migranti</p>
-  </div>
-  <div class="item item-image">
-    <img src="http://www.inzhoop.com/dappleths/dapp_2/logo_riace.png" style="width: 60%; padding:  20px;">
-  </div>
-    <label class="item item-input item-select">
-    <div class="input-label">
-      Select merchant: 
-    </div>
-  <select id="merchant">
-		<option value="0xc92af685c058197f22f432e33756409a7b10fb55" selected>Panetteria</option>
-		<option value="0xd1324ada7e026211d0cacd90cae5777e340de948">Pizzeria</option>
-		<option value="0xB548c82445Baa55dCf0128542b70c12287cc366F">Farmacia</option>
-		<option value="0x917e1d4d786af9b529ed6af7d8efa0b940ea5209">Abbigliamento</option>
-		<option value="0x25700f40a5a16e6049247b29058dac51e51b6445">Macelleria</option>
-		<option value="0xf8904c0ab3fcbc084772f8faf96922135c360940">Fruttivendolo</option>
 
-    </select>
-  </label>
-  <div class="item tabs item-input item-icon-right assertive">
-    <label class="item item-stacked-label">ρ coin: </label>  
-    <input type="number" pattern="(-?[0-9]+(\.[0-9]+)?)" placeholder="0,00" id="amountCoins" length="5">
-    <a class="icon ion-bag assertive" onclick="buy(merchant,amountCoins)"><i></i></a>
+<div class="item">
+  <div class="row">
+    <div class="col item-divider">
+      <i class="icon ion-ios-pricetag"></i>
+      Ticket Price
+    </div>
+    <div class="col item-divider">
+      <i class="icon ion-trophy"></i>
+      Jackpot
+    </div>
   </div>
-  <!--button id="show" class="button button-clear button-energized">Claim you coins!</button-->
+  <div class="row">
+    <div class="col item-text-wrap">
+      <p id="price">{{price}}</p>
+    </div>
+    <div class="col item-text-wrap">
+      <p id="amount">{{amount}}</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col item-divider">
+      <i class="icon ion-ios-stopwatch"></i>
+      Time Left
+    </div>
+    <div class="col item-divider">
+      <i class="icon ion-pound"></i>
+      Bets
+    </div>
+  </div>
+  <div class="row">
+    <div class="col item-text-wrap">
+      <p id="time">{{time}}</p>
+    </div>
+    <div class="col item-text-wrap">
+      <p id="numGiocate">{{numGiocate}}</p>
+    </div>
+  </div>
 </div>
+<ion-list>
+    <ion-item class="item item-avatar" >
+        <img id="icon" src="https://www.inzhoop.com/dappleths/dapp_2/img/info.png"/>
+        <p id="title" class="title"> wellcome</p>
+        <p id="text" class="text"></p>
+        <p id="date" class="date"></p>
+    </ion-item>    
+</ion-list>

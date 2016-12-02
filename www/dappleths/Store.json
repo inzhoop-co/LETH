@@ -12,7 +12,20 @@
 			"InstallUrl" : "/dapp_1/index.html",
 			"TemplateUrl" : "/dapp_1/index.html",
 			"ScriptUrl" : "/dapp_1/index.js"
-		}
+		},
+		{
+			"GUID" : "T02",
+			"Name" : "Beth",
+			"Network" : "Ropsten",
+			"Company" : "Inzhoop",
+			"Address" : "0x1abc82f3dd1808019fdb19c90d601f3399dca49a",
+			"ABI" : [{"constant":true,"inputs":[],"name":"getPayed","outputs":[{"name":"r","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"pos","type":"uint256"}],"name":"getGamer","outputs":[{"name":"r","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"duration","type":"uint256"},{"name":"price","type":"uint256"}],"name":"newMatch","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"x","type":"address"}],"name":"save","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"destroy","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getWinner","outputs":[{"name":"r","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"play","outputs":[{"name":"accepted","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getPrice","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getDuration","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"checkWinner","outputs":[{"name":"ready","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getNow","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getStart","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getAmount","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getNumGiocate","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"checkTime","outputs":[{"name":"r","type":"string"}],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"},{"payable":false,"type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"sender","type":"address"}],"name":"NewBet","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"winner","type":"address"},{"indexed":false,"name":"position","type":"uint256"}],"name":"Winner","type":"event"},{"anonymous":false,"inputs":[],"name":"TimeElapsed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"sender","type":"address"},{"indexed":false,"name":"reason","type":"string"}],"name":"BetRefused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"message","type":"string"}],"name":"MatchStarted","type":"event"}],
+			"Logo" : "https://www.inzhoop.com/dappleths/dapp_2/logo.png",
+			"Description" : "Bet & Win 50% Jackpot",
+			"InstallUrl" : "/dapp_2/index.html",
+			"TemplateUrl" : "/dapp_2/index.html",
+			"ScriptUrl" : "/dapp_2/index.js"
+		}		
 	],
 	"coins":[
 		{

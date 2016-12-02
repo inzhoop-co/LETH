@@ -35,7 +35,7 @@
             <h2>{{coin.Company}}</h2>
             <p>{{coin.Abstract}}</p>
             <ion-spinner icon="ripple" class="icon spinner-positive" ng-show="coin.progress"></ion-spinner>
-            <i class="icon ion-ios-checkmark balanced" ng-hide="!coin.Installed || coin.progress"></i>  
+            <i class="icon ion-ios-checkmark-outline balanced" ng-hide="!coin.Installed || coin.progress"></i>  
             <i class="icon ion-ios-cloud-download-outline positive" ng-hide="coin.Installed || coin.progress" ng-click="installCoin(coin)"></i>  
             <ion-option-button class="button-assertive" ng-show="coin.Installed" ng-click="uninstallCoin(coin)">
               <i class="icon ion-ios-trash-outline"></i>

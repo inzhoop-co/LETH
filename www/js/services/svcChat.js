@@ -199,7 +199,8 @@ angular.module('leth.services')
         });
       }
     },
-    sendDappMessage: function (msg, identity, topic) {
+    sendDappMessage: function (txt, dapp) {
+      var msg = {type: 'leth', mode: 'dappMessage', from: dapp.Address, to: [null], text: text};
       var payload = msg;
       var message = {
         from:  identity,
@@ -226,7 +227,7 @@ angular.module('leth.services')
       });
       return false;
     },
-    listenMessage: function($scope){
+    listenMessageEX: function($scope){
       filter =  web3.shh.filter({topics: [topics]});
       filter.watch(function (error, result) {
         if(error){return;};
@@ -266,6 +267,63 @@ angular.module('leth.services')
             $scope.$broadcast("incomingMessage", result);
           }//exclude self sent              
         };//else
+        localStorage.LastMsgTms = result.sent*1000;
+      });
+    },
+    listenMessage: function($scope){
+      filter =  web3.shh.filter({topics: [topics]});
+
+      filter.watch(function (error, result) {
+        //exit on error
+        if(error){return;}; 
+        //exit if mine
+        if(result.payload.from == AppService.account()){return;} 
+        //exit if outdated
+        if(result.sent*1000 <= localStorage.LastMsgTms){return;} 
+        //if encrypted msg write to DM
+        if(result.payload.mode == 'encrypted'){ 
+          lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
+            if(result.payload.text != '')
+              result.payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.text, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
+            if(result.payload.image != '')
+              result.payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.image, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
+
+            chatsDM.push({
+              identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
+              timestamp: result.sent*1000,
+              message: result.payload
+            });
+
+            $scope.$broadcast("incomingMessage", result);              
+          });
+        }
+        //if plain msg go to global chat
+        if(result.payload.mode == 'plain'){ 
+          //if(result.payload.to[0] == null){
+            chats.push({
+              identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
+              timestamp: result.sent*1000,
+              message: result.payload
+            });
+          //}
+
+          $scope.$broadcast("incomingMessage", result);
+        };
+
+        //if dappMessage go to dapp chat
+        if(result.payload.mode == 'dappMessage'){ 
+          //if(result.payload.to[0] == null){
+            chatsDAPP.push({
+              identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
+              timestamp: result.sent*1000,
+              message: result.payload
+            });
+          //}
+
+          $scope.$broadcast("incomingMessage", result);
+        };
+
+        //flag time last received
         localStorage.LastMsgTms = result.sent*1000;
       });
     },

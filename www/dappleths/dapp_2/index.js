@@ -1,61 +1,194 @@
-var riacecoinAdr = "0x53c061067827efb7a31c9925a28588e594e053fc";
-var riacecoinAdrAbi = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":true,"inputs":[],"name":"version","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"spentAllowance","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"inputs":[{"name":"initialSupply","type":"uint256"},{"name":"tokenName","type":"string"},{"name":"decimalUnits","type":"uint8"},{"name":"tokenSymbol","type":"string"},{"name":"versionOfTheCode","type":"string"}],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]
 
-var riacecoin = web3.eth.contract(riacecoinAdrAbi).at(riacecoinAdr);
+
+function init()
+{
+    //define center button
+    var btnCenter = angular.element(document.querySelector('#centerButton'));
+    btnCenter.html(' Play now!');
+    btnCenter.attr('class','button button-smal button-icon icon ion-play');
+    btnCenter.attr('onclick','playLottery()');
+
+    //define left button
+    /*
+    var btnLeft = angular.element(document.querySelector('#leftButton'));
+    btnLeft.html(' left');
+    btnLeft.attr('class','button button-smal button-icon icon ion-camera');
+    btnLeft.attr('onclick','scan()');
+    */
+
+    //define left button
+    /*
+    var btnRight = angular.element(document.querySelector('#rightButton'));
+    btnRight.html(' right');
+    btnRight.attr('class','button button-smal button-icon icon ion-ios-refresh');
+    btnRight.attr('onclick','updateData()');
+    */
+}
 
 angular.element(document).ready(function() {
 	updateData();
 })
 
+
+
+dappContract.MatchStarted().watch(function (error, result) {
+	var msg = result.args.msg;
+    /*
+    type: "info",
+    title: 'Nuova partita',
+    subtitle: 'Via al gioco',
+    text: r.args.message,
+    date: new Date()
+    */
+    console.log("Nuova partita: " + msg); 
+
+    var e = new CustomEvent('dappMessage', { "detail": "New match started"});
+    document.body.dispatchEvent(e);
+
+    angular.element(document.querySelector('#icon')).attr('src','dappleths/dapp_2/img/info.png');
+    angular.element(document.querySelector('#title')).html('Nuova partita');
+    angular.element(document.querySelector('#text')).html(msg);
+    angular.element(document.querySelector('#date')).html(new Date());
+
+    updateData();
+
+});
+
+dappContract.TimeElapsed().watch(function (error, result) {
+    var msg = result.args.msg;
+    /*
+    type: "warning",
+    title: 'Game Over!',
+    subtitle: 'Try again',
+    text: 'Fai partire un nuovo giro, play now!',
+    date: new Date()
+    */
+    console.log("TimeElapsed: " + msg); 
+    
+    var e = new CustomEvent('dappMessage', { "detail": "TimeElapsed"});
+    document.body.dispatchEvent(e);
+
+
+    angular.element(document.querySelector('#icon')).attr('src','dappleths/dapp_2/img/warning.png');
+    angular.element(document.querySelector('#title')).html('Game Over!');
+    angular.element(document.querySelector('#text')).html('Let start new round: play now!');
+    angular.element(document.querySelector('#date')).html(new Date());
+
+    updateData();
+
+});
+
+dappContract.NewBet().watch(function (error, result) {
+    var msg = result.args.sender;
+    /*
+    type: "info",
+    title: 'NewBet!',
+    subtitle: 'Compra un altro biglietto',
+    text: 'from:' + r.args.sender,
+    date: new Date()
+    */
+    console.log("NewBet: " + msg); 
+
+    var e = new CustomEvent('dappMessage', { "detail": "New bet"});
+    document.body.dispatchEvent(e);
+
+
+    angular.element(document.querySelector('#icon')).attr('src','dappleths/dapp_2/img/info.png');
+    angular.element(document.querySelector('#title')).html('New Bet!');
+    angular.element(document.querySelector('#text')).html('From ' + msg);
+    angular.element(document.querySelector('#date')).html(new Date().toString('dd-MM-yyyy h:mm:ss a'));
+
+    updateData();
+
+});
+
+dappContract.BetRefused().watch(function (error, result) {
+    var msg = result.args.reason;
+    /*
+    type: "alert",
+    title: 'Ohooooooo',
+    subtitle: 'Puntata non valida!',
+    text: r.args.reason,
+    date: new Date()
+    */
+     console.log("BetRefused: " + msg);
+
+    var e = new CustomEvent('dappMessage', { detail: "Bet refused!" });
+    document.body.dispatchEvent(e);
+
+    angular.element(document.querySelector('#icon')).attr('src','dappleths/dapp_2/img/alert.png');
+    angular.element(document.querySelector('#title')).html('Ohooooooo!');
+    angular.element(document.querySelector('#text')).html(msg);
+    angular.element(document.querySelector('#date')).html(new Date());
+
+    updateData();
+
+});
+
+
+dappContract.Winner().watch(function (error, result) {
+    var msg = result.args.winner;
+    /*
+    type: "info",
+    title: 'The Winner is',
+    subtitle: 'Ticket #' + r.args.position,
+    text: r.args.winner,
+    date: new Date()
+    */    
+    console.log("WinnerIs :" + msg); 
+
+    var e = new CustomEvent('dappMessage', { detail: "The winner is" });
+    document.body.dispatchEvent(e);
+
+
+    angular.element(document.querySelector('#icon')).attr('src','dappleths/dapp_2/img/winner.png');
+    angular.element(document.querySelector('#title')).html('The Winner is');
+    angular.element(document.querySelector('#text')).html(msg);
+    angular.element(document.querySelector('#date')).html(new Date());
+
+    updateData();
+
+});
+
+ function formatTimeStamp(ts){
+    var timestamp=ts;
+    var date=new Date(timestamp*1000);
+    var hours = date.getHours()-1; // minutes part from the timestamp (siamo in GMT+1)
+    var minutes = date.getMinutes()<10?'0'+date.getMinutes():date.getMinutes(); // seconds part from the timestamp
+    var seconds = date.getSeconds()<10?'0'+date.getSeconds():date.getSeconds(); // will display time in 10:30:23 format
+    var formattedTime = hours + ':' + minutes + ':' + seconds;
+    return formattedTime;
+}                
+
 function updateData(){
-	getBalance();
+    var price = parseFloat(dappContract.getPrice() / 1.0e+15);
+    var amount = parseFloat((dappContract.getAmount() / 2) / 1.0e+15);
+    var time = (dappContract.getDuration() - (dappContract.getNow() - dappContract.getStart()))/1
+    time = time <=0 ? "Game over!" : formatTimeStamp(time) + ' sec.';
+    var numGiocate = dappContract.getNumGiocate() / 1;
+
+    angular.element(document.querySelector('#price')).html(price + ' finney');
+    angular.element(document.querySelector('#amount')).html(amount + ' finney');
+    angular.element(document.querySelector('#time')).html(time);
+    angular.element(document.querySelector('#numGiocate')).html(numGiocate);
 
 }
 
 
-function buy(address,amount)
-{
-    var fromAddr =  global_keystore.getAddresses()[0];
-	//var coin = amount.value*1; 
-    var coin = parseFloat(angular.element(document.querySelector('#amountCoins')).val());
-	var toAddr = address.value;
-	var functionName = 'transfer';
+function playLottery() {
+    var fromAddr = global_keystore.getAddresses()[0];
+    var functionName = 'play';
     var args = JSON.parse('[]');
+    var value = dappContract['getPrice'].apply(this, args);
     var gasPrice = 50000000000;
     var gas = 3000000;
-    args.push(toAddr,coin,{from: fromAddr, gasPrice: gasPrice, gas: gas});
+    args.push({from: fromAddr, value: value, gasPrice: gasPrice, gas: gas});
     var callback = function (err, txhash) {
         console.log('error: ' + err);
         console.log('txhash: ' + txhash);
+
     }
     args.push(callback);
-    riacecoin['transfer'].apply(this, args);
-      
-    
-	 updateData(); 
-	//0xc92af685c058197f22f432e33756409a7b10fb55
-	//0xd1324ada7e026211d0cacd90cae5777e340de948
-    angular.element(document.querySelector('#amountCoins')).val('');
+    dappContract['play'].apply(this, args);
     return true;
-	
-}
-
-function getPOI()
-{
-	alert('Discover where you can buy');
-}
-
-
-function getBalance()
-{
-    var balance = "<b>" + parseFloat(riacecoin.balanceOf('0x' +  global_keystore.getAddresses()[0])).toFixed(2) + " " + riacecoin.symbol() + "</b> [" + riacecoin.name() + "]";
-    angular.element(document.querySelector('#balance')).html(balance);
-
-}
-
-function writeHelp()
-{
-    var m = "Il coin di Riace per i rifugiati";
-    angular.element(document.querySelector('#message')).html(m);
-
 }

@@ -1,0 +1,18 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-stable bar-assertive">
+    <button  class="button button-clear" ng-click="closeFriendsModal()">
+      <i class="icon ion-ios-close"></i>
+    </button>
+    <div class="h1 title">Choose Friend</div>
+  </ion-header-bar>
+  <ion-content class="has-header" padding="'true'">
+  <ion-list class="list item-avatar-left">
+    <div ng-repeat="friend in friends | filter:search track by $index">
+      <ion-radio ng-model="choice" ng-value="{{friend}}" ng-click="chooseFriend(friend)">
+        <img ng-src="{{friend.icon}}"/>
+        <h2><b>{{friend.name | strLimit: 20 : 5}}</b></h2>
+        <p>{{friend.addr | strLimit: 20 : 5}}</p>
+      </ion-radio>
+  </div>
+  </ion-content>
+</ion-modal-view>

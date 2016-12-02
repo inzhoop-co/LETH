@@ -191,6 +191,27 @@ angular.module('leth.controllers', [])
     });
   };
 
+  var addrsModal;
+  $scope.openFriendsModal = function () {
+    createModalFriends();
+  };
+  $scope.closeFriendsModal = function () {
+    addrsModal.hide();
+  };
+  var createModalFriends = function() {
+    $ionicModal.fromTemplateUrl('templates/addressbook.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      addrsModal = modal;
+      addrsModal.show();
+    });
+  };
+  $scope.chooseFriend = function (friend) {
+    $scope.addrTo = friend.addr;
+    addrsModal.hide();
+  };
+
   $scope.isValidAddr = function(addr){
     if(!web3.isAddress(addr)) {return false};
 
@@ -816,7 +837,7 @@ angular.module('leth.controllers', [])
           //$cordovaInAppBrowser.close();
       }, false);
     }//geolocation
-    if(msg.mode!='encrypted' && msg.attach.addr && msg.attach.idkey){
+    if(msg.mode!='encrypted' && msg.mode!='dappMessage' && msg.attach.addr && msg.attach.idkey){
       if($scope.isFriend(msg.attach.addr) && msg.attach.addr!=AppService.account()) //go to friend
         $state.go('tab.friend', {Friend: msg.attach.addr}, { relative: $state.$current.view});
       else //add friend
@@ -827,6 +848,7 @@ angular.module('leth.controllers', [])
   $scope.$on('incomingMessage', function (e, r) {     
     if(r.payload.text.length)
       msg = r.payload.text;
+    
     if(r.payload.image.length)
       msg = "Image sent";
 
@@ -852,8 +874,13 @@ angular.module('leth.controllers', [])
      
     }//broadcast
     else{
-      if($ionicTabsDelegate.selectedIndex()!=1)
-        $scope.msgCounter += 1;
+      if(r.payload.mode=="dappMessage"){
+        console.log(r.payload.text);
+      }
+      else{
+        if($ionicTabsDelegate.selectedIndex()!=1)
+          $scope.msgCounter += 1;
+      }
     }
 
 

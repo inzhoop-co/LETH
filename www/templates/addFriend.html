@@ -3,7 +3,7 @@
     <button  class="button button-clear" ng-click="closeSaveAddressModal()" ng-hide="fromAddressBook">
       <i class="icon ion-ios-close"></i>
     </button>
-    <div class="h1 title">Friend {{name}}</div>
+    <div class="h1 title">Friend {{name | strLimit: 5 : 5}}</div>
     <button menu-toggle="right" class="button button-clear" on-touch="scanAddr()">
       <i class="icon ion-ios-camera"></i>
     </button>
