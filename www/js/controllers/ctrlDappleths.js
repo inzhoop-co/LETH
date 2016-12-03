@@ -59,25 +59,39 @@ angular.module('leth.controllers')
     }
 
     $scope.installCoin = function(coin) {
-      coin.progress = true;
+      coin.Progress = true;
       $timeout(function() {
         coin.Installed = true;
-        var coins = JSON.parse(localStorage.Coins);
-        coin.progress = false;
-        coins.push(coin);
-        localStorage.Coins = JSON.stringify(coins);
+        $scope.listCoins.filter(function (c) {
+          if(c.GUID === coin.GUID){
+            c.Installed = true;
+            c.Progress = false;
+          }
+        })
+        coin.Progress = false;
+        if($scope.listCoins.indexOf(coin)==-1)
+          $scope.listCoins.push(coin);
+        localStorage.Coins = JSON.stringify($scope.listCoins);
       }, 3000);
     };
 
     $scope.uninstallCoin = function(coin) {
-      coin.progress = true;
+      coin.Progress = true;
+      var coins = JSON.parse(localStorage.Coins);
       $timeout(function() {
-        var coins = JSON.parse(localStorage.Coins);
-        var index = coins.indexOf(coin);
-        coins.splice(index, 1);
+        if(!coin.Custom){
+          coins.splice(coins.indexOf(coin), 1);
+        }else{
+          coins.filter(function (c) {
+            if(c.GUID === coin.GUID){
+              c.Installed = false;
+              c.Progress = false;
+            }
+          })
+        }
+        coin.Progress = false;
         localStorage.Coins = JSON.stringify(coins);
-        coin.Installed = false;
-        coin.progress = false;
+        $scope.listCoins = JSON.parse(localStorage.Coins);
       }, 3000);
       $ionicListDelegate.closeOptionButtons();
     };

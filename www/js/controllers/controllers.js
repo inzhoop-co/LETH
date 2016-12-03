@@ -3,7 +3,7 @@ angular.module('leth.controllers', [])
                                 $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
                                 $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,
-                                $cordovaBadge,$ionicScrollDelegate, 
+                                $cordovaBadge,$ionicScrollDelegate, $ionicListDelegate,
                                 AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService) {
   
   window.refresh = function () {
@@ -211,6 +211,52 @@ angular.module('leth.controllers', [])
     $scope.addrTo = friend.addr;
     addrsModal.hide();
   };
+
+  var tokenModal;
+  $scope.openTokenModal = function () {
+    createModalToken();
+  };
+  $scope.closeTokenModal = function () {
+    tokenModal.hide();
+  };
+  var createModalToken = function() {
+    $ionicModal.fromTemplateUrl('templates/token.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      tokenModal = modal;
+      tokenModal.show();
+    });
+  };
+  $scope.addCustomToken = function (token) {
+    var customToken = {
+      "Custom" : true,
+      "Installed" : true,
+      "Name" : token.name,
+      "GUID" : "C" + $scope.listCoins.length+1,
+      "Network" : $scope.nameNetwork, 
+      "Company" : token.company,
+      "Logo" : token.logo,
+      "Symbol" : token.symbol,
+      "Abstract" : token.abstract,
+      "Address" : token.address,
+      "ABI" : JSON.parse(token.ABI),
+      "Send" : "transfer",
+      "Events" : [{"Transfer":"address indexed from, address indexed to, uint256 value"}],
+      "Units":[{"multiplier": "1", "unitName": "Token"}]
+    }
+
+    $scope.listCoins.push(customToken);
+    localStorage.Coins = JSON.stringify($scope.listCoins);
+    
+    $scope.closeTokenModal();
+  };
+
+  $scope.removeCustomToken = function (token) {
+    $scope.listCoins.splice($scope.listCoins.indexOf(token),1);
+    localStorage.Coins = JSON.stringify($scope.listCoins);
+    $ionicListDelegate.closeOptionButtons();
+  }
 
   $scope.isValidAddr = function(addr){
     if(!web3.isAddress(addr)) {return false};

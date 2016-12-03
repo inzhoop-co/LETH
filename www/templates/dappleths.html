@@ -18,7 +18,7 @@
       <button class="{{filterStoreApps}}" ng-click="readDappsList()">ÐAppleths</button>
     </div>
     <ion-list ng-show="isDapp">
-      <ion-item class="item item-thumbnail-left item-icon-right"  ng-repeat="dapp in listApps | filter:{Network:nameNetwork}"
+      <ion-item class="item item-thumbnail-left item-icon-right"  ng-repeat="dapp in listApps | filter:{Network:nameNetwork} track by $index"
           type="item-text-wrap" ng-href="&#35;/tab/dappleth-run/{{dapp.GUID}}">
           <img ng-src="{{dapp.Logo}}"/>
             <h2>{{dapp.Company}}</h2>
@@ -29,17 +29,27 @@
       </ion-item>  
     </ion-list>
     <ion-list ng-show="isCoin">
-      <ion-item class="item item-avatar-left item-icon-right"  ng-repeat="coin in listCoins | filter:{Network:nameNetwork}"
+      <ion-item class="item item-avatar-left item-icon-right"  ng-repeat="coin in listCoins | filter:{Network:nameNetwork} track by $index"
           type="item-text-wrap">
           <img ng-src="{{coin.Logo}}"/>
             <h2>{{coin.Company}}</h2>
             <p>{{coin.Abstract}}</p>
-            <ion-spinner icon="ripple" class="icon spinner-positive" ng-show="coin.progress"></ion-spinner>
-            <i class="icon ion-ios-checkmark-outline balanced" ng-hide="!coin.Installed || coin.progress"></i>  
-            <i class="icon ion-ios-cloud-download-outline positive" ng-hide="coin.Installed || coin.progress" ng-click="installCoin(coin)"></i>  
+            <ion-spinner icon="ripple" class="icon spinner-positive" ng-show="coin.Progress"></ion-spinner>
+            <i class="icon ion-ios-checkmark-outline balanced" ng-hide="!coin.Installed || coin.Progress"></i>  
+            <i class="icon ion-ios-cloud-download-outline positive" ng-hide="coin.Installed || coin.Progress || coin.Custom" ng-click="installCoin(coin)"></i>  
+            <i class="icon ion-ios-circle-outline positive" ng-show="!coin.Installed && coin.Custom && !coin.Progress" ng-click="installCoin(coin)"></i>  
             <ion-option-button class="button-assertive" ng-show="coin.Installed" ng-click="uninstallCoin(coin)">
               <i class="icon ion-ios-trash-outline"></i>
             </ion-option-button>
+            <ion-option-button class="button-dark" ng-show="coin.Custom" ng-click="removeCustomToken(coin)">
+              <i class="icon ion-backspace-outline"></i>
+            </ion-option-button>
+      </ion-item>
+      <ion-item class="item item-avatar-left item-icon-right" ng-click="openTokenModal()">
+            <img ng-src="img/eth_coin.png"/>
+            <h2>Custom token</h2>
+            <p>Add a custom token</p>
+            <i class="icon ion-ios-plus-outline positive"></i>
       </ion-item>
     </ion-list> 
     <!--
