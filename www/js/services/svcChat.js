@@ -331,7 +331,8 @@ angular.module('leth.services')
               timestamp: result.sent*1000,
               message: result.payload
             });
-          }else {
+          }
+          if(result.payload.to[0] == null){
             chats.push({
               identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
               timestamp: result.sent*1000,
