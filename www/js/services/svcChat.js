@@ -310,6 +310,38 @@ angular.module('leth.services')
           $scope.$broadcast("incomingMessage", result);
         };
 
+        //if share contact go to global chat
+        if(result.payload.mode == 'contact'){ 
+          //if(result.payload.to[0] == null){
+            chats.push({
+              identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
+              timestamp: result.sent*1000,
+              message: result.payload
+            });
+          //}
+
+          $scope.$broadcast("incomingMessage", result);
+        };
+
+        //if share contact go to global chat
+        if(result.payload.mode == 'geolocation'){ 
+          if(result.payload.to[0] == AppService.account()){
+            chatsDM.push({
+              identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
+              timestamp: result.sent*1000,
+              message: result.payload
+            });
+          }else {
+            chats.push({
+              identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
+              timestamp: result.sent*1000,
+              message: result.payload
+            });
+          }
+
+          $scope.$broadcast("incomingMessage", result);
+        };
+
         //if dappMessage go to dapp chat
         if(result.payload.mode == 'dappMessage'){ 
           //if(result.payload.to[0] == null){

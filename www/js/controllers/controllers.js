@@ -253,9 +253,20 @@ angular.module('leth.controllers', [])
   };
 
   $scope.removeCustomToken = function (token) {
-    $scope.listCoins.splice($scope.listCoins.indexOf(token),1);
-    localStorage.Coins = JSON.stringify($scope.listCoins);
-    $ionicListDelegate.closeOptionButtons();
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Delete Custom Token',
+      template: 'Are you sure you want to delete this Token?'
+    });
+
+    confirmPopup.then(function(res) {
+     if(res) {
+        $scope.listCoins.splice($scope.listCoins.indexOf(token),1);
+        localStorage.Coins = JSON.stringify($scope.listCoins);
+     }
+
+     $ionicListDelegate.closeOptionButtons();
+   });
+   
   }
 
   $scope.isValidAddr = function(addr){
