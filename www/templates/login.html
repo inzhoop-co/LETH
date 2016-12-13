@@ -35,7 +35,7 @@
           </button>
           <ul class="assertive">
             <li ng-show="login.password.$dirty && login.password.$invalid ">* Password 8 to 20 digit (1 capital and 1 number at least)</li>
-            <li ng-show="login.confirmPassword.$dirty && login.password!=login.confirmPassword">* Password mismatch</li>
+            <li ng-show="login.confirmPassword.$dirty && password!=confirmPassword">* Password mismatch</li>
             <li ng-show="login.code.$dirty && login.code.$invalid">* Code not valid</li>
           </ul>
         </form>
