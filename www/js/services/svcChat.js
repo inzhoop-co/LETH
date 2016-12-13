@@ -212,7 +212,7 @@ angular.module('leth.services')
       web3.shh.post(message); 
 
       chatsDAPP.push({
-        identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
+        identity: dapp.Logo.toDataURL("image/jpeg"),
         timestamp: Date.now(),
         message: payload
       });
@@ -226,49 +226,6 @@ angular.module('leth.services')
         return msg;    
       });
       return false;
-    },
-    listenMessageEX: function($scope){
-      filter =  web3.shh.filter({topics: [topics]});
-      filter.watch(function (error, result) {
-        if(error){return;};
-        if(result.payload.from == AppService.account()){return;}
-        if(result.sent*1000 <= localStorage.LastMsgTms){return;}
-        if(result.payload.mode == 'encrypted'){
-          lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
-            if(result.payload.text != '')
-              result.payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.text, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
-            if(result.payload.image != '')
-              result.payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.image, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
-
-            chatsDM.push({
-              identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-              timestamp: result.sent*1000,
-              message: result.payload
-            });
-            $scope.$broadcast("incomingMessage", result);              
-          });
-        }
-        else{
-          if(result.payload.from != AppService.account()){
-            if(result.payload.to[0] == null){
-              chats.push({
-                identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-                timestamp: result.sent*1000,
-                message: result.payload
-              });
-            }else{
-              chatsDM.push({
-                identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-                timestamp: result.sent*1000,
-                message: result.payload
-              });
-            }
-
-            $scope.$broadcast("incomingMessage", result);
-          }//exclude self sent              
-        };//else
-        localStorage.LastMsgTms = result.sent*1000;
-      });
     },
     listenMessage: function($scope){
       filter =  web3.shh.filter({topics: [topics]});
@@ -299,14 +256,12 @@ angular.module('leth.services')
         }
         //if plain msg go to global chat
         if(result.payload.mode == 'plain'){ 
-          //if(result.payload.to[0] == null){
             chats.push({
               identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
               timestamp: result.sent*1000,
               message: result.payload
             });
-          //}
-
+            
           $scope.$broadcast("incomingMessage", result);
         };
 

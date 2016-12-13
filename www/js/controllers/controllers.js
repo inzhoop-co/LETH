@@ -144,10 +144,12 @@ angular.module('leth.controllers', [])
     $scope.isFeed = true;
   };  
 
-
+  $scope.shareByChat = function (friend) {
+    Chat.sendCryptedMessage("Please pay me !",friend.addr,friend.idkey);
+  };
 
   $scope.readFeed = function(index){
-    $state.go('app.feed',{Item: index});
+    $state.go('tab.feed',{Item: index});
   };
 
   var codeModal;
@@ -208,7 +210,11 @@ angular.module('leth.controllers', [])
     });
   };
   $scope.chooseFriend = function (friend) {
-    $scope.addrTo = friend.addr;
+    if($ionicHistory.currentTitle()=="Wallet")
+      $scope.addrTo = friend.addr;
+    if($ionicHistory.currentTitle()=="Address")
+      $scope.shareByChat(friend);
+
     addrsModal.hide();
   };
 
@@ -471,7 +477,7 @@ angular.module('leth.controllers', [])
         var msg = 'new user added';
         Chat.sendMessage(msg);
 
-        $state.go('app.dappleths');
+        $state.go('tab.intro');
 
         $timeout(function() {$ionicLoading.hide();}, 1000);
       });

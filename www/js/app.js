@@ -75,7 +75,9 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
         cordova.plugins.Keyboard.disableScroll(true);        
       }
       if (window.StatusBar) {
-        StatusBar.styleDefault();
+        StatusBar.styleLightContent();
+        //StatusBar.styleBlackOpaque()
+        //StatusBar.styleBlackTranslucent();
       }
       
       $rootScope.$on('loading:show', function () {
@@ -117,7 +119,7 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
         views: {
           'wallet': {
             templateUrl: 'templates/wallet.html',
-            controller: 'WalletCtrl',
+            controller: 'WalletCtrl'
           }
         }
       })
@@ -237,41 +239,41 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
       delete $httpProvider.defaults.headers.common['X-Requested-With'];
   })
   .config(function( $controllerProvider, $provide, $compileProvider ) {
-        // Since the "shorthand" methods for component 
-        // definitions are no longer valid, we can just 
-        // override them to use the providers for post-
-        // bootstrap loading.
-        console.log( "Config method executed." );
+    // Since the "shorthand" methods for component 
+    // definitions are no longer valid, we can just 
+    // override them to use the providers for post-
+    // bootstrap loading.
+    console.log( "Config method executed." );
 
-        // Let's keep the older references.
-        app._controller = app.controller;
-        // Provider-based controller.
-        app.controller = function( name, constructor ) {
+    // Let's keep the older references.
+    app._controller = app.controller;
+    // Provider-based controller.
+    app.controller = function( name, constructor ) {
 
-          $controllerProvider.register( name, constructor );
-          return( this );
+      $controllerProvider.register( name, constructor );
+      return( this );
 
-        };
+    };
   })
   .directive('hideTabs', function($rootScope) {
     return {
       restrict: 'A',
       link: function($scope, $el) {
-          $rootScope.hideTabs = 'tabs-item-hide';
-          $scope.$on('$destroy', function() {
-              $rootScope.hideTabs = '';
-          });
-          $scope.$on('$ionicView.beforeLeave', function() {
-              $rootScope.hideTabs = '';
-          });
-          $scope.$on('$ionicView.beforeEnter', function() {
-              $rootScope.hideTabs = 'tabs-item-hide';
-          });
+        $rootScope.hideTabs = 'tabs-item-hide';
+        $scope.$on('$destroy', function() {
+            $rootScope.hideTabs = '';
+        });
+        $scope.$on('$ionicView.beforeLeave', function() {
+            $rootScope.hideTabs = '';
+        });
+        $scope.$on('$ionicView.beforeEnter', function() {
+            $rootScope.hideTabs = 'tabs-item-hide';
+        });
       }
     };
   })
   .directive('dappTemplate', ['$http','$compile', function($http,$compile){
-  return {
+    return {
       restrict : 'A',
       scope : {},
       controller : "@",
@@ -333,8 +335,8 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
     }
   function handleOpenURL(url) {
     setTimeout(function() {
-        var event = new CustomEvent('LaunchUrl', {detail: {'url': url}});
-        window.dispatchEvent(event);
+      var event = new CustomEvent('LaunchUrl', {detail: {'url': url}});
+      window.dispatchEvent(event);
     }, 0);
   }
 ;

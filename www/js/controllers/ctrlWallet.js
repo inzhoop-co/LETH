@@ -186,6 +186,7 @@ angular.module('leth.controllers')
         if (res) {
           $scope.sendCoins(addr, amount,unit);
         } else {
+          $ionicLoading.hide();
           console.log('send coins aborted');
         }
       });

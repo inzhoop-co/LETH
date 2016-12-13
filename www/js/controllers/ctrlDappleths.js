@@ -146,7 +146,8 @@ angular.module('leth.controllers')
 
     $rootScope.$on('dappEvent', function(event,args){
       var msg = args.data.detail;
-      Chat.sendDappMessage(msg, $scope.activeApp);  
+      //Chat.sendDappMessage(msg, $scope.activeApp);  
+      $ionicLoading.show({ template: msg, noBackdrop: true, duration: 2000 })
     });
 
   })

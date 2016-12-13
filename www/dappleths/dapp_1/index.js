@@ -1,7 +1,12 @@
 //definition
+//var svcApp = angular.element(document.body).injector().get("AppService");
+
+var svcChat = angular.element(document.body).injector().get("Chat");
+
 
 function init()
 {
+
 	//define center button
 	var btnCenter = angular.element(document.querySelector('#centerButton'));
 	btnCenter.html(' Test me!');
@@ -41,5 +46,10 @@ function greet()
     var m = "Calling contract at <br/>" +  dappContract.address + "<br/>"
     m += "<b>"  + dappContract.greet() + "</b>";
     angular.element(document.querySelector('#message')).html(m);
+    
+    var e = new CustomEvent('dappMessage', { "detail": m});
+    document.body.dispatchEvent(e);
+
+    //svcChat.sendDappMessage(m);
     //alert('Greet!');
 }
