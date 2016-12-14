@@ -108,6 +108,32 @@ angular.module('leth.services')
         web3.shh.post(crptMsg); 
       });
     },
+    sendCryptedPaymentReq: function (content,request,toAddr,toKey) {
+      var msg = {type: 'leth', mode: 'payment', from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: '', attach: {addr: AppService.account(), idkey: AppService.idkey(), payment: request}};
+      var idFrom = this.identity();
+      var payload = msg;
+      var message = {
+        from:  idFrom,
+        topics: topics,
+        payload: payload,
+        ttl: ttlTime,
+        workToProve: wtpTime
+      };
+
+      chatsDM.push({
+          identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
+          timestamp: Date.now(),
+          message: payload
+        });
+
+      lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
+        var crptMsg = angular.copy(message);
+
+        crptMsg.payload.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
+
+        web3.shh.post(crptMsg); 
+      });
+    },
     sendCryptedPhoto: function (content,toAddr,toKey) {
       var msg = {type: 'leth', mode: 'encrypted', from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: '', image: content };
       var idFrom = this.identity();
@@ -276,6 +302,27 @@ angular.module('leth.services')
           //}
 
           $scope.$broadcast("incomingMessage", result);
+        };
+
+        //if payment request go to private chat
+        if(result.payload.mode == 'payment'){ 
+          //if(result.payload.to[0] == null){
+            //only DM request supported
+          //}
+          lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
+            if(result.payload.text != '')
+              result.payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.text, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
+            if(result.payload.image != '')
+              result.payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.image, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
+            
+            chatsDM.push({
+              identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
+              timestamp: result.sent*1000,
+              message: result.payload
+            });
+
+            $scope.$broadcast("incomingMessage", result);              
+          });
         };
 
         //if share contact go to global chat

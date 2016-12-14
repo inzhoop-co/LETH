@@ -144,8 +144,8 @@ angular.module('leth.controllers', [])
     $scope.isFeed = true;
   };  
 
-  $scope.shareByChat = function (friend) {
-    Chat.sendCryptedMessage("Please pay me !",friend.addr,friend.idkey);
+  $scope.shareByChat = function (friend,payment) {
+    Chat.sendCryptedPaymentReq("Please send me " + payment + " eth !", payment, friend.addr,friend.idkey);
   };
 
   $scope.readFeed = function(index){
@@ -194,13 +194,14 @@ angular.module('leth.controllers', [])
   };
 
   var addrsModal;
-  $scope.openFriendsModal = function () {
-    createModalFriends();
+  $scope.openFriendsModal = function (param) {
+    createModalFriends(param);
   };
   $scope.closeFriendsModal = function () {
     addrsModal.hide();
   };
-  var createModalFriends = function() {
+  var createModalFriends = function(param) {
+    $scope.param = param;
     $ionicModal.fromTemplateUrl('templates/addressbook.html', {
       scope: $scope,
       animation: 'slide-in-up'
@@ -213,7 +214,7 @@ angular.module('leth.controllers', [])
     if($ionicHistory.currentTitle()=="Wallet")
       $scope.addrTo = friend.addr;
     if($ionicHistory.currentTitle()=="Address")
-      $scope.shareByChat(friend);
+      $scope.shareByChat(friend, $scope.param);
 
     addrsModal.hide();
   };
@@ -900,7 +901,12 @@ angular.module('leth.controllers', [])
           //$cordovaInAppBrowser.close();
       }, false);
     }//geolocation
-    if(msg.mode!='encrypted' && msg.mode!='dappMessage' && msg.attach.addr && msg.attach.idkey){
+
+    if(msg.mode=="payment" && msg.attach){
+        $state.go('tab.wallet', {addr: msg.attach.addr + "#" + msg.attach.idkey + "@" + msg.attach.payment}, { relative: $state.$current.view});
+    }
+
+    if(msg.mode!='encrypted' && msg.mode!='dappMessage' && msg.mode!='payment' && msg.attach.addr && msg.attach.idkey){
       if($scope.isFriend(msg.attach.addr) && msg.attach.addr!=AppService.account()) //go to friend
         $state.go('tab.friend', {Friend: msg.attach.addr}, { relative: $state.$current.view});
       else //add friend
