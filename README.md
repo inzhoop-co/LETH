@@ -1,8 +1,8 @@
-# LΞTH (prototype)
-The First mobile LigthWallet for Ξthereum
+# LΞTH 
+The Only mobile ligthWallet builded for Ξthereum community
 
 # About
-LΞTH (Ligth Ξthereum Mobile Wallet) is the first hybrid mobile app to manage an Ethereum wallet built using Ionic framework.
+LΞTH (Ligth Ξthereum Mobile Wallet) is the first hybrid mobile app to manage an Ethereum wallet built using Ionic framework with the aim to serve the open community.
 
 # Features
 Thanks to the great job of library of ConsenSys (eth-lightwallet), the app could manage the key-pairs securely on smartphone side without send any password out of the wallet.
@@ -11,19 +11,20 @@ Every transaction could be signed directly with the smartphone and sent to an et
 With LETH you could:
 
 - Create a HD ligthwallet 
-- Add an Ethereum wallet address
-- Set an Ethereum node address private/public
+- Manage an Ethereum wallet address
+- Set host node address private/test/public
 - Send / Receive ETH
-- Send / Receive COINS
+- Send / Receive TOKENS
 - List your transactions
-- Share Address via SMS or Email
+- Share Address via SMS, Email or Whisper (SHH)
 - Share your geolocation
-- Request payments
+- Request payments via SMS, Email or Whisper (SHH)
 - Send messages / images to friends and community using SHH protocol in unpersisted chat
 - Send private unpersisted crypted messages to friends
-- Backup / Restore wallet
+- Backup / Restore wallet or seed
 - Protect access with TouchID / PIN code
 - Currency convertion value via Kraken API
+- Add Custom Token and Share it with friends
 - Run DAppLeth (in progress)
 
 # Beta Testers

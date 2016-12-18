@@ -179,7 +179,7 @@ angular.module('leth.services', [])
       });
 
       myPopup.then(function (res) {
-        $ionicLoading.show({template: 'Sending...'});
+        $ionicLoading.show({template: 'Waiting...'});
         q.resolve(res);
       });
 

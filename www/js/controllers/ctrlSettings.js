@@ -1,5 +1,5 @@
 angular.module('leth.controllers')
-.controller('SettingsCtrl', function ($scope, $interval, $ionicModal, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, $http, 
+.controller('SettingsCtrl', function ($scope, $interval, $ionicModal, $ionicLoading, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, $http, 
                                       Geolocation, AppService, ExchangeService, Chat, PasswordPopup) {    
   $scope.editableHost = false;
   $scope.addrHost = localStorage.NodeHost;
@@ -314,15 +314,17 @@ angular.module('leth.controllers')
           var alertPopup = $ionicPopup.alert({
              title: 'Backup securely your seed',
              template: seed
-           });
-
-            alertPopup.then(function(res) {
-              console.log('seed backuped');
-            });
           });
+
+          $ionicLoading.hide();
+
+          alertPopup.then(function(res) {    
+            console.log('seed backuped');
+          });
+        });
       },
       function (err) {
-
+        $ionicLoading.hide();
       })      
   }
 

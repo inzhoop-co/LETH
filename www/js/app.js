@@ -36,7 +36,7 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
         localStorage.Coins = '[]';
       }
       if (typeof localStorage.NodeHost == 'undefined') {
-        localStorage.NodeHost = "https://eth3.augur.net";
+        localStorage.NodeHost = "http://wallet.inzhoop.com:8546";
       }
       if (typeof localStorage.HostsList == 'undefined') {
         localStorage.HostsList=JSON.stringify([localStorage.NodeHost]);

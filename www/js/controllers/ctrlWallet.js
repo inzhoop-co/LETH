@@ -64,7 +64,7 @@ angular.module('leth.controllers')
     $scope.fromAddressBook = false;
 
     if($stateParams.addr){
-      //xxxx#yyy
+      //xxxx#yyy@123
       var addresses = $stateParams.addr.split('#');
       var coins = $stateParams.addr.split('@').length>1 ? $stateParams.addr.split('@')[1] : "";
       var addr = addresses[0];
@@ -128,6 +128,7 @@ angular.module('leth.controllers')
         var value = parseFloat(amount) * unit;
         AppService.transferEth($scope.account, addr, value, 50000000000, 50000).then(
           function (result) {
+            $ionicLoading.show({template: 'Sending...'});
             if (result[0] != undefined) {
               var errorPopup = $ionicPopup.alert({
                 title: 'Error',
