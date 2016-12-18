@@ -215,6 +215,8 @@ angular.module('leth.controllers', [])
       $scope.addrTo = friend.addr;
     if($ionicHistory.currentTitle()=="Address")
       $scope.shareByChat(friend, $scope.param);
+    if($ionicHistory.currentTitle()=="LΞTH")
+      $scope.shareCustomToken(friend, $scope.param);
 
     addrsModal.hide();
   };
@@ -274,6 +276,12 @@ angular.module('leth.controllers', [])
      $ionicListDelegate.closeOptionButtons();
    });
    
+  }
+
+  $scope.shareCustomToken = function (friend,token) {
+    Chat.sendCryptedCustomToken("Use this token " + token.Name + " !", token, friend.addr,friend.idkey);
+
+    $ionicListDelegate.closeOptionButtons();
   }
 
   $scope.isValidAddr = function(addr){
@@ -380,7 +388,7 @@ angular.module('leth.controllers', [])
         { text: '<i class="ion-sad-outline"></i> Poor'  }
       ],
       destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
-      titleText: 'Send your mood for this app',
+      titleText: 'Send your mood to Inzhoop',
       destructiveButtonClicked:  function() {
         hideSheet();
       },
@@ -478,7 +486,7 @@ angular.module('leth.controllers', [])
         var msg = 'new user added';
         Chat.sendMessage(msg);
 
-        $state.go('tab.intro');
+        $state.go('tab.dappleths');
 
         $timeout(function() {$ionicLoading.hide();}, 1000);
       });
@@ -697,9 +705,33 @@ angular.module('leth.controllers', [])
     createLoginModal();
   }
 
-  $scope.Login = function (seed, pw, cod) {      
-    $scope.createWallet(seed, pw, cod);
-    $scope.closeLoginModal();
+  $scope.Login = function (seed, pw, cod) { 
+    var err;
+    if(!lightwallet.keystore.isSeedValid(seed))
+      err = "Seed not valid <br/>";
+    if(!pw || pw.length<8 || pw.length>20)
+      err = "Password not valid <br/>";
+    if(!cod || cod.length!=4)
+      err = "Code not valid <br/>";
+
+    if(err){
+      var alertPopup = $ionicPopup.show({
+        title: 'Error',
+        template: 'Invalid data! <br/>' + err   
+      });
+
+      alertPopup.then(function(res) {
+         alertPopup.close();
+      });
+
+      $timeout(function() {
+         alertPopup.close(); 
+      }, 3000);
+
+    }else{
+      $scope.createWallet(seed, pw, cod);
+      $scope.closeLoginModal();      
+    }
   };
 
   $scope.sendSeedByEmail = function(){
@@ -906,7 +938,30 @@ angular.module('leth.controllers', [])
         $state.go('tab.wallet', {addr: msg.attach.addr + "#" + msg.attach.idkey + "@" + msg.attach.payment}, { relative: $state.$current.view});
     }
 
-    if(msg.mode!='encrypted' && msg.mode!='dappMessage' && msg.mode!='payment' && msg.attach.addr && msg.attach.idkey){
+    if(msg.mode=="token" && msg.attach){
+      console.log(msg.attach.token);
+      var msgTxt = "<h2 class='text-center'>Custom Token " + msg.attach.token.Name + " Shared! </h2>";
+      msgTxt += "<p class='text-center'><img height='100px' width='auto' src='" + msg.attach.token.Logo + "'/></p>";
+        
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Install Custom Token',
+        template: 'A new Token shared with you!<br/>Do you want to add ' + msg.attach.token.Name + '?'
+      });
+
+      confirmPopup.then(function(res) {
+        if(res) {
+          if($scope.listCoins.indexOf(msg.attach.token)==-1)
+            $scope.listCoins.push(msg.attach.token);
+          localStorage.Coins = JSON.stringify($scope.listCoins);
+         }
+      });
+
+      //$ionicLoading.show({ template: msgTxt, noBackdrop: true, duration: 5000 })
+
+      $state.go('tab.dappleths', { relative: $state.$current.view});
+    }
+
+    if(msg.mode=='plain' && msg.attach.addr && msg.attach.idkey){
       if($scope.isFriend(msg.attach.addr) && msg.attach.addr!=AppService.account()) //go to friend
         $state.go('tab.friend', {Friend: msg.attach.addr}, { relative: $state.$current.view});
       else //add friend
@@ -939,6 +994,11 @@ angular.module('leth.controllers', [])
 
       if(r.payload.mode=="transaction"){
         Transactions.add(r.payload.attach);
+      }
+
+      if(r.payload.mode=="token"){
+        //if not exist add
+        //Coins.add(r.payload.attach);
       }
      
     }//broadcast

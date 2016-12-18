@@ -26,8 +26,6 @@ angular.module('leth.controllers')
       if (img==undefined) {
         return;
       }
-      //var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: [null], text: '', image: img};
-      //Chat.sendMessage(msg);
       Chat.sendImage(img);
       $scope.scrollTo('chatScroll','bottom');      
     };

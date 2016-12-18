@@ -3,12 +3,12 @@
     <ion-slide-box auto-play="true" does-continue="false" show-pager="true">
       <ion-slide>
         <div>
-          <img src="img/banners/header1.png"  height="150" ng-click="nextSlide()"/>
+          <a href="#" onclick="window.open('https://www.inzhoop.com','_blank','location=yes','closebuttoncaption=Return');"><img src="img/banners/header1.png"  height="150" ng-click="nextSlide()"/></a>
         </div>
       </ion-slide>
       <ion-slide>
         <div>
-          <img src="img/banners/header2.png"  height="150" ng-click="nextSlide()"/>
+          <a href="#" onclick="window.open('https://www.inzhoop.com','_blank','location=yes','closebuttoncaption=Return');"><img src="img/banners/header2.png"  height="150" ng-click="nextSlide()"/></a>
         </div>
       </ion-slide>
     </ion-slide-box>
@@ -37,12 +37,19 @@
             <ion-spinner icon="ripple" class="icon spinner-positive" ng-show="coin.Progress"></ion-spinner>
             <i class="icon ion-ios-checkmark-outline balanced" ng-hide="!coin.Installed || coin.Progress"></i>  
             <i class="icon ion-ios-cloud-download-outline positive" ng-hide="coin.Installed || coin.Progress || coin.Custom" ng-click="installCoin(coin)"></i>  
-            <i class="icon ion-ios-circle-outline positive" ng-show="!coin.Installed && coin.Custom && !coin.Progress" ng-click="installCoin(coin)"></i>  
-            <ion-option-button class="button-assertive" ng-show="coin.Installed" ng-click="uninstallCoin(coin)">
-              <i class="icon ion-ios-trash-outline"></i>
+            <i class="icon ion-ios-circle-outline positive" ng-show="!coin.Installed && coin.Custom && !coin.Progress" ng-click="installCoin(coin)"></i> 
+            <!--style="display: inline-block !important; font-size: 12px; padding-top: 40px;"--> 
+            <ion-option-button style="padding-top: 40px; font-size: 12px;" class="button-energized" ng-show="coin.Custom" ng-click="openFriendsModal(coin)">
+              <i class="icon ion-share"></i>
+              <span>Share</span>
             </ion-option-button>
-            <ion-option-button class="button-dark" ng-show="coin.Custom" ng-click="removeCustomToken(coin)">
+            <ion-option-button style="padding-top: 40px; font-size: 12px;" class="button-assertive" ng-show="coin.Installed" ng-click="uninstallCoin(coin)">
+              <i class="icon ion-ios-trash-outline"></i>
+              <span>Unset</span>
+            </ion-option-button>
+            <ion-option-button style="padding-top: 40px; font-size: 12px;" class="button-dark" ng-show="coin.Custom" ng-click="removeCustomToken(coin)">
               <i class="icon ion-backspace-outline"></i>
+              <span>Delete</span>
             </ion-option-button>
       </ion-item>
       <ion-item class="item item-avatar-left item-icon-right" ng-click="openTokenModal()">

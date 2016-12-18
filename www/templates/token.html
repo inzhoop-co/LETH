@@ -31,7 +31,7 @@
       <label class="item item-input item-floating-label  item-avatar-right">
         <img ng-src="{{token.logo}}" ng-show="token.logo"/>
         <span class="input-label">Logo</span>
-        <input type="url" placeholder="Logo URL" ng-model="token.logo" required>
+        <input type="url" placeholder="Logo URL" ng-model="token.logo" ng-init="token.logo='https://www.inzhoop.com/dappleths/ct.png'" required>
       </label>
       <label class="item item-input item-floating-label">
         <span class="input-label">Address</span>

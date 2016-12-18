@@ -24,7 +24,7 @@
         <div ng-class="chat.message.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
           <div class="message" ng-class="chat.message.from === myidentity ? 'message-mine' : 'message-other'" on-hold="msgAction(chat.message)">
           <div class="message-text" ng-if="chat.message.text.length" ng-bind-html="chat.message.text"></div>
-          <img ng-src="{{chat.message.image}}" ng-if="chat.message.image.length"/>
+          <img ng-src="{{chat.message.image}}" height="100px" width="auto" ng-if="chat.message.image.length"/>
             <span class="message-timestamp">{{chat.timestamp | date: 'HH:mm'}}</span>
         </div>
       </div>     
