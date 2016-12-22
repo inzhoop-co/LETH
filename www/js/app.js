@@ -11,8 +11,8 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
     //url: 'http://us11.campaign-archive1.com/feed'
   })
   .constant('StoreEndpoint', {
-    url: 'dappleths'
-    //url: 'https://www.inzhoop.com/dappleths'
+    //url: 'dappleths'
+    url: 'https://www.inzhoop.com/dappleths'
   })
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,
                 $lockScreen,$state,$window, $location) {
