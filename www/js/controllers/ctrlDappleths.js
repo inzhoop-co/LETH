@@ -107,6 +107,14 @@ angular.module('leth.controllers')
     
     $ionicLoading.show(); 
 
+    //load api js, better if always on, but where and when?
+    angularLoad.loadScript('js/api.js').then(function() {
+        console.log('loading ' + 'js/api.js');
+    }).catch(function() {
+        console.log('ERROR :' + 'js/api.js');
+    });
+
+    
     dappContract = web3.eth.contract($scope.activeApp.ABI).at($scope.activeApp.Address);
 
     angularLoad.loadScript(StoreEndpoint.url + $scope.activeApp.ScriptUrl).then(function() {

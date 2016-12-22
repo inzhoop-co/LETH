@@ -28,7 +28,6 @@ angular.module('leth.controllers')
   })
   .controller('FriendCtrl', function ($scope, $stateParams, $ionicHistory, $state, $timeout, $cordovaImagePicker, $ionicActionSheet, $cordovaCamera, 
                                       Geolocation, Friends, Chat, AppService) {
-    $scope.friend = Friends.get($stateParams.Friend);
 
     $scope.$on('$ionicView.enter', function() {
       $scope.myidentity = AppService.account();
@@ -39,14 +38,20 @@ angular.module('leth.controllers')
       $scope.$digest(); 
     })
 
-    $scope.$on('$ionicView.beforeEnter', function() {
+    $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
         $scope.showTabs(false);
-    })
+        
+        viewData.enableBack = true;
+        //if($ionicHistory.currentTitle()==undefined || $ionicHistory.currentTitle()!="Friends")
+          
+    });
 
-    $scope.$on('$ionicView.beforeLeave', function() {
+    $scope.$on('$ionicView.beforeLeave', function(event, viewData) {
       $scope.showTabs(true);
+      $ionicHistory.clearHistory();
     })
 
+    $scope.friend = Friends.get($stateParams.Friend);
 
     $scope.isFromTo = function(chat){
       if($scope.friend.addr == AppService.account())

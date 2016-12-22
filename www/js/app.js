@@ -11,14 +11,14 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
     //url: 'http://us11.campaign-archive1.com/feed'
   })
   .constant('StoreEndpoint', {
-    //url: 'dappleths'
-    url: 'https://www.inzhoop.com/dappleths'
+    url: 'dappleths'
+    //url: 'https://www.inzhoop.com/dappleths'
   })
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,
                 $lockScreen,$state,$window, $location) {
     $ionicPlatform.ready(function () {      
-      if (typeof localStorage.LastMsgTms == 'undefined') {
-        localStorage.LastMsgTms="";
+      if (typeof localStorage.LastMsg == 'undefined') {
+        localStorage.LastMsg= JSON.stringify({time:0, hash:"0x"});
       }
       if (typeof localStorage.BackMode == 'undefined') {
         localStorage.BackMode="false";
@@ -98,7 +98,15 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
 
     });
   })
-  .config(function ($stateProvider, $urlRouterProvider) {
+  .config(function ($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
+    // $ionicConfigProvider.views.maxCache(10);
+    $ionicConfigProvider.views.transition('platform');
+    // $ionicConfigProvider.views.forwardCache(false);
+    $ionicConfigProvider.backButton.icon('ion-ios-arrow-back');
+    $ionicConfigProvider.backButton.text('');                  // default is 'Back'
+    $ionicConfigProvider.backButton.previousTitleText(false);  // hides the 'Back' text
+    // $ionicConfigProvider.templates.maxPrefetch(20);
+
     $stateProvider
       .state('tab', {
         url: '/tab',

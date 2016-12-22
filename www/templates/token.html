@@ -24,10 +24,20 @@
         <span class="input-label">Abstract</span>
         <input type="text" placeholder="One sentence abstract" ng-model="token.abstract" required>
       </label>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Symbol</span>
-        <input type="text" placeholder="Symbol" ng-model="token.symbol" required>
-      </label>
+      <div class="row">
+        <div class="col">
+          <label class="item-input item-floating-label">
+            <span class="input-label">Symbol</span>
+            <input type="text" placeholder="Symbol" ng-model="token.symbol" required>
+          </label>
+        </div>
+        <div class="col">
+          <label class="item-input item-floating-label">
+            <span class="input-label">Decimals</span>
+            <input type="number" placeholder="Decimals positions" ng-model="token.decimals" required>
+          </label>
+        </div>
+      </div>
       <label class="item item-input item-floating-label  item-avatar-right">
         <img ng-src="{{token.logo}}" ng-show="token.logo"/>
         <span class="input-label">Logo</span>

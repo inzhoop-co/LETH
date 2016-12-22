@@ -11,6 +11,7 @@ angular.module('leth.controllers')
         $scope.logoCoin = "img/ethereum-icon.png";
         $scope.descCoin = "Eth from main wallet";
         $scope.symbolCoin = "Ξ";
+        $scope.decimals = "6";
         $scope.xCoin = "XETH";        
         $scope.listUnit = [
     			{multiplier: "1.0e18", unitName: "ether"},
@@ -27,12 +28,13 @@ angular.module('leth.controllers')
         $scope.logoCoin = activeCoins[index-1].Logo;
         $scope.descCoin = activeCoins[index-1].Abstract;
         $scope.symbolCoin = activeCoins[index-1].Symbol;
+        $scope.decimals = activeCoins[index-1].Decimals;
         $scope.xCoin = activeCoins[index-1].Exchange;          
         $scope.methodSend = activeCoins[index-1].Send;
         $scope.contractCoin = web3.eth.contract(activeCoins[index-1].ABI).at(activeCoins[index-1].Address);
     		$scope.listUnit = activeCoins[index-1].Units;
         $scope.unit = $scope.listUnit[0].multiplier;
-        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.contractCoin.decimals());
+        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.decimals);
       }
       
       updateExchange();
@@ -53,7 +55,7 @@ angular.module('leth.controllers')
       if($scope.idCoin==0 || $scope.idCoin==undefined)    
         $scope.balance = AppService.balance($scope.unit);
       else
-        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.contractCoin.decimals());
+        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.decimals);
     
       updateExchange();
     })

@@ -1,12 +1,13 @@
-//definition
-//var svcApp = angular.element(document.body).injector().get("AppService");
+/*
+	API available
+	apiApp
+	apiChat
+	apiFriends
 
-var svcChat = angular.element(document.body).injector().get("Chat");
-
+*/
 
 function init()
-{
-
+{	
 	//define center button
 	var btnCenter = angular.element(document.querySelector('#centerButton'));
 	btnCenter.html(' Test me!');
@@ -50,6 +51,5 @@ function greet()
     var e = new CustomEvent('dappMessage', { "detail": m});
     document.body.dispatchEvent(e);
 
-    //svcChat.sendDappMessage(m);
-    //alert('Greet!');
+    //apiChat.sendDappMessage(m);
 }

@@ -19,13 +19,13 @@
   </div>
   <ion-content class="has-header has-subheader has-footer has-chat-footer chat" delegate-handle="chatScroll">    
     <div class="message-list has-chat-header has-chat-footer">
-      <div ng-repeat="chat in DMchats | filter:isFromTo | orderBy:'chat.timestamp'"
+      <div ng-repeat="chat in DMchats | filter:isFromTo | orderBy:'chat.message.time'"
         class="message-wrapper">
         <div ng-class="chat.message.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
-          <div class="message" ng-class="chat.message.from === myidentity ? 'message-mine' : 'message-other'" on-hold="msgAction(chat.message)">
+          <div class="message" ng-class="chat.message.from === myidentity ? 'message-mine' : 'message-other'" on-hold="chooseAction(chat.message)">
           <div class="message-text" ng-if="chat.message.text.length" ng-bind-html="chat.message.text"></div>
           <img ng-src="{{chat.message.image}}" height="100px" width="auto" ng-if="chat.message.image.length"/>
-            <span class="message-timestamp">{{chat.timestamp | date: 'HH:mm'}}</span>
+            <span class="message-timestamp">{{chat.message.time | date: 'HH:mm'}}</span>
         </div>
       </div>     
     </div>

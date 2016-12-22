@@ -17,9 +17,8 @@
         <div class="item item-input item-stacked-label item-icon-right">
           <span class="input-label">Address To 
           <i class="icon ion-ios-person-outline positive" ng-show="!addrTo.length" ng-click="openFriendsModal()"></i>
-            <span class="" ng-show="isFriend(addrTo)">({{isFriend(addrTo)}})</span>
+            <span class="" ng-show="isFriend(addrTo)">({{isFriend(addrTo) | strLimit: 20 : 5}})</span>
           </span>
-          
           <i class="icon ion-ios-personadd-empty positive" ng-show="isFriend(addrTo)=='' && isValidAddr(addrTo)" ng-click="addAddress(addrTo,addrKey)"></i>
           <input type="text" ng-model="addrTo" placeholder="Type address or use camera to scan" ng-required="true"/>
         </div>

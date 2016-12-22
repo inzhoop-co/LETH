@@ -1,5 +1,5 @@
 angular.module('leth.services')
-.factory('Chat', function ($rootScope, $http, $q, $sce, AppService, Friends) {
+.factory('Chat', function ($rootScope, $http, $q, $sce, $filter, AppService, Friends) {
   var ttlTime = 10000;
   var wtpTime = 100;
 
@@ -24,7 +24,7 @@ angular.module('leth.services')
       return identity;
     },
     find: function(){
-      return chats;
+      return chats ;
     },
     findDM: function(){
       return chatsDM;
@@ -47,7 +47,7 @@ angular.module('leth.services')
       return list;
     },      
     sendMessage: function (content) {
-      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: [null], text: content, image: '', attach: {addr: AppService.account(), idkey: AppService.idkey()} };
+      var msg = {type: 'leth', mode: 'plain', time: Date.now(), from: AppService.account(), to: [null], text: content, image: '', attach: {addr: AppService.account(), idkey: AppService.idkey()} };
       var payload = msg;
       var message = {
         from:  this.identity(),
@@ -65,7 +65,7 @@ angular.module('leth.services')
       });
     },
     sendImage: function (content) {
-      var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: [null], text: '', image: img};
+      var msg = {type: 'leth', mode: 'plain', time: Date.now(), from: AppService.account(), to: [null], text: '', image: img};
       var payload = msg;
       var message = {
         from:  this.identity(),
@@ -83,7 +83,7 @@ angular.module('leth.services')
       });
     },
     sendCryptedMessage: function (content,toAddr,toKey) {
-      var msg = {type: 'leth', mode: 'encrypted', from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: '' };
+      var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: '' };
       var idFrom = this.identity();
       var payload = msg;
       var message = {
@@ -109,7 +109,7 @@ angular.module('leth.services')
       });
     },
     sendCryptedPaymentReq: function (content,request,toAddr,toKey) {
-      var msg = {type: 'leth', mode: 'payment', from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: '', attach: {addr: AppService.account(), idkey: AppService.idkey(), payment: request}};
+      var msg = {type: 'leth', mode: 'payment', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: '', attach: {addr: AppService.account(), idkey: AppService.idkey(), payment: request}};
       var idFrom = this.identity();
       var payload = msg;
       var message = {
@@ -135,7 +135,7 @@ angular.module('leth.services')
       });
     },
     sendCryptedCustomToken: function (content,token,toAddr,toKey) {
-      var msg = {type: 'leth', mode: 'token', from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: token.Logo, attach: {addr: AppService.account(), idkey: AppService.idkey(), token: token}};
+      var msg = {type: 'leth', mode: 'token', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: token.Logo, attach: {addr: AppService.account(), idkey: AppService.idkey(), token: token}};
       var idFrom = this.identity();
       var payload = msg;
       var message = {
@@ -162,7 +162,7 @@ angular.module('leth.services')
       });
     },
     sendCryptedPhoto: function (content,toAddr,toKey) {
-      var msg = {type: 'leth', mode: 'encrypted', from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: '', image: content };
+      var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: '', image: content };
       var idFrom = this.identity();
       var payload = msg;
       var message = {
@@ -188,7 +188,7 @@ angular.module('leth.services')
       });
     },
     sendTransactionNote: function (transaction) {
-      var note = {type: 'leth', mode: 'transaction', from: AppService.account(), to: [transaction.to,AppService.account()], text: 'I sent ' + transaction.symbol + " " + (transaction.value / transaction.unit).toFixed(6) + '&#x1F4B8;', image: '', attach: transaction };
+      var note = {type: 'leth', mode: 'transaction', time: Date.now(), from: AppService.account(), to: [transaction.to,AppService.account()], text: 'I sent ' + transaction.symbol + " " + (transaction.value / transaction.unit).toFixed(6) + '&#x1F4B8;', image: '', attach: transaction };
       
       var payload = note;
       var message = {
@@ -207,7 +207,7 @@ angular.module('leth.services')
       });
     },      
     sendContact: function () {
-      var contact = {type: 'leth', mode: 'contact', from: AppService.account(), to: [null], text: 'My addresses ' + '&#x1F464;' , image: '', attach: {addr: AppService.account(), idkey: AppService.idkey()} };
+      var contact = {type: 'leth', mode: 'contact', time: Date.now(), from: AppService.account(), to: [null], text: 'My addresses ' + '&#x1F464;' , image: '', attach: {addr: AppService.account(), idkey: AppService.idkey()} };
       
       var payload = contact;
       var message = {
@@ -226,7 +226,7 @@ angular.module('leth.services')
       });
     },      
     sendPosition: function (toAddr, position) {
-      var note = {type: 'leth', mode: 'geolocation', from: AppService.account(), to: [toAddr,AppService.account()], text: "Here I am! " + '&#x1F4CD;' , image: '', attach:  position};
+      var note = {type: 'leth', mode: 'geolocation', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()], text: "Here I am! " + '&#x1F4CD;' , image: '', attach:  position};
       
       var payload = note;
       var message = {
@@ -253,7 +253,7 @@ angular.module('leth.services')
       }
     },
     sendDappMessage: function (txt, dapp) {
-      var msg = {type: 'leth', mode: 'dappMessage', from: dapp.Address, to: [null], text: text};
+      var msg = {type: 'leth', mode: 'dappMessage', time: Date.now(), from: dapp.Address, to: [null], text: text};
       var payload = msg;
       var message = {
         from:  identity,
@@ -274,7 +274,7 @@ angular.module('leth.services')
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         textMsg = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,textMsg, local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
 
-        var msg = {type: 'leth', mode: 'encrypted', from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: textMsg, image: '' };
+        var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: textMsg, image: '' };
 
         return msg;    
       });
@@ -288,8 +288,8 @@ angular.module('leth.services')
         if(error){return;}; 
         //exit if mine
         if(result.payload.from == AppService.account()){return;} 
-        //exit if outdated
-        if(result.sent*1000 <= localStorage.LastMsgTms){return;} 
+        //exit if outdated  !result.payload.time || 
+        if((result.payload.time <= JSON.parse(localStorage.LastMsg).time && result.hash == JSON.parse(localStorage.LastMsg).hash)){return;} 
         //if encrypted msg write to DM
         if(result.payload.mode == 'encrypted'){ 
           lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
@@ -300,22 +300,29 @@ angular.module('leth.services')
 
             chatsDM.push({
               identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-              timestamp: result.sent*1000,
+              timestamp: result.payload.time,
               message: result.payload
             });
 
-            $scope.$broadcast("incomingMessage", result);              
+            //flag time last received
+            localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
+            $scope.$broadcast("incomingMessage", result);
+
           });
         }
         //if plain msg go to global chat
         if(result.payload.mode == 'plain'){ 
+          //if(result.payload.to[0] == null){
             chats.push({
               identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-              timestamp: result.sent*1000,
+              timestamp: result.payload.time,
               message: result.payload
-            });
-            
+            });  
+          //}
+          //flag time last received
+          localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
           $scope.$broadcast("incomingMessage", result);
+
         };
 
         //if share contact go to global chat
@@ -323,11 +330,12 @@ angular.module('leth.services')
           //if(result.payload.to[0] == null){
             chats.push({
               identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-              timestamp: result.sent*1000,
+              timestamp: result.payload.time,
               message: result.payload
             });
           //}
-
+          //flag time last received
+          localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
           $scope.$broadcast("incomingMessage", result);
         };
 
@@ -344,11 +352,12 @@ angular.module('leth.services')
             
             chatsDM.push({
               identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-              timestamp: result.sent*1000,
+              timestamp: result.payload.time,
               message: result.payload
             });
-
-            $scope.$broadcast("incomingMessage", result);              
+            //flag time last received
+            localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
+            $scope.$broadcast("incomingMessage", result);
           });
         };
 
@@ -361,11 +370,12 @@ angular.module('leth.services')
             
             chatsDM.push({
               identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-              timestamp: result.sent*1000,
+              timestamp: result.payload.time,
               message: result.payload
             });
-
-            $scope.$broadcast("incomingMessage", result);              
+            //flag time last received
+            localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
+            $scope.$broadcast("incomingMessage", result);
           });
         };
 
@@ -374,18 +384,19 @@ angular.module('leth.services')
           if(result.payload.to[0] == AppService.account()){
             chatsDM.push({
               identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-              timestamp: result.sent*1000,
+              timestamp: result.payload.time,
               message: result.payload
             });
           }
           if(result.payload.to[0] == null){
             chats.push({
               identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-              timestamp: result.sent*1000,
+              timestamp: result.payload.time,
               message: result.payload
             });
           }
-
+          //flag time last received
+          localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
           $scope.$broadcast("incomingMessage", result);
         };
 
@@ -394,16 +405,16 @@ angular.module('leth.services')
           //if(result.payload.to[0] == null){
             chatsDAPP.push({
               identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
-              timestamp: result.sent*1000,
+              timestamp: result.payload.time,
               message: result.payload
             });
           //}
 
+          //flag time last received
+          localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
           $scope.$broadcast("incomingMessage", result);
         };
 
-        //flag time last received
-        localStorage.LastMsgTms = result.sent*1000;
       });
     },
     unlistenMessage: function(){

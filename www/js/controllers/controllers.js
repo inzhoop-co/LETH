@@ -3,7 +3,7 @@ angular.module('leth.controllers', [])
                                 $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
                                 $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,
-                                $cordovaBadge,$ionicScrollDelegate, $ionicListDelegate,
+                                $cordovaBadge,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, 
                                 AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService) {
   
   window.refresh = function () {
@@ -12,7 +12,7 @@ angular.module('leth.controllers', [])
     if($scope.idCoin==0 || $scope.idCoin==undefined)    
       $scope.balance = AppService.balance($scope.unit);
     else
-      $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.contractCoin.decimals());
+      $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.decimals);
 
     ExchangeService.getTicker($scope.xCoin, JSON.parse(localStorage.BaseCurrency).value).then(function(value){
       $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat(value * $scope.balance).toFixed(2) ;
@@ -145,7 +145,8 @@ angular.module('leth.controllers', [])
   };  
 
   $scope.shareByChat = function (friend,payment) {
-    Chat.sendCryptedPaymentReq("Please send me " + payment + " eth !", payment, friend.addr,friend.idkey);
+    Chat.sendCryptedPaymentReq("Please send me " + payment + " eth &#x1F4B8; !", payment, friend.addr,friend.idkey);
+    $state.go('tab.friend', {Friend: friend.addr});
   };
 
   $scope.readFeed = function(index){
@@ -199,6 +200,7 @@ angular.module('leth.controllers', [])
   };
   $scope.closeFriendsModal = function () {
     addrsModal.hide();
+    addrsModal.remove();
   };
   var createModalFriends = function(param) {
     $scope.param = param;
@@ -211,14 +213,15 @@ angular.module('leth.controllers', [])
     });
   };
   $scope.chooseFriend = function (friend) {
-    if($ionicHistory.currentTitle()=="Wallet")
-      $scope.addrTo = friend.addr;
+    if($ionicHistory.currentTitle()=="Wallet"){
+     $scope.addrTo = friend.addr;
+    }
     if($ionicHistory.currentTitle()=="Address")
       $scope.shareByChat(friend, $scope.param);
     if($ionicHistory.currentTitle()=="LΞTH")
       $scope.shareCustomToken(friend, $scope.param);
 
-    addrsModal.hide();
+    $scope.closeFriendsModal();
   };
 
   var tokenModal;
@@ -227,6 +230,7 @@ angular.module('leth.controllers', [])
   };
   $scope.closeTokenModal = function () {
     tokenModal.hide();
+    tokenModal.remove();
   };
   var createModalToken = function() {
     $ionicModal.fromTemplateUrl('templates/token.html', {
@@ -247,6 +251,7 @@ angular.module('leth.controllers', [])
       "Company" : token.company,
       "Logo" : token.logo,
       "Symbol" : token.symbol,
+      "Decimals" : token.decimals,
       "Abstract" : token.abstract,
       "Address" : token.address,
       "ABI" : JSON.parse(token.ABI),
@@ -912,6 +917,99 @@ angular.module('leth.controllers', [])
 
   setChatFilter();
 
+  $scope.chooseAction = function(msg){
+    var buttonsOpt= [{ text: '<i class="icon ion-ios-copy-outline"></i> Copy message', index: 1 }];
+
+    if((msg.mode=='plain' || msg.mode=="contact") && msg.attach.addr && msg.attach.idkey){
+      if($scope.isFriend(msg.attach.addr) && msg.attach.addr!=AppService.account())
+        buttonsOpt.push({ text: '<i class="icon ion-ios-person-outline"></i>Go to Friend', index: 2 })
+      else
+        buttonsOpt.push({ text: '<i class="icon ion-ios-personadd-outline"></i>Add to Friends', index: 3 })
+    }
+    if(msg.mode=="geolocation" && msg.attach)
+      buttonsOpt.push({ text: '<i class="icon ion-ios-navigate-outline"></i>Open location', index: 4 });
+    if(msg.mode=="payment" && msg.attach)
+      buttonsOpt.push({ text: '<i class="icon icon-wallet"></i>Pay request', index: 5 });
+    if(msg.mode=="token" && msg.attach)
+      buttonsOpt.push({ text: '<i class="icon ion-ios-circle-outline"></i>Install token', index: 6 });
+
+    var hideSheet = $ionicActionSheet.show({
+      buttons: buttonsOpt,
+      destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+      titleText: 'Choose an action',
+      destructiveButtonClicked:  function() {
+        hideSheet();
+      },
+      buttonClicked: function(index) {
+        switch(this.buttons[index].index){
+          case 1: //copy message
+            document.addEventListener("deviceready", function () {  
+              $cordovaClipboard
+              .copy(msg.text)
+              .then(function () {
+                // success
+              }, function () {
+                // error
+              });
+            }, false);
+            break;
+          case 2: //go to friend
+            $state.go('tab.friend', {Friend: msg.attach.addr}, { relative: $state.$current.view});
+            break;
+          case 3: // add to friends
+            $scope.addAddress(msg.attach.addr, msg.text, msg.attach.addr,msg.attach.idkey)
+            break;
+          case 4: // open location
+            var pinUrl = "https://www.google.com/maps/place/" + msg.attach.latitude + "," + msg.attach.longitude
+      
+            var options = {
+              location: 'yes',
+              clearcache: 'yes',
+              toolbar: 'yes'
+            };
+
+            document.addEventListener("deviceready", function () {
+              $cordovaInAppBrowser.open(pinUrl, '_blank', options)
+                .then(function(event) {
+                  // success
+                })
+                .catch(function(event) {
+                  // error
+                });
+                //$cordovaInAppBrowser.close();
+            }, false);
+            break;
+          case 5: // pay request
+            $state.go('tab.wallet', {addr: msg.attach.addr + "#" + msg.attach.idkey + "@" + msg.attach.payment}, { relative: $state.$current.view});
+            break;
+          case 6: // install token
+            var msgTxt = "<h2 class='text-center'>Custom Token " + msg.attach.token.Name + " Shared! </h2>";
+            msgTxt += "<p class='text-center'><img height='100px' width='auto' src='" + msg.attach.token.Logo + "'/></p>";
+              
+            var confirmPopup = $ionicPopup.confirm({
+              title: 'Install Custom Token',
+              template: 'A new Token shared with you!<br/>Do you want to add ' + msg.attach.token.Name + '?'
+            });
+
+            confirmPopup.then(function(res) {
+              if(res) {
+                if($scope.listCoins.indexOf(msg.attach.token)==-1)
+                  $scope.listCoins.push(msg.attach.token);
+                localStorage.Coins = JSON.stringify($scope.listCoins);
+                $state.go('tab.dappleths', { relative: $state.$current.view});
+               }
+            });
+            break;
+        }
+        hideSheet();
+       $timeout(function() {
+         hideSheet();
+        }, 20000);
+      }
+    });
+  }
+
+  //deprecated
   $scope.msgAction = function(msg){
     if(msg.mode=="geolocation" && msg.attach){
       var pinUrl = "https://www.google.com/maps/place/" + msg.attach.latitude + "," + msg.attach.longitude
@@ -984,7 +1082,7 @@ angular.module('leth.controllers', [])
         $scope.friends = Friends.all();
       }
 
-      if($ionicTabsDelegate.selectedIndex()!=2)
+      if($ionicTabsDelegate.selectedIndex()!=2 && r.payload.time > JSON.parse(localStorage.LastMsg).time)
         $scope.DMCounter += 1;
 
       if($ionicHistory.currentView().stateName != "tab.friend"){
@@ -1007,7 +1105,7 @@ angular.module('leth.controllers', [])
         console.log(r.payload.text);
       }
       else{
-        if($ionicTabsDelegate.selectedIndex()!=1)
+        if($ionicTabsDelegate.selectedIndex()!=1 && r.payload.time > JSON.parse(localStorage.LastMsg).time)
           $scope.msgCounter += 1;
       }
     }
