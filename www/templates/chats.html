@@ -5,7 +5,7 @@
   </ion-header-bar>
    <ion-content class="has-footer has-subheader has-tabs chat" delegate-handle="chatScroll">
    <div class="message-list">
-      <div ng-repeat="chat in chats | orderBy:'chat.message.time'"
+      <div ng-repeat="chat in chats | orderBy:'message.time'"
         class="message-wrapper">
         <div ng-class="chat.message.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
             <img on-hold="chooseAction(chat.message)" ng-src="{{chat.identity}}" ng-class="chat.message.from === myidentity ? 'rounded image image-mine' : 'rounded image image-other'""> 

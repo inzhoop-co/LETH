@@ -19,7 +19,7 @@
   </div>
   <ion-content class="has-header has-subheader has-footer has-chat-footer chat" delegate-handle="chatScroll">    
     <div class="message-list has-chat-header has-chat-footer">
-      <div ng-repeat="chat in DMchats | filter:isFromTo | orderBy:'chat.message.time'"
+      <div ng-repeat="chat in DMchats | filter:isFromTo | orderBy:'message.time'"
         class="message-wrapper">
         <div ng-class="chat.message.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
           <div class="message" ng-class="chat.message.from === myidentity ? 'message-mine' : 'message-other'" on-hold="chooseAction(chat.message)">
