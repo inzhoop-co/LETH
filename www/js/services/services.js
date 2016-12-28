@@ -157,7 +157,7 @@ angular.module('leth.services', [])
       $rootScope.secureData = {};
 
       var myPopup = $ionicPopup.show({
-        template: '<input type="password" ng-model="secureData.password" autofocus>',
+        template: '<input type="password" ng-model="secureData.password" autofocus="true">',
         title: msg,
         subTitle: defaultMessage,
         scope: $rootScope,
@@ -179,7 +179,8 @@ angular.module('leth.services', [])
       });
 
       myPopup.then(function (res) {
-        $ionicLoading.show({template: 'Waiting...'});
+        if(res)
+          $ionicLoading.show({template: 'Waiting...'});
         q.resolve(res);
       });
 

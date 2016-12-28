@@ -25,6 +25,11 @@ angular.module('leth.controllers')
       $scope.addrTo = $scope.friend.addr;
     }
 
+    $scope.moveItem = function(item, fromIndex, toIndex) {
+      $scope.friends.splice(fromIndex, 1);
+      $scope.friends.splice(toIndex, 0, item);
+    };
+
   })
   .controller('FriendCtrl', function ($scope, $stateParams, $ionicHistory, $state, $timeout, $cordovaImagePicker, $ionicActionSheet, $cordovaCamera, 
                                       Geolocation, Friends, Chat, AppService) {
@@ -71,7 +76,7 @@ angular.module('leth.controllers')
       
       Chat.sendCryptedMessage(textMsg,$scope.friend.addr,$scope.friend.idkey);
 
-      $scope.scrollTo('chatScroll','bottom');
+      $scope.scrollTo('chatDMScroll','bottom');
 
     };
 
@@ -81,7 +86,7 @@ angular.module('leth.controllers')
       }
       Chat.sendCryptedPhoto(img,$scope.friend.addr,$scope.friend.idkey);
 
-      $scope.scrollTo('chatScroll','bottom');    
+      $scope.scrollTo('chatDMScroll','bottom');    
     };
 
     $scope.getPhoto = function(){

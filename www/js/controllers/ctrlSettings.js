@@ -9,6 +9,7 @@ angular.module('leth.controllers')
   $scope.touch = { checked: (localStorage.TouchOn=="true") };
   $scope.geo = { checked: (localStorage.GeoOn=="true") };
   $scope.backmode = { checked: (localStorage.BackMode=="true") };
+  $scope.vibration = { checked: (localStorage.Vibration=="true") };
   $scope.baseCurrency = JSON.parse(localStorage.BaseCurrency);
 
   $scope.setIndexHost = function(index){    
@@ -74,6 +75,15 @@ angular.module('leth.controllers')
       $scope.geoWatch.clearWatch();        
     }
   };
+
+  var setVibration = function(value){
+    localStorage.Vibration = value? "true":"false";
+    $scope.vibration = { checked: value};
+  };
+
+  $scope.$watch('vibration.checked',function(value) {
+    setVibration(value);
+  });
 
   var setBackMode = function(value){
     localStorage.BackMode = value? "true":"false";

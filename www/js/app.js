@@ -16,9 +16,12 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
   })
   .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,
                 $lockScreen,$state,$window, $location) {
-    $ionicPlatform.ready(function () {      
+    $ionicPlatform.ready(function () {
       if (typeof localStorage.LastMsg == 'undefined') {
         localStorage.LastMsg= JSON.stringify({time:0, hash:"0x"});
+      }
+      if (typeof localStorage.Vibration == 'undefined') {
+        localStorage.Vibration="false";
       }
       if (typeof localStorage.BackMode == 'undefined') {
         localStorage.BackMode="false";
@@ -31,6 +34,9 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
       }
       if (typeof localStorage.GeoOn == 'undefined') {
         localStorage.GeoOn="false";
+      }
+      if (typeof localStorage.Transactions == 'undefined') {
+        localStorage.Transactions = '[]';
       }
       if (typeof localStorage.Coins == 'undefined') {
         localStorage.Coins = '[]';

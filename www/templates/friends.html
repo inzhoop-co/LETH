@@ -9,15 +9,15 @@
   </ion-header-bar>
   <ion-content class="has-header has-subheader has-tabs scrollBg">
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
-  <ion-list class="list">
+  <ion-list class="list" show-reorder="false" >
     <div ng-show="friends.length == 0" class="text-center dark">No saved friends :-(</div>
-    <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends | filter:search track by $index"
-      type="item-text-wrap" href="#/tab/friends/{{friend.addr}}">
+    <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends | filter:search track by $index" type="item-text-wrap" href="#/tab/friends/{{friend.addr}}">
       <img ng-src="{{friend.icon}}"/>
       <h2><b>{{friend.name | strLimit: 15 : 5}}</b></h2>
       <p>{{friend.addr | strLimit: 15 : 5}}</p>
       <!--span>{{friend.comment | strLimit: 15 : 5}}</span-->
       <span class="badge badge-assertive" ng-hide="friend.unread==0">{{friend.unread}}</span>      
+      <ion-reorder-button class="ion-navicon" on-reorder="moveItem(item, $fromIndex, $toIndex)"></ion-reorder-button>
       <i class="icon ion-chevron-right icon-accessory"></i>
       <ion-option-button class="button-positive" ng-click="edit(friend)">
           <i class="icon ion-edit"></i>

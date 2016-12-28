@@ -3,7 +3,7 @@ angular.module('leth.controllers', [])
                                 $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
                                 $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,
-                                $cordovaBadge,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, 
+                                $cordovaBadge,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, $cordovaVibration,
                                 AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService) {
   
   window.refresh = function () {
@@ -70,7 +70,27 @@ angular.module('leth.controllers', [])
     $scope.cards = Array.prototype.slice.call($scope.listFeeds, 0, 0);
   });
   */
-  
+  $scope.openInEtherscan = function(addr){
+    var pinUrl = "https://testnet.etherscan.io/address/" + addr;
+    
+      var options = {
+        location: 'yes',
+        clearcache: 'yes',
+        toolbar: 'yes'
+      };
+
+      document.addEventListener("deviceready", function () {
+        $cordovaInAppBrowser.open(pinUrl, '_system', options)
+          .then(function(event) {
+            // success
+          })
+          .catch(function(event) {
+            // error
+          });
+          //$cordovaInAppBrowser.close();
+      }, false);
+  }
+
   var getSync = function(){
     try {
       if(web3.eth.syncing)
@@ -241,6 +261,7 @@ angular.module('leth.controllers', [])
       tokenModal.show();
     });
   };
+
   $scope.addCustomToken = function (token) {
     var customToken = {
       "Custom" : true,
@@ -288,6 +309,17 @@ angular.module('leth.controllers', [])
 
     $ionicListDelegate.closeOptionButtons();
   }
+
+  $scope.showCustomTokenInfo = function(param) {
+    $scope.token = param;
+    $ionicModal.fromTemplateUrl('templates/token-info.html', {
+      scope: $scope,
+      animation: 'slide-in-right'
+    }).then(function (modal) {
+      tokenModal = modal;
+      tokenModal.show();
+    });
+  };
 
   $scope.isValidAddr = function(addr){
     if(!web3.isAddress(addr)) {return false};
@@ -389,8 +421,10 @@ angular.module('leth.controllers', [])
     // Show the action sheet
     var hideSheet = $ionicActionSheet.show({
       buttons: [
+        { text: '<i class="ion-sad-outline"></i> Poor'  },
         { text: '<i class="ion-happy-outline"></i> Good' },
-        { text: '<i class="ion-sad-outline"></i> Poor'  }
+        { text: '<i class="ion-help-buoy"></i> Make donation' }
+
       ],
       destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
       titleText: 'Send your mood to Inzhoop',
@@ -398,6 +432,9 @@ angular.module('leth.controllers', [])
         hideSheet();
       },
       buttonClicked: function(index) {
+        if(index==2){
+            $state.go('tab.wallet', {addr: "0xd1324ada7e026211d0cacd90cae5777e340de948"});
+        }else{
           var mood = index == 0 ? "Good" : "Poor";
           $cordovaEmailComposer.isAvailable().then(function() {
             var emailOpts = {
@@ -417,6 +454,7 @@ angular.module('leth.controllers', [])
             console.log("cordovaEmailComposer not available");
             return;
           });
+        }
        // For example's sake, hide the sheet after two seconds
        $timeout(function() {
          hideSheet();
@@ -905,7 +943,7 @@ angular.module('leth.controllers', [])
     $timeout(function() {
       $ionicScrollDelegate.$getByHandle(handle).resize();
       $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
-    }, 100);
+    }, 1000);
   }
 
   window.setChatFilter = function(){
@@ -1009,6 +1047,14 @@ angular.module('leth.controllers', [])
     });
   }
 
+  $scope.vibrate = function(){
+    if(localStorage.Vibration){
+      document.addEventListener('deviceready', function () {
+        $cordovaVibration.vibrate(100);
+      });
+    }
+  }
+
   //deprecated
   $scope.msgAction = function(msg){
     if(msg.mode=="geolocation" && msg.attach){
@@ -1067,7 +1113,9 @@ angular.module('leth.controllers', [])
     }//contact
   }
 
-  $scope.$on('incomingMessage', function (e, r) {     
+  $scope.$on('incomingMessage', function (e, r) {  
+    $scope.vibrate();   
+  
     if(r.payload.text.length)
       msg = r.payload.text;
     
@@ -1081,15 +1129,19 @@ angular.module('leth.controllers', [])
         Friends.add(r.payload.from,r.payload.from,r.payload.senderKey,r.payload.text);
         $scope.friends = Friends.all();
       }
-
-      if($ionicTabsDelegate.selectedIndex()!=2 && r.payload.time > JSON.parse(localStorage.LastMsg).time)
-        $scope.DMCounter += 1;
-
-      if($ionicHistory.currentView().stateName != "tab.friend"){
+      //if is a new message
+      if(r.payload.time > JSON.parse(localStorage.LastMsg).time){
         Friends.increaseUnread(r.payload.from);
-        $scope.loadFriends();
-      }
+        $scope.loadFriends(); 
 
+        //if($ionicHistory.currentView().stateName!="tab.friends")
+
+        if($ionicHistory.currentView().stateName=='tab.friend' && $ionicHistory.currentView().stateParams.Friend == r.payload.from)
+          ;//do nothing
+        else
+          $scope.DMCounter += 1;
+      }
+      
       if(r.payload.mode=="transaction"){
         Transactions.add(r.payload.attach);
       }
@@ -1099,19 +1151,27 @@ angular.module('leth.controllers', [])
         //Coins.add(r.payload.attach);
       }
      
+      $scope.scrollTo('chatDMScroll','bottom');
+
     }//broadcast
     else{
       if(r.payload.mode=="dappMessage"){
         console.log(r.payload.text);
       }
       else{
-        if($ionicTabsDelegate.selectedIndex()!=1 && r.payload.time > JSON.parse(localStorage.LastMsg).time)
+        if($ionicTabsDelegate.selectedIndex()!=1 && r.payload.time > JSON.parse(localStorage.LastMsg).time){
           $scope.msgCounter += 1;
+        }
       }
+
+      $scope.scrollTo('chatScroll','bottom');
+
     }
 
+    //flag time last received
+    if(r.payload.time >= JSON.parse(localStorage.LastMsg).time)
+      localStorage.LastMsg = JSON.stringify({time: r.payload.time, hash: r.hash});
 
-    $scope.scrollTo('chatScroll','bottom');
     $scope.$digest(); 
   });
 

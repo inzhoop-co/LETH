@@ -3,7 +3,7 @@
     <ion-slide-box auto-play="true" does-continue="false" show-pager="true">
       <ion-slide>
         <div>
-          <a href="#" onclick="window.open('https://www.inzhoop.com','_blank','location=yes','closebuttoncaption=Return');"><img src="img/banners/header1.png"  height="150" ng-click="nextSlide()"/></a>
+          <a href="#" onclick="window.open('https://ethereum.github.io/stake-voice','_self','location=yes','closebuttoncaption=Return');"><img src="img/banners/header1.png"  height="150" ng-click="nextSlide()"/></a>
         </div>
       </ion-slide>
       <ion-slide>
@@ -29,8 +29,7 @@
       </ion-item>  
     </ion-list>
     <ion-list ng-show="isCoin">
-      <ion-item class="item item-avatar-left item-icon-right"  ng-repeat="coin in listCoins | filter:{Network:nameNetwork} track by $index"
-          type="item-text-wrap">
+      <ion-item class="item item-avatar-left item-icon-right"  ng-repeat="coin in listCoins | filter:{Network:nameNetwork} track by $index" type="item-text-wrap" ng-click="showCustomTokenInfo(coin)">
           <img ng-src="{{coin.Logo}}"/>
             <h2>{{coin.Company}}</h2>
             <p>{{coin.Abstract}}</p>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.inzhoop.leth" version="0.9.25" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.inzhoop.leth" version="0.9.26" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>LΞTH</name>
   <description>
         The first Ethereum mobile wallet.
@@ -19,6 +19,7 @@
   <preference name="SplashScreenDelay" value="3000"/>
   <preference name="AndroidPersistentFileLocation" value="Internal"/>
   <preference name="iosPersistentFileLocation" value="Library"/>
+  <preference name="KeyboardDisplayRequiresUserAction" value="false" />
   <feature name="StatusBar">
     <param name="ios-package" onload="true" value="CDVStatusBar"/>
   </feature>

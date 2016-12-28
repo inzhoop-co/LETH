@@ -25,6 +25,19 @@
 			"InstallUrl" : "/dapp_2/index.html",
 			"TemplateUrl" : "/dapp_2/index.html",
 			"ScriptUrl" : "/dapp_2/index.js"
+		},
+		{
+			"GUID" : "T03",
+			"Name" : "Stake Voice",
+			"Network" : "Ropsten",
+			"Company" : "Ethereum fundation",
+			"Address" : "0x47ab800a75990b0bd5bb4a54cfbec777972c973c",
+			"ABI" : [{"constant":false,"inputs":[{"name":"proposalHash","type":"bytes32"},{"name":"pro","type":"bool"}],"name":"vote","outputs":[],"type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"proposalHash","type":"bytes32"},{"indexed":false,"name":"pro","type":"bool"},{"indexed":false,"name":"addr","type":"address"}],"name":"LogVote","type":"event"}],
+			"Logo" : "https://raw.githubusercontent.com/ethereum/stake-voice/master/icon.png",
+			"Description" : "Stake Voice",
+			"InstallUrl" : "/dapp_3/index.html",
+			"TemplateUrl" : "/dapp_3/index.html",
+			"ScriptUrl" : "/dapp_3/index.js"
 		}		
 	],
 	"coins":[

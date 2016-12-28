@@ -288,8 +288,8 @@ angular.module('leth.services')
         if(error){return;}; 
         //exit if mine
         if(result.payload.from == AppService.account()){return;} 
-        //exit if outdated  !result.payload.time || 
-        if((result.payload.time <= JSON.parse(localStorage.LastMsg).time && result.hash == JSON.parse(localStorage.LastMsg).hash)){return;} 
+        //exit if outdated  get only 1 hour before last msg
+        if(result.payload.time*3600 < JSON.parse(localStorage.LastMsg).time){return;} 
         //if encrypted msg write to DM
         if(result.payload.mode == 'encrypted'){ 
           lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
@@ -304,8 +304,6 @@ angular.module('leth.services')
               message: result.payload
             });
 
-            //flag time last received
-            localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
             $scope.$broadcast("incomingMessage", result);
 
           });
@@ -319,8 +317,7 @@ angular.module('leth.services')
               message: result.payload
             });  
           //}
-          //flag time last received
-          localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
+
           $scope.$broadcast("incomingMessage", result);
 
         };
@@ -334,8 +331,7 @@ angular.module('leth.services')
               message: result.payload
             });
           //}
-          //flag time last received
-          localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
+
           $scope.$broadcast("incomingMessage", result);
         };
 
@@ -355,8 +351,7 @@ angular.module('leth.services')
               timestamp: result.payload.time,
               message: result.payload
             });
-            //flag time last received
-            localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
+
             $scope.$broadcast("incomingMessage", result);
           });
         };
@@ -373,8 +368,7 @@ angular.module('leth.services')
               timestamp: result.payload.time,
               message: result.payload
             });
-            //flag time last received
-            localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
+
             $scope.$broadcast("incomingMessage", result);
           });
         };
@@ -395,8 +389,7 @@ angular.module('leth.services')
               message: result.payload
             });
           }
-          //flag time last received
-          localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
+
           $scope.$broadcast("incomingMessage", result);
         };
 
@@ -410,8 +403,6 @@ angular.module('leth.services')
             });
           //}
 
-          //flag time last received
-          localStorage.LastMsg = JSON.stringify({time: result.payload.time, hash: result.hash});
           $scope.$broadcast("incomingMessage", result);
         };
 

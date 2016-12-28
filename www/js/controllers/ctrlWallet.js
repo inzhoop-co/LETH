@@ -190,7 +190,7 @@ angular.module('leth.controllers')
           $scope.sendCoins(addr, amount,unit);
         } else {
           $ionicLoading.hide();
-          console.log('send coins aborted');
+          //console.log('send coins aborted');
         }
       });
     };

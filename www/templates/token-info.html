@@ -1,0 +1,43 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-stable bar-assertive">
+    <button  class="button button-clear" ng-click="closeTokenModal()">
+      <i class="icon ion-ios-close"></i>
+    </button>
+    <div class="h1 title">{{token.Name}}</div>
+  </ion-header-bar>
+  <ion-content class="has-header" padding="'true'">
+    <div class="list">
+      <span class="item item-thumbnail-left">
+        <img ng-src="{{token.Logo}}">  
+        <h2>{{token.Company}}</h2>
+        <p>{{token.Abstract}}</p>  
+      </span>
+      <div class="item item-badge-right item-divider">
+        Network
+        <span class="{{badgeNetwork}}">{{nameNetwork}}&nbsp;</span>
+      </div>
+      <div class="item subdued item-icon-left" ng-click="openInEtherscan('{{token.Address}}')">
+        {{token.Address | strLimit: 25 : 5}}
+        <i class="icon ion-link"></i>
+      </div>
+      <div class="item item-icon-left item-badge-right">
+        <i class="icon icon-wallet-on"></i>
+        {{token.Name}}
+        <span class="badge badge-stable">{{token.Symbol}}</span>
+      </div>
+      <div class="item item-icon-left">
+        <i class="icon ion-information"></i>
+        Decimals
+        <span class="badge badge-stable">{{token.Decimals}}</span>
+      </div>
+      <div class="item item-divider">
+        ABI
+      </div>
+      <div class="item item-text-wrap">
+        <textarea readonly rows="15" cols="45">{{token.ABI}}</textarea>
+      </div>
+    </div>
+  </ion-content>
+</ion-modal-view>
+
+
