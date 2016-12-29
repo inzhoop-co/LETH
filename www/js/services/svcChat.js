@@ -287,7 +287,19 @@ angular.module('leth.services')
         //exit on error
         if(error){return;}; 
         //exit if mine
-        if(result.payload.from == AppService.account()){return;} 
+        if(result.payload.from == AppService.account()){
+          //only if exist in chats/chatsDM array skip
+          var exist=false;
+          angular.forEach(chats, function(value, key) {
+            if(angular.equals(value.message,result.payload)){
+             exist=true;
+             return;
+            }
+          })
+
+          if(exist)
+            return;
+        } 
         //exit if outdated  get only 1 hour before last msg
         if(result.payload.time*3600 < JSON.parse(localStorage.LastMsg).time){return;} 
         //if encrypted msg write to DM
@@ -298,6 +310,18 @@ angular.module('leth.services')
             if(result.payload.image != '')
               result.payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,result.payload.image, result.payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
 
+            if(result.payload.from == AppService.account()){
+              angular.forEach(chatsDM, function(value, key) {
+                if(angular.equals(value.message,result.payload)){
+                  exist=true;
+                  return;
+                }
+              })
+
+              if(exist)
+                return;
+            }
+            
             chatsDM.push({
               identity: blockies.create({ seed: result.payload.from}).toDataURL("image/jpeg"),
               timestamp: result.payload.time,

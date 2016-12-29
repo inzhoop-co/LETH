@@ -21,8 +21,9 @@
       <ion-item class="item item-thumbnail-left item-icon-right"  ng-repeat="dapp in listApps | filter:{Network:nameNetwork} track by $index"
           type="item-text-wrap" ng-href="&#35;/tab/dappleth-run/{{dapp.GUID}}">
           <img ng-src="{{dapp.Logo}}"/>
-            <h2>{{dapp.Company}}</h2>
+            <h2>{{dapp.Name}}</h2>
             <p>{{dapp.Description}}</p>
+            <h6>by {{dapp.Company}}</h6>
             <ion-spinner icon="crescent" class="icon spinner-positive" ng-show="isInstalling(dapp)"></ion-spinner>
             <i class="icon ion-chevron-right icon-accessory" ng-hide="flagApps"></i>
             <i class="icon ion-ios-cloud-download-outline positive" ng-hide="!flagApps" ng-click="installDapp(dapp.GUID)"></i>  
@@ -31,8 +32,9 @@
     <ion-list ng-show="isCoin">
       <ion-item class="item item-avatar-left item-icon-right"  ng-repeat="coin in listCoins | filter:{Network:nameNetwork} track by $index" type="item-text-wrap" ng-click="showCustomTokenInfo(coin)">
           <img ng-src="{{coin.Logo}}"/>
-            <h2>{{coin.Company}}</h2>
+            <h2>{{coin.Name}}</h2>
             <p>{{coin.Abstract}}</p>
+            <h6>by {{coin.Company}}</h6>
             <ion-spinner icon="ripple" class="icon spinner-positive" ng-show="coin.Progress"></ion-spinner>
             <i class="icon ion-ios-checkmark-outline balanced" ng-hide="!coin.Installed || coin.Progress"></i>  
             <i class="icon ion-ios-cloud-download-outline positive" ng-hide="coin.Installed || coin.Progress || coin.Custom" ng-click="installCoin(coin)"></i>  
