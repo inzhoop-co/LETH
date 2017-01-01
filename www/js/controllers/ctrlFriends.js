@@ -97,8 +97,8 @@ angular.module('leth.controllers')
           sourceType: Camera.PictureSourceType.CAMERA,
           allowEdit: true,
           encodingType: Camera.EncodingType.JPEG,
-          targetWidth: 100,
-          targetHeight: 100,
+          targetWidth: 0,
+          targetHeight: 300,
           popoverOptions: CameraPopoverOptions,
           saveToPhotoAlbum: false,
           correctOrientation:true
@@ -118,9 +118,9 @@ angular.module('leth.controllers')
     $scope.getImage = function(){
       document.addEventListener("deviceready", function () {
         var optionsImg = {
-          maximumImagesCount: 10,
-          width: 100,
-          height: 100,
+          maximumImagesCount: 1,
+          width: 0,
+          height: 0,
           quality: 50
         };
 

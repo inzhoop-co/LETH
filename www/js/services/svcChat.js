@@ -65,7 +65,7 @@ angular.module('leth.services')
       });
     },
     sendImage: function (content) {
-      var msg = {type: 'leth', mode: 'plain', time: Date.now(), from: AppService.account(), to: [null], text: '', image: img};
+      var msg = {type: 'leth', mode: 'plain', time: Date.now(), from: AppService.account(), to: [null], text: '', image: content, attach: {addr: AppService.account(), idkey: AppService.idkey()} };
       var payload = msg;
       var message = {
         from:  this.identity(),

@@ -1,5 +1,5 @@
 angular.module('leth.controllers')  
-  .controller('ChatsCtrl', function ($scope, $ionicListDelegate, $ionicActionSheet, $ionicScrollDelegate, $cordovaImagePicker, $cordovaCamera, $timeout, 
+  .controller('ChatsCtrl', function ($scope, $ionicListDelegate, $ionicModal, $ionicActionSheet, $ionicScrollDelegate, $cordovaImagePicker, $cordovaCamera, $timeout, 
                                       Friends, Chat, AppService, Geolocation) {    
 
     $scope.$on('$ionicView.enter', function() {
@@ -15,7 +15,6 @@ angular.module('leth.controllers')
       if ($scope.text.message.length==0) {
         return;
       }
-      //var msg = {type: 'leth', mode: 'plain', from: AppService.account(), to: [null], text: $scope.text.message, image: '' };
       var content = $scope.text.message;      
       $scope.text.message="";
       Chat.sendMessage(content);
@@ -52,8 +51,8 @@ angular.module('leth.controllers')
           sourceType: Camera.PictureSourceType.CAMERA,
           allowEdit: true,
           encodingType: Camera.EncodingType.JPEG,
-          targetWidth: 100,
-          targetHeight: 100,
+          targetWidth: 0,
+          targetHeight: 300,
           popoverOptions: CameraPopoverOptions,
           saveToPhotoAlbum: false,
           correctOrientation:true
@@ -73,9 +72,9 @@ angular.module('leth.controllers')
     $scope.getImage = function(){
       document.addEventListener("deviceready", function () {
         var optionsImg = {
-          maximumImagesCount: 10,
-          width: 100,
-          height: 100,
+          maximumImagesCount: 1,
+          width: 0,
+          height: 0,
           quality: 50
         };
 
@@ -137,7 +136,6 @@ angular.module('leth.controllers')
         }
       })      
     };
-
   })
   .directive('input', input);
 

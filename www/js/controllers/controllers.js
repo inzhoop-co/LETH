@@ -733,6 +733,43 @@ angular.module('leth.controllers', [])
     loginModal.hide();
   };
 
+  var imageModal;
+  var createImageModal = function(img) {
+    $scope.imageSrc  = img;
+    $ionicModal.fromTemplateUrl('templates/image-modal.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      imageModal = modal;
+      imageModal.show();
+    });
+  }
+
+  $scope.openModalIMG = function(img) {
+    $scope.imageSrc = img;
+    imageModal.show();
+  };
+
+  $scope.closeModalIMG = function() {
+    imageModal.hide();
+  };
+
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    imageModal.remove();
+  });
+  // Execute action on hide modal
+  $scope.$on('modalIMG.hide', function() {
+    // Execute action
+  });
+  // Execute action on remove modal
+  $scope.$on('modalIMG.removed', function() {
+    // Execute action
+  });
+  $scope.$on('modalIMG.shown', function() {
+    //console.log('Modal is shown!');
+  });
+
   $scope.goLogin = function(random){
     closeEntropyModal();
     // create keystore and account and store them
@@ -971,6 +1008,10 @@ angular.module('leth.controllers', [])
     if(msg.mode=="token" && msg.attach)
       buttonsOpt.push({ text: '<i class="icon ion-ios-circle-outline"></i>Install token', index: 6 });
 
+    if(msg.image){
+        buttonsOpt.push({ text: '<i class="icon ion-image"></i>Show Image', index: 7 })
+    }
+
     var hideSheet = $ionicActionSheet.show({
       buttons: buttonsOpt,
       destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
@@ -982,13 +1023,19 @@ angular.module('leth.controllers', [])
         switch(this.buttons[index].index){
           case 1: //copy message
             document.addEventListener("deviceready", function () {  
-              $cordovaClipboard
-              .copy(msg.text)
-              .then(function () {
-                // success
-              }, function () {
-                // error
-              });
+              if(msg.image){
+                $cordovaClipboard.copy(msg.image).then(function () {
+                  // success
+                }, function () {
+                  // error
+                });
+              }else{
+                $cordovaClipboard.copy(msg.text).then(function () {
+                    // success
+                }, function () {
+                    // error
+                });
+              }
             }, false);
             break;
           case 2: //go to friend
@@ -1037,6 +1084,9 @@ angular.module('leth.controllers', [])
                 $state.go('tab.dappleths', { relative: $state.$current.view});
                }
             });
+            break;
+          case 7: // show image
+            createImageModal(msg.image);
             break;
         }
         hideSheet();

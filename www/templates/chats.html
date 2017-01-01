@@ -11,7 +11,7 @@
             <img on-hold="chooseAction(chat.message)" ng-src="{{chat.identity}}" ng-class="chat.message.from === myidentity ? 'rounded image image-mine' : 'rounded image image-other'""> 
           <div class="message" ng-class="chat.message.from === myidentity ? 'message-mine' : 'message-other'" on-hold="chooseAction(chat.message)">
             <div class="message-text" ng-if="chat.message.text.length" ng-bind-html="chat.message.text"></div>
-            <img ng-src="{{chat.message.image}}" ng-if="chat.message.image.length"/>
+            <img ng-src="{{chat.message.image}}" height="100px" width="auto" ng-if="chat.message.image.length"/>
             <span class="message-timestamp">{{isFriend(chat.message.from) | strLimit: 5 : 0}} {{chat.message.time == undefined ? 'outdated v.' : chat.message.time | date: 'HH:mm'}}</span>
           </div>
         </div>
