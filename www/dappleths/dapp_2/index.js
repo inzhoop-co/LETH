@@ -202,10 +202,10 @@ dappContract.Winner().watch(function (error, result) {
 
 function updateData(){
     var price = parseFloat(dappContract.getPrice() / 1.0e+15);
-    var amount = parseFloat((dappContract.getAmount() / 2) / 1.0e+15);
-    var vtime = (dappContract.getDuration() - (dappContract.getNow() - dappContract.getStart()))/1
+    var amount = parseFloat((dappContract.getAmount() / 1.333) / 1.0e+15).toFixed(2);
+    var vtime = (dappContract.getDuration() - (dappContract.getNow() - dappContract.getStart()))/1;
     time = vtime <=0 ? "Game over!" : formatTimeStamp(vtime) + ' sec.';
-    var numGiocate = dappContract.getNumGiocate() / 1;
+    var numGiocate = dappContract.getNumGiocate() < dappContract.getMinGiocate() ? dappContract.getNumGiocate() - dappContract.getMinGiocate() : dappContract.getNumGiocate();
     
     console.log(vtime);
     if(vtime>0){
