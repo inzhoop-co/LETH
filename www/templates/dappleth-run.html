@@ -81,6 +81,8 @@
 <ion-view view-title="{{activeApp.Name}}" hide-tabs>
   <ion-nav-bar class="bar-stable bar-assertive">
     <ion-nav-back-button>
+      <span class="badge badge-light" ng-hide="msgCounter==0"> {{msgCounter}}</span>     
+      <span class="badge badge-light" ng-hide="DMCounter==0"> {{DMCounter}}</span>     
     </ion-nav-back-button>
   </ion-nav-bar>  
   <!--ion-nav-buttons side="right">
@@ -94,14 +96,10 @@
     </div>
   </ion-content>
   <ion-footer-bar align-title="center" class="bar-assertive">
-    <div id="leftButton" class="buttons" onclick="leftPlay()">
-      <button class="button"></button>
-    </div>
+    <button id="leftButton" class="button"></button>
     <h2 class="title">
       <button id="centerButton" class="button"></button>
     </h2>
-    <div class="buttons" onclick="rightPlay()">
-      <button id="rightButton" class="button"></button>
-    </div>
+    <button id="rightButton" class="button"></button>
   </ion-footer-bar>
 </ion-view>

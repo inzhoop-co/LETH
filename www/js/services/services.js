@@ -180,7 +180,7 @@ angular.module('leth.services', [])
 
       myPopup.then(function (res) {
         if(res)
-          $ionicLoading.show({template: 'Waiting...'});
+          $ionicLoading.show({template: 'Waiting...', duration: 3000});
         q.resolve(res);
       });
 

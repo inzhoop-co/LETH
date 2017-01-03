@@ -3,31 +3,71 @@
 function init()
 {
     //define center button
+    /*
     var btnCenter = angular.element(document.querySelector('#centerButton'));
     btnCenter.html(' Play now!');
     btnCenter.attr('class','button button-smal button-icon icon ion-play');
     btnCenter.attr('onclick','playLottery()');
-
-    //define left button
-    /*
-    var btnLeft = angular.element(document.querySelector('#leftButton'));
-    btnLeft.html(' left');
-    btnLeft.attr('class','button button-smal button-icon icon ion-camera');
-    btnLeft.attr('onclick','scan()');
     */
 
     //define left button
-    /*
+    
+    var btnLeft = angular.element(document.querySelector('#leftButton'));
+    btnLeft.html(' Play now!');
+    btnLeft.attr('class','button button-smal button-icon icon ion-play');
+    btnLeft.attr('onclick','playLottery()');
+    
+    //define right button
+    
     var btnRight = angular.element(document.querySelector('#rightButton'));
-    btnRight.html(' right');
+    btnRight.html(' update');
     btnRight.attr('class','button button-smal button-icon icon ion-ios-refresh');
     btnRight.attr('onclick','updateData()');
-    */
 }
 
 angular.element(document).ready(function() {
 	updateData();
 })
+
+
+function getTimeRemaining(endtime) {
+  var t = Date.parse(endtime) - Date.parse(new Date());
+  var seconds = Math.floor((t / 1000) % 60);
+  var minutes = Math.floor((t / 1000 / 60) % 60);
+  var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+  var days = Math.floor(t / (1000 * 60 * 60 * 24));
+  return {
+    'total': t,
+    'days': days,
+    'hours': hours,
+    'minutes': minutes,
+    'seconds': seconds
+  };
+}
+
+function initializeClock(id, endtime) {
+  var clock = document.getElementById(id);
+  var daysSpan = clock.querySelector('.days');
+  var hoursSpan = clock.querySelector('.hours');
+  var minutesSpan = clock.querySelector('.minutes');
+  var secondsSpan = clock.querySelector('.seconds');
+
+  function updateClock() {
+    var t = getTimeRemaining(endtime);
+
+    daysSpan.innerHTML = t.days;
+    hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+    minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+    secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+    if (t.total <= 0) {
+      clearInterval(timeinterval);
+    }
+  }
+
+  updateClock();
+  var timeinterval = setInterval(updateClock, 1000);
+}
 
 
 
@@ -163,10 +203,18 @@ dappContract.Winner().watch(function (error, result) {
 function updateData(){
     var price = parseFloat(dappContract.getPrice() / 1.0e+15);
     var amount = parseFloat((dappContract.getAmount() / 2) / 1.0e+15);
-    var time = (dappContract.getDuration() - (dappContract.getNow() - dappContract.getStart()))/1
-    time = time <=0 ? "Game over!" : formatTimeStamp(time) + ' sec.';
+    var vtime = (dappContract.getDuration() - (dappContract.getNow() - dappContract.getStart()))/1
+    time = vtime <=0 ? "Game over!" : formatTimeStamp(vtime) + ' sec.';
     var numGiocate = dappContract.getNumGiocate() / 1;
-
+    
+    console.log(vtime);
+    if(vtime>0){
+        var elapsed = vtime;
+        setInterval(function () {
+            angular.element(document.querySelector('#time')).html(formatTimeStamp(elapsed-=1));
+        }, 1000);
+    }
+    
     angular.element(document.querySelector('#price')).html(price + ' finney');
     angular.element(document.querySelector('#amount')).html(amount + ' finney');
     angular.element(document.querySelector('#time')).html(time);
