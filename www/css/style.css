@@ -283,6 +283,13 @@ img#headerSetting
     background-repeat: no-repeat;
     background-size: 100%; }
 
+  .chatDapp  {
+    background-image: url(../img/backgrounds/xmas.png);
+    background-color: #E0DAD6;
+    background-repeat: no-repeat;
+    background-size: 100%; 
+    height: 300px;}
+
   .footer-chat .item-input-wrapper {
     background-color: #FFF; }
   .footer-chat .button.button-icon {
@@ -405,7 +412,6 @@ img#headerSetting
     line-height: 32px; }
 
 
-
 /* 
   ==========================================================================
    Image viewer style
@@ -444,4 +450,3 @@ img#headerSetting
       opacity: 0;
     }
   }
-

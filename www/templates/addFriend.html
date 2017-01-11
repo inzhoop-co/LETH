@@ -5,7 +5,7 @@
     </button>
     <div class="h1 title">Friend {{name | strLimit: 5 : 5}}</div>
     <button menu-toggle="right" class="button button-clear" on-touch="scanAddr()">
-      <i class="icon ion-ios-camera"></i>
+      <i class="icon ion-ios-camera-outline"></i>
     </button>
   </ion-header-bar>
   <ion-content class="has-header" padding="'true'">
@@ -17,11 +17,11 @@
             <input type="text" ng-model="name" placeholder="Name">
           </label>
           <label class="item item-input item-floating-label">
-            <span class="input-label">Wallet Address</span>
+            <span class="input-label">Wallet Address (scan QRCode)</span>
             <input type="text" ng-model="addr" readonly placeholder="Wallet Address" ng-valid>            
           </label>
           <label class="item item-input item-floating-label">
-            <span class="input-label">Identity Address</span>
+            <span class="input-label">Identity Address (scan QRCode)</span>
             <input type="text" ng-model="idkey" readonly placeholder="Identity Address" ng-valid>            
           </label>
           <label class="item item-input item-floating-label">

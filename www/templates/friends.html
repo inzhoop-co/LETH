@@ -5,7 +5,7 @@
       <input type="search" placeholder="Search" ng-model="search.name">     
     </label>
     <button class="icon button-icon ion-ios-close-empty dark" ng-if="search.name.length > 0" on-touch="search.name=''"></button>
-    <!--button class="icon button-icon ion-ios-personadd positive" ng-click="addAddress()"></button-->  
+    <button class="icon button-icon ion-ios-personadd positive" ng-click="addAddress()"></button>  
   </ion-header-bar>
   <ion-content class="has-header has-subheader has-tabs scrollBg">
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>

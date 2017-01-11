@@ -2,13 +2,13 @@
 	"dappleths":[
 		{
 			"GUID" : "T01",
-			"Name" : "Inzhoop greeting",
+			"Name" : "Greeting",
 			"Network" : "Ropsten",
 			"Company" : "Inzhoop",
 			"Address" : "0xf8374f01dd4960a6ea6192f36f451e111cabf3b3",
 			"ABI" : [{"constant":false,"inputs":[],"name":"kill","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"greet","outputs":[{"name":"","type":"string"}],"type":"function"},{"inputs":[{"name":"_greeting","type":"string"}],"type":"constructor"}],
 			"Logo" : "https://www.inzhoop.com/dappleths/dapp_1/logo.png",
-			"Description" : "Hello to the Ethereum world",
+			"Description" : "Hello from Inzhoop",
 			"InstallUrl" : "/dapp_1/index.html",
 			"TemplateUrl" : "/dapp_1/index.html",
 			"ScriptUrl" : "/dapp_1/index.js"
@@ -21,7 +21,7 @@
 			"Address" : "0x9be5c1db29f7755e810a595dab6f94b6e3d2c2a0",
 			"ABI" : [{"constant":true,"inputs":[],"name":"getPayed","outputs":[{"name":"r","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"duration","type":"uint256"},{"name":"price","type":"uint256"},{"name":"numGamersMin","type":"uint256"}],"name":"newMatch","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"pos","type":"uint256"}],"name":"getGamer","outputs":[{"name":"r","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getMinGiocate","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"x","type":"address"}],"name":"save","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"destroy","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getWinner","outputs":[{"name":"r","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"play","outputs":[{"name":"accepted","type":"bool"}],"payable":true,"type":"function"},{"constant":true,"inputs":[],"name":"getPrice","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getDuration","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"checkWinner","outputs":[{"name":"ready","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getNow","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getStart","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getAmount","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getNumGiocate","outputs":[{"name":"r","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"checkTime","outputs":[{"name":"r","type":"string"}],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"},{"payable":false,"type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"sender","type":"address"}],"name":"NewBet","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"winner","type":"address"},{"indexed":false,"name":"position","type":"uint256"}],"name":"Winner","type":"event"},{"anonymous":false,"inputs":[],"name":"TimeElapsed","type":"event"},{"anonymous":false,"inputs":[],"name":"StartTimer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"sender","type":"address"},{"indexed":false,"name":"reason","type":"string"}],"name":"BetRefused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"message","type":"string"}],"name":"MatchStarted","type":"event"}],
 			"Logo" : "https://www.inzhoop.com/dappleths/dapp_2/logo.png",
-			"Description" : "Bet & Win 75% Jackpot",
+			"Description" : "Win 75% of Jackpot",
 			"InstallUrl" : "/dapp_2/index.html",
 			"TemplateUrl" : "/dapp_2/index.html",
 			"ScriptUrl" : "/dapp_2/index.js"

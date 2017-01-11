@@ -161,6 +161,33 @@ angular.module('leth.services')
         web3.shh.post(crptMsg); 
       });
     },
+    sendInviteToDapp: function (dapp,toAddr,toKey) {
+      var content = dapp.message;
+      var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: '', attach: dapp };
+      var idFrom = this.identity();
+      var payload = msg;
+      var message = {
+        from:  idFrom,
+        topics: topics,
+        payload: payload,
+        ttl: ttlTime,
+        workToProve: wtpTime
+      };
+
+      chatsDM.push({
+          identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
+          timestamp: Date.now(),
+          message: payload
+        });
+
+      lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
+        var crptMsg = angular.copy(message);
+
+        crptMsg.payload.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
+
+        web3.shh.post(crptMsg); 
+      });
+    },
     sendCryptedPhoto: function (content,toAddr,toKey) {
       var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: '', image: content };
       var idFrom = this.identity();
@@ -252,11 +279,11 @@ angular.module('leth.services')
         });
       }
     },
-    sendDappMessage: function (txt, dapp) {
-      var msg = {type: 'leth', mode: 'dappMessage', time: Date.now(), from: dapp.Address, to: [null], text: text};
+    sendDappMessageShh: function (text, dapp) {
+      var msg = {type: 'leth', mode: 'dappMessage', time: Date.now(), from: dapp.Address, to: [null], text: text, image:''};
       var payload = msg;
       var message = {
-        from:  identity,
+        from:  this.identity(),
         topics: topics,
         payload: payload,
         ttl: ttlTime,
@@ -265,7 +292,22 @@ angular.module('leth.services')
       web3.shh.post(message); 
 
       chatsDAPP.push({
-        identity: dapp.Logo.toDataURL("image/jpeg"),
+        identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
+        timestamp: Date.now(),
+        message: payload
+      });
+    },
+    sendDappMessage: function (event, guid) {
+      var msg = {type: 'leth', mode: 'dappMessage', time: Date.now(), from: event.from, to: [null], text: event.text, image:''};
+      var payload = msg;
+      var message = {
+        from:  event.from,
+        payload: payload
+      };
+
+      chatsDAPP.push({
+        guid: guid,
+        identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
         timestamp: Date.now(),
         message: payload
       });

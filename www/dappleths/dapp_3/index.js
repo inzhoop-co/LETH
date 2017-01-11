@@ -6,7 +6,7 @@
 
 */
 
-function init()
+function init_T03()
 {	
 	//define center button
 	var btnCenter = angular.element(document.querySelector('#centerButton'));
@@ -28,9 +28,9 @@ function init()
 	
 }
 
-function updateData()
+function update_T03()
 {
-    init();
+   alert('updateData!');
 }
 
 function disagree()

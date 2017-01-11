@@ -1,4 +1,18 @@
 angular.module('leth.services', [])
+
+.service('UIService', function ($rootScope, $http, $q, StoreEndpoint, $ionicLoading) {
+  return{
+    loadOn: function(){
+      $ionicLoading.show();
+    },
+    loadOff: function(){
+      $ionicLoading.hide();
+    },
+    loadFade: function(content,elapsed){
+          $ionicLoading.show({template: content, duration: elapsed});
+    }
+  }
+})
 .service('AppService', function ($rootScope, $http, $q, StoreEndpoint) {
   return {
     getStore: function () {

@@ -6,9 +6,16 @@
 	angular.module('angularLoad', [])
 		.service('angularLoad', ['$document', '$q', '$timeout', function ($document, $q, $timeout) {
 			var document = $document[0];
+			var promises = {};
+			
+			function unloader(element,type) {
+				return function() {
+					promises={};
+				}
+			}
 
 			function loader(createElement) {
-				var promises = {};
+				promises = {};
 
 				return function(url) {
 					if (typeof promises[url] === 'undefined') {
@@ -65,6 +72,17 @@
 
 				document.head.appendChild(style);
 				return style;
+			});
+
+			/**
+			 * Reset loaded script
+			 * 
+			 * 
+			 */
+			this.resetScript = unloader(function (script,type) {
+				
+				//document.body;
+				return true;
 			});
 		}]);
 })();

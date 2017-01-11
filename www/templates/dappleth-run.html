@@ -78,22 +78,37 @@
 
 </ion-view-->
 
-<ion-view view-title="{{activeApp.Name}}" hide-tabs>
-  <ion-nav-bar class="bar-stable bar-assertive">
+<ion-view view-title=" " hide-tabs cache-view="false">
+  <ion-nav-bar class="bar-assertive">
     <ion-nav-back-button>
-      <span class="badge badge-light" ng-hide="msgCounter==0"> {{msgCounter}}</span>     
-      <span class="badge badge-light" ng-hide="DMCounter==0"> {{DMCounter}}</span>     
-    </ion-nav-back-button>
-  </ion-nav-bar>  
-  <!--ion-nav-buttons side="right">
-    <button class="button button-clear" on-touch="scan()">
-      <i class="icon ion-ios-camera-outline"></i>
-    </button>
-  </ion-nav-buttons-->
-  <ion-content class="has-header has-tabs" >
-  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
-    <div ng-bind-html="appContainer">
-    </div>
+      <span class="badge badge-light" ng-hide="msgCounter+DMCounter==0"> {{msgCounter + DMCounter}}</span>    
+    </ion-nav-back-button>  
+  </ion-nav-bar> 
+  <ion-header-bar align-title="center" class="bar-assertive">
+  <h1 class="buttons title">
+      <img src="{{activeApp.Logo}}" height="40px" width="auto">
+      {{activeApp.Name}} {{activeApp.Description | strLimit: 8 : 0}}
+  </h1>
+  <div class="buttons">
+    <button id="rightBtnHeader" class="button"></button>
+  </div>
+  </ion-header-bar> 
+  <ion-content class="has-header" >
+  <ion-refresher pulling-txt="load" on-refresh="refresh(activeApp.GUID)"></ion-refresher>
+    <div ng-bind-html="appContainer"></div>
+    <ion-scroll direction="y" class="chatDapp message-list">
+      <div ng-repeat="chat in DAPPchats | filter:isFromDapp | orderBy:'message.time'"
+        class="message-wrapper">
+        <div ng-class="chat.message.from === activeApp.Address ? 'bubble bubble-mine' : 'bubble bubble-other'">
+            <img on-hold="chooseDappAction(activeApp)" ng-src="{{chat.identity}}" ng-class="chat.message.from === activeApp.Address ? 'rounded image image-mine' : 'rounded image image-other'""> 
+          <div class="message" ng-class="chat.message.from === activeApp.Address ? 'message-mine' : 'message-other'" on-hold="chooseDappAction(activeApp)">
+            <div class="message-text" ng-if="chat.message.text.length" ng-bind-html="chat.message.text"></div>
+            <img ng-src="{{chat.message.image}}" height="100px" width="auto" ng-if="chat.message.image.length"/>
+            <span class="message-timestamp">{{isFriend(chat.message.from) | strLimit: 5 : 0}} {{chat.message.time == undefined ? 'outdated v.' : chat.message.time | date: 'HH:mm'}}</span>
+          </div>
+        </div>
+      </div>
+    </ion-scroll>
   </ion-content>
   <ion-footer-bar align-title="center" class="bar-assertive">
     <button id="leftButton" class="button"></button>

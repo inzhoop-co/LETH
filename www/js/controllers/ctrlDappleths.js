@@ -99,38 +99,65 @@ angular.module('leth.controllers')
   .controller('DapplethRunCtrl', function ($scope, $rootScope, $ionicHistory, angularLoad, $ionicLoading, $templateRequest, $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout, StoreEndpoint, AppService, Chat) {
     var id = $stateParams.Id;
     $scope.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
-    
-    $http.get(StoreEndpoint.url + $scope.activeApp.InstallUrl) 
-      .success(function(data){
-        $scope.appContainer = $sce.trustAsHtml(data);          
-    });
-    
-    $ionicLoading.show(); 
 
-    //load api js, better if always on, but where and when?
-    angularLoad.loadScript('js/api.js').then(function() {
-        console.log('loading ' + 'js/api.js');
-    }).catch(function() {
-        console.log('ERROR :' + 'js/api.js');
+    $scope.$on("$ionicView.beforeEnter", function () {
+      $ionicHistory.clearCache();
     });
 
-    
-    dappContract = web3.eth.contract($scope.activeApp.ABI).at($scope.activeApp.Address);
+    $scope.$on("$ionicView.afterEnter", function () {
 
-    angularLoad.loadScript(StoreEndpoint.url + $scope.activeApp.ScriptUrl).then(function() {
-      $ionicLoading.hide();
-        console.log('loading ' + StoreEndpoint.url + $scope.activeApp.ScriptUrl);
-    }).catch(function() {
-        console.log('ERROR :' + StoreEndpoint.url + $scope.activeApp.ScriptUrl);
+      $http.get(StoreEndpoint.url + $scope.activeApp.InstallUrl) 
+        .success(function(data){
+          $ionicLoading.show(); 
+          $scope.appContainer = $sce.trustAsHtml(data);  
+
+          angularLoad.loadScript('js/api.js').then(function() {
+              console.log('loading ' + 'js/api.js');
+
+              angularLoad.loadScript(StoreEndpoint.url + $scope.activeApp.ScriptUrl).then(function(result) {
+                  console.log('loading ' + StoreEndpoint.url + $scope.activeApp.ScriptUrl);
+                  $scope.initDapp(); 
+                  $ionicLoading.hide();
+              }).catch(function(err) {
+                  console.log('ERROR :' + StoreEndpoint.url + $scope.activeApp.ScriptUrl);
+              });
+
+          }).catch(function() {
+              console.log('ERROR :' + 'js/api.js');
+          });
+          
+          //dappContract = web3.eth.contract($scope.activeApp.ABI).at($scope.activeApp.Address);
+          $timeout(function() {$ionicLoading.hide();}, 1000);
+      });
     });
 
+    $scope.$on("$ionicView.beforeLeave", function () {
+      $ionicHistory.clearCache();
+
+      dappleth.destroy();
+      dappleth = null;
+
+      angularLoad.resetScript($scope.activeApp.ScriptUrl, "js");
+      removejscssfile($scope.activeApp.ScriptUrl, "js"); 
+      //dappContract={};
+    });
+
+    /*
+    $rootScope.$on('dappEvent', function(event,args){
+      var msg = args.data.detail;
+      Chat.sendDappMessage(msg, $scope.activeApp);  
+      $ionicLoading.show({ template: msg.text, noBackdrop: true, duration: 2000 })
+    });
+    */
+    
     $scope.refresh = function() {
-      updateData(); //defined in external js
+      dappleth.update();
+      //update(guid); //defined in external js
       $scope.$broadcast('scroll.refreshComplete');
     }
 
     $scope.initDapp = function() {
-      init(); //defined in external js
+      dappleth.run($scope.activeApp.GUID,$scope.activeApp.ABI,$scope.activeApp.Address);
     }
 
     $scope.scan = function() {
@@ -147,15 +174,31 @@ angular.module('leth.controllers')
       }, false);   
     }
 
-    $scope.$on("$ionicView.enter", function () {
-       //$ionicHistory.clearCache();
-       $scope.initDapp(); 
-    });
+    $scope.isFromDapp = function(item){
+      if($scope.activeApp.GUID == item.guid)
+        return true; 
+      return false;
+    }
 
-    $rootScope.$on('dappEvent', function(event,args){
-      var msg = args.data.detail;
-      //Chat.sendDappMessage(msg, $scope.activeApp);  
-      $ionicLoading.show({ template: msg, noBackdrop: true, duration: 2000 })
-    });
+    var isLoaded = function(filename, filetype){
+        var targetelement=(filetype=="js")? "script" : (filetype=="css")? "link" : "none" //determine element type to create nodelist from
+        var targetattr=(filetype=="js")? "src" : (filetype=="css")? "href" : "none" //determine corresponding attribute to test for
+        var allsuspects=document.getElementsByTagName(targetelement)
+        for (var i=allsuspects.length; i>=0; i--){ //search backwards within nodelist for matching elements to remove
+        if (allsuspects[i] && allsuspects[i].getAttribute(targetattr)!=null && allsuspects[i].getAttribute(targetattr).indexOf(filename)!=-1)
+            return true;
+        }
+        return false;
+    }
+
+    var removejscssfile = function(filename, filetype){
+        var targetelement=(filetype=="js")? "script" : (filetype=="css")? "link" : "none" //determine element type to create nodelist from
+        var targetattr=(filetype=="js")? "src" : (filetype=="css")? "href" : "none" //determine corresponding attribute to test for
+        var allsuspects=document.getElementsByTagName(targetelement)
+        for (var i=allsuspects.length; i>=0; i--){ //search backwards within nodelist for matching elements to remove
+        if (allsuspects[i] && allsuspects[i].getAttribute(targetattr)!=null && allsuspects[i].getAttribute(targetattr).indexOf(filename)!=-1)
+            allsuspects[i].parentNode.removeChild(allsuspects[i]) //remove element by calling parentNode.removeChild()
+        }
+    }
 
   })

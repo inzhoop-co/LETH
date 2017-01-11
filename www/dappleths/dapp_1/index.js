@@ -1,55 +1,98 @@
-/*
-	API available
-	apiApp
-	apiChat
-	apiFriends
+var dappleth = (function(){ 
+	var GUID;
+	var dappContract;
+	var btnLeft;
+	var btnCenter;
 
-*/
+	 function init(id,ABI,Address){
+		console.log("init " + id);
+		GUID=id;
+        dappContract = web3.eth.contract(ABI).at(Address);
 
-function init()
-{	
-	//define center button
-	var btnCenter = angular.element(document.querySelector('#centerButton'));
-	btnCenter.html(' Test me!');
-	btnCenter.attr('class','button button-smal button-icon icon ion-play');
-	btnCenter.attr('onclick','greet()');
+		btnCenter = angular.element(document.querySelector('#centerButton'));
+	}
 
-	//define left button
-	/*
-	var btnLeft = angular.element(document.querySelector('#leftButton'));
-	btnLeft.html(' left');
-	btnLeft.attr('class','button button-smal button-icon icon ion-camera');
-	btnLeft.attr('onclick','scan()');
-	*/
+	function setup(){
+		console.log("setup");
+		btnCenter.html(' Test me!');
+		btnCenter.attr('class','button button-smal button-icon icon ion-play');
+		btnCenter.attr('onclick','dappleth.greet()');
+	}
 
-	//define left button
-	/*
-	var btnRight = angular.element(document.querySelector('#rightButton'));
-	btnRight.html(' right');
-	btnRight.attr('class','button button-smal button-icon icon ion-ios-refresh');
-	btnRight.attr('onclick','updateData()');
-	*/
-}
+	function update(){
+		console.log("update");
+		apiUI.loadFade("loading...",2000);
+	}
 
-function updateData()
-{
-    init();
-}
+	function destroy(){
+		console.log("destroy");
+		dappContract={};
+	}
 
-function scan()
-{
-    alert('how to catch scan result?');
-}
+	function run(id,ABI,Address){
+        init(id,ABI,Address);
+		setup();
+		update();
+	}
 
-// Play main function of a simlpe contract
-function greet()
-{
-    var m = "Calling contract at <br/>" +  dappContract.address + "<br/>"
-    m += "<b>"  + dappContract.greet() + "</b>";
-    angular.element(document.querySelector('#message')).html(m);
-    
-    var e = new CustomEvent('dappMessage', { "detail": m});
-    document.body.dispatchEvent(e);
+	function greet(){
+		console.log("greet");
 
-    //apiChat.sendDappMessage(m);
-}
+		var m1 = {
+			from: dappContract.address,
+		    text: "Calling contract at " +  dappContract.address + "...",
+		    date: new Date()
+		};
+
+      	apiChat.sendDappMessage(m1, GUID);  
+
+    	var m2 = { 
+			from: dappContract.address,
+		    text: "Response is <br/>" + dappContract.greet(),
+		    date: new Date()
+		};
+
+      	apiChat.sendDappMessage(m2, GUID);  
+
+		update();
+      	
+      	/*
+      	var e1 = new CustomEvent('dappMessage', {
+	     "detail": {
+	        from: dappContract.address,
+	        text: "Calling contract at " +  dappContract.address + "...",
+	        date: new Date()
+	    	}
+		});
+
+    	var e2 = new CustomEvent('dappMessage', { 
+    	"detail": {
+	        from: dappContract.address,
+	        text: "Response is <br/>" + dappContract.greet(),
+	        date: new Date()}
+	    });
+
+	    document.body.dispatchEvent(new CustomEvent('dappMessage', {
+	     "detail": {
+	        from: dappContract.address,
+	        text: "Calling contract at " +  dappContract.address + "...",
+	        date: new Date()
+	    	}
+		}));
+	    document.body.dispatchEvent(new CustomEvent('dappMessage', { 
+    	"detail": {
+	        from: dappContract.address,
+	        text: "Response is <br/>" + dappContract.greet(),
+	        date: new Date()}
+	    }));	
+	    */
+	}
+
+	return {
+	    update: update,
+	    run: run,
+	    destroy: destroy,
+	    greet: greet
+	};
+
+})();

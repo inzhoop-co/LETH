@@ -118,7 +118,7 @@ angular.module('leth.controllers', [])
   $scope.infoSync = function(){
      var alertPopup = $ionicPopup.alert({
         title: 'Info Sync Node',
-        template: web3.eth.syncing=='false' ? 'Sync status: OK' : 'Sync status: progress' + '<br/>BlockNumber: ' + web3.eth.blockNumber  
+        template: web3.eth.syncing=='false' ? 'Sync status: OK' : 'Sync status: progress' + '<br/>BlockNumber: ' + web3.eth.blockNumber + '<br/>Network: ' + $scope.nameNetwork
       });
 
       alertPopup.then(function(res) {
@@ -167,6 +167,12 @@ angular.module('leth.controllers', [])
   $scope.shareByChat = function (friend,payment) {
     Chat.sendCryptedPaymentReq("Please send me " + payment + " eth &#x1F4B8; !", payment, friend.addr,friend.idkey);
     $state.go('tab.friend', {Friend: friend.addr});
+  };
+
+ $scope.inviteFriend = function (friend,param) {
+    Chat.sendInviteToDapp(param,friend.addr,friend.idkey);
+    $ionicLoading.show({ template: "Done!", noBackdrop: true, duration: 2000 })
+    
   };
 
   $scope.readFeed = function(index){
@@ -240,6 +246,10 @@ angular.module('leth.controllers', [])
       $scope.shareByChat(friend, $scope.param);
     if($ionicHistory.currentTitle()=="LΞTH")
       $scope.shareCustomToken(friend, $scope.param);
+    if($ionicHistory.currentView().stateName == "tab.dappleth-run"){
+      if($scope.param.action=="invite")
+        $scope.inviteFriend(friend, $scope.param);
+    }
 
     $scope.closeFriendsModal();
   };
@@ -1087,6 +1097,30 @@ angular.module('leth.controllers', [])
             break;
           case 7: // show image
             createImageModal(msg.image);
+            break;
+        }
+        hideSheet();
+       $timeout(function() {
+         hideSheet();
+        }, 20000);
+      }
+    });
+  }
+
+  $scope.chooseDappAction = function(dapp){
+    var buttonsOpt= [{ text: '<i class="icon ion-android-share-alt"></i> Invite a friend', index: 1 }];
+    
+    var hideSheet = $ionicActionSheet.show({
+      buttons: buttonsOpt,
+      destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
+      titleText: 'Choose an action',
+      destructiveButtonClicked:  function() {
+        hideSheet();
+      },
+      buttonClicked: function(index) {
+        switch(this.buttons[index].index){
+          case 1: // invite friend
+            $scope.openFriendsModal({action:"invite", sender: dapp, message: "Come on " + dapp.Name });
             break;
         }
         hideSheet();
