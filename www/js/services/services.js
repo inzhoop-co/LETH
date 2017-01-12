@@ -13,6 +13,23 @@ angular.module('leth.services', [])
     }
   }
 })
+.service('BEService', function ($rootScope, $http, $window, $q, StoreEndpoint, $ionicLoading) {
+  return{
+    storeData: function(guid,key,data){
+      $window.localStorage[guid + "_" + key] = JSON.stringify(data);
+    },
+    clearData: function(guid,key){
+      $window.localStorage[guid + "_" + key] = {};
+    },
+    getKey: function (guid,key) {
+      return $window.localStorage[guid + "_" + key];
+    },
+    removeKey: function(guid,key){
+      $window.localStorage.removeItem(guid + "_" + key);
+    }
+  }
+})                
+
 .service('AppService', function ($rootScope, $http, $q, StoreEndpoint) {
   return {
     getStore: function () {
@@ -80,7 +97,8 @@ angular.module('leth.services', [])
     balance: function (unit) {
       var result;
       try {
-        result = (parseFloat(web3.eth.getBalance(this.account())) / unit).toFixed(6);
+        //result = (parseFloat(web3.eth.getBalance(this.account())) / unit).toFixed(6);
+        result = parseFloat(web3.eth.getBalance(this.account()))/unit;
       }catch (e){
         result = undefined;
       }

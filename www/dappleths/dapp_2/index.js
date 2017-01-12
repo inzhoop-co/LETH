@@ -1,17 +1,19 @@
 var dappleth = (function(){ 
+    //standar variable
     var GUID;
     var dappContract;
     var btnLeft;
     var btnRight;
-    
-
-    
+    //dapp variable
     var eMatchStarted;
     var eTimeElapsed;
     var eNewBet;
     var eBetRefused; 
     var eWinner;
-    
+    var elapsed;
+    var countdown=0;
+    var tickets=[];
+    var idMatch;
 
     function init(id,ABI,Address){
         GUID=id;
@@ -29,32 +31,52 @@ var dappleth = (function(){
         btnRight.html(' update');
         btnRight.attr('class','button button-smal button-icon icon ion-ios-refresh');
         btnRight.attr('onclick','dappleth.update()');
+
+        if(apiBE.getKey(GUID,"tickets"))
+            tickets=JSON.parse(apiBE.getKey(GUID,"tickets")).tickets;
+        
     }
 
     function update(){
         apiUI.loadOn("loading...");
-
+        var balance = parseFloat(apiApp.balance(1) / 1.0e+15).toFixed(2);
+        idMatch = dappContract.getIdMatch();
         var price = parseFloat(dappContract.getPrice() / 1.0e+15);
         var amount = parseFloat((dappContract.getAmount() / 1.333) / 1.0e+15).toFixed(2);
-        var vtime = (dappContract.getDuration() - (dappContract.getNow() - dappContract.getStart()))/1;
-        time = vtime <=0 ? "-" : formatTimeStamp(vtime);
         var numGiocate = dappContract.getNumGiocate() < dappContract.getMinGiocate() ? dappContract.getNumGiocate() - dappContract.getMinGiocate() : dappContract.getNumGiocate();
         var checkTime = dappContract.checkTime().toUpperCase();
-
+ 
+        var vtime = (dappContract.getDuration() - (dappContract.getNow() - dappContract.getStart()))/1;
+        time = vtime <=0 ? "-" : formatTimeStamp(vtime);
         if(vtime>0){
-            var elapsed = vtime;
-            setInterval(function () {
-                angular.element(document.querySelector('#time')).html(formatTimeStamp(elapsed-=1));
-            }, 1000);
+            elapsed = vtime;
+            if(!countdown){
+                countdown = setInterval(function () {
+                    angular.element(document.querySelector('#time')).html(formatTimeStamp(elapsed-=1));
+                }, 1000);
+            }
         }else{
             angular.element(document.querySelector('#time')).html(time);
         }
 
-        
+        angular.element(document.querySelector('#match')).html('#'+idMatch+'#');
         angular.element(document.querySelector('#price')).html(price + ' finney');
         angular.element(document.querySelector('#amount')).html(amount + ' finney');
         angular.element(document.querySelector('#numGiocate')).html(numGiocate);
         angular.element(document.querySelector('#checkTime')).html(checkTime);
+        angular.element(document.querySelector('#balance')).html('balance: ' + balance + ' finney');
+        if(elapsed>=0)
+            angular.element(document.querySelector('#time')).html(elapsed);
+        else
+            angular.element(document.querySelector('#time')).html("-");
+
+        var lblTickets = '';
+        
+        angular.forEach(tickets, function(value, key) {
+          lblTickets += '<span class="badge badge-calm">' + value + '</span> '
+        });
+
+        angular.element(document.querySelector('#myTickets')).html(lblTickets);
 
         apiUI.loadOff();
 
@@ -67,24 +89,34 @@ var dappleth = (function(){
         eTimeElapsed.stopWatching();
         eBetRefused.stopWatching();
         eWinner.stopWatching();
+        apiBE.removeKey(GUID,"tickets");
+
         dappContract={};
     }
 
     function listner(){
         //event listner
         eMatchStarted = dappContract.MatchStarted().watch(function (error, result) {
+            var idEvent = result.code;
+            var idMatch = result.idMatch;
+            var text = result.args.message;
             var msg = {
                 from: result.address,
-                text: result.args.message,
+                text: text,
                 date: new Date()
             };
 
             apiChat.sendDappMessage(msg, GUID);  
 
+            tickets=[];
+            clearInterval(countdown);
+
             update();
         });
     
         eTimeElapsed = dappContract.TimeElapsed().watch(function (error, result) {
+            clearInterval(countdown);
+
             var msg = {
                 from: result.address,
                 text: "Time elapsed!",
@@ -97,11 +129,18 @@ var dappleth = (function(){
         });
 
         eNewBet = dappContract.NewBet().watch(function (error, result) {
+            var ticket = result.args.position;
+            var player = result.args.sender;
             var msg = {
-                from: result.args.sender,
-                text: 'New Bet!',
+                from: player,
+                text: 'New Bet #' + ticket + '!',
                 date: new Date()
             };
+
+            if(player==apiApp.account()){
+                tickets.push(ticket); //store to localstorage with idmatch
+                apiBE.storeData(GUID,"tickets",{match: idMatch, tickets: tickets});
+            }
 
             apiChat.sendDappMessage(msg, GUID);  
 
@@ -109,6 +148,7 @@ var dappleth = (function(){
         });
 
         eBetRefused = dappContract.BetRefused().watch(function (error, result) {
+            var idEvent = result.arg.code;
             var msg = {
                 from: result.address,
                 text: 'Refused: ' + result.args.reason,
@@ -121,15 +161,19 @@ var dappleth = (function(){
         });
 
         eWinner = dappContract.Winner().watch(function (error, result) {
-            var amount = parseFloat((dappContract.getAmount() / 1.333) / 1.0e+15).toFixed(2);
-
+            var winnerTicket = result.args.position;
+            var winnerAddress = result.args.winner;
+            var prize = parseFloat(result.args.prize / 1.0e+15);
             var msg = {
-                from: result.args.winner,
-                text: 'I Won ' + amount + ' finney!',
+                from: winnerAddress,
+                text: 'I Won ' + prize + ' finney with ticket #' + winnerTicket + '!',
                 date: new Date()
             };
 
             apiChat.sendDappMessage(msg, GUID);  
+
+            
+            clearInterval(countdown);
 
             update();
         });
