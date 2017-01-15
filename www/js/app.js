@@ -286,6 +286,17 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
       }
     };
   })
+  .filter('strLimit', ['$filter', function($filter) {
+   return function(input, beginlimit, endlimit) {
+      if (! input) return;
+      if (input.length <= beginlimit + endlimit) {
+          return input;
+      }
+
+      return $filter('limitTo')(input, beginlimit) + '...' + $filter('limitTo')(input, -endlimit) ;
+   };
+  }])
+   /*  
   .directive('dappTemplate', ['$http','$compile', function($http,$compile){
     return {
       restrict : 'A',
@@ -301,6 +312,7 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
       }
     }
   }]) 
+ 
   .directive('appDirective', function($rootScope, Chat, AppService){
     return {
       restrict : 'A',
@@ -311,46 +323,26 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
         })        
       }
     }
-  })  
-  /*.directive('msgDirective', function(){
-  return {
-      restrict : 'A',
-      scope : true, 
-      link: function(scope, element, attrs){
-        scope.$on('dappEvent',function(){
-          console.log('caught event from dapp');
-        });  
-
-       }
-    }
-  }) */
-  .filter('strLimit', ['$filter', function($filter) {
-   return function(input, beginlimit, endlimit) {
-      if (! input) return;
-      if (input.length <= beginlimit + endlimit) {
-          return input;
-      }
-
-      return $filter('limitTo')(input, beginlimit) + '...' + $filter('limitTo')(input, -endlimit) ;
-   };
-  }])
+  }) 
   .filter('calendar', calendar);
-    function calendar () {
-      return function (time) {
-        if (! time) return;
+  function calendar () {
+    return function (time) {
+      if (! time) return;
 
-        return moment(time).calendar(null, {
-          lastDay : '[Yesterday]',
-          sameDay : 'LT',
-          lastWeek : 'dddd',
-          sameElse : 'DD/MM/YY'
-        });
-      };
-    }
+      return moment(time).calendar(null, {
+        lastDay : '[Yesterday]',
+        sameDay : 'LT',
+        lastWeek : 'dddd',
+        sameElse : 'DD/MM/YY'
+      });
+    };
+  } 
+   
   function handleOpenURL(url) {
     setTimeout(function() {
       var event = new CustomEvent('LaunchUrl', {detail: {'url': url}});
       window.dispatchEvent(event);
     }, 0);
   }
+  */
 ;

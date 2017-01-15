@@ -207,10 +207,10 @@ img#headerSetting
   border-radius: 7px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); }
   .message.message-mine {
-    //float: right;
+    float: right;
     background-color: #DCF8C6; }
   .message.message-other {
-    //float: left;
+    float: left;
     background-color: #FFF; }
   .message.message-other::before, .message.message-mine::before {
     content: "";
@@ -326,10 +326,10 @@ img#headerSetting
   border-radius: 7px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); }
   .bot.bot-mine {
-    //float: right;
+    float: right;
     background-color: #DCF8C6; }
   .bot.bot-other {
-    //float: left;
+    float: left;
     background-color: #FFF; }
   .bot.bot-other::before, .bot.bot-mine::before {
     content: "";

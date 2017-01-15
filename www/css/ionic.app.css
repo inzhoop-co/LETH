@@ -8925,7 +8925,7 @@ a.button {
   .button-bar.button-bar-inline {
     display: block;
     width: auto;
-    *zoom: 1; }
+    zoom: 1; }
     .button-bar.button-bar-inline:before, .button-bar.button-bar-inline:after {
       display: table;
       content: "";
@@ -9353,7 +9353,7 @@ a.button {
   width: 100%; }
 
 .clearfix {
-  *zoom: 1; }
+  zoom: 1; }
   .clearfix:before, .clearfix:after {
     display: table;
     content: "";

@@ -304,12 +304,13 @@ angular.module('leth.controllers', [])
     });
 
     confirmPopup.then(function(res) {
-     if(res) {
+      if(res) {
         $scope.listCoins.splice($scope.listCoins.indexOf(token),1);
         localStorage.Coins = JSON.stringify($scope.listCoins);
-     }
-
-     $ionicListDelegate.closeOptionButtons();
+      }
+    
+      $scope.readCoinsList();
+      $ionicListDelegate.closeOptionButtons();
    });
    
   }
@@ -987,10 +988,15 @@ angular.module('leth.controllers', [])
   };
 
   $scope.scrollTo = function(handle,where){
+    /*
     $timeout(function() {
       $ionicScrollDelegate.$getByHandle(handle).resize();
+    }, 1000);
+    */
+    $timeout(function() {
       $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
     }, 1000);
+
   }
 
   window.setChatFilter = function(){
@@ -1139,122 +1145,45 @@ angular.module('leth.controllers', [])
     }
   }
 
-  //deprecated
-  $scope.msgAction = function(msg){
-    if(msg.mode=="geolocation" && msg.attach){
-      var pinUrl = "https://www.google.com/maps/place/" + msg.attach.latitude + "," + msg.attach.longitude
-    
-      var options = {
-        location: 'yes',
-        clearcache: 'yes',
-        toolbar: 'yes'
-      };
-
-      document.addEventListener("deviceready", function () {
-        $cordovaInAppBrowser.open(pinUrl, '_system', options)
-          .then(function(event) {
-            // success
-          })
-          .catch(function(event) {
-            // error
-          });
-          //$cordovaInAppBrowser.close();
-      }, false);
-    }//geolocation
-
-    if(msg.mode=="payment" && msg.attach){
-        $state.go('tab.wallet', {addr: msg.attach.addr + "#" + msg.attach.idkey + "@" + msg.attach.payment}, { relative: $state.$current.view});
-    }
-
-    if(msg.mode=="token" && msg.attach){
-      console.log(msg.attach.token);
-      var msgTxt = "<h2 class='text-center'>Custom Token " + msg.attach.token.Name + " Shared! </h2>";
-      msgTxt += "<p class='text-center'><img height='100px' width='auto' src='" + msg.attach.token.Logo + "'/></p>";
-        
-      var confirmPopup = $ionicPopup.confirm({
-        title: 'Install Custom Token',
-        template: 'A new Token shared with you!<br/>Do you want to add ' + msg.attach.token.Name + '?'
-      });
-
-      confirmPopup.then(function(res) {
-        if(res) {
-          if($scope.listCoins.indexOf(msg.attach.token)==-1)
-            $scope.listCoins.push(msg.attach.token);
-          localStorage.Coins = JSON.stringify($scope.listCoins);
-         }
-      });
-
-      //$ionicLoading.show({ template: msgTxt, noBackdrop: true, duration: 5000 })
-
-      $state.go('tab.dappleths', { relative: $state.$current.view});
-    }
-
-    if(msg.mode=='plain' && msg.attach.addr && msg.attach.idkey){
-      if($scope.isFriend(msg.attach.addr) && msg.attach.addr!=AppService.account()) //go to friend
-        $state.go('tab.friend', {Friend: msg.attach.addr}, { relative: $state.$current.view});
-      else //add friend
-        $scope.addAddress(msg.attach.addr, msg.text, msg.attach.addr,msg.attach.idkey)
-    }//contact
-  }
-
-  $scope.$on('incomingMessage', function (e, r) {  
-    $scope.vibrate();   
-  
-    if(r.payload.text.length)
-      msg = r.payload.text;
-    
-    if(r.payload.image.length)
-      msg = "Image sent";
-
-    //if direct to me
-    if(r.payload.to[0] && r.payload.to.indexOf(AppService.account())!=-1){
-      //if not a friend of mine
-      if(!$scope.isFriend(r.payload.from)){
-        Friends.add(r.payload.from,r.payload.from,r.payload.senderKey,r.payload.text);
-        $scope.friends = Friends.all();
-      }
-      //if is a new message
-      if(r.payload.time > JSON.parse(localStorage.LastMsg).time){
-        Friends.increaseUnread(r.payload.from);
-        $scope.loadFriends(); 
-
-        //if($ionicHistory.currentView().stateName!="tab.friends")
-
-        if($ionicHistory.currentView().stateName=='tab.friend' && $ionicHistory.currentView().stateParams.Friend == r.payload.from)
-          ;//do nothing
-        else
-          $scope.DMCounter += 1;
-      }
-      
-      if(r.payload.mode=="transaction"){
-        Transactions.add(r.payload.attach);
-      }
-
-      if(r.payload.mode=="token"){
-        //if not exist add
-        //Coins.add(r.payload.attach);
-      }
-     
-      $scope.scrollTo('chatDMScroll','bottom');
-
-    }//broadcast
-    else{
-      if(r.payload.mode=="dappMessage"){
-        console.log(r.payload.text);
-      }
+  $scope.$on('incomingMessage', function (e, payload) {
+    if(!payload.to[0]){
+      //public msg
+      if($ionicTabsDelegate.selectedIndex()==1) 
+        $scope.scrollTo('chatScroll','bottom');
       else{
-        if($ionicTabsDelegate.selectedIndex()!=1 && r.payload.time > JSON.parse(localStorage.LastMsg).time){
+        if(payload.time > JSON.parse(localStorage.LastMsg).time){
           $scope.msgCounter += 1;
+          localStorage.LastMsg = JSON.stringify({time: payload.time, hash: payload.hash});
+        }
+      }
+      $scope.vibrate(); 
+    }
+
+    if(payload.to[0] && payload.to[0]==AppService.account()){
+      //direct to me
+      if(!$scope.isFriend(payload.from)){
+        Friends.add(payload.from,payload.from,payload.senderKey,payload.text);
+      }
+      if($ionicHistory.currentView().stateName=='tab.friend' && 
+        $ionicHistory.currentView().stateParams.Friend == payload.from)
+        $scope.scrollTo('chatDMScroll','bottom');
+      else{
+        if(payload.time > JSON.parse(localStorage.LastMsg).time){
+          $scope.DMCounter += 1;
+          Friends.increaseUnread(payload.from);
+          localStorage.LastMsg = JSON.stringify({time: payload.time, hash: payload.hash});
         }
       }
 
-      $scope.scrollTo('chatScroll','bottom');
+      if(payload.mode=="transaction")
+        Transactions.add(payload.attach);
 
+      if(payload.mode=="token")
+        //Token.add(payload.attach);
+
+      $scope.loadFriends();
+      $scope.vibrate(); 
     }
-
-    //flag time last received
-    if(r.payload.time >= JSON.parse(localStorage.LastMsg).time)
-      localStorage.LastMsg = JSON.stringify({time: r.payload.time, hash: r.hash});
 
     $scope.$digest(); 
   });
@@ -1274,20 +1203,21 @@ angular.module('leth.controllers', [])
      // Called when background mode has been activated
     cordova.plugins.backgroundMode.onactivate = function() {
       console.log('backgroundMode activated');
-      $scope.$on('incomingMessage', function (e, r) {
-        if(r.payload.text.length)
-          msg = $sce.trustAsHtml(r.payload.text);
-        if(r.payload.image.length)
+      $scope.$on('incomingMessage', function (e, payload) {
+        var msg="new message on LETH";
+        if(payload.text.length)
+          msg = $sce.trustAsHtml(payload.text);
+        if(payload.image.length)
           msg = "Image sent";
 
         var toNotify = false;
-        if(!r.payload.to[0] || (r.payload.to[0] && r.payload.to.indexOf(AppService.account())!=-1)){
+        if(!payload.to[0] || (payload.to[0] && payload.to.indexOf(AppService.account())!=-1)){
           toNotify=true;
         }
 
         //console.log('in backgroundMode:' + msg);    
         if(toNotify){
-          $scope.scheduleSingleNotification(r.payload.from,msg,r.hash);
+          $scope.scheduleSingleNotification(payload.from,msg,payload.hash);
           $scope.increaseBadge();
         }
       });
