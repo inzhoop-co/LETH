@@ -31,16 +31,21 @@ angular.module('leth.controllers', [])
 
   function keyboardShowHandler(e){
     //patch on open
+    $rootScope.hideTabs = 'tabs-item-hide';
     if($ionicHistory.currentView().stateName== "tab.chats")
       $scope.scrollTo('chatScroll','bottom');
 
     if($ionicHistory.currentView().stateName== "tab.friend")
       $scope.scrollTo('chatDMScroll','bottom');
+  }
 
-    //console.log('Keyboard height is: ' + e.keyboardHeight);
+  function keyboardHideHandler(e){
+    //patch on close
+    $rootScope.hideTabs = '';    
   }
 
   window.addEventListener('native.keyboardshow', keyboardShowHandler);     
+  window.addEventListener('native.keyboardhide', keyboardHideHandler);     
 
   window.setChatFilter = function(){
     //stop listening shh
