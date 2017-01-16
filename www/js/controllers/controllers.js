@@ -31,17 +31,30 @@ angular.module('leth.controllers', [])
 
   function keyboardShowHandler(e){
     //patch on open
-    $rootScope.hideTabs = 'tabs-item-hide';
-    if($ionicHistory.currentView().stateName== "tab.chats")
+    
+    if($ionicHistory.currentView().stateName== "tab.chats"){
       $scope.scrollTo('chatScroll','bottom');
+      //$rootScope.hideTabs = 'tabs-item-hide';
+    }
 
-    if($ionicHistory.currentView().stateName== "tab.friend")
+    if($ionicHistory.currentView().stateName== "tab.friend"){
       $scope.scrollTo('chatDMScroll','bottom');
+      //$rootScope.hideTabs = 'tabs-item-hide';
+    }
   }
 
   function keyboardHideHandler(e){
     //patch on close
-    $rootScope.hideTabs = '';    
+    if($ionicHistory.currentView().stateName== "tab.chats"){
+      $scope.scrollTo('chatScroll','bottom');
+      //$rootScope.hideTabs = '';    
+   }
+
+    if($ionicHistory.currentView().stateName== "tab.friend"){
+      $scope.scrollTo('chatDMScroll','bottom');
+      //$rootScope.hideTabs = '';    
+    }
+
   }
 
   window.addEventListener('native.keyboardshow', keyboardShowHandler);     
