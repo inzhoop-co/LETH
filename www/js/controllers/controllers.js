@@ -29,6 +29,19 @@ angular.module('leth.controllers', [])
     $timeout(function() {$ionicLoading.hide();}, 1000);
   };
 
+  function keyboardShowHandler(e){
+    //patch on open
+    if($ionicHistory.currentView().stateName== "tab.chats")
+      $scope.scrollTo('chatScroll','bottom');
+
+    if($ionicHistory.currentView().stateName== "tab.friend")
+      $scope.scrollTo('chatDMScroll','bottom');
+
+    //console.log('Keyboard height is: ' + e.keyboardHeight);
+  }
+
+  window.addEventListener('native.keyboardshow', keyboardShowHandler);     
+
   window.setChatFilter = function(){
     //stop listening shh
     Chat.unlistenMessage();
@@ -997,10 +1010,10 @@ angular.module('leth.controllers', [])
   };
 
   $scope.scrollTo = function(handle,where){
-    //$timeout(function() {
+    $timeout(function() {
       $ionicScrollDelegate.$getByHandle(handle).resize();
       $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
-    //}, 1000);
+    }, 1000);
 
   }
 

@@ -20,6 +20,7 @@
   <preference name="AndroidPersistentFileLocation" value="Internal"/>
   <preference name="iosPersistentFileLocation" value="Library"/>
   <preference name="KeyboardDisplayRequiresUserAction" value="false"/>
+  <preference name="KeyboardShrinksView" value="true" /> 
   <feature name="StatusBar">
     <param name="ios-package" onload="true" value="CDVStatusBar"/>
   </feature>
