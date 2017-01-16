@@ -14,64 +14,39 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
     url: 'dappleths'
     //url: 'https://www.inzhoop.com/dappleths'
   })
-  .run(function ($ionicPlatform, $ionicActionSheet, $rootScope, $ionicLoading, $localstorage,
+  .run(function ($ionicPlatform, $rootScope, $ionicLoading,
                 $lockScreen,$state,$window, $location) {
     $ionicPlatform.ready(function () {
-      if (typeof localStorage.LastMsg == 'undefined') {
-        localStorage.LastMsg= JSON.stringify({time:0, hash:"0x"});
-      }
-      if (typeof localStorage.Vibration == 'undefined') {
-        localStorage.Vibration="false";
-      }
-      if (typeof localStorage.BackMode == 'undefined') {
-        localStorage.BackMode="false";
-      }
-      if (typeof localStorage.PinOn == 'undefined') {
-        localStorage.PinOn="false";
-      }
-      if (typeof localStorage.TouchOn == 'undefined') {
-        localStorage.TouchOn="false";
-      }
-      if (typeof localStorage.GeoOn == 'undefined') {
-        localStorage.GeoOn="false";
-      }
-      if (typeof localStorage.Transactions == 'undefined') {
-        localStorage.Transactions = '[]';
-      }
-      if (typeof localStorage.Coins == 'undefined') {
-        localStorage.Coins = '[]';
-      }
-      if (typeof localStorage.NodeHost == 'undefined') {
-        localStorage.NodeHost = "http://wallet.inzhoop.com:8546";
-      }
-      if (typeof localStorage.HostsList == 'undefined') {
-        localStorage.HostsList=JSON.stringify([localStorage.NodeHost]);
-      }
-      if (typeof localStorage.BaseCurrency == 'undefined') {
-        localStorage.BaseCurrency = JSON.stringify({ name: 'EUR', symbol:'€', value: 'ZEUR'});
-      }      
+      //Start Settings
+      if (typeof localStorage.Vibration == 'undefined') {localStorage.Vibration="false";}
+      if (typeof localStorage.BackMode == 'undefined') {localStorage.BackMode="false";}
+      if (typeof localStorage.PinOn == 'undefined') {localStorage.PinOn="false";}
+      if (typeof localStorage.TouchOn == 'undefined') {localStorage.TouchOn="false";}
+      if (typeof localStorage.GeoOn == 'undefined') {localStorage.GeoOn="false";}
+      if (typeof localStorage.Friends == 'undefined') {localStorage.Friends = '[]';}
+      if (typeof localStorage.LastMsg == 'undefined') {localStorage.LastMsg= JSON.stringify({time:0, hash:"0x"});}
+      if (typeof localStorage.Transactions == 'undefined') {localStorage.Transactions = '[]';}
+      if (typeof localStorage.Coins == 'undefined') {localStorage.Coins = '[]';}
+      if (typeof localStorage.NodeHost == 'undefined') {localStorage.NodeHost = "http://wallet.inzhoop.com:8546";}
+      if (typeof localStorage.HostsList == 'undefined') {localStorage.HostsList=JSON.stringify([localStorage.NodeHost]);}
+      if (typeof localStorage.BaseCurrency == 'undefined') {localStorage.BaseCurrency = JSON.stringify({ name: 'EUR', symbol:'€', value: 'ZEUR'});}      
 	    if(localStorage.PinOn=="true"){
     		$lockScreen.show({
     			code: JSON.parse(localStorage.AppCode).code,
           touchId: JSON.parse(localStorage.TouchOn),
     			ACDelbuttons: true,
-    			onCorrect: function () {
-    			  //console.log('correct!');
-    			},
-    			onWrong: function (attemptNumber) {
-    			  //console.log(attemptNumber + ' wrong passcode attempt(s)');
-    			},
+    			onCorrect: function () {},
+    			onWrong: function (attemptNumber) {},
   		  });
 		  }
-
       if (typeof localStorage.AppKeys == 'undefined') {
-          console.log("wallet not found");
+          //console.log("wallet not found");
           $rootScope.hasLogged = false;
           localStorage.HasLogged = $rootScope.hasLogged;          
           $location.path('/tab/login');
         }
         else {
-          console.log("login successfully");
+          //console.log("login successfully");
           $rootScope.hasLogged = true;  
           localStorage.HasLogged = $rootScope.hasLogged;
           $location.path('/tab/dappleths');
@@ -89,7 +64,6 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
       $rootScope.$on('loading:show', function () {
         $ionicLoading.show({template: 'Loading...'})
       })
-
       $rootScope.$on('loading:hide', function () {
         $ionicLoading.hide()
       })
@@ -257,16 +231,14 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
     // definitions are no longer valid, we can just 
     // override them to use the providers for post-
     // bootstrap loading.
-    console.log( "Config method executed." );
+    //console.log( "Config method executed." );
 
     // Let's keep the older references.
     app._controller = app.controller;
     // Provider-based controller.
     app.controller = function( name, constructor ) {
-
       $controllerProvider.register( name, constructor );
       return( this );
-
     };
   })
   .directive('hideTabs', function($rootScope) {
@@ -296,7 +268,8 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
       return $filter('limitTo')(input, beginlimit) + '...' + $filter('limitTo')(input, -endlimit) ;
    };
   }])
-   /*  
+  ;
+   /*  to delete
   .directive('dappTemplate', ['$http','$compile', function($http,$compile){
     return {
       restrict : 'A',
@@ -345,4 +318,3 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
     }, 0);
   }
   */
-;

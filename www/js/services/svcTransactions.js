@@ -4,7 +4,7 @@ angular.module('leth.services')
 
   return {
     all: function () {
-      if (localStorage.Transactions != undefined) {
+      if (localStorage.Transactions != undefined && localStorage.Transactions[0] !="{") {
         transactions = JSON.parse(localStorage.Transactions);
       } else {
         transactions = [];
@@ -13,7 +13,7 @@ angular.module('leth.services')
       return transactions;
     },
     delAll: function () {
-      transactions.length=0;
+      transactions=[];
       localStorage.Transactions = JSON.stringify(transactions);
     },
     add: function (t) {

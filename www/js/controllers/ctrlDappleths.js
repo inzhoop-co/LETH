@@ -9,7 +9,8 @@ angular.module('leth.controllers')
     };
 
     refresh();
-
+    
+    /*
     $scope.cardSwiped = function(index) {
       $scope.addCard();
     };
@@ -57,6 +58,7 @@ angular.module('leth.controllers')
          
       }, 2000);
     }
+    */
 
     $scope.installCoin = function(coin) {
       coin.Progress = true;
@@ -100,12 +102,13 @@ angular.module('leth.controllers')
     var id = $stateParams.Id;
     $scope.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
 
-    $scope.$on("$ionicView.beforeEnter", function () {
+    $scope.$on("$ionicView.enter", function () {
       $ionicHistory.clearCache();
+      $scope.scrollTo('chatScroll','bottom');
+      $scope.$digest(); 
     });
 
     $scope.$on("$ionicView.afterEnter", function () {
-
       $http.get(StoreEndpoint.url + $scope.activeApp.InstallUrl) 
         .success(function(data){
           $ionicLoading.show(); 
@@ -139,7 +142,6 @@ angular.module('leth.controllers')
 
       angularLoad.resetScript($scope.activeApp.ScriptUrl, "js");
       removejscssfile($scope.activeApp.ScriptUrl, "js"); 
-      //dappContract={};
     });
 
     /*
@@ -152,7 +154,6 @@ angular.module('leth.controllers')
     
     $scope.refresh = function() {
       dappleth.update();
-      //update(guid); //defined in external js
       $scope.$broadcast('scroll.refreshComplete');
     }
 

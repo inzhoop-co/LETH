@@ -14,7 +14,7 @@
     </ion-slide-box>
     <div class="button-bar padding">
       <!--button class="{{filterFeed}}" ng-click="readFeedsList()">News </button-->
-      <button class="{{filterStoreCoins}}" ng-click="readCoinsList()">Coins</button>
+      <button class="{{filterStoreCoins}}" ng-click="readCoinsList()">Tokens</button>
       <button class="{{filterStoreApps}}" ng-click="readDappsList()">ÐAppleths</button>
     </div>
     <ion-list ng-show="isDapp">
@@ -73,7 +73,7 @@
         </ion-option-button>
       </ion-item> 
       </ion-list> 
-      -->      
+        
       <swipe-cards ng-show="isFeed">
         <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)">
           <div class="card" >        
@@ -104,7 +104,7 @@
           </div>
         </swipe-card>
       </swipe-cards>
-    
+     -->   
     <div ng-bind-html="appContainer">
     </div>
     </ion-content>

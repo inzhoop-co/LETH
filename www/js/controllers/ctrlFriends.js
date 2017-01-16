@@ -3,7 +3,6 @@ angular.module('leth.controllers')
     
      $scope.$on('$ionicView.enter', function() {
       $scope.loadFriends();
-
       $scope.cancelDMNotifications();
       $scope.clearBadge();
       $scope.$digest(); 
@@ -40,19 +39,15 @@ angular.module('leth.controllers')
       $scope.cancelDMNotifications();
       Friends.clearUnread($scope.friend.addr);
       $scope.clearBadge();
+      $scope.scrollTo('chatDMScroll','bottom');
       $scope.$digest(); 
     })
 
     $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
-        $scope.showTabs(false);
-        
         viewData.enableBack = true;
-        //if($ionicHistory.currentTitle()==undefined || $ionicHistory.currentTitle()!="Friends")
-          
     });
 
     $scope.$on('$ionicView.beforeLeave', function(event, viewData) {
-      $scope.showTabs(true);
       $ionicHistory.clearHistory();
     })
 

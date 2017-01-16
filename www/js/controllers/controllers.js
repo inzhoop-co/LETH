@@ -8,7 +8,6 @@ angular.module('leth.controllers', [])
   
   window.refresh = function () {
     $ionicLoading.show();
-    $scope.showTabs(true);
     if($scope.idCoin==0 || $scope.idCoin==undefined)    
       $scope.balance = AppService.balance($scope.unit);
     else
@@ -30,9 +29,12 @@ angular.module('leth.controllers', [])
     $timeout(function() {$ionicLoading.hide();}, 1000);
   };
 
-  $scope.showTabs = function(val) {
-    $scope.showBar = val;
-  };
+  window.setChatFilter = function(){
+    //stop listening shh
+    Chat.unlistenMessage();
+    //start listening message shh
+    Chat.listenMessage($scope);
+  }
 
   $scope.loadFriends = function(){
     $scope.friends = Friends.all();
@@ -92,13 +94,15 @@ angular.module('leth.controllers', [])
   }
 
   var getSync = function(){
-    try {
-      if(web3.eth.syncing)
-        $scope.syncStatus = "icon ion-eye-disabled light";
-      else
-        $scope.syncStatus = "icon ion-eye calm";
+    if(!web3.currentProvider) return;
 
-      $scope.lastBlock = web3.eth.blockNumber;
+    try {    
+        if(web3.eth.syncing)
+          $scope.syncStatus = "icon ion-eye-disabled light";
+        else
+          $scope.syncStatus = "icon ion-eye calm";
+
+        $scope.lastBlock = web3.eth.blockNumber;
     } catch (err) {
       var alertPopup = $ionicPopup.show({
         title: 'Error',
@@ -540,9 +544,11 @@ angular.module('leth.controllers', [])
         var msg = 'new user added';
         Chat.sendMessage(msg);
 
-        $state.go('tab.dappleths');
+        refresh();
 
-        $timeout(function() {$ionicLoading.hide();}, 1000);
+        $state.go('tab.dappleths');
+        //$location.path('/tab/dappleths');
+        //$timeout(function() {$ionicLoading.hide();}, 1000);
       });
     }
   };
@@ -932,6 +938,9 @@ angular.module('leth.controllers', [])
     AppService.setWeb3Provider(global_keystore);
     $scope.qrcodeString = AppService.account();
 
+  setChatFilter();
+
+
   }else{
     createEntropyModal();
   }
@@ -988,25 +997,12 @@ angular.module('leth.controllers', [])
   };
 
   $scope.scrollTo = function(handle,where){
-    /*
-    $timeout(function() {
+    //$timeout(function() {
       $ionicScrollDelegate.$getByHandle(handle).resize();
-    }, 1000);
-    */
-    $timeout(function() {
       $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
-    }, 1000);
+    //}, 1000);
 
   }
-
-  window.setChatFilter = function(){
-    //stop listening shh
-    Chat.unlistenMessage();
-    //start listening message shh
-    Chat.listenMessage($scope);
-  }
-
-  setChatFilter();
 
   $scope.chooseAction = function(msg){
     var buttonsOpt= [{ text: '<i class="icon ion-ios-copy-outline"></i> Copy message', index: 1 }];

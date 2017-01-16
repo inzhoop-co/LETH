@@ -8,6 +8,8 @@ angular.module('leth.controllers')
 
       $scope.cancelAllNotifications();
       $scope.clearBadge();
+      $scope.scrollTo('chatScroll','bottom');
+
       $scope.$digest(); 
     })
 
