@@ -547,6 +547,12 @@ angular.module('leth.services')
     unlistenMessage: function(){
       if(filter!=null)
         filter.stopWatching();
-    }
+    },
+    flush: function(){
+      chats=[];
+      chatsDM=[];
+      chatsDAPP=[];
+    },
+
   }
 })

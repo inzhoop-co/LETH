@@ -1,54 +1,89 @@
-/*
-	API available
-	apiApp
-	apiChat
-	apiFriends
+var dappleth = (function(){ 
+	var GUID;
+	var dappContract;
+	var btnLeft;
+	var btnCenter;
 
-*/
+	 function init(id,ABI,Address){
+		console.log("init " + id);
+		GUID=id;
+        dappContract=Address;
 
-function init_T03()
-{	
-	//define center button
-	var btnCenter = angular.element(document.querySelector('#centerButton'));
-	btnCenter.html(' Results!');
-	btnCenter.attr('class','button button-smal button-icon icon ion-ios-list-outliney');
-	btnCenter.attr('onclick','results()');
+		btnCenter = angular.element(document.querySelector('#centerButton'));
+	}
 
-	//define left button
-	
-	var btnLeft = angular.element(document.querySelector('#leftButton'));
-	btnLeft.html(' Agree');
-	btnLeft.attr('class','button button-smal button-icon icon ion-play');
-	btnLeft.attr('onclick','agree()');
-	
-	var btnRight = angular.element(document.querySelector('#rightButton'));
-	btnRight.html(' Disagree');
-	btnRight.attr('class','button button-smal button-icon icon ion-play');
-	btnRight.attr('onclick','disagree()');
-	
-}
+	function setup(){
+		btnCenter.html(' Pay me!');
+		btnCenter.attr('class','button button-smal button-icon icon ion-play');
+		btnCenter.attr('onclick','dappleth.apply()');
+		
+		var balance = web3.fromWei(web3.eth.getBalance(dappContract)).toFixed(6);
+        angular.element(document.querySelector('#faucet')).html(balance);
 
-function update_T03()
-{
-   alert('updateData!');
-}
+	}
 
-function disagree()
-{
-    alert('disagree!');
-}
+	function update(){
+		console.log("update");
+		apiUI.loadFade("loading...",2000);
+	}
 
-function agree()
-{
-    alert('agree!');
-}
+	function destroy(){
+		console.log("destroy");
+		dappContract={};
+	}
 
-// Play main function of a simlpe contract
-function results()
-{
-    var m = "Addr <br/>" +  dappContract.address + "<br/>"
-    angular.element(document.querySelector('#status')).html(m);
-    
-    var e = new CustomEvent('dappMessage', { "detail": m});
-    document.body.dispatchEvent(e);
-}
+	function run(id,ABI,Address){
+        init(id,ABI,Address);
+		setup();
+		update();
+	}
+
+	function httpGetAsync(theUrl, callback)
+	{
+	    var xmlHttp = new XMLHttpRequest();
+	    xmlHttp.onreadystatechange = function() { 
+	        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+	            callback(xmlHttp.responseText);
+	    }
+	    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+	    xmlHttp.send(null);
+	}
+
+	function apply(){
+		var myAddr = apiApp.account();
+		var callFaucet = "http://faucet.ropsten.be:3001/donate/" + myAddr;
+
+		var m1 = {
+			from: apiApp.account(),
+		    text: "Requesting payment at " +  dappContract + "...",
+		    date: new Date()
+		};
+      	apiChat.sendDappMessage(m1, GUID);  
+		
+		httpGetAsync(callFaucet, function(r){
+			var result = JSON.parse(r)
+			var msg = result.message;
+			if(!result.message)
+				msg="We put your address " + myAddr + " in queue!<br/> You'll receive " + r.amount +  " Eth";
+
+	    	var m2 = { 
+				from: dappContract,
+			    text: msg,
+			    date: r.paydate
+			};
+
+	      	apiChat.sendDappMessage(m2, GUID);  
+		})
+		
+		update();
+      	
+	}
+
+	return {
+	    update: update,
+	    run: run,
+	    destroy: destroy,
+	    apply: apply
+	};
+
+})();

@@ -27,8 +27,12 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
       if (typeof localStorage.LastMsg == 'undefined') {localStorage.LastMsg= JSON.stringify({time:0, hash:"0x"});}
       if (typeof localStorage.Transactions == 'undefined') {localStorage.Transactions = '[]';}
       if (typeof localStorage.Coins == 'undefined') {localStorage.Coins = '[]';}
-      if (typeof localStorage.NodeHost == 'undefined') {localStorage.NodeHost = "http://wallet.inzhoop.com:8546";}
-      if (typeof localStorage.HostsList == 'undefined') {localStorage.HostsList=JSON.stringify([localStorage.NodeHost]);}
+      if (typeof localStorage.NodeHost == 'undefined') {
+        localStorage.NodeHost = "http://wallet.inzhoop.com:8546";
+      }
+      if (typeof localStorage.HostsList == 'undefined') {
+        localStorage.HostsList=JSON.stringify(["http://wallet.inzhoop.com:8546","http://wallet.inzhoop.com:8545"]);
+      }
       if (typeof localStorage.BaseCurrency == 'undefined') {localStorage.BaseCurrency = JSON.stringify({ name: 'EUR', symbol:'€', value: 'ZEUR'});}      
 	    if(localStorage.PinOn=="true"){
     		$lockScreen.show({

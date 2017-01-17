@@ -28,13 +28,13 @@
 		},
 		{
 			"GUID" : "T03",
-			"Name" : "Faucet",
+			"Name" : "Stake Voice",
 			"Network" : "Ropsten",
-			"Company" : "Locals Wolrd",
-			"Address" : "0x687422eea2cb73b5d3e242ba5456b782919afc85",
-			"ABI" : [{}],
-			"Logo" : "https://avatars1.githubusercontent.com/u/17782182?v=3&s=200",
-			"Description" : "Locals Faucet for Ropsten",
+			"Company" : "Ethereum fundation",
+			"Address" : "0x47ab800a75990b0bd5bb4a54cfbec777972c973c",
+			"ABI" : [{"constant":false,"inputs":[{"name":"proposalHash","type":"bytes32"},{"name":"pro","type":"bool"}],"name":"vote","outputs":[],"type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"proposalHash","type":"bytes32"},{"indexed":false,"name":"pro","type":"bool"},{"indexed":false,"name":"addr","type":"address"}],"name":"LogVote","type":"event"}],
+			"Logo" : "https://raw.githubusercontent.com/ethereum/stake-voice/master/icon.png",
+			"Description" : "Stake Voice",
 			"InstallUrl" : "/dapp_3/index.html",
 			"TemplateUrl" : "/dapp_3/index.html",
 			"ScriptUrl" : "/dapp_3/index.js"
@@ -57,34 +57,34 @@
 			"Units":[{"multiplier": "1", "unitName": "Coins"}]
 		},
 		{
-  			"Name" : "Augur",
-  			"GUID" : "M01",
-  			"Network" : "Mainet", 
- 			"Company" : "Augur",
-  			"Logo" : "https://etherscan.io/token/images/augur.png",
-  			"Symbol" : "REP",
+			"Name" : "The Dao",
+			"GUID" : "M01",
+			"Network" : "Mainet", 
+			"Company" : "DAO",
+			"Logo" : "https://forum.daohub.org/uploads/default/optimized/1X/085b28de41ab2441812d9d38b0e834e8c02b8569_1_690x168.png",
+			"Symbol" : "Ð",
 			"Decimals" : "6",
-  			"Abstract" : "Prediction market Augur token",
- 			"Address" : "0x48c80F1f4D53D5951e5D5438B54Cba84f29F32a5",
- 			"ABI" : [{"name":"allowance","type":"function","constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"outputs":[{"name":"out","type":"uint256"}]},{"name":"approve","type":"function","constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"amount","type":"uint256"}],"outputs":[{"name":"out","type":"uint256"}]},{"name":"balanceOf","type":"function","constant":true,"inputs":[{"name":"address","type":"address"}],"outputs":[{"name":"out","type":"uint256"}]},{"name":"decimals","type":"function","constant":true,"inputs":[],"outputs":[{"name":"out","type":"uint256"}]},{"name":"getSeeded","type":"function","constant":true,"inputs":[],"outputs":[{"name":"out","type":"uint256"}]},{"name":"name","type":"function","constant":true,"inputs":[],"outputs":[{"name":"out","type":"uint256"}]},{"name":"setSaleDistribution","type":"function","constant":false,"inputs":[{"name":"addresses","type":"address[]"},{"name":"balances","type":"uint256[]"}],"outputs":[{"name":"out","type":"uint256"}]},{"name":"symbol","type":"function","constant":true,"inputs":[],"outputs":[{"name":"out","type":"uint256"}]},{"name":"totalSupply","type":"function","constant":true,"inputs":[],"outputs":[{"name":"out","type":"uint256"}]},{"name":"transfer","type":"function","constant":false,"inputs":[{"name":"receiver","type":"address"},{"name":"fxpValue","type":"uint256"}],"outputs":[{"name":"out","type":"uint256"}]},{"name":"transferFrom","type":"function","constant":false,"inputs":[{"name":"from","type":"address"},{"name":"receiver","type":"address"},{"name":"fxpValue","type":"uint256"}],"outputs":[{"name":"out","type":"uint256"}]},{"name":"Approval(address,address,uint256)","type":"event","inputs":[{"name":"owner","type":"address","indexed":true},{"name":"spender","type":"address","indexed":true},{"name":"fxpValue","type":"uint256","indexed":false}]},{"name":"Transfer(address,address,uint256)","type":"event","inputs":[{"name":"from","type":"address","indexed":true},{"name":"to","type":"address","indexed":true},{"name":"value","type":"uint256","indexed":false}]}],
- 			"Send" : "transfer",
- 			"Eevents" : [{"Transfer":"address indexed from, address indexed to, uint256 value"},{"FrozenFunds" : "address target, bool frozen"}],
- 			"Units":[{"multiplier": "1", "unitName": "Coins"}]
- 		},
- 		{
-  			"Name" : "SingularDTV",
-  			"GUID" : "M02",
-  			"Network" : "Mainet", 
- 			"Company" : "SingularDTV",
-  			"Logo" : "https://etherscan.io/token/images/sngls2.PNG",
-  			"Symbol" : "SNGLS",
+			"Abstract" : "DAOHUB Token",
+			"Address" : "0xbb9bc244d798123fde783fcc1c72d3bb8c189413",
+			"ABI" : [{"type":"function","outputs":[{"type":"uint256","name":""}],"name":"minTokensToCreate","inputs":[],"constant":true},{"type":"function","outputs":[{"type":"uint256","name":""}],"name":"totalSupply","inputs":[],"constant":true},{"type":"function","outputs":[{"type":"uint256","name":""}],"name":"closingTime","inputs":[],"constant":true},{"type":"function","outputs":[],"name":"refund","inputs":[],"constant":false},{"type":"function","outputs":[{"type":"address","name":""}],"name":"curator","inputs":[],"constant":true},{"type":"function","outputs":[{"type":"uint256","name":"balance"}],"name":"balanceOf","inputs":[{"type":"address","name":"_owner"}],"constant":true},{"type":"function","outputs":[{"type":"uint256","name":"_numberOfProposals"}],"name":"numberOfProposals","inputs":[],"constant":true},{"type":"function","outputs":[{"type":"address","name":""}],"name":"extraBalance","inputs":[],"constant":true},{"type":"function","outputs":[{"type":"bool","name":""}],"name":"isFueled","inputs":[],"constant":true},{"type":"function","outputs":[{"type":"bool","name":"success"}],"name":"createTokenProxy","inputs":[{"type":"address","name":"_tokenHolder"}],"constant":false},{"type":"function","outputs":[{"type":"uint256","name":"_voteID"}],"name":"vote","inputs":[{"type":"uint256","name":"_proposalID"},{"type":"bool","name":"_supportsProposal"}],"constant":false},{"type":"event","name":"FuelingToDate","inputs":[{"type":"uint256","name":"value","indexed":false}],"anonymous":false},{"type":"event","name":"ProposalAdded","inputs":[{"type":"uint256","name":"proposalID","indexed":true},{"type":"address","name":"recipient","indexed":false},{"type":"uint256","name":"amount","indexed":false},{"type":"bool","name":"newCurator","indexed":false},{"type":"string","name":"description","indexed":false}],"anonymous":false},{"type":"event","name":"ProposalTallied","inputs":[{"type":"uint256","name":"proposalID","indexed":true},{"type":"bool","name":"result","indexed":false},{"type":"uint256","name":"quorum","indexed":false}],"anonymous":false}],
+			"Send" : "vote",
+			"Events" : [],
+			"Units":[{"multiplier": "1", "unitName": "Token"}]
+		},
+		{
+			"Name" : "Golem",
+			"GUID" : "M02",
+			"Network" : "Mainet", 
+			"Company" : "Golem Network",
+			"Logo" : "https://golem.network/img/golem-letter-blue.png",
+			"Symbol" : "GTN",
 			"Decimals" : "6",
-  			"Abstract" : "SingularDTV token",
- 			"Address" : "0xaeC2E87E0A235266D9C5ADc9DEb4b2E29b54D009",
- 			"ABI" : [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"from","type":"address"},{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":false,"inputs":[{"name":"_for","type":"address"},{"name":"tokenCount","type":"uint256"}],"name":"issueTokens","outputs":[{"name":"","type":"bool"}],"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"remaining","type":"uint256"}],"type":"function"},{"inputs":[],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"}],
- 			"Send" : "transfer",
- 			"Eevents" : [{"Transfer":"address indexed from, address indexed to, uint256 value"},{"FrozenFunds" : "address target, bool frozen"}],
- 			"Units":[{"multiplier": "1", "unitName": "Coins"}]
- 		}					
+			"Abstract" : "Golem Token",
+			"Address" : "0xa74476443119A942dE498590Fe1f2454d7D4aC0d",
+			"ABI" : [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"golemFactory","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_master","type":"address"}],"name":"setMigrationMaster","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"migrate","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"finalize","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"refund","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"migrationMaster","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"tokenCreationCap","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_agent","type":"address"}],"name":"setMigrationAgent","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"migrationAgent","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"fundingEndBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"totalMigrated","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"tokenCreationMin","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"funding","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"tokenCreationRate","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"fundingStartBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"create","outputs":[],"payable":true,"type":"function"},{"inputs":[{"name":"_golemFactory","type":"address"},{"name":"_migrationMaster","type":"address"},{"name":"_fundingStartBlock","type":"uint256"},{"name":"_fundingEndBlock","type":"uint256"}],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Migrate","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Refund","type":"event"}],
+			"Send" : "transfer",
+			"Events" : [],
+			"Units":[{"multiplier": "1", "unitName": "GTN"}]
+		}				
 	]
 }

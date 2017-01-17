@@ -139,7 +139,8 @@ angular.module('leth.controllers')
   			  $scope.hostsList.push(addr);
   			  localStorage.HostsList=JSON.stringify($scope.hostsList);
   		  }
-        $scope.editableHost = false;      
+        $scope.editableHost = false;  
+        setChatFilter();    
         refresh();
         console.log('provider host update to: ' + addr);
       } else {

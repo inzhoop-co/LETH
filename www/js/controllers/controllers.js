@@ -53,6 +53,8 @@ angular.module('leth.controllers', [])
   window.setChatFilter = function(){
     //stop listening shh
     Chat.unlistenMessage();
+    //Flush chat messages
+    Chat.flush();
     //start listening message shh
     Chat.listenMessage($scope);
   }
