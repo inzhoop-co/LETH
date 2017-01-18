@@ -8,7 +8,7 @@ angular.module('leth.controllers', [])
   
   window.refresh = function () {
     $ionicLoading.show();
-    if($scope.idCoin==0 || $scope.idCoin==undefined)    
+    if($scope.idCoin==0 || $scope.idCoin==undefined)  //buggy from wallet refresh  
       $scope.balance = AppService.balance($scope.unit);
     else
       $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.decimals);
