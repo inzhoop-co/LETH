@@ -43,4 +43,4 @@ angular.module('leth.services')
       return navigator.geolocation.clearWatch(watchID);
     }
   };
-}]);
+}])

@@ -4,7 +4,7 @@ angular.module('leth.controllers', [])
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
                                 $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,
                                 $cordovaBadge,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, $cordovaVibration,
-                                AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService) {
+                                AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService, nfcService) {
   
   window.refresh = function () {
     $ionicLoading.show();
