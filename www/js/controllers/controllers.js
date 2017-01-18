@@ -23,7 +23,7 @@ angular.module('leth.controllers', [])
     $scope.loadFriends();
     $scope.transactions = Transactions.all();
     localStorage.Transactions = JSON.stringify($scope.transactions);
-    $scope.nfcAvailable = isNfcAvailable();
+    isNfcAvailable();
     $scope.readDappsList();
     $scope.readCoinsList();
     //$scope.readFeedsList();
@@ -378,13 +378,31 @@ angular.module('leth.controllers', [])
   var isNfcAvailable = function(){
     document.addEventListener("deviceready", function () {
       nfc.enabled(function(){
-        return true;
+        $scope.nfcAvailable = true;
       },function(e){
+        var ermsg;
         if(e === "NO_NFC")
-          return false;
-        if(e === "NO_DISABLED")
-          //not available
-          return true;      
+          $scope.nfcAvailable = false;
+        if(e === "NO_DISABLED"){
+          ermsg='Not enabled on Device!'
+        } else{
+          ermsg = e;
+          $scope.nfcAvailable = false;        
+        }
+        if(!ermsg){   
+          var alertPopup = $ionicPopup.show({
+            title: 'NFC Error',
+            template: ermsg   
+          });
+
+          alertPopup.then(function(res) {
+             alertPopup.close();
+          });
+
+          $timeout(function() {
+             alertPopup.close(); 
+          }, 3000);
+        }
       })
     }, false);
     
