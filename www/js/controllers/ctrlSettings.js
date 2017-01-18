@@ -10,6 +10,7 @@ angular.module('leth.controllers')
   $scope.geo = { checked: (localStorage.GeoOn=="true") };
   $scope.backmode = { checked: (localStorage.BackMode=="true") };
   $scope.vibration = { checked: (localStorage.Vibration=="true") };
+  $scope.nfc = { checked: (localStorage.NfcOn=="true") };
   $scope.baseCurrency = JSON.parse(localStorage.BaseCurrency);
 
   $scope.setIndexHost = function(index){    
@@ -49,6 +50,11 @@ angular.module('leth.controllers')
   var setTouchID = function(value){
     localStorage.TouchOn = value? "true":"false";
     $scope.touch = { checked: value};
+  };
+
+  var setNFC = function(value){
+    localStorage.NfcOn = value? "true":"false";
+    $scope.nfc = { checked: value};
   };
 
   var setGeo = function(value){
@@ -101,6 +107,10 @@ angular.module('leth.controllers')
 	$scope.$watch('pin.checked',function(value) {
 		setPin(value);
 	});
+
+  $scope.$watch('nfc.checked',function(value) {
+    setNFC(value);
+  });
 
   $scope.$watch('touch.checked',function(value) {
     setTouchID(value);

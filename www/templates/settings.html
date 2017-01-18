@@ -72,6 +72,10 @@
 		<ion-toggle  ng-model="vibration.checked" ng-checked="vibration.checked">
 			Vibrate notification 
 		</ion-toggle>
+		<div class="padding subdued" ng-if="nfcAvailable">Communication</div>
+	    <ion-toggle  ng-model="nfc.checked" ng-checked="nfc.checked" ng-if="nfcAvailable">
+			NFC sensor
+		</ion-toggle>
 		<div class="padding subdued">Geolocation</div>
 	    <ion-toggle  ng-model="geo.checked" ng-checked="geo.checked">
 			{{lat}} {{long}}

@@ -23,6 +23,7 @@ angular.module('leth.controllers', [])
     $scope.loadFriends();
     $scope.transactions = Transactions.all();
     localStorage.Transactions = JSON.stringify($scope.transactions);
+    $scope.nfcAvailable = isNfcAvailable();
     $scope.readDappsList();
     $scope.readCoinsList();
     //$scope.readFeedsList();
@@ -50,6 +51,7 @@ angular.module('leth.controllers', [])
   window.addEventListener('native.keyboardshow', keyboardShowHandler);     
   //window.addEventListener('native.keyboardhide', keyboardHideHandler);     
 
+  
   var flushChats = function(){
     //Flush chat messages
     Chat.flush();
@@ -57,6 +59,7 @@ angular.module('leth.controllers', [])
     $scope.DAPPchats = Chat.findDAPP(); 
     $scope.chats = Chat.find();
   }
+
   window.setChatFilter = function(){
     //stop listening shh
     Chat.unlistenMessage();
@@ -371,6 +374,23 @@ angular.module('leth.controllers', [])
 
     return true;
   };
+
+  var isNfcAvailable = function(){
+    document.addEventListener("deviceready", function () {
+      nfc.enabled(function(){
+        return true;
+      },function(e){
+        if(e === "NO_NFC")
+          return false;
+        if(e === "NO_DISABLED")
+          //not available
+          return true;      
+      })
+    }, false);
+    
+    return false;
+  };
+  
 
   $scope.scanTo = function () {
     document.addEventListener("deviceready", function () {      

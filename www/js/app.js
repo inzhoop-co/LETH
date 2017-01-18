@@ -1,14 +1,14 @@
 web3 = new Web3();
 hdPath = "m/44'/60'/0";
 
-var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
+var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('$ionicLoadingConfig', {
     template: 'Loading...'
   })
   .constant('FeedEndpoint', {
-    //url: 'http://localhost:8100/feed'
     url: 'https://blog.ethereum.org/feed'
     //url: 'http://us11.campaign-archive1.com/feed'
+    //url: 'http://localhost:8100/feed'
   })
   .constant('StoreEndpoint', {
     url: 'dappleths'
@@ -18,6 +18,7 @@ var app = angular.module('leth', ['ionic', 'ngTagsInput', 'angularLoad','ionic.c
                 $lockScreen,$state,$window, $location) {
     $ionicPlatform.ready(function () {
       //Start Settings
+      if (typeof localStorage.NfcOn == 'undefined') {localStorage.NfcOn="false";}
       if (typeof localStorage.Vibration == 'undefined') {localStorage.Vibration="false";}
       if (typeof localStorage.BackMode == 'undefined') {localStorage.BackMode="false";}
       if (typeof localStorage.PinOn == 'undefined') {localStorage.PinOn="false";}

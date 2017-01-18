@@ -62,7 +62,7 @@ var dappleth = (function(){
 		
 		httpGetAsync(callFaucet, function(r){
 			var result = JSON.parse(r)
-			var amount = web3.fromWei(result.amount.toNumber()).toFixed(6);
+			var amount = parseFloat(web3.fromWei(result.amount)).toFixed(6);
 			var msg = result.message;
 			if(!result.message)
 				msg="We put your address " + myAddr + " in queue!<br/> You'll receive " + amount +  " Eth";
