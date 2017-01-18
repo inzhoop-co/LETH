@@ -22,7 +22,7 @@ var dappleth = (function(){
 		document.addEventListener("deviceready", function () {
 		    nfc.addNdefListener(function(nfcEvent) {
 		        console.log(nfcEvent.tag);
-		        var eventMsg = "TagId: " + nfc.bytesToHexStrig(nfcEvent.tag.id);
+		        var eventMsg = "TagId: " + nfc.bytesToHexString(nfcEvent.tag.id);
 		        apiChat.sendDappMessage(eventMsg, GUID);
 		    }, function () {
 		        console.log("Listening for NDEF Tags.");
@@ -50,7 +50,7 @@ var dappleth = (function(){
 
 	function test(){
 		console.log("greet");
-		var m1 = nfc.bytesToHexStrig(apiNFC.tagNFC.id);
+		var m1 = nfc.bytesToHexString(apiNFC.tagNFC.id);
       	apiChat.sendDappMessage(m1, GUID);  
 
 		update();
