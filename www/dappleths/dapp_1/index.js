@@ -9,6 +9,8 @@ var dappleth = (function(){
 		GUID=id;
         dappContract = web3.eth.contract(ABI).at(Address);
 
+
+
 		btnCenter = angular.element(document.querySelector('#centerButton'));
 	}
 
@@ -22,6 +24,9 @@ var dappleth = (function(){
 	function update(){
 		console.log("update");
 		apiUI.loadFade("loading...",2000);
+
+		console.log(apiNFC.tagNFC);
+
 	}
 
 	function destroy(){
