@@ -64,7 +64,7 @@ var dappleth = (function(){
 			var result = JSON.parse(r)
 			var msg = result.message;
 			if(!result.message)
-				msg="We put your address " + myAddr + " in queue!<br/> You'll receive " + r.amount +  " Eth";
+				msg="We put your address " + myAddr + " in queue!<br/> You'll receive " + result.amount +  " Eth";
 
 	    	var m2 = { 
 				from: dappContract,
