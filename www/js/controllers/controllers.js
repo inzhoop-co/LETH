@@ -50,11 +50,18 @@ angular.module('leth.controllers', [])
   window.addEventListener('native.keyboardshow', keyboardShowHandler);     
   //window.addEventListener('native.keyboardhide', keyboardHideHandler);     
 
+  var flushChats = function(){
+    //Flush chat messages
+    Chat.flush();
+    $scope.DMchats = Chat.findDM(); 
+    $scope.DAPPchats = Chat.findDAPP(); 
+    $scope.chats = Chat.find();
+  }
   window.setChatFilter = function(){
     //stop listening shh
     Chat.unlistenMessage();
     //Flush chat messages
-    Chat.flush();
+    flushChats();
     //start listening message shh
     Chat.listenMessage($scope);
   }
