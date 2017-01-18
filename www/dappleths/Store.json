@@ -38,6 +38,19 @@
 			"InstallUrl" : "/dapp_3/index.html",
 			"TemplateUrl" : "/dapp_3/index.html",
 			"ScriptUrl" : "/dapp_3/index.js"
+		},
+		{
+			"GUID" : "T04",
+			"Name" : "NFC for IoT",
+			"Network" : "Ropsten",
+			"Company" : "Inzhoop",
+			"Address" : "0x",
+			"ABI" : [{}],
+			"Logo" : "https://www.inzhoop.com/dappleths/dapp_1/logo.png",
+			"Description" : "NFC dappleths",
+			"InstallUrl" : "/dapp_4/index.html",
+			"TemplateUrl" : "/dapp_4/index.html",
+			"ScriptUrl" : "/dapp_4/index.js"
 		}		
 	],
 	"coins":[

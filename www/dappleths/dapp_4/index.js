@@ -10,14 +10,26 @@ var dappleth = (function(){
         dappContract = web3.eth.contract(ABI).at(Address);
 
 		btnCenter = angular.element(document.querySelector('#centerButton'));
-
+	
 	}
 
 	function setup(){
 		console.log("setup");
-		btnCenter.html(' Test me!');
+		btnCenter.html(' Show Tag!');
 		btnCenter.attr('class','button button-smal button-icon icon ion-play');
-		btnCenter.attr('onclick','dappleth.greet()');
+		btnCenter.attr('onclick','dappleth.test()');
+
+		document.addEventListener("deviceready", function () {
+		    nfc.addNdefListener(function(nfcEvent) {
+		        console.log(nfcEvent.tag);
+		        var eventMsg = "TagId: " + nfc.bytesToHexStrig(nfcEvent.tag.id);
+		        apiChat.sendDappMessage(eventMsg, GUID);
+		    }, function () {
+		        console.log("Listening for NDEF Tags.");
+		    }, function (reason) {
+		        console.log("Error adding NFC Listener " + reason);
+		    });
+		}, false)
 	}
 
 	function update(){
@@ -36,24 +48,10 @@ var dappleth = (function(){
 		update();
 	}
 
-	function greet(){
+	function test(){
 		console.log("greet");
-
-		var m1 = {
-			from: dappContract.address,
-		    text: "Calling contract at " +  dappContract.address + "...",
-		    date: new Date()
-		};
-
+		var m1 = nfc.bytesToHexStrig(apiNFC.tagNFC.id);
       	apiChat.sendDappMessage(m1, GUID);  
-
-    	var m2 = { 
-			from: dappContract.address,
-		    text: "Response is <br/>" + dappContract.greet(),
-		    date: new Date()
-		};
-
-      	apiChat.sendDappMessage(m2, GUID);  
 
 		update();
 	}
@@ -62,7 +60,7 @@ var dappleth = (function(){
 	    update: update,
 	    run: run,
 	    destroy: destroy,
-	    greet: greet
+	    test: test
 	};
 
 })();
