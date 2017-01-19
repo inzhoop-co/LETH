@@ -13,7 +13,7 @@
     <button id="rightBtnHeader" class="button"></button>
   </div>
   </ion-header-bar> 
-  <ion-content class="has-header" >
+  <ion-content class="has-header" delegate-handle="chatDappScroll">
   <ion-refresher pulling-txt="load" on-refresh="refresh(activeApp.GUID)"></ion-refresher>
     <div ng-bind-html="appContainer"></div>
     <ion-scroll direction="y" class="chatDapp message-list">

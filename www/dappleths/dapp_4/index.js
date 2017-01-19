@@ -3,6 +3,7 @@ var dappleth = (function(){
 	var dappContract;
 	var btnLeft;
 	var btnCenter;
+	var tagRecord;
 
 	 function init(id,ABI,Address){
 		console.log("init " + id);
@@ -10,24 +11,32 @@ var dappleth = (function(){
         dappContract = web3.eth.contract(ABI).at(Address);
 
 		btnCenter = angular.element(document.querySelector('#centerButton'));
-	
 	}
 
 	function setup(){
 		console.log("setup");
 		btnCenter.html(' Show Tag!');
 		btnCenter.attr('class','button button-smal button-icon icon ion-play');
-		btnCenter.attr('onclick','dappleth.test()');
+		btnCenter.attr('onclick','dappleth.readed()');
 
 		document.addEventListener("deviceready", function () {
 		    nfc.addNdefListener(function(nfcEvent) {
-		        console.log(nfcEvent.tag);
+		        //console.log(nfcEvent.tag);
+				apiUI.loadOn();
+
+		        tagRecord = nfcEvent.tag;
+
 		        var eventMsg = {
-					from: apiApp.account(),
-				    text: "TagId: " + nfc.bytesToHexString(nfcEvent.tag.id),
+					from: dappContract.address,
+				    text: "TagId: " + nfc.bytesToHexString(tagRecord.id),
 				    date: new Date()
 				};
+
 		        apiChat.sendDappMessage(eventMsg, GUID);
+
+		        apiUI.scrollTo('chatDappScroll','bottom');
+
+				apiUI.loadOff();
 		    }, function () {
 		        console.log("Listening for NDEF Tags.");
 		    }, function (reason) {
@@ -38,7 +47,7 @@ var dappleth = (function(){
 
 	function update(){
 		console.log("update");
-		apiUI.loadFade("loading...",2000);
+		//apiUI.loadFade("loading...",1000);
 	}
 
 	function destroy(){
@@ -52,23 +61,28 @@ var dappleth = (function(){
 		update();
 	}
 
-	function test(){
-		console.log("greet");
+	function readed(){
+		apiUI.loadOn();
+
 		var m1 = {
 			from: apiApp.account(),
-		    text: "Last TagId: " + nfc.bytesToHexString(apiNFC.tagNFC.id),
+		    text: "Last TagId: " + nfc.bytesToHexString(tagRecord.id),
 		    date: new Date()
 		};
+
       	apiChat.sendDappMessage(m1, GUID);  
 
-		update();
+		apiUI.scrollTo('chatDappScroll','bottom');
+
+		apiUI.loadOff();
+		
 	}
 
 	return {
 	    update: update,
 	    run: run,
 	    destroy: destroy,
-	    test: test
+	    readed: readed
 	};
 
 })();

@@ -1,6 +1,7 @@
 angular.module('leth.services', [])
 
-.service('UIService', function ($rootScope, $http, $q, StoreEndpoint, $ionicLoading) {
+.service('UIService', function ($rootScope, $http, $q, $timeout,
+          StoreEndpoint, $ionicLoading, $ionicScrollDelegate) {
   return{
     loadOn: function(){
       $ionicLoading.show();
@@ -10,6 +11,12 @@ angular.module('leth.services', [])
     },
     loadFade: function(content,elapsed){
       $ionicLoading.show({template: content, duration: elapsed});
+    },
+    scrollTo: function(handle,where){
+       $timeout(function() {
+        $ionicScrollDelegate.$getByHandle(handle).resize();
+        $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
+      }, 1000);
     }
   }
 })
