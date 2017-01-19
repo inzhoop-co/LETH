@@ -15,7 +15,7 @@ var dappleth = (function(){
 
 	function setup(){
 		console.log("setup");
-		btnCenter.html(' Show Tag!');
+		btnCenter.html(' Show Last Tag!');
 		btnCenter.attr('class','button button-smal button-icon icon ion-play');
 		btnCenter.attr('onclick','dappleth.readed()');
 
@@ -62,11 +62,16 @@ var dappleth = (function(){
 	}
 
 	function readed(){
+		var msg = "No TAG readed! <br/>Bring NFC Tag on the back";
+		if(tagRecord){
+			msg = "Last TagId: " + nfc.bytesToHexString(tagRecord.id);
+		}
+
 		apiUI.loadOn();
 
 		var m1 = {
 			from: apiApp.account(),
-		    text: "Last TagId: " + nfc.bytesToHexString(tagRecord.id),
+		    text: msg,
 		    date: new Date()
 		};
 
@@ -75,7 +80,7 @@ var dappleth = (function(){
 		apiUI.scrollTo('chatDappScroll','bottom');
 
 		apiUI.loadOff();
-		
+				
 	}
 
 	return {
