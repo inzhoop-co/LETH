@@ -311,8 +311,6 @@ angular.module('leth.controllers', [])
 
   $scope.addCustomToken = function (token) {
     var customToken = {
-      "Custom" : true,
-      "Installed" : true,
       "Name" : token.name,
       "GUID" : "C" + $scope.listCoins.length+1,
       "Network" : $scope.nameNetwork, 
@@ -325,7 +323,9 @@ angular.module('leth.controllers', [])
       "ABI" : JSON.parse(token.ABI),
       "Send" : "transfer",
       "Events" : [{"Transfer":"address indexed from, address indexed to, uint256 value"}],
-      "Units":[{"multiplier": "1", "unitName": "Token"}]
+      "Units":[{"multiplier": "1", "unitName": "Token"}],
+      "Custom" : true,
+      "Installed" : true
     }
 
     $scope.listCoins.push(customToken);
@@ -414,19 +414,23 @@ angular.module('leth.controllers', [])
   
 
   $scope.scanTo = function () {
-    document.addEventListener("deviceready", function () {      
-      $cordovaBarcodeScanner
-        .scan()
-        .then(function (barcodeData) {
-          if(barcodeData.text!= ""){
-			      $state.go('tab.wallet', {addr: barcodeData.text});
-			      console.log('read code: ' + barcodeData.text);
-		      }
-        }, function (error) {
-          // An error occurred
-          console.log('Error!' + error);
-        });
-    }, false);          
+    //document.addEventListener("deviceready", function () {      
+    $ionicPlatform.ready(function () {
+      if($rootScope.deviceready){
+        $cordovaBarcodeScanner
+          .scan()
+          .then(function (barcodeData) {
+            if(barcodeData.text!= ""){
+  			      $state.go('tab.wallet', {addr: barcodeData.text});
+  			      console.log('read code: ' + barcodeData.text);
+  		      }
+          }, function (error) {
+            // An error occurred
+            console.log('Error!' + error);
+          });
+      //}, false); 
+      }
+    });        
   };
 
   $scope.lat = "N/A";

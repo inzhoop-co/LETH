@@ -305,16 +305,41 @@ angular.module('leth.services')
         message: msg
       });
     },
-    listenMessageOLD: function($scope){
+    listenMessage_Test: function($scope){
       filter =  web3.shh.filter({topics: [topics]});
-
       filter.watch(function (error, result) {
-        var payload = JSON.parse(web3.toUtf8(result.payload));
+        var msgUTF8 = web3.toUtf8(result.payload);
+
+        var payload = "";
+        try {
+            payload=JSON.parse(msgUTF8);
+            //todo  json type
+            if(payload.type!="leth"){
+              if(!payload.type=="CarInsurance" || !payload.address || payload.address=="0x0"){
+                var msg = {type: 'other', mode: 'plain', time: Date.now(), from: "0x0", to: [], text: payload.message, image: ''};
+
+                chats.push({
+                  identity: blockies.create({ seed: result.from}).toDataURL("image/jpeg"),
+                  timestamp: result.sent,
+                  message: msg
+                });  
+
+                payload.hash = result.hash;
+                $scope.$broadcast("incomingMessage", payload);
+                return;
+              }
+            }
+          }
+          catch(e){
+            payload=msgUTF8;
+            return;
+          }
         //exit on error
         if(error){return;}; 
+        //exit if outdated  get only 1 hour before last msg
+        if(payload.time*3600 < JSON.parse(localStorage.LastMsg).time){return;} 
         //exit if mine
         if(payload.from == AppService.account()){
-          //only if exist in chats/chatsDM array skip
           var exist=false;
           angular.forEach(chats, function(value, key) {
             if(angular.equals(value.message,payload)){
@@ -322,159 +347,43 @@ angular.module('leth.services')
              return;
             }
           })
-
+          //exit if exist in chats/chatsDM array
           if(exist)
             return;
-        } 
-        //exit if outdated  get only 1 hour before last msg
-        if(payload.time*3600 < JSON.parse(localStorage.LastMsg).time){return;} 
-        //if encrypted msg write to DM
-        if(payload.mode == 'encrypted'){ 
+        }
+        //if is public
+        if(!payload.to[0]){
+          chats.push({
+            identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
+            timestamp: payload.time,
+            message: payload
+          });  
+
+          payload.hash = result.hash;
+          $scope.$broadcast("incomingMessage", payload);
+
+        };
+
+        if(payload.to[0] && payload.to[0]==AppService.account()){
+
           lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
             if(payload.text != '')
               payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,payload.text, payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
             if(payload.image != '')
               payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,payload.image, payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
 
-            if(payload.from == AppService.account()){
-              angular.forEach(chatsDM, function(value, key) {
-                if(angular.equals(value.message,payload)){
-                  exist=true;
-                  return;
-                }
-              })
 
-              if(exist)
-                return;
-            }
-            
             chatsDM.push({
               identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
               timestamp: payload.time,
               message: payload
             });
-            
+
             payload.hash = result.hash;
             $scope.$broadcast("incomingMessage", payload);
 
           });
         }
-        //if plain msg go to global chat
-        if(payload.mode == 'plain'){ 
-          //if(payload.to[0] == null){
-            chats.push({
-              identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
-              timestamp: payload.time,
-              message: payload
-            });  
-          //}
-
-          payload.hash = result.hash;
-          $scope.$broadcast("incomingMessage", payload);
-
-        };
-
-        //if share contact go to global chat
-        if(payload.mode == 'contact'){ 
-          //if(payload.to[0] == null){
-            chats.push({
-              identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
-              timestamp: payload.time,
-              message: payload
-            });
-          //}
-
-          payload.hash = result.hash;
-          $scope.$broadcast("incomingMessage", payload);
-        };
-
-        //if payment request go to private chat
-        if(payload.mode == 'payment'){ 
-          //if(payload.to[0] == null){
-            //only DM request supported
-          //}
-          lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
-            if(payload.text != '')
-              payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,payload.text, payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
-            if(payload.image != '')
-              payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,payload.image, payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
-            
-            chatsDM.push({
-              identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
-              timestamp: payload.time,
-              message: payload
-            });
-
-            payload.hash = result.hash;
-            $scope.$broadcast("incomingMessage", payload);
-          });
-        };
-
-        if(payload.mode == 'token'){ 
-          lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
-            if(payload.text != '')
-              payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,payload.text, payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
-            if(payload.image != '')
-              payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,payload.image, payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
-            
-            chatsDM.push({
-              identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
-              timestamp: payload.time,
-              message: payload
-            });
-            payload.hash = result.hash;
-            $scope.$broadcast("incomingMessage", payload);
-          });
-        };
-
-        //if share contact go to global chat
-        if(payload.mode == 'geolocation'){ 
-          if(payload.to[0] == AppService.account()){
-            chatsDM.push({
-              identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
-              timestamp: payload.time,
-              message: payload
-            });
-          }
-          if(payload.to[0] == null){
-            chats.push({
-              identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
-              timestamp: payload.time,
-              message: payload
-            });
-          }
-
-          payload.hash = result.hash;
-          $scope.$broadcast("incomingMessage", payload);
-        };
-
-        if(payload.mode == 'transaction'){ 
-          //if(payload.to[0] == null){
-            chatsDM.push({
-              identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
-              timestamp: payload.time,
-              message: payload
-            });
-          //}
-
-          payload.hash = result.hash;
-          $scope.$broadcast("incomingMessage", payload);
-        };
-
-        //if dappMessage go to dapp chat
-        if(payload.mode == 'dappMessage'){ 
-          //if(payload.to[0] == null){
-            chatsDAPP.push({
-              identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
-              timestamp: payload.time,
-              message: payload
-            });
-          //}
-
-          payload.hash = result.hash;
-          $scope.$broadcast("incomingMessage", payload);
-        };
-
       });
     },
     listenMessage: function($scope){

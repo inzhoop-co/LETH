@@ -95,6 +95,10 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
           $state.go('tab.wallet', {addr: page});
       }); 
 
+      document.addEventListener("deviceready", function () {  
+          $rootScope.deviceready = true;  
+      }, false);     
+
     });
   })
   .config(function ($ionicConfigProvider, $stateProvider, $urlRouterProvider) {

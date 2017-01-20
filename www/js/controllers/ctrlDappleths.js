@@ -79,7 +79,23 @@ angular.module('leth.controllers')
 
     $scope.uninstallCoin = function(coin) {
       coin.Progress = true;
-      var coins = JSON.parse(localStorage.Coins);
+      $timeout(function() {
+        coin.Installed = false;
+        $scope.listCoins.filter(function (c) {
+          if(c.GUID === coin.GUID){
+            c.Installed = false;
+            c.Progress = false;
+          }
+        })
+        coin.Progress = false;
+        localStorage.Coins = JSON.stringify($scope.listCoins);
+      }, 2000);
+      $ionicListDelegate.closeOptionButtons();
+    };
+
+    $scope.uninstallCoinOLD = function(coin) {
+      coin.Progress = true;
+      var coins = $scope.listCoins;
       $timeout(function() {
         if(!coin.Custom){
           coins.splice(coins.indexOf(coin), 1);
@@ -94,7 +110,7 @@ angular.module('leth.controllers')
         coin.Progress = false;
         localStorage.Coins = JSON.stringify(coins);
         $scope.listCoins = JSON.parse(localStorage.Coins);
-      }, 3000);
+      }, 2000);
       $ionicListDelegate.closeOptionButtons();
     };
   })

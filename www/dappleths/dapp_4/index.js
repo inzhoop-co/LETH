@@ -19,30 +19,55 @@ var dappleth = (function(){
 		btnCenter.attr('class','button button-smal button-icon icon ion-play');
 		btnCenter.attr('onclick','dappleth.readed()');
 
-		document.addEventListener("deviceready", function () {
-		    nfc.addNdefListener(function(nfcEvent) {
-		        //console.log(nfcEvent.tag);
-				apiUI.loadOn();
+		//document.addEventListener("deviceready", function () {
+			try{
+			    nfc.addNdefListener(function(nfcEvent) {
+			        //console.log(nfcEvent.tag);
+					apiUI.loadOn();
 
-		        tagRecord = nfcEvent.tag;
+			        tagRecord = nfcEvent.tag;
 
-		        var eventMsg = {
-					from: dappContract.address,
-				    text: "TagId: " + nfc.bytesToHexString(tagRecord.id),
+			        var eventMsg = {
+						from: dappContract.address,
+					    text: "TagId: " + nfc.bytesToHexString(tagRecord.id),
+					    date: new Date()
+					};
+
+			        apiChat.sendDappMessage(eventMsg, GUID);
+
+			        apiUI.scrollTo('chatDappScroll','bottom');
+
+					apiUI.loadOff();
+			    }, function () {
+			        console.log("Listening for NDEF Tags.");
+			    }, function (reason) {
+			    	apiUI.loadOn();
+			    	var m2 = {
+						from: apiApp.account(),
+					    text: reason,
+					    date: new Date()
+					};
+
+			      	apiChat.sendDappMessage(m2, GUID); 
+			      	apiUI.scrollTo('chatDappScroll','bottom');
+
+					apiUI.loadOff();
+			        console.log("Error adding NFC Listener " + reason);
+			    });
+		    }catch(e){
+		    	apiUI.loadOn();
+		    	var mEx = {
+					from: apiApp.account(),
+				    text: e,
 				    date: new Date()
 				};
 
-		        apiChat.sendDappMessage(eventMsg, GUID);
-
-		        apiUI.scrollTo('chatDappScroll','bottom');
+		      	apiChat.sendDappMessage(mEx, GUID); 
+		      	apiUI.scrollTo('chatDappScroll','bottom');
 
 				apiUI.loadOff();
-		    }, function () {
-		        console.log("Listening for NDEF Tags.");
-		    }, function (reason) {
-		        console.log("Error adding NFC Listener " + reason);
-		    });
-		}, false)
+		    }
+		//}, false)
 	}
 
 	function update(){
