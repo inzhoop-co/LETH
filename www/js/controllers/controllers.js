@@ -525,7 +525,7 @@ angular.module('leth.controllers', [])
         if(index==2){
             $state.go('tab.wallet', {addr: "0xd1324ada7e026211d0cacd90cae5777e340de948"});
         }else{
-          var mood = index == 0 ? "Good" : "Poor";
+          var mood = index == 0 ? "Poor" : "Good";
           $cordovaEmailComposer.isAvailable().then(function() {
             var emailOpts = {
               to: ['info@inzhoop.com'],
