@@ -41,19 +41,29 @@ var dappleth = (function(){
 
 		var m1 = {
 			from: apiApp.account(),
-		    text: "Check registerd counter ...",
+		    text: "Check registerd...",
 		    date: new Date()
 		};
 
       	apiChat.sendDappMessage(m1, GUID);  
 
+      	var count = dappContract.registered(); //
     	var m2 = { 
 			from: dappContract.address,
-		    text: "Total registered </b>#" + dappContract.registered() + "</b>",
+		    text: "Total registered <b># " + count + "</b>",
 		    date: new Date()
 		};
 
       	apiChat.sendDappMessage(m2, GUID);  
+
+      	var p = dappContract.participantsIndex(count); //iterate for list
+		var m3 = { 
+			from: dappContract.address,
+		    text: "Partecipant address</br><b>" + p + "</b>",
+		    date: new Date()
+		};
+
+      	apiChat.sendDappMessage(m3, GUID);  
 
 		update();
 	}
