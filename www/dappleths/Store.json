@@ -38,7 +38,7 @@
 			"InstallUrl" : "/dapp_3/index.html",
 			"TemplateUrl" : "/dapp_3/index.html",
 			"ScriptUrl" : "/dapp_3/index.js"
-		},
+		}, 
 		{
 			"GUID" : "T04",
 			"Name" : "NFC for IoT",
@@ -51,6 +51,19 @@
 			"InstallUrl" : "/dapp_4/index.html",
 			"TemplateUrl" : "/dapp_4/index.html",
 			"ScriptUrl" : "/dapp_4/index.js"
+		}, 
+		{
+			"GUID" : "T05",
+			"Name" : "Block Party",
+			"Network" : "Ropsten",
+			"Company" : "Makoto",
+			"Address" : "0xafC831135a5731Bbf8086912eA11b936e9F6b748",
+			"ABI" : [ { "constant": true, "inputs": [], "name": "name", "outputs": [ { "name": "", "type": "string" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "participants", "outputs": [ { "name": "participantName", "type": "string" }, { "name": "addr", "type": "address" }, { "name": "attended", "type": "bool" }, { "name": "payout", "type": "uint256" }, { "name": "paid", "type": "bool" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "ended", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "registered", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "type": "function" }, { "constant": false, "inputs": [], "name": "withdraw", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "endedAt", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "type": "function" }, { "constant": false, "inputs": [], "name": "clear", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "payout", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "limitOfParticipants", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "_addr", "type": "address" } ], "name": "isPaid", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "type": "function" }, { "constant": false, "inputs": [], "name": "payback", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "coolingPeriod", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "type": "function" }, { "constant": false, "inputs": [ { "name": "_addresses", "type": "address[]" } ], "name": "attend", "outputs": [], "payable": false, "type": "function" }, { "constant": false, "inputs": [ { "name": "_limitOfParticipants", "type": "uint256" } ], "name": "setLimitOfParticipants", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "participantsIndex", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "_addr", "type": "address" } ], "name": "isAttended", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "totalBalance", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "attended", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "_addr", "type": "address" } ], "name": "isRegistered", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "deposit", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "type": "function" }, { "constant": false, "inputs": [], "name": "cancel", "outputs": [], "payable": false, "type": "function" }, { "constant": false, "inputs": [ { "name": "_participant", "type": "string" } ], "name": "register", "outputs": [], "payable": true, "type": "function" }, { "inputs": [ { "name": "_coolingPeriod", "type": "uint256" } ], "payable": false, "type": "constructor" }, { "payable": false, "type": "fallback" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "participantName", "type": "string" }, { "indexed": false, "name": "addr", "type": "address" }, { "indexed": false, "name": "balance", "type": "uint256" }, { "indexed": false, "name": "value", "type": "uint256" } ], "name": "Register", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "addr", "type": "address" }, { "indexed": false, "name": "balance", "type": "uint256" } ], "name": "Attend", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "addr", "type": "address" }, { "indexed": false, "name": "_payout", "type": "uint256" }, { "indexed": false, "name": "balance", "type": "uint256" }, { "indexed": false, "name": "paid", "type": "bool" } ], "name": "Payback", "type": "event" } ],
+			"Logo" : "dappleths/dapp_5/logo.png",
+			"Description" : "No Block No Party",
+			"InstallUrl" : "/dapp_5/index.html",
+			"TemplateUrl" : "/dapp_5/index.html",
+			"ScriptUrl" : "/dapp_5/index.js"
 		}		
 	],
 	"coins":[
