@@ -33,6 +33,10 @@ angular.module('leth.services')
     findDAPP: function(){
       return chatsDAPP;
     },
+    clearDAPP: function(){
+      chatsDAPP=[];
+      return chatsDAPP;
+    },
     addTopic: function(t){
       topics.push(t);
     },
