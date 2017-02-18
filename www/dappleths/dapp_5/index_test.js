@@ -16,7 +16,7 @@ var dappleth = (function(){
 		GUID=id;
         dappContract = web3.eth.contract(ABI).at(Address);
 		
-		confAddr = "0x7b249881af36cccd1ab2e4325a8eed2a7848b263" ; //"5f27df285a59ff4aeb00f05b017bb9768f2b0931"
+		confAddr = "0xafC831135a5731Bbf8086912eA11b936e9F6b748" ; 
 		deposit = 1000000000000000000;
 
 		btnCenter = angular.element(document.querySelector('#centerButton'));
