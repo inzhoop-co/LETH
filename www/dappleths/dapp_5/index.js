@@ -205,8 +205,8 @@ var dappleth = (function(){
         var functionName = 'register';
         var args = JSON.parse('[]');
         var value = deposit;
-        var gasPrice = 50000000000;
-        var gas = 3000000;
+        var gasPrice = web3.eth.gasPrice;
+        var gas = 300000;
         args.push(name,{from: fromAddr, to: confAddr, value: value, gasPrice: gasPrice, gas: gas});
         var callback = function (err, txhash) {
             if(err){
@@ -242,8 +242,8 @@ var dappleth = (function(){
         var fromAddr = apiApp.account();
         var functionName = 'withdraw';
         var args = JSON.parse('[]');
-        var gasPrice = 50000000000;
-        var gas = 3000000;
+        var gasPrice = web3.eth.gasPrice;
+        var gas = 300000;
         args.push({from: fromAddr, gasPrice: gasPrice, gas: gas});
         var callback = function (err, txhash) {
 			if(err){

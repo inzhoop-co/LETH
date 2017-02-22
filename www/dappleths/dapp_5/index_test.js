@@ -47,25 +47,7 @@ var dappleth = (function(){
 		var isAttended = dappContract.isAttended(addr);
 		var isPaid = dappContract.isPaid(addr);
 		var payout = dappContract.participants(addr);
-
-		angular.element(document.querySelector('#Status')).html(status);
-
-		if (isAttended){
-        	btnRight.attr('style','visibility:true');
-		}
-
-		if (isPaid){
-        	btnRight.attr('style','visibility:hidden');
-		}		
-
-		if (isRegistered){
-			angular.element(document.querySelector('#Status')).html('registered');
-			document.getElementById('handleTwitter').style='visibility:hidden';
-		}else{
-			angular.element(document.querySelector('#Status')).html('not registered');
-			document.getElementById('handleTwitter').style='visibility:true';
-		}
-
+		
 		/*
 		1. 'not registered' if isRegistered(address) == false
 		2. 'registered' if isRegistered(address) == true && isAttended(address) == false
@@ -75,22 +57,29 @@ var dappleth = (function(){
 		*/
 
 		var myStatus;
-		if(!isRegistered)
+		if(!isRegistered){
 			myStatus = "not registered";
+			document.getElementById('handleTwitter').style='visibility:true';
+		}
 
 		if(isRegistered && !isAttended && payout == 0){
-			myStatus="registered"
+			myStatus="registered";
+			document.getElementById('handleTwitter').style='visibility:hidden';
+
 		}
 
 		if(isAttended && payout == 0 && !isPaid){
-			myStatus="attended"
+			myStatus="attended";
+        	btnRight.attr('style','visibility:true');
 		}
 
 		if(isAttended && payout > 0 && !isPaid ){
-			myStatus="won"
+			myStatus="won";
+			document.getElementById('handleTwitter').style='visibility:true';
 		}
 		if(isPaid){
-			myStatus="earned"
+			myStatus="earned";
+			document.getElementById('handleTwitter').style='visibility:true';
 		}
 
 		angular.element(document.querySelector('#Status')).html(myStatus);
@@ -205,8 +194,8 @@ var dappleth = (function(){
         var functionName = 'register';
         var args = JSON.parse('[]');
         var value = deposit;
-        var gasPrice = 50000000000;
-        var gas = 3000000;
+        var gasPrice = web3.eth.gasPrice; //50000000000;
+        var gas = 300000;
         args.push(name,{from: fromAddr, to: confAddr, value: value, gasPrice: gasPrice, gas: gas});
         var callback = function (err, txhash) {
             if(err){
@@ -242,8 +231,8 @@ var dappleth = (function(){
         var fromAddr = apiApp.account();
         var functionName = 'withdraw';
         var args = JSON.parse('[]');
-        var gasPrice = 50000000000;
-        var gas = 3000000;
+        var gasPrice = web3.eth.gasPrice; //50000000000;
+        var gas = 300000;
         args.push({from: fromAddr, gasPrice: gasPrice, gas: gas});
         var callback = function (err, txhash) {
 			if(err){
