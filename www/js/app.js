@@ -1,5 +1,5 @@
 web3 = new Web3();
-hdPath = "m/44'/60'/0";
+hdPath = "m/44'/60'/0'/0"; //"m/44'/60'/0";
 
 var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('$ionicLoadingConfig', {

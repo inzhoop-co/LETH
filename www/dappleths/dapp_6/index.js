@@ -6,6 +6,7 @@ var dappleth = (function(){
 	var eBetLost;
 	var eNewBet;
 	var eSuccessSend;
+    var sliderRange;
 
 	 function init(id,ABI,Address){
 		console.log("init " + id);
@@ -21,20 +22,33 @@ var dappleth = (function(){
 		btnLeft.html(' Bet');
         btnLeft.attr('class','button button-smal button-icon icon ion-ios-play');
 		btnLeft.attr('onclick','dappleth.play()');
+        sliderRange = document.getElementById('betAmount');
+        btnLeft.html(' Bet 0.22100 ETH');
+        sliderRange.addEventListener('touchmove',function(e){
+            //e.stopPropagation();
+            //e.preventDefault();
+            btnLeft.html(' Bet ' + this.value + ' ETH');
+        ;})
+        sliderRange.addEventListener('touchend',function(e){
+            btnLeft.html(' Bet ' + this.value + ' ETH');
+        ;})
+        sliderRange.addEventListener('change',function(e){
+            btnLeft.html(' Bet ' + this.value + ' ETH');
+        ;})
 	}
 
 	function update(){
 		console.log("update");
 		apiUI.loadFade("loading...",100);
 		var addr = apiApp.account();
-		var betValue = document.getElementById('betAmount').value;
-		btnLeft.html(' Bet ' + betValue + ' ETH');
-
-		console.log(betValue);
 	}
 
 	function destroy(){
 		console.log("destroy");
+		eNewBet.stopWatching();
+		eBetWon.stopWatching();
+		eBetLost.stopWatching();
+
 		dappContract={};
 	}
 
@@ -48,18 +62,20 @@ var dappleth = (function(){
         */
 
 		eNewBet = dappContract.LOG_NewBet().watch(function (error, result) {
-            var user = result.args.playerAddress;
-            var amount = parseFloat(result.args.amount/1.0E18).toFixed(6);
+            if(!error){
+                var user = result.args.playerAddress;
+                var amount = parseFloat(result.args.amount/1.0E18).toFixed(6);
 
-            var msg = {
-                from: user,
-                text: 'I\'m betting ' + amount + ' ETH &#x1F91E;',
-                date: new Date()
-            };
+                var msg = {
+                    from: user,
+                    text: 'I\'m betting ' + amount + ' ETH &#x1F91E;',
+                    date: new Date()
+                };
 
-            apiChat.sendDappMessage(msg, GUID);  
+                apiChat.sendDappMessage(msg, GUID);  
 
-            update();
+                update();
+            }
         });
 
 		/*
@@ -80,32 +96,36 @@ var dappleth = (function(){
 		*/
 
         eBetWon = dappContract.LOG_BetWon().watch(function (error, result) {
-            var user = result.args.playerAddress;
-            var amount = parseFloat(result.args.amountWon/1.0E18).toFixed(6);
-            var numberRolled = result.args.numberRolled
-            var msg = {
-                from: user,
-                text: '&#x1F3B2; <b>' + numberRolled + '</b> &#x1F3B2;<br/>I won ' + amount + ' ETH &#x1F3C6;',
-                date: new Date()
-            };
+            if(!error){
+                var user = result.args.playerAddress;
+                var amount = parseFloat(result.args.amountWon/1.0E18).toFixed(6);
+                var numberRolled = result.args.numberRolled
+                var msg = {
+                    from: user,
+                    text: '&#x1F3B2; <b>' + numberRolled + '</b> &#x1F3B2;<br/>I won ' + amount + ' ETH &#x1F3C6;',
+                    date: new Date()
+                };
 
-            apiChat.sendDappMessage(msg, GUID);  
+                apiChat.sendDappMessage(msg, GUID);  
 
-            update();
+                update();
+            }
         });
 
         eBetLost = dappContract.LOG_BetLost().watch(function (error, result) {
-            var user = result.args.playerAddress;
-            var numberRolled = result.args.numberRolled
-            var msg = {
-                from: user,
-                text: '&#x1F3B2; <b>' + numberRolled + '</b> &#x1F3B2;<br/>I lost &#x1F3C6;',
-                date: new Date()
-            };
+            if(!error){            
+                var user = result.args.playerAddress;
+                var numberRolled = result.args.numberRolled
+                var msg = {
+                    from: user,
+                    text: '&#x1F3B2; <b>' + numberRolled + '</b> &#x1F3B2;<br/>I lost &#x1F622;',
+                    date: new Date()
+                };
 
-            apiChat.sendDappMessage(msg, GUID);  
+                apiChat.sendDappMessage(msg, GUID);  
 
-            update();
+                update();
+            }
         });
 
         
