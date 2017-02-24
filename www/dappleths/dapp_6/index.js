@@ -22,19 +22,7 @@ var dappleth = (function(){
 		btnLeft.html(' Bet');
         btnLeft.attr('class','button button-smal button-icon icon ion-ios-play');
 		btnLeft.attr('onclick','dappleth.play()');
-        sliderRange = document.getElementById('betAmount');
         btnLeft.html(' Bet 0.22100 ETH');
-        sliderRange.addEventListener('touchmove',function(e){
-            //e.stopPropagation();
-            //e.preventDefault();
-            btnLeft.html(' Bet ' + this.value + ' ETH');
-        ;})
-        sliderRange.addEventListener('touchend',function(e){
-            btnLeft.html(' Bet ' + this.value + ' ETH');
-        ;})
-        sliderRange.addEventListener('change',function(e){
-            btnLeft.html(' Bet ' + this.value + ' ETH');
-        ;})
 	}
 
 	function update(){
@@ -54,12 +42,27 @@ var dappleth = (function(){
 
 	function listner(){
         //event listner
+        var bal = apiApp.balance('1.0e18');
 
-        /*
-		    event LOG_NewBet(address playerAddress, uint amount);
-		    event LOG_BetWon(address playerAddress, uint numberRolled, uint amountWon);
-		    event LOG_BetLost(address playerAddress, uint numberRolled);
-        */
+        sliderRange = document.getElementById('betAmount');
+        
+        sliderRange.max = bal;
+        
+        if(bal < sliderRange.min){
+            btnLeft.html(' Insufficent ETH');
+            btnLeft.attr('onclick','alert("Insufficent balance!")');
+        }else{
+            sliderRange.addEventListener('touchmove',function(e){
+                btnLeft.html(' Bet ' + this.value + ' ETH');
+            ;})
+            sliderRange.addEventListener('touchend',function(e){
+                btnLeft.html(' Bet ' + this.value + ' ETH');
+            ;})
+            sliderRange.addEventListener('change',function(e){
+                btnLeft.html(' Bet ' + this.value + ' ETH');
+            ;})
+        }        
+        
 
 		eNewBet = dappContract.LOG_NewBet().watch(function (error, result) {
             if(!error){
@@ -77,23 +80,6 @@ var dappleth = (function(){
                 update();
             }
         });
-
-		/*
-        eSuccessSend = dappContract.LOG_SuccessfulSend().watch(function (error, result) {
-            var user = result.args.addr;
-            var amount = parseFloat(result.args.amount/1.0E18).toFixed(6);
-
-            var msg = {
-                from: result.address,
-                text: amount + ' ETH received &#x1F91E; from ' + user,
-                date: new Date()
-            };
-
-            apiChat.sendDappMessage(msg, GUID);  
-
-            update();
-        });
-		*/
 
         eBetWon = dappContract.LOG_BetWon().watch(function (error, result) {
             if(!error){
