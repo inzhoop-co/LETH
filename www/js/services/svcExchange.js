@@ -23,6 +23,7 @@ angular.module('leth.services')
           { name: 'EUR', symbol:'€', value: 'ZEUR'},
           { name: 'USD', symbol:'$', value: 'ZUSD' },
           { name: 'GBP', symbol:'£', value: 'ZGBP' },
+          { name: 'CHF', symbol:' ', value: 'ZCHF' },
           { name: 'DAO', symbol:'Ð', value: 'XDAO' },
           { name: 'BTC', symbol:'฿', value: 'XXBT' }
           ];
