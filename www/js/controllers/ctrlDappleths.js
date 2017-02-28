@@ -60,6 +60,7 @@ angular.module('leth.controllers')
     }
     */
 
+
     $scope.installCoin = function(coin) {
       coin.Progress = true;
       $timeout(function() {
@@ -174,6 +175,7 @@ angular.module('leth.controllers')
     }
 
     $scope.initDapp = function() {
+      $scope.chatBoard = $scope.activeApp.Chatboard;
       dappleth.run($scope.activeApp.GUID,$scope.activeApp.ABI,$scope.activeApp.Address);
     }
 

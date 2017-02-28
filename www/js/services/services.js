@@ -38,7 +38,28 @@ angular.module('leth.services', [])
 })                
 
 .service('AppService', function ($rootScope, $http, $q, StoreEndpoint) {
+  var network;
   return {
+    getNetwork: function(){
+      web3.eth.getBlock(0, function(e, res){
+        if(!e){
+          switch(res.hash) {
+            case '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303':
+              network = 'Morden';
+              break;
+            case '0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d':
+              network = 'Ropsten';
+              break;
+            case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
+              network = 'Mainet';
+              break;
+            default:
+              network = 'Private';
+          }
+        }
+        return network;
+      });
+    },
     getStore: function () {
       var q = $q.defer();
       $http({
@@ -51,13 +72,28 @@ angular.module('leth.services', [])
       });
       return q.promise;
     },
+    getStoreCategories: function () {
+      var q = $q.defer();
+      $http({
+        method: 'GET',
+        url: StoreEndpoint.url + '/Store.json'
+      }).then(function(response) {
+        q.resolve(response.data.categories);
+      }, function(response) {
+        q.reject(response);
+      });
+      return q.promise;
+    },
     getStoreApps: function () {
       var q = $q.defer();
       $http({
         method: 'GET',
         url: StoreEndpoint.url + '/Store.json'
       }).then(function(response) {
-        q.resolve(response.data.dappleths);
+        var apps = response.data.dappleths.filter(function (val) {
+          return val.Network === network;
+        });
+        q.resolve(apps);
       }, function(response) {
         q.reject(response);
       });
@@ -74,7 +110,7 @@ angular.module('leth.services', [])
         q.reject(response);
       });
       return q.promise;
-    },        
+    },    
     setWeb3Provider: function (keys) {
       var web3Provider = new HookedWeb3Provider({
         host: localStorage.NodeHost,
@@ -143,7 +179,9 @@ angular.module('leth.services', [])
           }
         }); 
     },
-    transferEth: function (from, to, value, gasPrice, gas) {
+    transferEth: function (from, to, value) {
+      var gasPrice = web3.eth.gasPrice;
+      var gas = 3000000;
       return $q(function (resolve, reject) {
         try {
           web3.eth.sendTransaction({

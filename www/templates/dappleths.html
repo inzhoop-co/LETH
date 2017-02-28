@@ -17,7 +17,51 @@
       <button class="{{filterStoreCoins}}" ng-click="readCoinsList()">Tokens</button>
       <button class="{{filterStoreApps}}" ng-click="readDappsList()">ÐAppleths</button>
     </div>
-    <ion-list ng-show="isDapp">
+        
+    <div class="categoryBox" ng-repeat="cat in listCategory | filter:{Network:nameNetwork}" ng-if="isDapp">
+      <div class="categoryHead">{{cat.Name}} 
+        <span class="item-note">#{{cat.List.length}}</span>
+      </div>
+      <ul class="appSlider">
+        <li class="appBox" ng-repeat="dapp in listApps | inCategory:cat.List:'GUID'">
+          <a class="wrapper" ng-href="&#35;/tab/dappleth-run/{{dapp.GUID}}">
+            <img class="appIco" ng-src="{{dapp.Logo}}"/>
+            <h2 class="title">{{dapp.Name}}</h2>
+            <p class="description">{{dapp.Description}}</p>
+            <h6 class="author">by {{dapp.Company}}</h6> 
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!--ion-slide-box auto-play="true" does-continue="true" show-pager="false" ng-repeat="cat in listCategory" ng-if="isDapp">
+      <ion-slide class="list" ng-repeat="dapp in listApps | filter:{Category:cat.Name} as listFiltered track by $index" ng-show="listFiltered.length>0">
+        <h5>{{cat.Name}} {{listFiltered.length}}</h5>
+        <a class="item item-thumbnail-left item-icon-right" ng-href="&#35;/tab/dappleth-run/{{dapp.GUID}}">
+          <img ng-src="{{dapp.Logo}}"/>
+          <h2>{{dapp.Name}}</h2>
+          <p>{{dapp.Description}}</p>
+          <h6>by {{dapp.Company}}</h6> 
+          <i class="icon ion-chevron-right icon-accessory" ng-hide="flagApps"></i>
+        </a>
+      </ion-slide>
+    </ion-slide-box-->
+
+     <!--ion-list ng-show="isDapp" class="list">
+      <ion-scroll direction="x" class="dapp-ion-scroll" ng-repeat="cat in listCategory" ng-show="listFiltered.length>0">
+        <div class="categoryContainer">
+        <h5>{{cat.Name}}</h5>
+          <div class="cardDapp" ng-repeat="dapp in listApps | filter:{Category:cat.Name} as listFiltered track by $index">
+          <a class="item item-thumbnail-left item-icon-right" ng-href="&#35;/tab/dappleth-run/{{dapp.GUID}}">
+            <img ng-src="{{dapp.Logo}}"/>
+            <h2>{{dapp.Name}}</h2>
+            <p>{{dapp.Description}}</p>
+            <h6>by {{dapp.Company}}</h6> 
+            </a>
+          </div>
+        </div>
+      </ion-scroll>
+
       <ion-item class="item item-thumbnail-left item-icon-right"  ng-repeat="dapp in listApps | filter:{Network:nameNetwork} track by $index"
           type="item-text-wrap" ng-href="&#35;/tab/dappleth-run/{{dapp.GUID}}">
           <img ng-src="{{dapp.Logo}}"/>
@@ -28,7 +72,7 @@
             <i class="icon ion-chevron-right icon-accessory" ng-hide="flagApps"></i>
             <i class="icon ion-ios-cloud-download-outline positive" ng-hide="!flagApps" ng-click="installDapp(dapp.GUID)"></i>  
       </ion-item>  
-    </ion-list>
+    </ion-list-->
     <ion-list ng-show="isCoin">
       <ion-item class="item item-avatar-left item-icon-right"  ng-repeat="coin in listCoins | filter:{Network:nameNetwork} track by $index" type="item-text-wrap" on-hold="showCustomTokenInfo(coin)">
           <img ng-src="{{coin.Logo}}"/>

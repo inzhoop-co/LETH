@@ -9734,19 +9734,3 @@ a.button {
   opacity: 0;
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
-
-.scrollBg {
-  background-color: #efeff4; }
-/*
-.tabs .tab-item .icon.mcfly {
-  background-repeat: no-repeat;
-  background-position: 50%;
-  height: 100%;
-  background-image: url('../img/money_r.png');
-  background-size:contain;
-}
-*/
-
-body.keyboard-open .has-footer{ 
-bottom: 150;
-}

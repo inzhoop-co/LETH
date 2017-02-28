@@ -128,7 +128,7 @@ angular.module('leth.controllers')
       }
       else{
         var value = parseFloat(amount) * unit;
-        AppService.transferEth($scope.account, addr, value, 50000000000, 50000).then(
+        AppService.transferEth($scope.account, addr, value).then(
           function (result) {
             $ionicLoading.show({template: 'Sending...'});
             if (result[0] != undefined) {

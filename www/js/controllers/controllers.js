@@ -19,11 +19,13 @@ angular.module('leth.controllers', [])
     $scope.account = AppService.account();
     $scope.nick = AppService.idkey();
     $scope.qrcodeString = $scope.account + "/" + $scope.nick ;
+    AppService.getNetwork();
     $scope.getNetwork();
     $scope.loadFriends();
     $scope.transactions = Transactions.all();
     localStorage.Transactions = JSON.stringify($scope.transactions);
     isNfcAvailable();
+    $scope.readCategoryList();
     $scope.readDappsList();
     $scope.readCoinsList();
     //$scope.readFeedsList();
@@ -162,6 +164,12 @@ angular.module('leth.controllers', [])
         
       });
   }
+
+  $scope.readCategoryList = function(){
+    AppService.getStoreCategories().then(function(response){
+      $scope.listCategory = response;
+    }) 
+  };
 
   $scope.readDappsList = function(){
     $scope.filterStoreCoins = 'button button-small button-outline button-positive';

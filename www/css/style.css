@@ -90,6 +90,20 @@ img#headerSetting
   ========================================================================== 
 */
 
+.scrollBg {
+  background-color: #efeff4; }
+
+body.keyboard-open .has-footer{ 
+bottom: 150;
+}
+
+
+/* 
+  ==========================================================================
+   Font Awesome Style
+  ========================================================================== 
+*/
+
 @font-face {
     font-family: 'fontawesome';
     src:url('../font-awesome/fonts/fontawesome-webfont.eot');
@@ -450,3 +464,120 @@ img#headerSetting
       opacity: 0;
     }
   }
+
+/* 
+  ==========================================================================
+   Horizontal List
+  ========================================================================== 
+*/
+
+
+
+.categoryBox {
+  display: inline-block;
+  background-color: white;
+  margin-bottom: 15px;
+  width: 100%;
+  padding: 5px;
+}
+.categoryHead {
+    text-overflow: ellipsis;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 3px;
+    font-weight: bold;
+}
+
+.appBox {
+  width: calc(100% / 3);
+
+  box-sizing: content-box;
+  overflow: hidden;
+  text-align: left;
+}
+
+.appSlider {
+  -moz-box-orient:horizontal;
+  -ms-box-orient:horizontal;
+  -webkit-box-orient:horizontal;
+  -o-box-orient:horizontal;
+  box-orient:horizontal;
+  display:-moz-box;
+  display:-ms-box;
+  display:-webkit-box;
+  display:-o-box;
+  display:box;
+
+  -webkit-overflow-scrolling: touch;
+
+  list-style-type:none;
+  overflow-x: scroll;
+}
+
+.appBox .wrapper {
+  display: inline-block;
+  vertical-align: top;
+  text-decoration: none;
+  padding: 3px;
+}
+.appBox .appIco {
+  width: 70%;
+  border-radius: 20px;
+}
+.appBox .title {
+  margin: 0 0 2px 0;
+  font-size: 14px;
+  font-weight: normal;
+  color: #000;
+  font-family: "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+  line-height: 0.8;
+
+}
+.appBox .description {
+    text-overflow: ellipsis;
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 1px;
+}
+.appBox .author {
+    text-overflow: ellipsis;
+    margin: 0 0 2px 0;
+    font-size: 10px;
+    color: #000;
+    font-weight: 500;
+    font-family: "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    line-height: 0.8;
+
+}
+
+
+
+/*
+.dapp-ion-scroll{
+  height:150px;
+  width:100%;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+}
+
+.categoryContainer{
+  width: 3020px;
+}
+.cardDapp{
+  display: inline-block !important;
+  font-size: 0.8em;
+  height: 120px;
+  margin: 5px;
+  text-align: left;
+  text-decoration: none;
+  text-shadow: none;
+  width: 280px;
+  border:none;
+}
+.cardDapp:nth-child(2n+2) {
+  color: #fff;
+}
+.cardDapp:first-child{
+  margin-left: 10px;
+}
+*/

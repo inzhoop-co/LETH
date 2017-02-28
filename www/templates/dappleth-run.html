@@ -6,8 +6,8 @@
   </ion-nav-bar> 
   <ion-header-bar align-title="center" class="bar-assertive">
   <h1 class="buttons title">
-      <img src="{{activeApp.Logo}}" height="40px" width="auto">
-      {{activeApp.Name}} {{activeApp.Description | strLimit: 18 : 0}}
+      <img ng-src="{{activeApp.Logo}}" height="45px" width="auto">
+      <span>&nbsp;{{activeApp.Description | strLimit: 20 : 0}}</span>
   </h1>
   <div class="buttons">
     <button id="rightBtnHeader" class="button"></button>
@@ -15,8 +15,8 @@
   </ion-header-bar> 
   <ion-content class="has-header" delegate-handle="chatDappScroll">
   <ion-refresher pulling-txt="load" on-refresh="refresh(activeApp.GUID)"></ion-refresher>
-    <div ng-bind-html="appContainer"></div>
-    <ion-scroll direction="y" class="chatDapp message-list">
+    <div ng-bind-html="appContainer" id="appContainer"></div>
+    <ion-scroll direction="y" class="chatDapp message-list" ng-if="chatBoard">
       <div ng-repeat="chat in DAPPchats | filter:isFromDapp | orderBy:'message.time'"
         class="message-wrapper">
         <div ng-class="chat.message.from === activeApp.Address ? 'bubble bubble-mine' : 'bubble bubble-other'">

@@ -1,5 +1,5 @@
 web3 = new Web3();
-hdPath = "m/44'/60'/0'/0"; //"m/44'/60'/0";
+hdPath = "m/44'/60'/0"; //"m/44'/60'/0'/0";
 
 var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('$ionicLoadingConfig', {
@@ -281,6 +281,15 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
       }
     };
   })
+  .filter('inCategory', function($filter){
+    return function(list, arrayFilter, element){
+        if(arrayFilter){
+            return $filter("filter")(list, function(listItem){
+                return arrayFilter.indexOf(listItem[element]) != -1;
+            });
+        }
+    };
+  })
   .filter('strLimit', ['$filter', function($filter) {
    return function(input, beginlimit, endlimit) {
       if (! input) return;
@@ -291,6 +300,13 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
       return $filter('limitTo')(input, beginlimit) + '...' + $filter('limitTo')(input, -endlimit) ;
    };
   }])
+  
+  function handleOpenURL(url) {
+    setTimeout(function() {
+      var event = new CustomEvent('LaunchUrl', {detail: {'url': url}});
+      window.dispatchEvent(event);
+    }, 0);
+  }
   ;
    /*  to delete
   .directive('dappTemplate', ['$http','$compile', function($http,$compile){
@@ -333,11 +349,7 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
       });
     };
   } 
-   
-  function handleOpenURL(url) {
-    setTimeout(function() {
-      var event = new CustomEvent('LaunchUrl', {detail: {'url': url}});
-      window.dispatchEvent(event);
-    }, 0);
-  }
-  */
+  */ 
+
+
+  
