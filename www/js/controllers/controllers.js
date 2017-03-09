@@ -4,7 +4,7 @@ angular.module('leth.controllers', [])
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
                                 $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,
                                 $cordovaBadge,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, $cordovaVibration,
-                                AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService, nfcService) {
+                                AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService, nfcService, SwarmService) {
   
   window.refresh = function () {
     $ionicLoading.show();
@@ -31,6 +31,11 @@ angular.module('leth.controllers', [])
     //$scope.readFeedsList();
     $timeout(function() {$ionicLoading.hide();}, 1000);
   };
+
+  //SwarmService.download("b48c31e5757a759fb1c712aca49963730f45ff2080d020d1dbcc1147edcc0d65");
+  //SwarmService.download("07499d2df7baef1ce4a5f2047e411d02e7c74dada07231dcc4b88f928a5db028");
+  //SwarmService.download("620120ae2bd2e5d0114bd605ca033e8efa9588312ac453e91a7bcf19630f6f20");
+
 
   function keyboardShowHandler(e){
     //patch on open
@@ -107,6 +112,7 @@ angular.module('leth.controllers', [])
     $scope.cards = Array.prototype.slice.call($scope.listFeeds, 0, 0);
   });
   */
+
   $scope.openInEtherscan = function(addr){
     var pinUrl = "https://testnet.etherscan.io/address/" + addr;
     
@@ -1264,7 +1270,9 @@ angular.module('leth.controllers', [])
       $scope.vibrate(); 
     }
 
-    $scope.$digest(); 
+    if(!$scope.$$phase) {
+      $scope.$digest(); 
+    }
   });
 
 

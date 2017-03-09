@@ -85,8 +85,8 @@ angular.module('leth.controllers')
             window.resolveLocalFileSystemURL(results[0], function(fileEntry){
               fileEntry.file(function(file) {
                   var reader = new FileReader();
-                  reader.onloadend = function(e) {
-                       $scope.sendPhoto(this.result);
+                  reader.onloadend = function(e) {  
+                    $scope.sendPhoto(this.result);
                    };
                   reader.readAsDataURL(file);
                }); 

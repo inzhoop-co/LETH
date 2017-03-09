@@ -300,14 +300,14 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
       return $filter('limitTo')(input, beginlimit) + '...' + $filter('limitTo')(input, -endlimit) ;
    };
   }])
-  
+  ;
+
   function handleOpenURL(url) {
     setTimeout(function() {
       var event = new CustomEvent('LaunchUrl', {detail: {'url': url}});
       window.dispatchEvent(event);
     }, 0);
   }
-  ;
    /*  to delete
   .directive('dappTemplate', ['$http','$compile', function($http,$compile){
     return {
