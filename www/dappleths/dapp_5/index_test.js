@@ -93,11 +93,12 @@ var dappleth = (function(){
 
 	function listner(){
         //event listner
-        eRegister = dappContract.Register().watch(function (error, result) {
+        eRegister = dappContract.RegisterEvent().watch(function (error, result) {
 
+						var addr = result.addr;
             var user = result.participantName;
             var msg = {
-                from: result.address,
+                from: addr,
                 text: 'Here I am, registered!',
                 date: new Date()
             };
@@ -107,7 +108,7 @@ var dappleth = (function(){
             update();
         });
 
-        eAttend = dappContract.Attend().watch(function (error, result) {
+        eAttend = dappContract.AttendEvent().watch(function (error, result) {
 
             var addr = result.addr;
             var msg = {
@@ -121,10 +122,10 @@ var dappleth = (function(){
             update();
         });
 
-        ePayback = dappContract.Attend().watch(function (error, result) {
+        ePayback = dappContract.PaybackEvent().watch(function (error, result) {
             var addr = result.addr;
             var msg = {
-                from: result.address,
+                from: addr,
                 text: 'Payback ' + result._payout + '!',
                 date: new Date()
             };
