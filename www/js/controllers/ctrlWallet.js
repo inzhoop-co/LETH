@@ -20,6 +20,7 @@ angular.module('leth.controllers')
     		];
         $scope.unit = $scope.listUnit[0].multiplier;
         $scope.balance = AppService.balance($scope.unit);
+        $scope.symbolFee = $scope.symbolCoin;        
       }
       else {
       	$scope.getNetwork();
@@ -180,7 +181,13 @@ angular.module('leth.controllers')
 
     $scope.setFee = function(val){
       $scope.fee= val;
-      $scope.feeLabel = $scope.fee  / $scope.unit;
+      var unit = 1.0e18;
+      if($scope.idCoin==0)
+        unit = $scope.unit;
+
+        
+
+      $scope.feeLabel = $scope.fee  / unit;
 
     }
     $scope.unitChanged = function(u){
@@ -191,17 +198,26 @@ angular.module('leth.controllers')
       $scope.balance = AppService.balance(unt[0].multiplier);
       $scope.symbolCoin = unt[0].unitName;
       $scope.unit = unt[0].multiplier;
-
-      $scope.feeLabel = $scope.fee  / $scope.unit;
+  
+      if($scope.idCoin==0){
+        $scope.feeLabel = $scope.fee  / $scope.unit;
+        $scope.symbolFee = $scope.symbolCoin;
+      }
 
     }
 
     $scope.confirmSend = function (addr, amount,unit) {
-      var valueFee = parseFloat($scope.fee / $scope.unit);
+      var total = parseFloat(amount);
+      var unit = 1.0e18;
+      if($scope.idCoin==0){
+        unit = $scope.unit;
+        var valueFee = parseFloat($scope.fee / unit);
+        total = parseFloat(amount + valueFee) ;
+      }
 
       var confirmPopup = $ionicPopup.confirm({
         title: 'Confirm payment',
-        template: 'Send ' + parseFloat(amount + valueFee) + " " + document.querySelector('#valuta option:checked').text + " to " + addr + " ?"
+        template: 'Send ' + total + " " + document.querySelector('#valuta option:checked').text + " to " + addr + " ?"
       });
       confirmPopup.then(function (res) {
         if (res) {
