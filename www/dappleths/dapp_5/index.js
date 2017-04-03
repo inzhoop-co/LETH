@@ -1,4 +1,4 @@
-var dappleth = (function(){ 
+var dappleth = (function(){
 	var GUID;
 	var dappContract;
 	var btnRight;
@@ -15,7 +15,7 @@ var dappleth = (function(){
 		console.log("init " + id);
 		GUID=id;
         dappContract = web3.eth.contract(ABI).at(Address);
-		
+
 		confAddr = "0x7b249881af36cccd1ab2e4325a8eed2a7848b263" ; //"5f27df285a59ff4aeb00f05b017bb9768f2b0931"
 		deposit = 1000000000000000000;
 
@@ -26,7 +26,7 @@ var dappleth = (function(){
 
 	function setup(){
 		console.log("setup");
-		
+
 		btnCenter.html(' check');
         btnCenter.attr('class','button button-smal button-icon icon ion-ios-refresh');
 		btnCenter.attr('onclick','dappleth.play()');
@@ -56,7 +56,7 @@ var dappleth = (function(){
 
 		if (isPaid){
         	btnRight.attr('style','visibility:hidden');
-		}		
+		}
 
 		if (isRegistered){
 			angular.element(document.querySelector('#Status')).html('registered');
@@ -104,22 +104,23 @@ var dappleth = (function(){
 
 	function listner(){
         //event listner
-        eRegister = dappContract.Register().watch(function (error, result) {
-      
+        eRegister = dappContract.RegisterEvent().watch(function (error, result) {
+
+						var addr = result.addr;
             var user = result.participantName;
             var msg = {
-                from: result.address,
+                from: addr,
                 text: 'Here I am, registered!',
                 date: new Date()
             };
 
-            apiChat.sendDappMessage(msg, GUID);  
+            apiChat.sendDappMessage(msg, GUID);
 
             update();
         });
 
-        eAttend = dappContract.Attend().watch(function (error, result) {
-      
+        eAttend = dappContract.AttendEvent().watch(function (error, result) {
+
             var addr = result.addr;
             var msg = {
                 from: addr,
@@ -127,20 +128,20 @@ var dappleth = (function(){
                 date: new Date()
             };
 
-            apiChat.sendDappMessage(msg, GUID);  
+            apiChat.sendDappMessage(msg, GUID);
 
             update();
         });
 
-        ePayback = dappContract.Attend().watch(function (error, result) {
+        ePayback = dappContract.PaybackEvent().watch(function (error, result) {
             var addr = result.addr;
             var msg = {
-                from: result.address,
+                from: addr,
                 text: 'Payback ' + result._payout + '!',
                 date: new Date()
             };
 
-            apiChat.sendDappMessage(msg, GUID);  
+            apiChat.sendDappMessage(msg, GUID);
 
             update();
         });
@@ -162,17 +163,17 @@ var dappleth = (function(){
 		    date: new Date()
 		};
 
-      	apiChat.sendDappMessage(m1, GUID);  
+      	apiChat.sendDappMessage(m1, GUID);
 
       	var count = dappContract.registered(); //
-      	var m2 = { 
+      	var m2 = {
 				from: dappContract.address,
 			    text: "Total registered <b># " + count + "</b>",
 			    date: new Date()
 			};
 
-		apiChat.sendDappMessage(m2, GUID);  
-    	
+		apiChat.sendDappMessage(m2, GUID);
+
     	for(var i=1;i<=count;i++){
 	      	var addr = dappContract.participantsIndex(i); //iterate for list
 	      	var u = dappContract.participants(addr);
@@ -184,15 +185,15 @@ var dappleth = (function(){
 	      		profile +="<br/>I won";
 	      	if(u[4])
 	      		profile +="<br/>I earned " + parseFloat(u[3] / 1.0e+18).toFixed(2);
-	      	
 
-			var m3 = { 
+
+			var m3 = {
 				from: addr,
 			    text: profile,
 			    date: new Date()
 			};
 
-	      	apiChat.sendDappMessage(m3, GUID);  	    	
+	      	apiChat.sendDappMessage(m3, GUID);
     	}
 
 		//apiChat.clearDAPP();
@@ -212,25 +213,25 @@ var dappleth = (function(){
             if(err){
 	            console.log('error: ' + err);
 
-            	var mE = { 
+            	var mE = {
 					from: dappContract.address,
 			    	text: "Ops! <b>" + err + "</b>",
 			    	date: new Date()
 				};
 
-	      		apiChat.sendDappMessage(mE, GUID); 
+	      		apiChat.sendDappMessage(mE, GUID);
             }
 
             console.log('txhash: ' + txhash);
 
             if(txhash!=undefined){
-				var mT = { 
+				var mT = {
 					from: dappContract.address,
 			    	text: "sending tx " + txhash + "...",
 			    	date: new Date()
 				};
 
-	      		apiChat.sendDappMessage(mT, GUID); 
+	      		apiChat.sendDappMessage(mT, GUID);
             }
         }
         args.push(callback);
@@ -249,25 +250,25 @@ var dappleth = (function(){
 			if(err){
 	            console.log('error: ' + err);
 
-            	var mE = { 
+            	var mE = {
 					from: dappContract.address,
 			    	text: "Ops! <b>" + err + "</b>",
 			    	date: new Date()
 				};
 
-	      		apiChat.sendDappMessage(mE, GUID); 
+	      		apiChat.sendDappMessage(mE, GUID);
             }
 
             console.log('txhash: ' + txhash);
 
             if(txhash!="undefined"){
-				var mT = { 
+				var mT = {
 					from: dappContract.address,
 			    	text: "sending tx " + txhash + "...",
 			    	date: new Date()
 				};
 
-	      		apiChat.sendDappMessage(mT, GUID); 
+	      		apiChat.sendDappMessage(mT, GUID);
             }
         }
         args.push(callback);
