@@ -20,6 +20,9 @@
         Set strong password to encrypt your wallet.
         Set a 4 digit password for rapid access.
       </label>
+      <ion-toggle ng-model="legacy" ng-click="setLegacy(legacy)">
+        Restore legacy address pre v0.11.0 
+      </ion-toggle>
       <label class="item item-input">
         <span class="input-label">Password</span>
         <input type="password" ng-model="formImport.password" placeholder="8 to 20 digit alphanumeric" required="true" ng-minlength="8" ng-maxlength="20" ng-pattern="/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])/" required>

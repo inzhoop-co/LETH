@@ -22,14 +22,19 @@
           <i class="icon ion-ios-personadd-empty positive" ng-show="isFriend(addrTo)=='' && isValidAddr(addrTo)" ng-click="addAddress(addrTo,addrKey)"></i>
           <input type="text" ng-model="addrTo" placeholder="Type address or use camera to scan" ng-required="true"/>
         </div>
-        <div class="item item-input item-select">
-          <input type="number" pattern="-?\d+(\.\d+)?" ng-model="amountTo" placeholder="0.00" ng-required="true">
+        <div class="item item-input item-floating-label item-select">
+             <input type="number" pattern="-?\d+(\.\d+)?" ng-model="amountTo" placeholder="0.00" ng-required="true">
     			<select id="valuta" class="item-select padding" ng-model="unit" ng-required="true" ng-init="unit" ng-change="unitChanged(unit)">
     				<option ng-repeat="uni in listUnit" value="{{uni.multiplier}}" ng-selected="$index==0">{{uni.unitName}}</option>
     			</select>
         </div>
-        <button ng-disabled="!unit || !amountTo>0 || !isValidAddr(addrTo)" class="button button-block button-energized"
-                ng-click="confirmSend(addrTo,amountTo,unit,idCoin)"><i class="icon ion-paper-airplane"></i> Send
+        <div class="list">
+          <div class="item range range-positive">
+            <span class="item-note">fee {{feeLabel}} {{symbolCoin}}</span>
+            <input type="range" ng-model="fee"  min="{{minFee}}" max="{{maxFee}}" step="{{step}}" value="{{fee}}" ng-init="fee" ng-change="setFee(fee)">
+          </div>
+        </div>
+        <button ng-disabled="!unit || !amountTo>0 || !isValidAddr(addrTo)" class="button button-block button-energized" ng-click="confirmSend(addrTo,amountTo,unit,idCoin)"><i class="icon ion-paper-airplane"></i> Send 
         </button>
         </div> 
         <div class="item tabs row"> 

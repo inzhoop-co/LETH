@@ -29,13 +29,27 @@ angular.module('leth.controllers', [])
     $scope.readDappsList();
     $scope.readCoinsList();
     //$scope.readFeedsList();
+
     $timeout(function() {$ionicLoading.hide();}, 1000);
   };
 
-  //SwarmService.download("b48c31e5757a759fb1c712aca49963730f45ff2080d020d1dbcc1147edcc0d65");
-  //SwarmService.download("07499d2df7baef1ce4a5f2047e411d02e7c74dada07231dcc4b88f928a5db028");
-  //SwarmService.download("620120ae2bd2e5d0114bd605ca033e8efa9588312ac453e91a7bcf19630f6f20");
 
+  $scope.deployTest = function(greet){
+    var param = ['ciaux'];
+    var abi = [{"constant":false,"inputs":[],"name":"destroy","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getMsg","outputs":[{"name":"r","type":"string"}],"payable":false,"type":"function"},{"inputs":[{"name":"m","type":"string"}],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"message","type":"string"}],"name":"Log","type":"event"}];
+    var code = '0x6060604052341561000c57fe5b6040516103aa3803806103aa833981016040528080518201919050505b33600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508060019080519060200190610080929190610088565b505b5061012d565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f106100c957805160ff19168380011785556100f7565b828001600101855582156100f7579182015b828111156100f65782518255916020019190600101906100db565b5b5090506101049190610108565b5090565b61012a91905b8082111561012657600081600090555060010161010e565b5090565b90565b61026e8061013c6000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806383197ef014610046578063b5fdeb2314610058575bfe5b341561004e57fe5b6100566100f1565b005b341561006057fe5b610068610185565b60405180806020018281038252838181518152602001915080519060200190808383600083146100b7575b8051825260208311156100b757602082019150602081019050602083039250610093565b505050905090810190601f1680156100e35780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141561018257600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16ff5b5b565b61018d61022e565b60018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156102235780601f106101f857610100808354040283529160200191610223565b820191906000526020600020905b81548152906001019060200180831161020657829003601f168201915b505050505090505b90565b6020604051908101604052806000815250905600a165627a7a72305820da3a000078a8eaf2f978db0e1f347a381c9e29bf60d6d245e3a65c51b642be130029';
+    var gas = 4700000;
+    var fee = 1060020000000000;
+    AppService.contractNew(param,abi,code,gas,fee).then(function (res){
+        console.log(res);
+    });
+
+  }
+
+  $scope.checkContract = function(hash){
+    if(web3.eth.getTransactionReceipt(hash))
+      $scope.newContract = web3.eth.getTransactionReceipt(hash).contractAddress;
+  }
 
   function keyboardShowHandler(e){
     //patch on open
@@ -615,7 +629,14 @@ angular.module('leth.controllers', [])
       });
 
       lightwallet.keystore.deriveKeyFromPassword(password, function (err, pwDerivedKey) {
-        global_keystore = new lightwallet.keystore(seed, pwDerivedKey);
+        if($scope.legacy){
+          global_keystore = new lightwallet.keystore(seed, pwDerivedKey);
+        }else{
+          global_keystore = new lightwallet.keystore(seed, pwDerivedKey,hdPath2);
+          var info={curve: 'secp256k1', purpose: 'sign'};
+          global_keystore.addHdDerivationPath(hdPath,pwDerivedKey,info);          
+        }
+
         global_keystore.generateNewAddress(pwDerivedKey, 1);
         global_keystore.passwordProvider = customPasswordProvider;
 
@@ -883,6 +904,10 @@ angular.module('leth.controllers', [])
     $scope.randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
     createLoginModal();
   }
+
+  $scope.setLegacy = function(value) {
+    $scope.legacy = value;
+  };
 
   $scope.restoreLogin = function(seed){
     closeEntropyModal();

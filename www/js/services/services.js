@@ -131,7 +131,7 @@ angular.module('leth.services', [])
     idkey: function () {
       var result;
       try {
-        result = "0x" + local_keystore.getPubKeys(hdPath)[0];
+        result = local_keystore.getPubKeys(hdPath)[0];
       }catch(e) {
         result = undefined;
       }
@@ -179,16 +179,81 @@ angular.module('leth.services', [])
           }
         }); 
     },
-    transferEth: function (from, to, value) {
+    deployContract: function (datacode, gasValue) {
+      return $q(function (resolve, reject) {
+        var fromAddr = global_keystore.getAddresses()[0];
+        var gasPrice = web3.eth.gasPrice;
+        var gas = gasValue; //TODO: use estimate?
+        var cdata = datacode;
+         try {
+            web3.eth.sendTransaction({
+              from: fromAddr,
+              gasPrice: gasPrice,
+              gas: gas,
+              data: cdata
+            }, function (err, hash) {
+              var result = new Array;
+              result.push(err);
+              result.push(hash);
+              resolve(result);
+            });
+          } catch (e) {
+            reject(e);
+          }
+        }); 
+    },
+    contractNew: function (params, abi, datacode, gasLimit, fee) {
+      var fromAddr = global_keystore.getAddresses()[0];
+      var m = params[0];
+      var contract = web3.eth.contract(abi);
       var gasPrice = web3.eth.gasPrice;
-      var gas = 3000000;
+      var estimateGas = web3.eth.estimateGas({from: fromAddr, gasPrice: gasPrice, gas: gasLimit, data: datacode});
+      
+      var gPrice = fee/estimateGas;
+      
+      console.log("fee: " + fee);
+      console.log("price: " + gPrice);
+      console.log("estimate: " + estimateGas);
+      console.log("priceStandard: " + gasPrice.toNumber());
+      console.log("cost: " + gasPrice*gasLimit);
+
+      if(estimateGas>gasLimit) console.log("Warning: GasLimit too low!");
+
+      return $q(function (resolve, reject) {
+        try {
+          var callback = function (err, contract) {
+            if(err) reject(err);
+              if(contract.address){
+                  var result = new Array;
+                  result.push(contract);
+                  console.log(contract.address);
+                  resolve(result);
+              }else
+                console.log(contract.transactionHash);
+          }
+
+          contract.new(m,{from: fromAddr, gasPrice: gasPrice, gas: gasLimit, data: datacode}, callback);
+
+        } catch (e) {
+            reject(e);
+        }
+      }); 
+    },
+    transferEth: function (from, to, value, fee) {
+      var gas = web3.eth.estimateGas({});
+      var gasPrice = web3.eth.gasPrice; 
+      console.log("fee: " + fee);
+      var gPrice =   web3.toBigNumber(fee).dividedBy(gas).round();
+      console.log(gPrice.toNumber());
+
+      //web3.toBigNumber(web3.toWei(fee)/gas);
       return $q(function (resolve, reject) {
         try {
           web3.eth.sendTransaction({
             from: from,
             to: to,
             value: value,
-            gasPrice: gasPrice,
+            gasPrice: gPrice,
             gas: gas
           }, function (err, hash) {
             var result = new Array;
@@ -208,7 +273,8 @@ angular.module('leth.services', [])
         var functionName = nameSend;
         var args = JSON.parse('[]');
         var gasPrice = web3.eth.gasPrice;
-        var gas = 3000000; //TODO: use estimate?
+        var estimateGas = web3.eth.estimateGas({from: fromAddr, gasPrice: gasPrice, gas: gas});
+        var gas = estimateGas; //3000000; 
         try {
           args.push(toAddr,amount,{from: fromAddr, gasPrice: gasPrice, gas: gas});
           var callback = function (err, hash) {

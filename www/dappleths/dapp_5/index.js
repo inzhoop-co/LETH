@@ -105,7 +105,7 @@ var dappleth = (function(){
 	function listner(){
         //event listner
         eRegister = dappContract.Register().watch(function (error, result) {
-      
+	      if(!error){
             var user = result.participantName;
             var msg = {
                 from: result.address,
@@ -116,10 +116,11 @@ var dappleth = (function(){
             apiChat.sendDappMessage(msg, GUID);  
 
             update();
+          }
         });
 
         eAttend = dappContract.Attend().watch(function (error, result) {
-      
+		  if(!error){      
             var addr = result.addr;
             var msg = {
                 from: addr,
@@ -130,10 +131,12 @@ var dappleth = (function(){
             apiChat.sendDappMessage(msg, GUID);  
 
             update();
+          }
         });
 
-        ePayback = dappContract.Attend().watch(function (error, result) {
-            var addr = result.addr;
+        ePayback = dappContract.Payback().watch(function (error, result) {
+		   if(!error){
+			var addr = result.addr;
             var msg = {
                 from: result.address,
                 text: 'Payback ' + result._payout + '!',
@@ -143,6 +146,7 @@ var dappleth = (function(){
             apiChat.sendDappMessage(msg, GUID);  
 
             update();
+           }
         });
     }
 

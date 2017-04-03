@@ -107,7 +107,7 @@ angular.module('leth.services')
       }).catch(console.log);
     },
     sendCryptedMessage: function (content,toAddr,toKey) {
-      var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: '' };
+      var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: AppService.idkey() , text: content, image: '' };
       var idFrom = this.identity();
 
       chatsDM.push({
@@ -118,7 +118,7 @@ angular.module('leth.services')
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
-        encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
+        encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
         var payload = web3.fromUtf8(JSON.stringify(encMsg));        
         var message = {
           from:  idFrom,
@@ -132,7 +132,7 @@ angular.module('leth.services')
       });
     },
     sendCryptedPaymentReq: function (content,request,toAddr,toKey) {
-      var msg = {type: 'leth', mode: 'payment', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: '', attach: {addr: AppService.account(), idkey: AppService.idkey(), payment: request}};
+      var msg = {type: 'leth', mode: 'payment', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: AppService.idkey() , text: content, image: '', attach: {addr: AppService.account(), idkey: AppService.idkey(), payment: request}};
       var idFrom = this.identity();
 
       chatsDM.push({
@@ -143,7 +143,7 @@ angular.module('leth.services')
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
-        encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
+        encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = {
           from:  idFrom,
@@ -157,7 +157,7 @@ angular.module('leth.services')
       });
     },
     sendCryptedCustomToken: function (content,token,toAddr,toKey) {
-      var msg = {type: 'leth', mode: 'token', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: token.Logo, attach: {addr: AppService.account(), idkey: AppService.idkey(), token: token}};
+      var msg = {type: 'leth', mode: 'token', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: AppService.idkey() , text: content, image: token.Logo, attach: {addr: AppService.account(), idkey: AppService.idkey(), token: token}};
       var idFrom = this.identity();
      
       chatsDM.push({
@@ -168,8 +168,8 @@ angular.module('leth.services')
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
-        encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
-        encMsg.image = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,token.Logo,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
+        encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
+        encMsg.image = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,token.Logo,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey],hdPath);
 
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = {
@@ -185,7 +185,7 @@ angular.module('leth.services')
     },
     sendInviteToDapp: function (dapp,toAddr,toKey) {
       var content = dapp.message;
-      var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: content, image: '', attach: dapp };
+      var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: AppService.idkey() , text: content, image: '', attach: dapp };
       var idFrom = this.identity();
 
       chatsDM.push({
@@ -196,7 +196,7 @@ angular.module('leth.services')
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
-        encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
+        encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = {
           from:  idFrom,
@@ -210,7 +210,7 @@ angular.module('leth.services')
       });
     },
     sendCryptedPhotoOld: function (content,toAddr,toKey) {
-      var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: '', image: content };
+      var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: AppService.idkey() , text: '', image: content };
       var idFrom = this.identity();
 
       chatsDM.push({
@@ -221,7 +221,7 @@ angular.module('leth.services')
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
-        crptMsg.payload.image = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
+        crptMsg.payload.image = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
          
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = {
@@ -236,7 +236,7 @@ angular.module('leth.services')
       });
     },
     sendCryptedPhoto: function (content,toAddr,toKey) {
-      var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: local_keystore.getPubKeys(hdPath)[0] , text: '', image: content };
+      var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: AppService.idkey() , text: '', image: content };
       var idFrom = this.identity();
 
       chatsDM.push({
@@ -247,13 +247,13 @@ angular.module('leth.services')
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
-        var encImg = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
+        var encImg = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
         encMsg.image = web3.fromUtf8(JSON.stringify(encImg));
 
         SwarmService.upload(encMsg.image).then(function(val){
           encMsg.image = val;
           var bzzrAddr = "bzzr@: " + val;
-          encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,bzzrAddr,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath); 
+          encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,bzzrAddr,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath); 
           
           var payload = web3.fromUtf8(JSON.stringify(encMsg));
           var message = {
@@ -287,7 +287,7 @@ angular.module('leth.services')
       });
     },
     sendTransactionNote: function (transaction) {
-      var note = {type: 'leth', mode: 'transaction', time: Date.now(), from: AppService.account(), to: [transaction.to,AppService.account()], senderKey: local_keystore.getPubKeys(hdPath)[0] ,text: 'I sent ' + transaction.symbol + " " + (transaction.value / transaction.unit).toFixed(6) + '&#x1F4B8;', image: '', attach: transaction };   
+      var note = {type: 'leth', mode: 'transaction', time: Date.now(), from: AppService.account(), to: [transaction.to,AppService.account()], senderKey: AppService.idkey() ,text: 'I sent ' + transaction.symbol + " " + (transaction.value / transaction.unit).toFixed(6) + '&#x1F4B8;', image: '', attach: transaction };   
       var idFrom = this.identity();
      
       chatsDM.push({
@@ -300,8 +300,8 @@ angular.module('leth.services')
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encNote = angular.copy(note);
-        encNote.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,note.text,local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath); 
-        encNote.attach = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,JSON.stringify(transaction),local_keystore.getPubKeys(hdPath)[0],[toKey.replace("0x",""),local_keystore.getPubKeys(hdPath)[0]],hdPath);
+        encNote.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,note.text,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath); 
+        encNote.attach = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,JSON.stringify(transaction),AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
 
         var payload = web3.fromUtf8(JSON.stringify(encNote));
         var message = {
@@ -455,13 +455,13 @@ angular.module('leth.services')
         if(payload.to[0] && payload.to[0]==AppService.account()){
           lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
             if(payload.text != '')
-              payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,payload.text, payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
+              payload.text = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,payload.text, payload.senderKey,AppService.idkey(),hdPath);
             if(payload.attach && payload.attach != '')
-              payload.attach = JSON.parse(lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,payload.attach, payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath));
+              payload.attach = JSON.parse(lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,payload.attach, payload.senderKey,AppService.idkey(),hdPath));
             if(payload.image != ''){
               SwarmService.downloadRw(payload.image).then(function(val){
                 var img = JSON.parse(web3.toUtf8(val.toString()));
-                payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,img, payload.senderKey,local_keystore.getPubKeys(hdPath)[0],hdPath);
+                payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,img, payload.senderKey,AppService.idkey(),hdPath);
                 
                 pushChatDM(payload, result);
               }).catch(console.log);

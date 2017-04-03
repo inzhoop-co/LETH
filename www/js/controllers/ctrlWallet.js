@@ -15,8 +15,8 @@ angular.module('leth.controllers')
         $scope.xCoin = "XETH";        
         $scope.listUnit = [
     			{multiplier: "1.0e18", unitName: "ether"},
-    			{multiplier: "1.0e15", unitName: "finney"},
-    			{multiplier: "1.0e12",unitName: "szabo"}
+    			{multiplier: "1.0e15", unitName: "finney"}
+          //,{multiplier: "1.0e12",unitName: "szabo"}
     		];
         $scope.unit = $scope.listUnit[0].multiplier;
         $scope.balance = AppService.balance($scope.unit);
@@ -57,6 +57,13 @@ angular.module('leth.controllers')
       else
         $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.decimals);
     
+      $scope.minFee = 371007000000000;
+      $scope.maxFee = 11183211000000000;
+      $scope.step = 344506500000000;
+      $scope.fee = 1060020000000000;
+
+      $scope.feeLabel = $scope.fee / $scope.unit;
+
       updateExchange();
     })
 
@@ -128,7 +135,7 @@ angular.module('leth.controllers')
       }
       else{
         var value = parseFloat(amount) * unit;
-        AppService.transferEth($scope.account, addr, value).then(
+        AppService.transferEth($scope.account, addr, value, $scope.fee).then(
           function (result) {
             $ionicLoading.show({template: 'Sending...'});
             if (result[0] != undefined) {
@@ -171,6 +178,11 @@ angular.module('leth.controllers')
       }//else
     };
 
+    $scope.setFee = function(val){
+      $scope.fee= val;
+      $scope.feeLabel = $scope.fee  / $scope.unit;
+
+    }
     $scope.unitChanged = function(u){
       var unt = $scope.listUnit.filter(function (val) {
         if(val.multiplier === u)
@@ -178,12 +190,18 @@ angular.module('leth.controllers')
       });
       $scope.balance = AppService.balance(unt[0].multiplier);
       $scope.symbolCoin = unt[0].unitName;
+      $scope.unit = unt[0].multiplier;
+
+      $scope.feeLabel = $scope.fee  / $scope.unit;
+
     }
 
     $scope.confirmSend = function (addr, amount,unit) {
+      var valueFee = parseFloat($scope.fee / $scope.unit);
+
       var confirmPopup = $ionicPopup.confirm({
         title: 'Confirm payment',
-        template: 'Send ' + parseFloat(amount) + " " + document.querySelector('#valuta option:checked').text + " to " + addr + " ?"
+        template: 'Send ' + parseFloat(amount + valueFee) + " " + document.querySelector('#valuta option:checked').text + " to " + addr + " ?"
       });
       confirmPopup.then(function (res) {
         if (res) {
