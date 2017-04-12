@@ -35,7 +35,7 @@ angular.module('leth.controllers')
         $scope.contractCoin = web3.eth.contract(activeCoins[index-1].ABI).at(activeCoins[index-1].Address);
     		$scope.listUnit = activeCoins[index-1].Units;
         $scope.unit = $scope.listUnit[0].multiplier;
-        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.decimals);
+        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit );
       }
       
       updateExchange();
@@ -92,8 +92,9 @@ angular.module('leth.controllers')
     }
 
     $scope.sendCoins = function (addr, amount, unit, idCoin) {
+      var value = parseFloat(amount) * unit;
       if( $scope.idCoin!=0){
-        AppService.transferCoin($scope.contractCoin, $scope.methodSend, $scope.account, addr, amount).then(
+        AppService.transferCoin($scope.contractCoin, $scope.methodSend, $scope.account, addr, value).then(
           function (result) {
             if (result[0] != undefined) {
               var errorPopup = $ionicPopup.alert({
@@ -115,7 +116,7 @@ angular.module('leth.controllers')
                 $state.go('tab.transall');
               });
               //save transaction
-              var newT = {from: $scope.account, to: addr, id: result[1], value: amount, unit: unit, symbol: $scope.symbolCoin, time: new Date().getTime()};
+              var newT = {from: $scope.account, to: addr, id: result[1], value: value, unit: unit, symbol: $scope.symbolCoin, time: new Date().getTime()};
               $scope.transactions = Transactions.add(newT);
               Chat.sendTransactionNote(newT);              
               refresh();
@@ -135,7 +136,6 @@ angular.module('leth.controllers')
 
       }
       else{
-        var value = parseFloat(amount) * unit;
         AppService.transferEth($scope.account, addr, value, $scope.fee).then(
           function (result) {
             $ionicLoading.show({template: 'Sending...'});
@@ -208,9 +208,8 @@ angular.module('leth.controllers')
 
     $scope.confirmSend = function (addr, amount,unit) {
       var total = parseFloat(amount);
-      var unit = 1.0e18;
+      var unit = $scope.unit;  
       if($scope.idCoin==0){
-        unit = $scope.unit;
         var valueFee = parseFloat($scope.fee / unit);
         total = parseFloat(amount + valueFee) ;
       }
