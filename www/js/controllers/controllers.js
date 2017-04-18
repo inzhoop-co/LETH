@@ -33,7 +33,6 @@ angular.module('leth.controllers', [])
     $timeout(function() {$ionicLoading.hide();}, 1000);
   };
 
-
   $scope.deployTest = function(greet){
     var param = ['ciaux'];
     var abi = [{"constant":false,"inputs":[],"name":"destroy","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getMsg","outputs":[{"name":"r","type":"string"}],"payable":false,"type":"function"},{"inputs":[{"name":"m","type":"string"}],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"message","type":"string"}],"name":"Log","type":"event"}];
