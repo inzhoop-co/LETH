@@ -256,6 +256,7 @@ angular.module('leth.services', [])
             gasPrice: gPrice,
             gas: gas
           }, function (err, hash) {
+            if(err) reject(err);
             var result = new Array;
             result.push(err);
             result.push(hash);
