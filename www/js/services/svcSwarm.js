@@ -1,13 +1,18 @@
 angular.module('leth.services')
 .factory('SwarmService', function ($http, $q) {
   var PROVIDER = "http://swarm-gateways.net";
-  var swarm = Swarm.at(PROVIDER);
+  var swarm;
+
+  try{
+    swarm=Swarm.at(PROVIDER);
+  }catch(e){
+    console.log(e);
+  }
 
   var print = function print(val) {
     console.log(val);
     var result = toHTML(val);
     console.log(result);
-    //Chat.sendMessage(toHTML(val));
   };
 
   var resolve = function resolve(val) {
@@ -83,7 +88,6 @@ angular.module('leth.services')
         q.reject(response);
       });
       return q.promise;
-      //swarm.download(hash).then(resolve).catch(console.log);        
     },
     upload: function upload(dir) {
       var q = $q.defer();
