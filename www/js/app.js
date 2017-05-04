@@ -1,8 +1,8 @@
 web3 = new Web3();
 hdPath = "m/44'/60'/0";
 hdPath2 = "m/44'/60'/0'/0";
-
-
+StorePath = 'https://www.inzhoop.com/dappleths'; 
+//https://raw.githubusercontent.com/inzhoop-co/DappLETHs/master/Bootstrap';
 
 var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
   .constant('$ionicLoadingConfig', {
@@ -15,7 +15,8 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
   })
   .constant('StoreEndpoint', {
     //url: 'DappLETHs'
-    url: 'https://www.inzhoop.com/dappleths'
+    //url: 'https://www.inzhoop.com/dappleths'
+    url: StorePath
   })
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicScrollDelegate,
                 $lockScreen,$state,$window, $location) {

@@ -1,7 +1,7 @@
 angular.module('leth.services', [])
 
 .service('UIService', function ($rootScope, $http, $q, $timeout,
-          StoreEndpoint, $ionicLoading, $ionicScrollDelegate) {
+          StoreEndpoint, $ionicPopup,$ionicPlatform, $ionicLoading, $ionicScrollDelegate, $cordovaBarcodeScanner) {
   return{
     loadOn: function(){
       $ionicLoading.show();
@@ -17,6 +17,45 @@ angular.module('leth.services', [])
         $ionicScrollDelegate.$getByHandle(handle).resize();
         $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
       }, 1000);
+    },
+    popupConfirm: function(txtTitle, txtTemplate){
+      var q = $q.defer();
+      
+      var confirmPopup = $ionicPopup.confirm({
+        title: txtTitle,
+        template: txtTemplate
+      });
+
+      confirmPopup.then(function(res,err) {
+        if(res)
+          q.resolve();
+        else
+        q.reject();
+       });
+      
+      return q.promise;
+
+    },
+    scanQR : function(){
+      var q = $q.defer();
+
+      $ionicPlatform.ready(function () {
+        if($rootScope.deviceready){
+          $cordovaBarcodeScanner
+          .scan()
+          .then(function (barcodeData) {
+            if(barcodeData.text!= ""){
+              console.log('read code: ' + barcodeData.text);
+              q.resolve(barcodeData.text);
+            }
+          }, function (error) {
+            // An error occurred
+            console.log('Error!' + error);
+            q.reject(error);
+          });
+        }
+      });
+      return q.promise;
     }
   }
 })
