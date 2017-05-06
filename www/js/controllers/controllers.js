@@ -1272,18 +1272,18 @@ angular.module('leth.controllers', [])
             $state.go('tab.wallet', {addr: msg.attach.addr + "#" + msg.attach.idkey + "@" + msg.attach.payment}, { relative: $state.$current.view});
             break;
           case 6: // install token
-            var msgTxt = "<h2 class='text-center'>Custom Token " + msg.attach.token.Name + " Shared! </h2>";
-            msgTxt += "<p class='text-center'><img height='100px' width='auto' src='" + msg.attach.token.Logo + "'/></p>";
+                        var msgTxt = "<h2 class='text-center'>Custom Token " + msg.attach.Name + " Shared! </h2>";
+            msgTxt += "<p class='text-center'><img height='100px' width='auto' src='" + msg.attach.Logo + "'/></p>";
               
             var confirmPopup = $ionicPopup.confirm({
               title: 'Install Custom Token',
-              template: 'A new Token shared with you!<br/>Do you want to add ' + msg.attach.token.Name + '?'
+              template: 'A new Token shared with you!<br/>Do you want to add ' + msg.attach.Name + '?'
             });
 
             confirmPopup.then(function(res) {
               if(res) {
-                if($scope.listCoins.indexOf(msg.attach.token)==-1)
-                  $scope.listCoins.push(msg.attach.token);
+                if($scope.listCoins.indexOf(msg.attach)==-1)
+                  $scope.listCoins.push(msg.attach);
                 localStorage.Coins = JSON.stringify($scope.listCoins);
                 $state.go('tab.dappleths', { relative: $state.$current.view});
                }
