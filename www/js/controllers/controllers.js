@@ -441,23 +441,22 @@ angular.module('leth.controllers', [])
   
 
   $scope.scanTo = function () {
-    //document.addEventListener("deviceready", function () {      
     $ionicPlatform.ready(function () {
       if($rootScope.deviceready){
-        $cordovaBarcodeScanner.hasPermission().then(
+        $cordovaBarcodeScanner.hasPermission().then(function(result){
           $cordovaBarcodeScanner
           .scan()
           .then(function (barcodeData) {
             if(barcodeData.text!= ""){
-  			      $state.go('tab.wallet', {addr: barcodeData.text});
-  			      console.log('read code: ' + barcodeData.text);
-  		      }
+              $state.go('tab.wallet', {addr: barcodeData.text});
+              console.log('read code: ' + barcodeData.text);
+            }
           }, function (error) {
             // An error occurred
             console.log('Error!' + error);
           });
-        )
-      }
+        });
+      }//if
     });        
   };
 
