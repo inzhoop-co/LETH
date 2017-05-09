@@ -443,7 +443,6 @@ angular.module('leth.controllers', [])
   $scope.scanTo = function () {
     $ionicPlatform.ready(function () {
       if($rootScope.deviceready){
-        $cordovaBarcodeScanner.hasPermission().then(function(result){
           $cordovaBarcodeScanner
           .scan()
           .then(function (barcodeData) {
@@ -455,7 +454,6 @@ angular.module('leth.controllers', [])
             // An error occurred
             console.log('Error!' + error);
           });
-        });
       }//if
     });        
   };
