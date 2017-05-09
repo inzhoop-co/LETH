@@ -67,7 +67,7 @@ angular.module('leth.services')
         message: msg
       });
     },
-    sendImageOld: function (content) {
+    sendImageShh: function (content) {
       var msg = {type: 'leth', mode: 'plain', time: Date.now(), from: AppService.account(), to: [null], text: '', image: content, attach: {addr: AppService.account(), idkey: AppService.idkey()} };
       var payload = web3.fromUtf8(JSON.stringify(msg));
       var message = {
@@ -132,7 +132,8 @@ angular.module('leth.services')
       });
     },
     sendCryptedPaymentReq: function (content,request,toAddr,toKey) {
-      var msg = {type: 'leth', mode: 'payment', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: AppService.idkey() , text: content, image: '', attach: {addr: AppService.account(), idkey: AppService.idkey(), payment: request}};
+      var paymentRequest = {addr: AppService.account(), idkey: AppService.idkey(), payment: request};
+      var msg = {type: 'leth', mode: 'payment', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: AppService.idkey() , text: content, image: '', attach: paymentRequest};
       var idFrom = this.identity();
 
       chatsDM.push({
@@ -144,6 +145,8 @@ angular.module('leth.services')
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
         encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
+        encMsg.attach = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,JSON.stringify(paymentRequest),AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
+        
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = {
           from:  idFrom,
@@ -210,7 +213,7 @@ angular.module('leth.services')
         web3.shh.post(message); 
       });
     },
-    sendCryptedPhotoOld: function (content,toAddr,toKey) {
+    sendCryptedPhotoShh: function (content,toAddr,toKey) {
       var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: AppService.idkey() , text: '', image: content };
       var idFrom = this.identity();
 
@@ -346,19 +349,40 @@ angular.module('leth.services')
       };
       web3.shh.post(message); 
       
-      if(toAddr==null){
-        chats.push({
-          identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-          timestamp: Date.now(),
-          message: msg
-        });
-      }else{
-        chatsDM.push({
-          identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-          timestamp: Date.now(),
-          message: msg
-        });
-      }
+      chats.push({
+        identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
+        timestamp: Date.now(),
+        message: msg
+      });
+    },
+    sendCryptedPosition: function (toAddr, position) {
+      var msg = {type: 'leth', mode: 'geolocation', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()], senderKey: AppService.idkey(), text: "Here I am! " + '&#x1F4CD;' , image: '', attach:  position};
+      var idFrom = this.identity();
+    
+      chatsDM.push({
+        identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
+        timestamp: Date.now(),
+        message: msg
+      });
+
+      var toKey = Friends.get(toAddr).idkey;
+
+      lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
+        var encMsg = angular.copy(msg);
+        encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,msg.text,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath); 
+        encMsg.attach = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,JSON.stringify(position),AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
+
+        var payload = web3.fromUtf8(JSON.stringify(encMsg));
+        var message = {
+          from:  idFrom,
+          topics: topics,
+          payload: payload,
+          ttl: ttlTime,
+          workToProve: wtpTime
+        };
+  
+        web3.shh.post(message); 
+      });      
     },
     sendDappMessageShh: function (text, dapp) {
       var msg = {type: 'leth', mode: 'dappMessage', time: Date.now(), from: dapp.Address, to: [null], text: text, image:''};

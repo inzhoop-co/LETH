@@ -159,7 +159,7 @@ angular.module('leth.controllers')
                 Geolocation.getCurrentPosition()
                     .then(function (position) {
                       var coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-                      Chat.sendPosition($scope.friend.addr,coords);
+                      Chat.sendCryptedPosition($scope.friend.addr,coords);
                     }, function (err) {
                         // error
                     });
