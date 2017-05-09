@@ -444,7 +444,8 @@ angular.module('leth.controllers', [])
     //document.addEventListener("deviceready", function () {      
     $ionicPlatform.ready(function () {
       if($rootScope.deviceready){
-        $cordovaBarcodeScanner
+        $cordovaBarcodeScanner.hasPermission().then(
+          $cordovaBarcodeScanner
           .scan()
           .then(function (barcodeData) {
             if(barcodeData.text!= ""){
@@ -455,7 +456,7 @@ angular.module('leth.controllers', [])
             // An error occurred
             console.log('Error!' + error);
           });
-      //}, false); 
+        )
       }
     });        
   };
