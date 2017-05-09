@@ -330,7 +330,7 @@ angular.module('leth.controllers')
   var backupSeed = function(){
     PasswordPopup.open("Digit your wallet password", "unlock account to proceed").then(
       function (password) {
-        lightwallet.keystore.deriveKeyFromPassword(password, function (err, pwDerivedKey) {
+        global_keystore.keyFromPassword(password, function (err, pwDerivedKey) {
           var seed = global_keystore.getSeed(pwDerivedKey);
           var alertPopup = $ionicPopup.alert({
              title: 'Backup securely your seed',
