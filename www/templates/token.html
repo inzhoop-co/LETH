@@ -10,25 +10,30 @@
         Network 
         <span class="{{badgeNetwork}}">{{nameNetwork}}&nbsp;</span>
     </div>
-    <form name="token" ng-submit="addCustomToken(token)">
+    <form name="frmtoken" ng-submit="addCustomToken()">
     <div class="list">
       <label class="item item-input item-floating-label">
-        <span class="input-label">Company</span>
-        <input type="text" placeholder="Company Name" ng-model="token.company" required>
-      </label>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Token</span>
-        <input type="text" placeholder="Token Name" ng-model="token.name" required>
+        <span class="input-label">Owner</span>
+        <input type="text" placeholder="Owner Token Name" ng-model="token.company" required>
       </label>
       <label class="item item-input item-floating-label">
         <span class="input-label">Abstract</span>
         <input type="text" placeholder="One sentence abstract" ng-model="token.abstract" required>
       </label>
+      <label class="item item-input item-floating-label  item-avatar-right">
+        <img ng-src="{{token.logo}}" ng-show="token.logo"/>
+        <span class="input-label">Logo</span>
+        <input type="url" placeholder="Logo URL" ng-model="token.logo" ng-init="token.logo='https://www.inzhoop.com/dappleths/ct.png'" required>
+      </label>
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Token</span>
+        <input type="text" placeholder="Token Name" ng-model="token.name" required readonly="">
+      </label>
       <div class="row">
         <div class="col">
           <label class="item-input item-floating-label">
             <span class="input-label">Symbol</span>
-            <input type="text" placeholder="Symbol" ng-model="token.symbol" required>
+            <input type="text" placeholder="Symbol" ng-model="token.symbol" required readonly="">
           </label>
         </div>
         <div class="col">
@@ -38,21 +43,16 @@
           </label>
         </div>
       </div>
-      <label class="item item-input item-floating-label  item-avatar-right">
-        <img ng-src="{{token.logo}}" ng-show="token.logo"/>
-        <span class="input-label">Logo</span>
-        <input type="url" placeholder="Logo URL" ng-model="token.logo" ng-init="token.logo='https://www.inzhoop.com/dappleths/ct.png'" required>
-      </label>
       <label class="item item-input item-floating-label">
         <span class="input-label">Address</span>
-        <input type="text" placeholder="Adress token deployed" ng-model="token.address" required>
+        <input type="text" placeholder="Adress token deployed" ng-model="token.address" required readonly>
       </label>
-      <label class="item item-input item-floating-label">
+      <!--label class="item item-input item-floating-label">
         <span class="input-label">ABI</span>
         <textarea placeholder="ABI token contract" ng-model="token.ABI" required></textarea>
-      </label>
-      <button ng-disabled="!token.$valid" class="button button-block button-energized" type="submit">
-         <i class="icon ion-ios-checkmark-empty" ng-hide="!login.$valid"></i>&nbsp;Add Token
+      </label-->
+      <button ng-disabled="!frmtoken.$valid" class="button button-block button-energized" type="submit">
+         <i class="icon ion-ios-checkmark-empty"></i>&nbsp;Add Token
       </button>
     </div>
     </form>

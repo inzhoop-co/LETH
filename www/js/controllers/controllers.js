@@ -336,18 +336,95 @@ angular.module('leth.controllers', [])
     });
   };
 
+  var loadTokenData=function(contractAddress){
+      var addr = AppService.account();
+      //ERC20Abi
+      var abi = [{"constant": true,"inputs": [],"name": "name","outputs": [{"name": "","type": "string"}],"payable": false,"type": "function"},{"constant": false,"inputs": [{"name": "_spender","type": "address"},{"name": "_value","type": "uint256"}],"name": "approve","outputs": [{"name": "success","type": "bool"}],"payable": false,"type": "function"},{"constant": true,"inputs": [],"name": "totalSupply","outputs": [{"name": "","type": "uint256"}],"payable": false,"type": "function"},{"constant": false,"inputs": [{"name": "_from","type": "address"},{"name": "_to","type": "address"},{"name": "_value","type": "uint256"}],"name": "transferFrom","outputs": [{"name": "success","type": "bool"}],"payable": false,"type": "function"},{"constant": true,"inputs": [],"name": "decimals","outputs": [{"name": "","type": "uint8"}],"payable": false,"type": "function"},{"constant": true,"inputs": [],"name": "version","outputs": [{"name": "","type": "string"}],"payable": false,"type": "function"},{"constant": true,"inputs": [{"name": "_owner","type": "address"}],"name": "balanceOf","outputs": [{"name": "balance","type": "uint256"}],"payable": false,"type": "function"},{"constant": true,"inputs": [],"name": "symbol","outputs": [{"name": "","type": "string"}],"payable": false,"type": "function"},{"constant": false,"inputs": [{"name": "_to","type": "address"},{"name": "_value","type": "uint256"}],"name": "transfer","outputs": [{"name": "success","type": "bool"}],"payable": false,"type": "function"},{"constant": false,"inputs": [{"name": "_spender","type": "address"},{"name": "_value","type": "uint256"},{"name": "_extraData","type": "bytes"}],"name": "approveAndCall","outputs": [{"name": "success","type": "bool"}],"payable": false,"type": "function"},{"constant": true,"inputs": [{"name": "_owner","type": "address"},{"name": "_spender","type": "address"}],"name": "allowance","outputs": [{"name": "remaining","type": "uint256"}],"payable": false,"type": "function"},{"inputs": [{"name": "_initialAmount","type": "uint256"},{"name": "_tokenName","type": "string"},{"name": "_decimalUnits","type": "uint8"},{"name": "_tokenSymbol","type": "string"}],"type": "constructor"},{"payable": false,"type": "fallback"},{"anonymous": false,"inputs": [{"indexed": true,"name": "_from","type": "address"},{"indexed": true,"name": "_to","type": "address"},{"indexed": false,"name": "_value","type": "uint256"}],"name": "Transfer","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "_owner","type": "address"},{"indexed": true,"name": "_spender","type": "address"},{"indexed": false,"name": "_value","type": "uint256"}],"name": "Approval","type": "event"}];
+
+      var token = web3.eth.contract(abi).at(contractAddress);
+
+      $scope.token.abi=token.abi;
+
+      // Get the token name
+      token.name.call(function(err, name) {
+        if(err) { console.log(err) }
+        if(name) { console.log('The token name is: ' + name) }
+        $scope.token.name = name;
+      })
+
+      token.decimals.call(function(err, decimals) {
+        if(err) { console.log(err) }
+        if(decimals) { console.log('The decimals are: ' + decimals.toNumber()) }
+        $scope.token.decimals = decimals.toNumber();
+      })
+
+      // Get the token symbol
+      token.symbol.call({from: addr}, function(err, symbol) {
+        //ABI expects string here,
+        if(err) { console.log(err) }
+        console.log('Token symbol: ' + symbol)
+        $scope.token.symbol = symbol;
+      })
+
+      token.totalSupply.call({from: addr}, function(err, totalSupply) {
+        console.log(totalSupply)
+      })
+
+      token.balanceOf.call(addr, function (err, bal) {
+        if (err) { console.error(err) }
+        console.log('balance is ' + bal.toString(10))
+      })
+
+      console.log($scope.token);
+
+  }
+  $scope.loadCustomToken = function(){
+    $scope.token = {};
+
+    // An elaborate, custom popup
+    var myPopup = $ionicPopup.show({
+      template: '<input type="text" ng-model="token.address" autofocus="true">',
+      title: 'ERC20 Contract Address',
+      subTitle: 'Enter address of deployed contract token',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel' },
+        {
+          text: '<b>Load</b>',
+          type: 'button-positive',
+          onTap: function(e) {
+            if (!$scope.token.address) {
+              e.preventDefault();
+            } else {
+              return $scope.token.address;
+            }
+          }
+        }
+      ]
+    });
+
+    myPopup.then(function(res) {
+      console.log('Tapped!', res);
+      if(res){
+        loadTokenData($scope.token.address);
+        createModalToken();
+      }
+    });
+
+  }
+
   $scope.addCustomToken = function (token) {
     var customToken = {
-      "Name" : token.name,
+      "Name" : $scope.token.name,
       "GUID" : "C" + $scope.listCoins.length+1,
       "Network" : $scope.nameNetwork, 
-      "Company" : token.company,
-      "Logo" : token.logo,
-      "Symbol" : token.symbol,
-      "Decimals" : token.decimals,
-      "Abstract" : token.abstract,
-      "Address" : token.address,
-      "ABI" : JSON.parse(token.ABI),
+      "Company" : $scope.token.company,
+      "Logo" : $scope.token.logo,
+      "Symbol" : $scope.token.symbol,
+      "Decimals" : $scope.token.decimals,
+      "Abstract" : $scope.token.abstract,
+      "Address" : $scope.token.address,
+      "ABI" : $scope.token.abi,
       "Send" : "transfer",
       "Events" : [{"Transfer":"address indexed from, address indexed to, uint256 value"}],
       "Units":[{"multiplier": "1", "unitName": "Token"}],
@@ -776,10 +853,12 @@ angular.module('leth.controllers', [])
   }
 
   $scope.saveAddr = function(name,addr,idkey,comment){
-    if($scope.isFriend(addr))
-      Friends.update(name,addr,idkey,comment);
-    else
-      Friends.add(name,addr,idkey,comment);
+    if($scope.isValidAddr(addr)){
+      if($scope.isFriend(addr))
+        Friends.update(name,addr,idkey,comment);
+      else
+        Friends.add(name,addr,idkey,comment);      
+    }
     
     $scope.closeSaveAddressModal(); 
     $scope.friends = Friends.all();

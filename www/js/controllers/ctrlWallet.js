@@ -83,6 +83,7 @@ angular.module('leth.controllers')
       $scope.addrKey = idkey;
       $scope.amountTo = parseFloat(coins);
       $scope.fromAddressBook = true;
+      $scope.balAddrTo = parseFloat(web3.eth.getBalance($scope.addrTo))/$scope.unit;
     }else { 
       $scope.fromAddressBook = false;
     }
