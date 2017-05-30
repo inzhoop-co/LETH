@@ -348,22 +348,28 @@ angular.module('leth.controllers', [])
       // Get the token name
       token.name.call(function(err, name) {
         if(err) { console.log(err) }
-        if(name) { console.log('The token name is: ' + name) }
-        $scope.token.name = name;
+        if(name) { 
+          console.log('The token name is: ' + name);
+          $scope.token.name = name;
+        }
       })
 
       token.decimals.call(function(err, decimals) {
         if(err) { console.log(err) }
-        if(decimals) { console.log('The decimals are: ' + decimals.toNumber()) }
-        $scope.token.decimals = decimals.toNumber();
+        if(decimals) { 
+          console.log('The decimals are: ' + decimals.toNumber()) 
+          $scope.token.decimals = decimals.toNumber();
+        }
       })
 
       // Get the token symbol
       token.symbol.call({from: addr}, function(err, symbol) {
         //ABI expects string here,
         if(err) { console.log(err) }
-        console.log('Token symbol: ' + symbol)
-        $scope.token.symbol = symbol;
+        if(symbol){
+          console.log('Token symbol: ' + symbol)
+          $scope.token.symbol = symbol;
+        }
       })
 
       token.totalSupply.call({from: addr}, function(err, totalSupply) {
@@ -384,14 +390,14 @@ angular.module('leth.controllers', [])
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
       template: '<input type="text" ng-model="token.address" autofocus="true">',
-      title: 'ERC20 Contract Address',
-      subTitle: 'Enter address of deployed contract token',
+      title: 'ERC20 Token Address',
+      subTitle: 'Enter contract token address',
       scope: $scope,
       buttons: [
         { text: 'Cancel' },
         {
           text: '<b>Load</b>',
-          type: 'button-positive',
+          type: 'button-balanced',
           onTap: function(e) {
             if (!$scope.token.address) {
               e.preventDefault();
