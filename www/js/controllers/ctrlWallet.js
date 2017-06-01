@@ -1,7 +1,7 @@
 angular.module('leth.controllers')
   .controller('WalletCtrl', function ($scope, $rootScope, $stateParams, $ionicLoading, $ionicModal, $state, 
                                       $ionicPopup, $cordovaBarcodeScanner, $ionicActionSheet, 
-                                      $timeout, AppService, Transactions,ExchangeService, Chat) {
+                                      $timeout, ENSService, AppService, Transactions,ExchangeService, Chat) {
     var TrueException = {};
     var FalseException = {};
 
@@ -93,6 +93,10 @@ angular.module('leth.controllers')
     }
 
     $scope.sendCoins = function (addr, amount, unit, idCoin) {
+      if(addr.split('.')[1]==ENSService.suffix){
+        addr = ENSService.getAddress(addr);
+      } 
+
       var value = parseFloat(amount) * unit;
       if( $scope.idCoin!=0){
         AppService.transferCoin($scope.contractCoin, $scope.methodSend, $scope.account, addr, value).then(
@@ -208,6 +212,10 @@ angular.module('leth.controllers')
     }
 
     $scope.confirmSend = function (addr, amount,unit) {
+      if(addr.split('.')[1]==ENSService.suffix){
+        addrEns = ENSService.getAddress(addr);
+      }
+      var receiver = addr + " " + addrEns;
       var total = parseFloat(amount);
       var unit = $scope.unit;  
       if($scope.idCoin==0){
@@ -217,7 +225,7 @@ angular.module('leth.controllers')
 
       var confirmPopup = $ionicPopup.confirm({
         title: 'Confirm payment',
-        template: 'Send ' + total + " " + document.querySelector('#valuta option:checked').text + " to " + addr + " ?"
+        template: 'Send ' + total + " " + document.querySelector('#valuta option:checked').text + " to " + receiver + " ?"
       });
       confirmPopup.then(function (res) {
         if (res) {

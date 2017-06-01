@@ -482,8 +482,7 @@ angular.module('leth.controllers', [])
   $scope.isValidAddr = function(addr){
     if(addr){      
       if(addr.split('.')[1]==ENSService.suffix){
-        //console.log(addr);        
-        //resolve and replace address
+        //not able to change addrTo scope wallet variable!
         addr = ENSService.getAddress(addr);
         $scope.ENSResolved = addr;
       } 
