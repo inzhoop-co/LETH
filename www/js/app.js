@@ -13,8 +13,8 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
     //url: 'http://localhost:8100/feed'
   })
   .constant('StoreEndpoint', {
-    //url: 'DappLETHs'
-    url: StorePath
+    url: 'DappLETHs'
+    //url: StorePath
   })
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicScrollDelegate,
                 $lockScreen,$state,$window, $location) {

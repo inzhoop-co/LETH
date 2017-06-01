@@ -4,7 +4,7 @@ angular.module('leth.controllers', [])
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
                                 $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,
                                 $cordovaBadge,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, $cordovaVibration,
-                                AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService, nfcService, SwarmService) {
+                                ENSService, AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService, nfcService, SwarmService) {
   
   window.refresh = function () {
     $ionicLoading.show();
@@ -480,6 +480,17 @@ angular.module('leth.controllers', [])
   };
 
   $scope.isValidAddr = function(addr){
+    if(addr){      
+      if(addr.split('.')[1]==ENSService.suffix){
+        //console.log(addr);        
+        //resolve and replace address
+        addr = ENSService.getAddress(addr);
+        $scope.ENSResolved = addr;
+      } 
+      else
+        $scope.ENSResolved="";
+    }
+
     if(!web3.isAddress(addr)) {return false};
 
     return true;
@@ -607,6 +618,7 @@ angular.module('leth.controllers', [])
               $scope.classNetwork = 'calm';                
               $scope.badgeNetwork = 'badge badge-calm';              
           }
+          ENSService.init($scope.nameNetwork);//find a better place
         }
       });
       getSync();

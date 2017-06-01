@@ -9,3 +9,4 @@ var apiFriends = angular.element(document.body).injector().get("Friends");
 var apiUI = angular.element(document.body).injector().get("UIService");
 var apiBE = angular.element(document.body).injector().get("BEService");
 var apiNFC = angular.element(document.body).injector().get("nfcService");
+var apiENS = angular.element(document.body).injector().get("ENSService");
