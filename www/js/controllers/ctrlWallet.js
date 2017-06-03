@@ -212,6 +212,7 @@ angular.module('leth.controllers')
     }
 
     $scope.confirmSend = function (addr, amount,unit) {
+      var addrEns="";
       if(addr.split('.')[1]==ENSService.suffix){
         addrEns = ENSService.getAddress(addr);
       }

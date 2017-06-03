@@ -483,7 +483,7 @@ angular.module('leth.controllers', [])
     if(addr){      
       if(addr.split('.')[1]==ENSService.suffix){
         //not able to change addrTo scope wallet variable!
-        addr = ENSService.getAddress(addr);
+        addr = ENSService.getAddress(angular.lowercase(addr));
         $scope.ENSResolved = addr;
       } 
       else
