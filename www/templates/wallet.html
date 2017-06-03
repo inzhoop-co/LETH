@@ -5,7 +5,7 @@
       <ion-list class="list" can-swipe="true">
       <ion-item class="item item-divider item-avatar-left  item-icon-right item-avatar-right">
         <img ng-src="{{logoCoin}}" ng-click="scrollRefresh()"/>
-        <label id="{{idCoin}}"><b>{{balance | currency:symbolCoin+' ':6}} </b><span class="subdued" ">({{balanceExc}})</span></label>
+        <label id="{{idCoin}}"><b>{{balance | currency:symbolCoin+' ':decimals}} </b><span class="subdued" ">({{balanceExc}})</span></label>
         <p>
           <label >{{descCoin}}</label>
         </p>
@@ -21,7 +21,7 @@
             <label class="item-floating-label" ng-show="isFriend(addrTo)">{{isFriend(addrTo) | strLimit: 15 : 3}}</label> 
             <i class="icon ion-ios-person-outline positive" ng-show="!addrTo.length" ng-click="openFriendsModal()"></i>            
           </span>
-          <span class="item-note">{{balAddrTo | currency:'Ξ ':6}}</span>
+          <span class="item-note">{{balAddrTo | currency:symbolCoin+' ':decimals}}</span>
           <i class="icon ion-ios-personadd-empty positive" ng-show="isFriend(addrTo)=='' && isValidAddr(addrTo)" ng-click="addAddress(addrTo,addrKey)"></i>
           <input type="text" ng-model="addrTo" placeholder="Type address or use camera to scan" ng-required="true"/>
         </div>

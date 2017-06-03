@@ -195,6 +195,15 @@ angular.module('leth.services', [])
       }
       return result
     },
+    balanceOfUser: function (contractCoin, unit, userAddr) {
+      var result;
+      try {
+        result = contractCoin.balanceOf(userAddr)/ unit;
+      }catch (e){
+        result = undefined;
+      }
+      return result
+    },
     transactionCall: function (fname, to, params) {
       return $q(function (resolve, reject) {
         var fromAddr = global_keystore.getAddresses()[0];
