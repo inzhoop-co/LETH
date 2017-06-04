@@ -1,5 +1,5 @@
 angular.module('leth.controllers')  
-  .controller('DapplethsCtrl', function ($scope, $state, angularLoad, $ionicLoading, $ionicListDelegate, $ionicPopup, $timeout, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $cordovaInAppBrowser, AppService, FeedService) {
+  .controller('DapplethsCtrl', function ($scope, $state, angularLoad, $ionicLoading, $ionicListDelegate, $ionicPopup, $timeout, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $cordovaInAppBrowser, AppService) {
     $ionicSlideBoxDelegate.start();
     $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
@@ -10,57 +10,6 @@ angular.module('leth.controllers')
 
     refresh();
     
-    /*
-    $scope.cardSwiped = function(index) {
-      $scope.addCard();
-    };
-    $scope.cardDestroyed = function(index) {
-      $scope.cards.splice(index, 1);
-    };
-    $scope.addCard = function() {
-      var i = Math.floor(Math.random() * $scope.listFeeds.length);
-      var newCard = $scope.listFeeds[i];
-      newCard.id = i;
-      $scope.cards.push(angular.extend({}, newCard));
-    }
-    
-    $scope.accept = function(index) {
-        alert(index);
-    };
-    
-    $scope.earn = function(index){
-      $scope.item =  $scope.listFeeds[index]; 
-
-      var options = {
-        location: 'no',
-        clearcache: 'yes'
-      };
-
-      var earnPopup = $ionicPopup.show({
-        title: "1 coins earned!",
-        scope: $scope
-      })  
-
-      earnPopup.then(function(res){
-        document.addEventListener("deviceready", function () {      
-          $cordovaInAppBrowser.open($scope.item.link, '_system', options)
-            .then(function(event) {
-              // success
-            })
-            .catch(function(event) {
-              // error
-            });      
-        }, false); 
-      })
-
-      $timeout(function(){
-        earnPopup.close();
-         
-      }, 2000);
-    }
-    */
-
-
     $scope.installCoin = function(coin) {
       coin.Progress = true;
       $timeout(function() {
@@ -160,14 +109,6 @@ angular.module('leth.controllers')
       angularLoad.resetScript($scope.activeApp.ScriptUrl, "js");
       removejscssfile($scope.activeApp.ScriptUrl, "js"); 
     });
-
-    /*
-    $rootScope.$on('dappEvent', function(event,args){
-      var msg = args.data.detail;
-      Chat.sendDappMessage(msg, $scope.activeApp);  
-      $ionicLoading.show({ template: msg.text, noBackdrop: true, duration: 2000 })
-    });
-    */
     
     $scope.refresh = function() {
       dappleth.update();

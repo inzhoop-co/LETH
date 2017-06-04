@@ -13,7 +13,6 @@
       </ion-slide>
     </ion-slide-box>
     <div class="button-bar padding">
-      <!--button class="{{filterFeed}}" ng-click="readFeedsList()">News </button-->
       <button class="{{filterStoreCoins}}" ng-click="readCoinsList()">Tokens</button>
       <button class="{{filterStoreApps}}" ng-click="readDappsList()">ÐAppleths</button>
     </div>
@@ -33,46 +32,6 @@
         </li>
       </ul>
     </div>
-
-    <!--ion-slide-box auto-play="true" does-continue="true" show-pager="false" ng-repeat="cat in listCategory" ng-if="isDapp">
-      <ion-slide class="list" ng-repeat="dapp in listApps | filter:{Category:cat.Name} as listFiltered track by $index" ng-show="listFiltered.length>0">
-        <h5>{{cat.Name}} {{listFiltered.length}}</h5>
-        <a class="item item-thumbnail-left item-icon-right" ng-href="&#35;/tab/dappleth-run/{{dapp.GUID}}">
-          <img ng-src="{{dapp.Logo}}"/>
-          <h2>{{dapp.Name}}</h2>
-          <p>{{dapp.Description}}</p>
-          <h6>by {{dapp.Company}}</h6> 
-          <i class="icon ion-chevron-right icon-accessory" ng-hide="flagApps"></i>
-        </a>
-      </ion-slide>
-    </ion-slide-box-->
-
-     <!--ion-list ng-show="isDapp" class="list">
-      <ion-scroll direction="x" class="dapp-ion-scroll" ng-repeat="cat in listCategory" ng-show="listFiltered.length>0">
-        <div class="categoryContainer">
-        <h5>{{cat.Name}}</h5>
-          <div class="cardDapp" ng-repeat="dapp in listApps | filter:{Category:cat.Name} as listFiltered track by $index">
-          <a class="item item-thumbnail-left item-icon-right" ng-href="&#35;/tab/dappleth-run/{{dapp.GUID}}">
-            <img ng-src="{{dapp.Logo}}"/>
-            <h2>{{dapp.Name}}</h2>
-            <p>{{dapp.Description}}</p>
-            <h6>by {{dapp.Company}}</h6> 
-            </a>
-          </div>
-        </div>
-      </ion-scroll>
-
-      <ion-item class="item item-thumbnail-left item-icon-right"  ng-repeat="dapp in listApps | filter:{Network:nameNetwork} track by $index"
-          type="item-text-wrap" ng-href="&#35;/tab/dappleth-run/{{dapp.GUID}}">
-          <img ng-src="{{dapp.Logo}}"/>
-            <h2>{{dapp.Name}}</h2>
-            <p>{{dapp.Description}}</p>
-            <h6>by {{dapp.Company}}</h6>
-            <ion-spinner icon="crescent" class="icon spinner-positive" ng-show="isInstalling(dapp)"></ion-spinner>
-            <i class="icon ion-chevron-right icon-accessory" ng-hide="flagApps"></i>
-            <i class="icon ion-ios-cloud-download-outline positive" ng-hide="!flagApps" ng-click="installDapp(dapp.GUID)"></i>  
-      </ion-item>  
-    </ion-list-->
     <ion-list ng-show="isCoin">
       <ion-item class="item item-avatar-left item-icon-right"  ng-repeat="coin in listCoins | filter:{Network:nameNetwork} track by $index" type="item-text-wrap" on-hold="showCustomTokenInfo(coin)">
           <img ng-src="{{coin.Logo}}"/>
@@ -103,52 +62,7 @@
             <p>Add a custom token</p>
             <i class="icon ion-ios-plus-outline positive"></i>
       </ion-item>
-    </ion-list> 
-    <!--
-     <ion-list ng-show="isFeed">
-      <ion-item class="item-remove-animate item-icon-right" ng-repeat="info in listFeeds track by $index" ng-click="readFeed($index)">
-          <img ng-src="{{dapp.Logo}}"/>
-          <h2 ng-bind-html="info.title"></h2>
-          <p ng-bind-html="info.abstract"></p>
-          <p ng-bind-html="info.pubDate" class="item-note"></p>
-          <i class="icon ion-chevron-right icon-accessory"></i>
-        <ion-option-button class="button-assertive" ng-click="remove($index)">
-            Delete
-        </ion-option-button>
-      </ion-item> 
-      </ion-list> 
-        
-      <swipe-cards ng-show="isFeed">
-        <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)">
-          <div class="card" >        
-            <div class="item item-divider item-energized"> 
-              Read now Ethereum news 
-              <span class="badge badge-assertive">{{listFeeds.length}}</span>
-            </div>
-            <div class="item item-text-wrap">
-              <h3>{{card.title}}</h3>
-              <p>{{card.pubDate}}</p>
-            </div>
-            <div class="item item-divider item-stable">
-               <a class="icon button button-clear button-assertive" ng-click="earn({{card.id}})"><i class="ion-ios-pricetag"></i>  
-                Read & Earn</a>
-                <a class="icon button button-clear button-stable" ng-click="cardDestroyed($index); cardSwiped($index)"><i class="ion-arrow-graph-down-left"></i> Swipe & Skip</a>
-            </div>
-          </div> 
-        </swipe-card>
-        <swipe-card on-card-swipe="cardSwiped()" id="start-card">
-          <div class="card" >                
-            <div class="item item-divider item-energized"> 
-
-            </div>
-            <div class="item item-text-wrap">  
-              <h3>Swipe down cards, read and earn a revenue in coins! 
-              <i class="ion-arrow-graph-down-left"></i></h3>
-            </div>
-          </div>
-        </swipe-card>
-      </swipe-cards>
-     -->   
+    </ion-list>  
     <div ng-bind-html="appContainer">
     </div>
     </ion-content>

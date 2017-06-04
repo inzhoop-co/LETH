@@ -1,7 +1,6 @@
 /* 
 *	API Wrapper for Angularjs Services
 *
-*
 */
 var apiApp = angular.element(document.body).injector().get("AppService");
 var apiChat = angular.element(document.body).injector().get("Chat");

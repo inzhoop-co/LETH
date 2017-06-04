@@ -1,7 +1,7 @@
 angular.module('leth.controllers')  
   .controller('FriendsCtrl', function ($scope, Friends, $ionicListDelegate,  AppService, Chat) {    
     
-     $scope.$on('$ionicView.enter', function() {
+    $scope.$on('$ionicView.enter', function() {
       $scope.loadFriends();
       $scope.cancelDMNotifications();
       $scope.clearBadge();
@@ -72,10 +72,9 @@ angular.module('leth.controllers')
       Chat.sendCryptedMessage(textMsg,$scope.friend.addr,$scope.friend.idkey);
 
       $scope.scrollTo('chatDMScroll','bottom');
-
     };
 
-     $scope.sendPhoto = function(img){
+    $scope.sendPhoto = function(img){
       if (img==undefined) {
         return;
       }

@@ -37,9 +37,9 @@ angular.module('leth.controllers')
         $scope.contractCoin = web3.eth.contract(activeCoins[index-1].ABI).at(activeCoins[index-1].Address);
     		$scope.listUnit = activeCoins[index-1].Units;
         $scope.unit = $scope.listUnit[0].multiplier;
-        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit );
+        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.decimals);
         if($scope.addrTo!=undefined)
-          $scope.balAddrTo = AppService.balanceOfUser($scope.contractCoin,$scope.unit,$scope.addrTo);
+          $scope.balAddrTo = AppService.balanceOfUser($scope.contractCoin,$scope.unit + 'e+' + $scope.decimals,$scope.addrTo);
 
       }
       
@@ -61,7 +61,7 @@ angular.module('leth.controllers')
       if($scope.idCoin==0 || $scope.idCoin==undefined)    
         $scope.balance = AppService.balance($scope.unit);
       else
-        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit);
+        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.decimals);
     
       $scope.minFee = 371007000000000;
       $scope.maxFee = 11183211000000000;
@@ -92,7 +92,6 @@ angular.module('leth.controllers')
         $scope.balAddrTo = parseFloat(web3.eth.getBalance($scope.addrTo))/$scope.unit;
       else
         $scope.balAddrTo = AppService.balanceOfUser($scope.contractCoin,$scope.unit,$scope.addrTo);
-
     }else { 
       $scope.fromAddressBook = false;
     }
@@ -202,8 +201,8 @@ angular.module('leth.controllers')
         
 
       $scope.feeLabel = $scope.fee  / unit;
-
     }
+
     $scope.unitChanged = function(u){
       var unt = $scope.listUnit.filter(function (val) {
         if(val.multiplier === u)
@@ -217,7 +216,6 @@ angular.module('leth.controllers')
         $scope.feeLabel = $scope.fee  / $scope.unit;
         $scope.symbolFee = $scope.symbolCoin;
       }
-
     }
 
     $scope.confirmSend = function (addr, amount,unit) {

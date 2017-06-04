@@ -7,14 +7,9 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
   .constant('$ionicLoadingConfig', {
     template: 'Loading...'
   })
-  .constant('FeedEndpoint', {
-    url: 'https://blog.ethereum.org/feed'
-    //url: 'http://us11.campaign-archive1.com/feed'
-    //url: 'http://localhost:8100/feed'
-  })
   .constant('StoreEndpoint', {
-    url: 'DappLETHs'
-    //url: StorePath
+    //url: 'DappLETHs'
+    url: StorePath
   })
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicScrollDelegate,
                 $lockScreen,$state,$window, $location) {
@@ -181,15 +176,6 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
             controller: "DapplethRunCtrl"
           }
         }
-      }) 
-      .state('tab.feed', {
-        url: '/feed/:Item',
-        views: {
-          'feed': {
-            templateUrl: 'templates/feed-detail.html',
-            controller: 'FeedCtrl'
-          }
-        }
       })     
       .state('tab.address', {
         url: '/address',
@@ -310,48 +296,5 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
       window.dispatchEvent(event);
     }, 0);
   }
-   /*  to delete
-  .directive('dappTemplate', ['$http','$compile', function($http,$compile){
-    return {
-      restrict : 'A',
-      scope : {},
-      controller : "@",
-      name:"controllerName",  
-      link: function(scope, element, attrs){
-        scope.message = "direttiva";  
-
-       },
-      templateUrl: function(elem,attrs) {
-           return "dappleths/" + attrs.templateUrl || 'template/notfound.html'
-      }
-    }
-  }]) 
- 
-  .directive('appDirective', function($rootScope, Chat, AppService){
-    return {
-      restrict : 'A',
-      link: function(scope, element, attrs){
-        element.bind('dappMessage', function(e){
-          $rootScope.$broadcast('dappEvent', { data: e});
-          
-        })        
-      }
-    }
-  }) 
-  .filter('calendar', calendar);
-  function calendar () {
-    return function (time) {
-      if (! time) return;
-
-      return moment(time).calendar(null, {
-        lastDay : '[Yesterday]',
-        sameDay : 'LT',
-        lastWeek : 'dddd',
-        sameElse : 'DD/MM/YY'
-      });
-    };
-  } 
-  */ 
-
 
   

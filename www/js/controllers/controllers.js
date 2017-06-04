@@ -4,8 +4,8 @@ angular.module('leth.controllers', [])
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
                                 $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,
                                 $cordovaBadge,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, $cordovaVibration,
-                                ENSService, AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, FeedService, nfcService, SwarmService) {
-  
+                                ENSService, AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, nfcService, SwarmService) {
+
   window.refresh = function () {
     $ionicLoading.show();
     if($scope.idCoin==0 || $scope.idCoin==undefined)  //buggy from wallet refresh  
@@ -28,7 +28,6 @@ angular.module('leth.controllers', [])
     $scope.readCategoryList();
     $scope.readDappsList();
     $scope.readCoinsList();
-    //$scope.readFeedsList();
 
     $timeout(function() {$ionicLoading.hide();}, 1000);
   };
@@ -119,12 +118,6 @@ angular.module('leth.controllers', [])
       })
   };
   
-  /*
-  FeedService.GetFeed().then(function(infoNews){
-    $scope.listFeeds = infoNews;
-    $scope.cards = Array.prototype.slice.call($scope.listFeeds, 0, 0);
-  });
-  */
 
   $scope.openInEtherscan = function(addr){
     var pinUrl = "https://testnet.etherscan.io/address/" + addr;
@@ -152,9 +145,9 @@ angular.module('leth.controllers', [])
 
     try {    
         if(web3.eth.syncing)
-          $scope.syncStatus = "icon ion-eye-disabled light";
+          $scope.syncStatus = "icon ion-eye-disabled ";
         else
-          $scope.syncStatus = "icon ion-eye calm";
+          $scope.syncStatus = "icon ion-eye ";
 
         $scope.lastBlock = web3.eth.blockNumber;
     } catch (err) {
@@ -193,10 +186,8 @@ angular.module('leth.controllers', [])
   $scope.readDappsList = function(){
     $scope.filterStoreCoins = 'button button-small button-outline button-positive';
     $scope.filterStoreApps = 'button button-small button button-positive';
-    $scope.filterFeed = 'button button-small button-outline button-positive';
     $scope.isDapp = true;
     $scope.isCoin = false;
-    $scope.isFeed = false;
 
     AppService.getStoreApps().then(function(response){
       $scope.listApps = response;
@@ -207,10 +198,8 @@ angular.module('leth.controllers', [])
   $scope.readCoinsList = function(){
     $scope.filterStoreCoins = 'button button-small button button-positive';
     $scope.filterStoreApps = 'button button-small button-outline button-positive';
-    $scope.filterFeed = 'button button-small button-outline button-positive';
     $scope.isDapp = false;
     $scope.isCoin = true;
-    $scope.isFeed = false;
 
     $scope.listCoins = JSON.parse(localStorage.Coins);
 
@@ -218,15 +207,6 @@ angular.module('leth.controllers', [])
       angular.merge($scope.listCoins,response);
     }) 
   };      
-
-  $scope.readFeedsList = function(){
-    $scope.filterStoreCoins = 'button button-small button-outline button-positive';
-    $scope.filterStoreApps = 'button button-small button-outline button-positive';
-    $scope.filterFeed = 'button button-small button button-positive';
-    $scope.isDapp = false;
-    $scope.isCoin = false;
-    $scope.isFeed = true;
-  };  
 
   $scope.shareByChat = function (friend,payment) {
     Chat.sendCryptedPaymentReq("Please send me " + payment + " eth &#x1F4B8; !", payment, friend.addr,friend.idkey);
@@ -237,10 +217,6 @@ angular.module('leth.controllers', [])
     Chat.sendInviteToDapp(param,friend.addr,friend.idkey);
     $ionicLoading.show({ template: "Done!", noBackdrop: true, duration: 2000 })
     
-  };
-
-  $scope.readFeed = function(index){
-    $state.go('tab.feed',{Item: index});
   };
 
   var codeModal;
@@ -617,6 +593,7 @@ angular.module('leth.controllers', [])
               $scope.classNetwork = 'calm';                
               $scope.badgeNetwork = 'badge badge-calm';              
           }
+
           ENSService.init($scope.nameNetwork);//find a better place
         }
       });
@@ -1203,8 +1180,6 @@ angular.module('leth.controllers', [])
   //init
   $scope.friends = [];    
   $scope.transactions = Transactions.all();
-  //$scope.fromStore(true);
-  $scope.readFeedsList();
 
   $scope.currencies = ExchangeService.getCurrencies();
   $scope.xCoin = "XETH";

@@ -255,24 +255,6 @@ angular.module('leth.controllers')
   };
 
   var importStorageWallet = function(){
-    /*
-    var fileList=[];
-    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (dirEntry) {
-      var directoryReader = dirEntry.createReader();
-      directoryReader.readEntries(
-        function(entries){
-          var i;
-          for (i=0; i<entries.length; i++) {
-            if(entries[i].name.indexOf('_lethKeystore.js')> -1)
-              fileList.push(entries[i].name); 
-          }
-        },
-        function(){
-          console.log("INFO: Listing entries")
-        }
-      );
-    });
-    */
     //show all value fileList[]
     var keystoreFilename = "leth_keystore.json";
     document.addEventListener("deviceready", function () {
