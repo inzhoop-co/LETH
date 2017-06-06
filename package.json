@@ -68,7 +68,8 @@
     "cordova-plugin-camera",
     "cordova-plugin-inappbrowser",
     "cordova-plugin-vibration",
-    "phonegap-nfc"
+    "phonegap-nfc",
+    "cordova-plugin-http"
   ],
   "cordovaPlatforms": [
     "android",
