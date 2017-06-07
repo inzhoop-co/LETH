@@ -2,7 +2,7 @@ angular.module('leth.controllers')
   .controller('FriendsCtrl', function ($scope, Friends, $ionicListDelegate,  AppService, Chat) {    
     
     $scope.$on('$ionicView.enter', function() {
-      $scope.loadFriends();
+      //$scope.loadFriends();
       $scope.cancelDMNotifications();
       $scope.clearBadge();
       $scope.$digest(); 

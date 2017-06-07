@@ -54,19 +54,6 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
           $location.path('/tab/dappleths');
       } 
 
-      /*
-      function keyboardShowHandler(e){
-        //patch on open
-        $ionicScrollDelegate.$getByHandle('chatScroll').resize();
-        $ionicScrollDelegate.$getByHandle('chatScroll').scrollTo('bottom',350);
-
-        $ionicScrollDelegate.$getByHandle('chatDMScroll').resize();
-        $ionicScrollDelegate.$getByHandle('chatDMScroll').scrollTo('bottom',350);
-
-        //console.log('Keyboard height is: ' + e.keyboardHeight);
-      }
-      */
-
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.disableScroll(true);   
         //window.addEventListener('native.keyboardshow', keyboardShowHandler);     
