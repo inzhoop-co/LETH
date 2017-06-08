@@ -5290,24 +5290,38 @@ ion-tabs.tabs-color-active-dark .tab-item {
   background-color: #fff; }
 
 @media (min-width: 680px) {
+  /*Full screen for tablet*/
   .modal {
+      top: 0px !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;}
+  .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) > * {
+      margin-top: 20px;}
+  .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) {
+    height: 64px;}
+  .platform-ios.platform-cordova .modal-wrapper .modal .has-header,
+  .platform-ios.platform-cordova .modal-wrapper .modal .bar-subheader {
+    top: 64px;}
+/*  .modal {
     top: 20%;
     right: 20%;
     bottom: 20%;
     left: 20%;
     min-height: 240px;
     width: 60%; }
-  .modal.ng-leave-active {
-    bottom: 0; }
+  
   .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) {
     height: 44px; }
     .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) > * {
       margin-top: 0; }
-  .platform-ios.platform-cordova .modal-wrapper .modal .tabs-top > .tabs,
-  .platform-ios.platform-cordova .modal-wrapper .modal .tabs.tabs-top {
-    top: 44px; }
   .platform-ios.platform-cordova .modal-wrapper .modal .has-header,
   .platform-ios.platform-cordova .modal-wrapper .modal .bar-subheader {
+    top: 44px; }
+*/
+  .platform-ios.platform-cordova .modal-wrapper .modal .tabs-top > .tabs,
+  .platform-ios.platform-cordova .modal-wrapper .modal .tabs.tabs-top {
     top: 44px; }
   .platform-ios.platform-cordova .modal-wrapper .modal .has-subheader {
     top: 88px; }
@@ -5315,6 +5329,8 @@ ion-tabs.tabs-color-active-dark .tab-item {
     top: 93px; }
   .platform-ios.platform-cordova .modal-wrapper .modal .has-header.has-subheader.has-tabs-top {
     top: 137px; }
+  .modal.ng-leave-active {
+    bottom: 0; }
   .modal-backdrop-bg {
     -webkit-transition: opacity 300ms ease-in-out;
     transition: opacity 300ms ease-in-out;
