@@ -64,11 +64,17 @@ angular.module('leth.controllers', [])
   }
 
   function keyboardHideHandler(e){
+    if($ionicHistory.currentView().stateName== "tab.chats"){
+      $scope.scrollTo('chatScroll','bottom');
+    }
 
+    if($ionicHistory.currentView().stateName== "tab.friend"){
+      $scope.scrollTo('chatDMScroll','bottom');
+    }
   }
 
   window.addEventListener('native.keyboardshow', keyboardShowHandler);     
-  //window.addEventListener('native.keyboardhide', keyboardHideHandler);     
+  window.addEventListener('native.keyboardhide', keyboardHideHandler);     
 
   
   var flushChats = function(){
@@ -120,8 +126,13 @@ angular.module('leth.controllers', [])
   
 
   $scope.openInEtherscan = function(addr){
-    var pinUrl = "https://testnet.etherscan.io/address/" + addr;
+    var etherscanUrl;
+    if($scope.nameNetwork=="Ropsten")
+      etherscanUrl="https://ropsten.etherscan.io/address/";
+    if($scope.nameNetwork=="Mainet")
+      etherscanUrl="https://etherscan.io/address/";
     
+    var pinUrl = etherscanUrl + addr;    
       var options = {
         location: 'yes',
         clearcache: 'yes',

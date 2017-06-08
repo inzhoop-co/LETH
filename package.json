@@ -69,7 +69,8 @@
     "cordova-plugin-inappbrowser",
     "cordova-plugin-vibration",
     "phonegap-nfc",
-    "cordova-plugin-http"
+    "cordova-plugin-http",
+    "cordova-plugin-email-composer"
   ],
   "cordovaPlatforms": [
     "android",
