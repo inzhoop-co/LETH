@@ -331,11 +331,35 @@ angular.module('leth.controllers')
       })      
   }
 
+  var backupPrivateKey = function(){
+    PasswordPopup.open("Digit your wallet password", "unlock account to proceed").then(
+      function (password) {
+        global_keystore.keyFromPassword(password, function (err, pwDerivedKey) {
+          var pvtKey = global_keystore.exportPrivateKey(AppService.account(), pwDerivedKey)
+          var alertPopup = $ionicPopup.alert({
+             title: 'Backup securely your private key',
+             template: pvtKey
+          });
+
+          $ionicLoading.hide();
+
+          alertPopup.then(function(res) {    
+            console.log('pvtKey backuped');
+          });
+        });
+      },
+      function (err) {
+        $ionicLoading.hide();
+      })      
+  }
+
+
   $scope.backupWallet = function () {
 	  var hideSheet = $ionicActionSheet.show({
       buttons: [
         { text: 'Backup Seed' },
-        { text: 'Backup Keys' }
+        { text: 'Backup Keys' },
+        { text: 'Backup Private Key' }
         /*{ text: 'Backup on Storage'}*/
       ],
       destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
@@ -354,6 +378,10 @@ angular.module('leth.controllers')
               hideSheet();
               break;
           case 2:
+              backupPrivateKey();
+              hideSheet();
+              break;
+          case 3:
               backupWalletToStorage();
               hideSheet();
               break;

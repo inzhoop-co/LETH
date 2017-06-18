@@ -64,7 +64,9 @@ angular.module('leth.controllers')
       $ionicListDelegate.closeOptionButtons();
     };
   })
-  .controller('DapplethRunCtrl', function ($scope, $rootScope, $ionicHistory, angularLoad, $ionicLoading, $templateRequest, $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout, StoreEndpoint, AppService, Chat) {
+  .controller('DapplethRunCtrl', function ($scope, $rootScope, $ionicHistory, angularLoad, $ionicLoading, $templateRequest, 
+                                          $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout, 
+                                           StoreEndpoint, AppService, Chat) {
     var id = $stateParams.Id;
     $scope.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
 
@@ -73,6 +75,7 @@ angular.module('leth.controllers')
       $scope.scrollTo('chatScroll','bottom');
       $scope.$digest(); 
     });
+    
 
     $scope.$on("$ionicView.afterEnter", function () {
       $http.get(StoreEndpoint.url + $scope.activeApp.InstallUrl) 
@@ -95,7 +98,6 @@ angular.module('leth.controllers')
               console.log('ERROR :' + 'js/api.js');
           });
           
-          //dappContract = web3.eth.contract($scope.activeApp.ABI).at($scope.activeApp.Address);
           $timeout(function() {$ionicLoading.hide();}, 1000);
       });
     });

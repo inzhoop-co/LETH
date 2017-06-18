@@ -65,7 +65,9 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
       }
       
       $rootScope.$on('loading:show', function () {
-        $ionicLoading.show({template: 'Loading...'})
+        $ionicLoading.show({
+         template: 'Loading...'
+        })
       })
       $rootScope.$on('loading:hide', function () {
         $ionicLoading.hide()
@@ -93,6 +95,7 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
     $ionicConfigProvider.backButton.text('');                  // default is 'Back'
     $ionicConfigProvider.backButton.previousTitleText(false);  // hides the 'Back' text
     // $ionicConfigProvider.templates.maxPrefetch(20);
+
 
     $stateProvider
       .state('tab', {
