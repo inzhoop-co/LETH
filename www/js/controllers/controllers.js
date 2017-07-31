@@ -594,19 +594,36 @@ angular.module('leth.controllers', [])
               $scope.nameNetwork = 'Ropsten';
               $scope.classNetwork = 'positive';                
               $scope.badgeNetwork = 'badge badge-positive';
+              
+              ENSService.init($scope.nameNetwork);//find a better place
+
               break;
             case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
-              $scope.nameNetwork = 'Mainet';
-              $scope.classNetwork = 'balanced';                
-              $scope.badgeNetwork = 'badge badge-balanced';
+              web3.eth.getBlock(1920000, function(e, res){
+                if(!e){
+                  console.log(res.hash);
+                  switch(res.hash) {
+                   case '0x94365e3a8c0b35089c1d1195081fe7489b528a84b22199c916180db8b28ade7f':
+                    $scope.nameNetwork = 'Main-ETC';
+                    $scope.classNetwork = 'balanced';                
+                    $scope.badgeNetwork = 'badge badge-balanced';
+                    break;
+                   default:
+                    $scope.nameNetwork = 'Mainet';
+                    $scope.classNetwork = 'balanced';                
+                    $scope.badgeNetwork = 'badge badge-balanced';
+              
+                    ENSService.init($scope.nameNetwork);//find a better place
+
+                  }
+                }
+              }) 
               break;
             default:
               $scope.nameNetwork = 'Private';
               $scope.classNetwork = 'calm';                
               $scope.badgeNetwork = 'badge badge-calm';              
           }
-
-          ENSService.init($scope.nameNetwork);//find a better place
         }
       });
       getSync();

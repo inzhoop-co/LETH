@@ -10,9 +10,14 @@ angular.module('leth.controllers')
         $scope.idCoin = 0;
         $scope.logoCoin = "img/ethereum-icon.png";
         $scope.descCoin = "Eth from main wallet";
-        $scope.symbolCoin = "Ξ";
+        if($scope.nameNetwork=="Main-ETC"){
+          $scope.symbolCoin = "ΞC";
+          $scope.xCoin = "XETC";                  
+        }else{
+          $scope.symbolCoin = "Ξ";
+          $scope.xCoin = "XETH";                  
+        }
         $scope.decimals = "6";
-        $scope.xCoin = "XETH";        
         $scope.listUnit = [
     			{multiplier: "1.0e18", unitName: "ether"},
     			{multiplier: "1.0e15", unitName: "finney"}
