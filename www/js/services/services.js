@@ -3,6 +3,9 @@ angular.module('leth.services', [])
 .service('UIService', function ($rootScope, $http, $q, $timeout,
           StoreEndpoint, $ionicPopup,$ionicPlatform, $ionicLoading, $ionicScrollDelegate, $cordovaBarcodeScanner) {
   return{
+    ionicPopup: function(){
+      return $ionicPopup;
+    },
     loadOn: function(){
       $ionicLoading.show();
     },
@@ -28,9 +31,29 @@ angular.module('leth.services', [])
 
       confirmPopup.then(function(res,err) {
         if(res)
-          q.resolve();
+          q.resolve(res);
         else
-        q.reject();
+        q.reject(err);
+       });
+      
+      return q.promise;
+
+    },
+    popupPrompt: function(txtTitle, txtSubtitle, inputType, inputPlaceholder){
+      var q = $q.defer();
+    
+      var promptPopup = $ionicPopup.prompt({
+        title: txtTitle,
+        subTitle: txtSubtitle,
+        inputType: inputType,
+        inputPlaceholder: inputPlaceholder
+      });
+
+      promptPopup.then(function(res,err) {
+        if(res)
+          q.resolve(res);
+        else
+        q.reject(err);
        });
       
       return q.promise;
@@ -254,7 +277,7 @@ angular.module('leth.services', [])
       var fromAddr = global_keystore.getAddresses()[0];
       var m = params[0];
       var contract = web3.eth.contract(abi);
-      var gasPrice = web3.eth.gasPrice;
+      var gasPrice = web3.toBigNumber(50000000000); //web3.eth.gasPrice;
       var estimateGas = web3.eth.estimateGas({from: fromAddr, gasPrice: gasPrice, gas: gasLimit, data: datacode});
       
       var gPrice = fee/estimateGas;
@@ -267,25 +290,30 @@ angular.module('leth.services', [])
 
       if(estimateGas>gasLimit) console.log("Warning: GasLimit too low!");
 
-      return $q(function (resolve, reject) {
+      var q = $q.defer();
         try {
           var callback = function (err, contract) {
-            if(err) reject(err);
+            if(err) 
+              q.reject(err);
+            else{
               if(contract.address){
                   var result = new Array;
                   result.push(contract);
                   console.log(contract.address);
-                  resolve(result);
-              }else
+                  q.resolve(result);
+              }else{
                 console.log(contract.transactionHash);
+              }
+            }
           }
 
           contract.new(m,{from: fromAddr, gasPrice: gasPrice, gas: gasLimit, data: datacode}, callback);
 
         } catch (e) {
-            reject(e);
+            q.reject(e);
         }
-      }); 
+      return q.promise;
+
     },
     transferEth: function (from, to, value, fee) {
       var gas = web3.eth.estimateGas({});

@@ -1,0 +1,25 @@
+<ion-view view-title="Host nodes">
+  <ion-header-bar class="bar bar-subheader bar-stable item-input-inset" hide-on-scroll="true">
+  	<div class="padding subdued">
+  	  Choose a node
+		<span class="{{badgeNetwork}} relative-position">{{nameNetwork}}&nbsp;</span>
+  </div>
+  </ion-header-bar>
+  <ion-content class="has-header has-tabs scrollBg">
+  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+  <ion-list class="list" show-reorder="false" >
+    <ion-radio ng-repeat="host in hostsList" ng-value="host" ng-model="addrHost" ng-click="editHost(host)">
+    	{{host}}
+    </ion-radio>
+  </ion-list>
+  <div class="item item-input">
+	<label class="item-input-wrapper"><input type="text" ng-model="newHost" placeholder="type custom host address"></label>
+	<button class="button button-clear" ng-click="editHost(newHost)">
+	    <i class="icon ion-plus-circled"></i>
+	 </button>
+	<button class="button button-clear" ng-click="deleteHost(newHost)">
+		<i class="icon ion-minus-circled"></i>
+	</button>
+  </div>
+  </ion-content>
+</ion-view>

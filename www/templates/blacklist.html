@@ -1,0 +1,24 @@
+<ion-view view-title="Blacklist">
+  <ion-header-bar class="bar bar-subheader bar-stable item-input-inset" hide-on-scroll="true">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Search" ng-model="search.addr">     
+    </label>
+    <button class="icon button-icon ion-ios-close-empty dark" ng-if="search.addr.length > 0" on-touch="search.addr=''"></button>
+    <!--button class="icon button-icon ion-ios-personadd positive" ng-click="addBanned()"></button-->  
+  </ion-header-bar>
+  <ion-content class="has-header has-subheader has-tabs scrollBg">
+  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+  <ion-list class="list" show-reorder="false" >
+    <div ng-show="blacklisted.length == 0" class="text-center dark">No banned users</div>
+    <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="user in blacklisted | orderBy: '-unread' | filter:search track by $index" type="item-text-wrap">
+      <img ng-src="{{user.icon}}"/>
+      <h2><b>{{user.addr | strLimit: 15 : 5}}</b></h2>
+      <p>banned {{user.date | date: 'dd-MM-yyyy HH:mm:ss'}}</p>
+      <ion-option-button class="button-assertive" ng-click="delBanned($index)">
+          <i class="icon ion-ios-trash"></i>
+      </ion-option-button>
+    </ion-item>
+  </ion-list>
+  </ion-content>
+</ion-view>

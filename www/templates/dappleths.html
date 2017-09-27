@@ -16,7 +16,23 @@
       <button class="{{filterStoreCoins}}" ng-click="readCoinsList()">Tokens</button>
       <button class="{{filterStoreApps}}" ng-click="readDappsList()">ÐAppleths</button>
     </div>
-        
+
+    <!--div class="categoryBox" ng-if="isDapp">
+      <div class="categoryHead">Factory - self deployable dapps
+        <span class="item-note">#1</span>
+      </div>
+      <ul class="appSlider">
+        <li class="appBox">
+          <a class="wrapper" ng-click="deployTest()">
+            <img class="appIco" ng-src="/img/dappbuilder.png"/>
+            <h2 class="title">Greet maker</h2>
+            <p class="description">Your custom greet</p>
+            <h6 class="author">by Inzhoop</h6> 
+          </a>
+        </li>
+      </ul>
+    </div-->
+
     <div class="categoryBox" ng-repeat="cat in listCategory | filter:{Network:nameNetwork}" ng-if="isDapp">
       <div class="categoryHead">{{cat.Name}} 
         <span class="item-note">#{{cat.List.length}}</span>
@@ -61,6 +77,16 @@
             <h2>Custom token</h2>
             <p>Add a custom token</p>
             <i class="icon ion-ios-plus-outline positive"></i>
+      </ion-item>
+       <ion-item class="item item-avatar-left item-icon-right" ng-click="deployTest()">
+            <img ng-src="img/dappbuilder.png"/>
+            <h2>Custom Dappleth to Greet</h2>
+            <p>Deploy your custom greet</p>
+            <i class="icon ion-ios-plus-outline positive"></i>
+            <ion-option-button style="padding-top: 40px; font-size: 12px;" class="button-dark" ng-click="tesdeploy()">
+              <i class="icon ion-play"></i>
+              <span>Test</span>
+            </ion-option-button>
       </ion-item>
     </ion-list>  
     <div ng-bind-html="appContainer">

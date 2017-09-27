@@ -6,19 +6,18 @@
 		<div class="item padding-on-borders" >
 		 	<div class="row no-bmp">
 		 		<div class="col text-left no-bmp col-50 col-center">Host type 
-		 			<span class="item-note">#{{lastBlock}}</span>
-			    </div>
-				 <div class="col text-left col-center col-33">
+		 		<span class="item-note">#{{lastBlock}}</span></div>
+				 <div class="col text-left col-center col-66">
 					<span class="{{badgeNetwork}} relative-position">{{nameNetwork}}&nbsp;</span>
 				</div>
-				<div class="col text-right no-bmp col-20 col-center">
+				<!--div class="col text-right no-bmp col-20 col-center">
 					<button class="button button-clear" ng-click="enableEditHost(!editableHost)">
 				 		<i class="icon ion-edit"></i>
 				 	</button>
-				 </div>				
+				 </div-->				
 		 	</div>
 		</div>
-		<div class="item item-input" ng-if="showEditHost()">
+		<!--div class="item item-input" ng-if="showEditHost()">
 		    <label class="item-input-wrapper"><input type="text" ng-model="addrHost" placeholder="type host address"></label>
 		    <button class="button button-clear" ng-click="editHost(addrHost)">
 		        <i class="icon ion-plus-circled"></i>
@@ -28,15 +27,19 @@
 		    </button>
 		</div>
 		<div class="item item-select">
-		<div class="row no-bmp">
-		<div class="col text-left no-bmp   col-center">Host </div>
-			<div class="col padding-on-borders  col-center">	
-				<select class="item-select " ng-model="addrHost" ng-required="true" ng-init="addrHost" ng-change="editHost(addrHost)">
-					<option ng-repeat="host in hostsList" value="{{host}}" ng-selected="addrHost==host"  ng-model="addrHost">{{host}}</option>
-				</select>
+			<div class="row no-bmp">
+				<div class="col text-left no-bmp col-center">Host </div>
+				<div class="col padding-on-borders  col-center">	
+					<select class="item-select " ng-model="addrHost" ng-required="true" ng-init="addrHost" ng-change="editHost(addrHost)">
+						<option ng-repeat="host in hostsList" value="{{host}}" ng-selected="addrHost==host"  ng-model="addrHost">{{host}}</option>
+					</select>
+				</div>		
 			</div>		
-			</div>		
-		</div>		
+		</div-->
+		<ion-item class="item item-icon-right" href="#/tab/hostnodes">
+            {{addrHost}}
+		     <i class="icon ion-chevron-right icon-accessory"></i>
+      	</ion-item>		
 		<div class="padding subdued">Backup</div>
 		<div class="item item-button-right">
 		    Backup your Wallet
@@ -65,6 +68,12 @@
 		    </button>
 		</div> 
 		-->
+		<div class="padding subdued">Banned Users <i class="ion-android-hand"></i></div>
+		<ion-item class="item item-icon-right" href="#/tab/blacklist">
+            Manage blacklist 
+			 <span class="badge badge-stable" ng-show="blacklisted.length>0">{{blacklisted.length}}</span>
+		     <i class="icon ion-chevron-right icon-accessory"></i>
+      	</ion-item>
 		<div class="padding subdued">Activity</div>
 		<ion-toggle  ng-model="backmode.checked" ng-checked="backmode.checked">
 			Background mode 
@@ -89,7 +98,7 @@
 		</div>		
 		<div class="divider padding" align="center">
 			<p><img ng-src="img/inzhoop.png" id="headerSetting"></p>
-			<p>LΞTH v.0.25.0
+			<p>LΞTH v.0.26.0
 				<a ng-if="isIOS()" href="itms-services://?action=download-manifest&url=
 https://www.inzhoop.com/download/ios/manifest.plist">(update)</a>
 			</p>

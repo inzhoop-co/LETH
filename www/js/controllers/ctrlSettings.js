@@ -1,10 +1,11 @@
 angular.module('leth.controllers')
-.controller('SettingsCtrl', function ($scope, $interval, $ionicModal, $ionicLoading, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, $http, 
+.controller('SettingsCtrl', function ($scope, $interval, $ionicModal, $ionicLoading, $ionicListDelegate, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, $http, 
                                       Geolocation, AppService, ExchangeService, Chat, PasswordPopup) {    
-  $scope.editableHost = false;
-  $scope.addrHost = localStorage.NodeHost;
+
+  //$scope.editableHost = false;
+  //$scope.addrHost = localStorage.NodeHost;
   $scope.hostsList= JSON.parse(localStorage.HostsList);
-	$scope.indexHost = $scope.hostsList.indexOf($scope.addrHost);
+	//$scope.indexHost = $scope.hostsList.indexOf($scope.addrHost);
   $scope.pin = { checked: (localStorage.PinOn=="true") };
   $scope.touch = { checked: (localStorage.TouchOn=="true") };
   $scope.geo = { checked: (localStorage.GeoOn=="true") };
@@ -12,6 +13,11 @@ angular.module('leth.controllers')
   $scope.vibration = { checked: (localStorage.Vibration=="true") };
   $scope.nfc = { checked: (localStorage.NfcOn=="true") };
   $scope.baseCurrency = JSON.parse(localStorage.BaseCurrency);
+
+  $scope.$on("$ionicView.enter", function () {
+    $scope.addrHost = localStorage.NodeHost;
+    //$scope.$digest(); 
+  });
 
   $scope.setIndexHost = function(index){    
     localStorage.NodeHost = $scope.hostsList[index];
@@ -142,6 +148,7 @@ angular.module('leth.controllers')
     });
     confirmPopup.then(function (res) {
       if (res) {
+        resetChatFilter(); 
         localStorage.NodeHost = addr;
         AppService.setWeb3Provider(global_keystore);
         $scope.addrHost = localStorage.NodeHost;
@@ -392,6 +399,12 @@ angular.module('leth.controllers')
       }
     })
   };
+
+  $scope.delBanned = function(index){
+    $scope.blacklisted.splice(index, 1);
+    localStorage.Blacklist = JSON.stringify($scope.blacklisted);
+    $ionicListDelegate.closeOptionButtons();
+  }
 
   var walletViaEmail = function(){
     //backup keys wallet via email 

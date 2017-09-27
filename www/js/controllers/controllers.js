@@ -29,20 +29,68 @@ angular.module('leth.controllers', [])
     $scope.readCategoryList();
     $scope.readDappsList();
     $scope.readCoinsList();
+    $scope.blacklisted = JSON.parse(localStorage.Blacklist);
 
     $timeout(function() {$ionicLoading.hide();}, 1000);
   };
 
-  $scope.deployTest = function(greet){
-    var param = ['ciaux'];
-    var abi = [{"constant":false,"inputs":[],"name":"destroy","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getMsg","outputs":[{"name":"r","type":"string"}],"payable":false,"type":"function"},{"inputs":[{"name":"m","type":"string"}],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"message","type":"string"}],"name":"Log","type":"event"}];
-    var code = '0x6060604052341561000c57fe5b6040516103aa3803806103aa833981016040528080518201919050505b33600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508060019080519060200190610080929190610088565b505b5061012d565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f106100c957805160ff19168380011785556100f7565b828001600101855582156100f7579182015b828111156100f65782518255916020019190600101906100db565b5b5090506101049190610108565b5090565b61012a91905b8082111561012657600081600090555060010161010e565b5090565b90565b61026e8061013c6000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806383197ef014610046578063b5fdeb2314610058575bfe5b341561004e57fe5b6100566100f1565b005b341561006057fe5b610068610185565b60405180806020018281038252838181518152602001915080519060200190808383600083146100b7575b8051825260208311156100b757602082019150602081019050602083039250610093565b505050905090810190601f1680156100e35780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141561018257600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16ff5b5b565b61018d61022e565b60018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156102235780601f106101f857610100808354040283529160200191610223565b820191906000526020600020905b81548152906001019060200180831161020657829003601f168201915b505050505090505b90565b6020604051908101604052806000815250905600a165627a7a72305820da3a000078a8eaf2f978db0e1f347a381c9e29bf60d6d245e3a65c51b642be130029';
-    var gas = 4700000;
-    var fee = 1060020000000000;
-    AppService.contractNew(param,abi,code,gas,fee).then(function (res){
-        console.log(res);
+  $scope.deployTest = function(){
+
+    var myPopup = $ionicPopup.prompt({
+      title: 'Deploy your Greet',
+      subTitle: 'Enter your greet message',
+      inputType: 'text',
+      inputPlaceholder: 'type a greet...'
+    }).then(function(res) {
+      console.log('Your message is', res);
+      if(res){
+        var param = [res];
+        var abi = [{"constant":false,"inputs":[],"name":"destroy","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getMsg","outputs":[{"name":"r","type":"string"}],"payable":false,"type":"function"},{"inputs":[{"name":"m","type":"string"}],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"message","type":"string"}],"name":"Log","type":"event"}];
+        var code = '0x6060604052341561000c57fe5b6040516103aa3803806103aa833981016040528080518201919050505b33600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508060019080519060200190610080929190610088565b505b5061012d565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f106100c957805160ff19168380011785556100f7565b828001600101855582156100f7579182015b828111156100f65782518255916020019190600101906100db565b5b5090506101049190610108565b5090565b61012a91905b8082111561012657600081600090555060010161010e565b5090565b90565b61026e8061013c6000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806383197ef014610046578063b5fdeb2314610058575bfe5b341561004e57fe5b6100566100f1565b005b341561006057fe5b610068610185565b60405180806020018281038252838181518152602001915080519060200190808383600083146100b7575b8051825260208311156100b757602082019150602081019050602083039250610093565b505050905090810190601f1680156100e35780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141561018257600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16ff5b5b565b61018d61022e565b60018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156102235780601f106101f857610100808354040283529160200191610223565b820191906000526020600020905b81548152906001019060200180831161020657829003601f168201915b505050505090505b90565b6020604051908101604052806000815250905600a165627a7a72305820da3a000078a8eaf2f978db0e1f347a381c9e29bf60d6d245e3a65c51b642be130029';
+        var gas = 4700000;
+        var fee = 1060020000000000;
+        AppService.contractNew(param,abi,code,gas,fee).then(function (res){
+            console.log(res);
+        }, function(err){
+            var alertPopup = $ionicPopup.show({
+              title: 'Error',
+              template: 'Something is wrong! <br/>' + err.message   
+            });
+
+            alertPopup.then(function(res) {
+               alertPopup.close();
+            });
+          
+            $timeout(function() {
+               alertPopup.close(); 
+            }, 3000);
+        });
+      }
     });
 
+  }
+
+  $scope.tesdeploy = function(){
+    var abi = [{"constant":false,"inputs":[],"name":"destroy","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getMsg","outputs":[{"name":"r","type":"string"}],"payable":false,"type":"function"},{"inputs":[{"name":"m","type":"string"}],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"message","type":"string"}],"name":"Log","type":"event"}];
+    var addr = "0xf76a7beffecee307fd6c51206b38ba57433fe36b"; //"0x327104dafb98dcd577efaee44528838cf8859643";
+    var dappContract = web3.eth.contract(abi).at(addr);
+    console.log(dappContract.getMsg());
+
+    var alertPopup = $ionicPopup.show({
+      title: 'Greet',
+      template: 'Your Dappleth says <br/><b>' + dappContract.getMsg()  + '</b>' 
+    });
+
+    alertPopup.then(function(res) {
+       alertPopup.close();
+    });
+
+    $ionicListDelegate.closeOptionButtons();
+
+   $timeout(function() {
+       alertPopup.close(); 
+    }, 3000);
+    
   }
 
   $scope.checkContract = function(hash){
@@ -86,11 +134,14 @@ angular.module('leth.controllers', [])
     $scope.chats = Chat.find();
   }
 
-  window.setChatFilter = function(){
+  window.resetChatFilter = function(){
     //stop listening shh
     Chat.unlistenMessage();
     //Flush chat messages
     flushChats();
+  }
+
+  window.setChatFilter = function(){
     //start listening message shh
     Chat.listenMessage($scope);
   }
@@ -601,7 +652,7 @@ angular.module('leth.controllers', [])
             case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
               web3.eth.getBlock(1920000, function(e, res){
                 if(!e){
-                  console.log(res.hash);
+                  //console.log(res.hash);
                   switch(res.hash) {
                    case '0x94365e3a8c0b35089c1d1195081fe7489b528a84b22199c916180db8b28ade7f':
                     $scope.nameNetwork = 'Main-ETC';
@@ -748,10 +799,10 @@ angular.module('leth.controllers', [])
             lightwallet.keystore.deriveKeyFromPassword(code, function (err, pw2DerivedKey) {
               local_keystore = new lightwallet.keystore(seed, pw2DerivedKey,hdPath);
               var info={curve: 'curve25519', purpose: 'asymEncrypt'};
+              local_keystore.passwordProvider = code; //customPasswordProvider;
               local_keystore.addHdDerivationPath(hdPath,pw2DerivedKey,info);
               local_keystore.generateNewEncryptionKeys(pw2DerivedKey, 1, hdPath);
               local_keystore.setDefaultHdDerivationPath(hdPath);
-              local_keystore.passwordProvider = code; //customPasswordProvider;
             
 
               AppService.setWeb3Provider(global_keystore);
@@ -1246,8 +1297,9 @@ angular.module('leth.controllers', [])
     if((msg.mode=='plain' || msg.mode=="contact") && msg.attach.addr && msg.attach.idkey){
       if($scope.isFriend(msg.attach.addr) && msg.attach.addr!=AppService.account())
         buttonsOpt.push({ text: '<i class="icon ion-ios-person-outline"></i>Go to Friend', index: 2 })
-      else
+      else if(msg.from!=AppService.account()){
         buttonsOpt.push({ text: '<i class="icon ion-ios-personadd-outline"></i>Add to Friends', index: 3 })
+      }
     }
     if(msg.mode=="geolocation" && msg.attach)
       buttonsOpt.push({ text: '<i class="icon ion-ios-navigate-outline"></i>Open location', index: 4 });
@@ -1259,6 +1311,9 @@ angular.module('leth.controllers', [])
     if(msg.image){
         buttonsOpt.push({ text: '<i class="icon ion-image"></i>Show Image', index: 7 })
     }
+    //ban spammers
+    if(msg.attach.addr!=AppService.account())
+      buttonsOpt.push({ text: '<i class="icon ion-android-hand"></i>Ban User...', index: 8 })
 
     var hideSheet = $ionicActionSheet.show({
       buttons: buttonsOpt,
@@ -1316,7 +1371,7 @@ angular.module('leth.controllers', [])
             $state.go('tab.wallet', {addr: msg.attach.addr + "#" + msg.attach.idkey + "@" + msg.attach.payment}, { relative: $state.$current.view});
             break;
           case 6: // install token
-                        var msgTxt = "<h2 class='text-center'>Custom Token " + msg.attach.Name + " Shared! </h2>";
+            var msgTxt = "<h2 class='text-center'>Custom Token " + msg.attach.Name + " Shared! </h2>";
             msgTxt += "<p class='text-center'><img height='100px' width='auto' src='" + msg.attach.Logo + "'/></p>";
               
             var confirmPopup = $ionicPopup.confirm({
@@ -1336,6 +1391,24 @@ angular.module('leth.controllers', [])
           case 7: // show image
             createImageModal(msg.image);
             break;
+          case 8: // ban user
+            var confirmBan = $ionicPopup.confirm({
+              title: 'Block User',
+              template: 'User gives you noise? <br/>Do you want to add to blacklist?'
+            });
+
+            confirmBan.then(function(res) {
+              if(res) {
+                //add user to black list
+                if(!$scope.blacklisted.includes(msg.attach.addr)) {
+                  var banned = {addr:msg.attach.addr, icon: blockies.create({seed: msg.attach.addr}).toDataURL("image/jpeg"),  date: Date.now(), comment: msg.text};
+                  $scope.blacklisted.push(banned);
+                  localStorage.Blacklist=JSON.stringify($scope.blacklisted);
+                }
+               }
+            });
+            break;
+
         }
         hideSheet();
        $timeout(function() {

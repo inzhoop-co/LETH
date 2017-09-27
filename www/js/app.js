@@ -8,13 +8,14 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
     template: 'Loading...'
   })
   .constant('StoreEndpoint', {
-    //url: 'DappLETHs'
-    url: StorePath
+    url: 'DappLETHs'
+    //url: StorePath
   })
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicScrollDelegate,
                 $lockScreen,$state,$window, $location) {
     $ionicPlatform.ready(function () {
       //Start Settings
+      if (typeof localStorage.Blacklist == 'undefined') {localStorage.Blacklist='[]';}
       if (typeof localStorage.NfcOn == 'undefined') {localStorage.NfcOn="false";}
       if (typeof localStorage.Vibration == 'undefined') {localStorage.Vibration="false";}
       if (typeof localStorage.BackMode == 'undefined') {localStorage.BackMode="false";}
@@ -126,6 +127,24 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
         views: {
           'settings': {
             templateUrl: 'templates/settings.html',
+            controller: 'SettingsCtrl'
+          }
+        }
+      })
+      .state('tab.blacklist', {
+        url: '/blacklist',
+        views: {
+          'settings': {
+            templateUrl: 'templates/blacklist.html',
+            controller: 'SettingsCtrl'
+          }
+        }
+      })
+      .state('tab.hostnodes', {
+        url: '/hostnodes',
+        views: {
+          'settings': {
+            templateUrl: 'templates/hostnodes.html',
             controller: 'SettingsCtrl'
           }
         }
