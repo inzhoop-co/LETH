@@ -70,7 +70,8 @@
     "cordova-plugin-vibration",
     "phonegap-nfc",
     "cordova-plugin-http",
-    "cordova-plugin-email-composer"
+    "cordova-plugin-email-composer",
+    "cordova-plugin-globalization"
   ],
   "cordovaPlatforms": [
     "android",
