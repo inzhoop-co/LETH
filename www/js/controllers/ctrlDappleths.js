@@ -69,7 +69,7 @@ angular.module('leth.controllers')
                                            StoreEndpoint, AppService, Chat) {
     var id = $stateParams.Id;
     $scope.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
-
+    
     $scope.$on("$ionicView.enter", function () {
       $ionicHistory.clearCache();
       $scope.scrollTo('chatScroll','bottom');

@@ -12,8 +12,8 @@ var app = angular.module('leth', [
     template: 'Loading...'
   })
   .constant('StoreEndpoint', {
-    //url: 'DappLETHs'
-    url: StorePath
+    url: 'DappLETHs'
+    //url: StorePath
   })
   .constant('availableLanguages', ['en-US', 'it-IT'])
   .constant('defaultLanguage', 'en-US')
@@ -315,6 +315,28 @@ var app = angular.module('leth', [
     app.controller = function( name, constructor ) {
       $controllerProvider.register( name, constructor );
       return( this );
+    };
+  })
+  .directive('dapplethTemplate', function(AppService, $compile, $http, StoreEndpoint){
+    return {
+      restrict: "EA",
+      scope: true,
+      link: function(scope,element,attrs){
+        //how to inject this and read dinamically?
+        console.log(AppService.account());          
+        scope.setId = function(){
+          console.log('done!');
+          scope.activeApp.GUID=19;
+        };
+
+        $http.get(StoreEndpoint.url + attrs.page) 
+        .success(function(data){
+          var customTemplate = data;
+          
+          element.append($compile(customTemplate)(scope));
+          
+        })
+      }
     };
   })
   .directive('hideTabs', function($rootScope) {

@@ -15,7 +15,8 @@
   </ion-header-bar> 
   <ion-content class="has-header" delegate-handle="chatDappScroll">
   <ion-refresher pulling-txt="load" on-refresh="refresh(activeApp.GUID)"></ion-refresher>
-    <div ng-bind-html="appContainer" id="appContainer"></div>
+    <!--div ng-bind-html="appContainer" id="appContainer"></div-->
+    <div dappleth-template page="{{activeApp.InstallUrl}}"></div>
     <ion-scroll direction="y" class="chatDapp message-list" ng-if="chatBoard">
       <div id="chatDappDiv" ng-repeat="chat in DAPPchats | filter:isFromDapp | orderBy:'message.time'"
         class="message-wrapper">
