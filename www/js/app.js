@@ -15,7 +15,7 @@ var app = angular.module('leth', [
     //url: 'DappLETHs'
     url: StorePath
   })
-  .constant('availableLanguages', ['en-US', 'it-IT'])
+  .constant('availableLanguages', ['en-US', 'it-IT', 'de-DE'])
   .constant('defaultLanguage', 'en-US')
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicScrollDelegate,
                 $lockScreen,$state,$window, $location, availableLanguages, defaultLanguage, 
