@@ -1,11 +1,8 @@
 angular.module('leth.controllers')
 .controller('SettingsCtrl', function ($scope, $interval, $ionicModal, $ionicLoading, $ionicListDelegate, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, $http, 
-                                      Geolocation, AppService, ExchangeService, Chat, PasswordPopup) {    
+                                      Geolocation, $translate, tmhDynamicLocale, availableLanguages, AppService, ExchangeService, Chat, PasswordPopup) {    
 
-  //$scope.editableHost = false;
-  //$scope.addrHost = localStorage.NodeHost;
   $scope.hostsList= JSON.parse(localStorage.HostsList);
-	//$scope.indexHost = $scope.hostsList.indexOf($scope.addrHost);
   $scope.pin = { checked: (localStorage.PinOn=="true") };
   $scope.touch = { checked: (localStorage.TouchOn=="true") };
   $scope.geo = { checked: (localStorage.GeoOn=="true") };
@@ -13,9 +10,11 @@ angular.module('leth.controllers')
   $scope.vibration = { checked: (localStorage.Vibration=="true") };
   $scope.nfc = { checked: (localStorage.NfcOn=="true") };
   $scope.baseCurrency = JSON.parse(localStorage.BaseCurrency);
-
+  
   $scope.$on("$ionicView.enter", function () {
     $scope.addrHost = localStorage.NodeHost;
+    $scope.language = localStorage.Language;
+    $scope.availableLanguages = availableLanguages;
     //$scope.$digest(); 
   });
 
@@ -123,6 +122,12 @@ angular.module('leth.controllers')
     if(value)
       setPin(value);
   });
+
+  $scope.setLanguage = function(lang){
+    localStorage.Language = lang;
+    tmhDynamicLocale.set(lang);
+    $translate.use(lang);
+  }
 
   $scope.isIOS = function(){
     return ionic.Platform.isIOS();

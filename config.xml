@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.inzhoop.leth" version="0.26.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.inzhoop.leth" version="0.26.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>LΞTH</name>
     <description>
         The first Ethereum mobile wallet.
@@ -86,4 +86,5 @@
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="https://github.com/katzer/cordova-plugin-local-notifications.git" />
     <plugin name="phonegap-nfc" spec="~0.6.6" />
     <plugin name="cordova-plugin-http" spec="~1.2.0" />
+    <plugin name="cordova-plugin-globalization" spec="~1.0.7" />
 </widget>

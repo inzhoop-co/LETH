@@ -3,7 +3,11 @@ hdPath = "m/44'/60'/0";
 hdPath2 = "m/44'/60'/0'/0";
 StorePath = 'https://www.inzhoop.com/dappleths'; 
 
-var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angularLoad','ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services','ionic-lock-screen'])
+var app = angular.module('leth', [
+      'ionic', 'nfcFilters', 'ngTagsInput', 'angularLoad',
+      'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 
+      'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services',
+      'ionic-lock-screen', 'pascalprecht.translate', 'tmh.dynamicLocale'])
   .constant('$ionicLoadingConfig', {
     template: 'Loading...'
   })
@@ -11,10 +15,42 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
     //url: 'DappLETHs'
     url: StorePath
   })
+  .constant('availableLanguages', ['en-US', 'it-IT'])
+  .constant('defaultLanguage', 'en-US')
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicScrollDelegate,
-                $lockScreen,$state,$window, $location) {
+                $lockScreen,$state,$window, $location, availableLanguages, defaultLanguage, 
+                $translate, $locale, tmhDynamicLocale ) {
+
+
+    function applyLanguage(language) {
+      tmhDynamicLocale.set(language.toLowerCase());
+      $translate.use(language.toLowerCase());
+    }
+
+    function getSuitableLanguage(language) {
+      for (var index = 0; index < availableLanguages.length; index++) {
+        if (availableLanguages[index].toLowerCase() === language.toLocaleLowerCase()) {
+          return availableLanguages[index];
+        }
+      }
+      return defaultLanguage;
+    }
+
+    function setLanguage() {
+        if (typeof navigator.globalization !== "undefined") {
+          $cordovaGlobalization.getPreferredLanguage().then(function (result) {
+            var language = getSuitableLanguage(result.value);
+            applyLanguage(language);
+            $translate.use(language);
+          });
+        } else {
+          applyLanguage(localStorage.Language);
+        }
+    }
+
     $ionicPlatform.ready(function () {
       //Start Settings
+      if (typeof localStorage.Language == 'undefined') {localStorage.Language=defaultLanguage;}
       if (typeof localStorage.Blacklist == 'undefined') {localStorage.Blacklist='[]';}
       if (typeof localStorage.NfcOn == 'undefined') {localStorage.NfcOn="false";}
       if (typeof localStorage.Vibration == 'undefined') {localStorage.Vibration="false";}
@@ -32,6 +68,9 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
       if (typeof localStorage.HostsList == 'undefined') {
         localStorage.HostsList=JSON.stringify(["http://wallet.inzhoop.com:8546","http://wallet.inzhoop.com:8545"]);
       }
+      
+      setLanguage();
+
       if (typeof localStorage.BaseCurrency == 'undefined') {localStorage.BaseCurrency = JSON.stringify({ name: 'EUR', symbol:'€', value: 'ZEUR'});}      
 	    if(localStorage.PinOn=="true"){
     		$lockScreen.show({
@@ -87,6 +126,14 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
       }, false);     
 
     });
+  })
+  .config(function (tmhDynamicLocaleProvider, $translateProvider, defaultLanguage) {
+    tmhDynamicLocaleProvider.localeLocationPattern('locales/angular-locale_{{locale}}.js');
+    $translateProvider.useStaticFilesLoader({
+      'prefix': 'i18n/',
+      'suffix': '.json'
+    });
+    $translateProvider.preferredLanguage(defaultLanguage);
   })
   .config(function ($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
     // $ionicConfigProvider.views.maxCache(10);
@@ -145,6 +192,15 @@ var app = angular.module('leth', ['ionic', 'nfcFilters', 'ngTagsInput', 'angular
         views: {
           'settings': {
             templateUrl: 'templates/hostnodes.html',
+            controller: 'SettingsCtrl'
+          }
+        }
+      })
+      .state('tab.languages', {
+        url: '/languages',
+        views: {
+          'settings': {
+            templateUrl: 'templates/languages.html',
             controller: 'SettingsCtrl'
           }
         }
