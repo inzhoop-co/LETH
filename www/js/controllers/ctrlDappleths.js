@@ -119,7 +119,8 @@ angular.module('leth.controllers')
 
     $scope.initDapp = function() {
       $scope.chatBoard = $scope.activeApp.Chatboard;
-      dappleth.run($scope.activeApp.GUID,$scope.activeApp.ABI,$scope.activeApp.Address);
+
+      dappleth.run({data: $scope, services: AppService});// gli passi tutto quello che gli potrebbe servire
     }
 
     $scope.scan = function() {
