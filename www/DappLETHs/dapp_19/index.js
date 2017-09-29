@@ -1,11 +1,10 @@
 var dappleth = (function(){
 	return {
-		run:function(panino){
-			panino.data.setId = function(){
+		run:function(Ð){
+			Ð.scope.setId = function(){
 				console.log("sono un metodo esterno");
-				panino.data.activeApp.GUID=19;
-				panino.data.hasLogged = false;
-				console.log(panino.services.account());
+				Ð.scope.activeApp.GUID=19;
+				Ð.scope.hasLogged = false;
 			}
 		}
 	};

@@ -66,7 +66,7 @@ angular.module('leth.controllers')
   })
   .controller('DapplethRunCtrl', function ($scope, $rootScope, $ionicHistory, angularLoad, $ionicLoading, $templateRequest, 
                                           $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout, 
-                                           StoreEndpoint, AppService, Chat) {
+                                           StoreEndpoint, AppService, Chat, DappService) {
     var id = $stateParams.Id;
     $scope.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
     
@@ -78,28 +78,12 @@ angular.module('leth.controllers')
     
 
     $scope.$on("$ionicView.afterEnter", function () {
-      $http.get(StoreEndpoint.url + $scope.activeApp.InstallUrl) 
-        .success(function(data){
-          $ionicLoading.show(); 
-          $scope.appContainer = $sce.trustAsHtml(data);  
-
-          angularLoad.loadScript('js/api.js').then(function() {
-              console.log('loading ' + 'js/api.js');
-
-              angularLoad.loadScript(StoreEndpoint.url + $scope.activeApp.ScriptUrl).then(function(result) {
-                  console.log('loading ' + StoreEndpoint.url + $scope.activeApp.ScriptUrl);
-                  $scope.initDapp(); 
-                  $ionicLoading.hide();
-              }).catch(function(err) {
-                  console.log('ERROR :' + StoreEndpoint.url + $scope.activeApp.ScriptUrl);
-              });
-
-          }).catch(function() {
-              console.log('ERROR :' + 'js/api.js');
-          });
-          
-          $timeout(function() {$ionicLoading.hide();}, 1000);
-      });
+        angularLoad.loadScript(StoreEndpoint.url + $scope.activeApp.ScriptUrl).then(function(result) {
+            dappleth.run({scope: $scope, services: DappService});
+            $ionicLoading.hide();
+        }).catch(function(err) {
+            console.log('ERROR :' + StoreEndpoint.url + $scope.activeApp.ScriptUrl);
+        });
     });
 
     $scope.$on("$ionicView.beforeLeave", function () {
@@ -115,12 +99,6 @@ angular.module('leth.controllers')
     $scope.refresh = function() {
       dappleth.update();
       $scope.$broadcast('scroll.refreshComplete');
-    }
-
-    $scope.initDapp = function() {
-      $scope.chatBoard = $scope.activeApp.Chatboard;
-
-      dappleth.run({data: $scope, services: AppService});// gli passi tutto quello che gli potrebbe servire
     }
 
     $scope.scan = function() {

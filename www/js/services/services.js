@@ -1,5 +1,4 @@
 angular.module('leth.services', [])
-
 .service('UIService', function ($rootScope, $http, $q, $timeout,
           StoreEndpoint, $ionicPopup,$ionicPlatform, $ionicLoading, $ionicScrollDelegate, $cordovaBarcodeScanner) {
   return{

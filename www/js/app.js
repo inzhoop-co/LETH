@@ -322,13 +322,7 @@ var app = angular.module('leth', [
       restrict: "EA",
       scope: true,
       link: function(scope,element,attrs){
-        //how to inject this and read dinamically?
-        console.log(AppService.account());          
-        /*scope.setId = function(){
-          console.log('done!');
-          scope.activeApp.GUID=19;
-        };
-*/
+
         $http.get(StoreEndpoint.url + attrs.page) 
         .success(function(data){
           var customTemplate = data;
