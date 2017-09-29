@@ -7,8 +7,8 @@
   <ion-content class="has-header has-tabs scrollBg">
   <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
   <ion-list class="list" show-reorder="false" >
-    <ion-radio ng-repeat="lang in availableLanguages" ng-value="lang" ng-model="language" ng-click="setLanguage(language)">
-    	{{lang}}
+    <ion-radio ng-repeat="lang in availableLanguages" ng-value="lang.ISO" ng-model="language" ng-click="setLanguage(language)">
+    	{{lang.Language}}
     </ion-radio>
   </ion-list>
   </ion-content>
