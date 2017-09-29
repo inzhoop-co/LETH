@@ -68,8 +68,10 @@ angular.module('leth.controllers')
                                           $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout, 
                                            StoreEndpoint, AppService, Chat, DappService) {
     var id = $stateParams.Id;
-    $scope.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
+    $scope.Dapp=[];
+    $scope.Dapp.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
     
+
     $scope.$on("$ionicView.enter", function () {
       $ionicHistory.clearCache();
       $scope.scrollTo('chatScroll','bottom');
@@ -78,11 +80,12 @@ angular.module('leth.controllers')
     
 
     $scope.$on("$ionicView.afterEnter", function () {
-        angularLoad.loadScript(StoreEndpoint.url + $scope.activeApp.ScriptUrl).then(function(result) {
-            dappleth.run({scope: $scope, services: DappService});
+        
+        angularLoad.loadScript(StoreEndpoint.url + $scope.Dapp.activeApp.ScriptUrl).then(function(result) {
+            dappleth.run({scope: $scope, service: DappService});
             $ionicLoading.hide();
         }).catch(function(err) {
-            console.log('ERROR :' + StoreEndpoint.url + $scope.activeApp.ScriptUrl);
+            console.log('ERROR :' + StoreEndpoint.url + $scope.Dapp.activeApp.ScriptUrl);
         });
     });
 
@@ -92,15 +95,16 @@ angular.module('leth.controllers')
       dappleth.destroy();
       dappleth = null;
 
-      angularLoad.resetScript($scope.activeApp.ScriptUrl, "js");
-      removejscssfile($scope.activeApp.ScriptUrl, "js"); 
+      angularLoad.resetScript($scope.Dapp.activeApp.ScriptUrl, "js");
+      removejscssfile($scope.Dapp.activeApp.ScriptUrl, "js"); 
     });
     
     $scope.refresh = function() {
-      dappleth.update();
+      //dappleth.update();
       $scope.$broadcast('scroll.refreshComplete');
     }
 
+    /*
     $scope.scan = function() {
       document.addEventListener("deviceready", function () {      
       $cordovaBarcodeScanner
@@ -114,32 +118,12 @@ angular.module('leth.controllers')
         });
       }, false);   
     }
+    */
 
     $scope.isFromDapp = function(item){
-      if($scope.activeApp.GUID == item.guid)
+      if($scope.Dapp.activeApp.GUID == item.guid)
         return true; 
       return false;
-    }
-
-    var isLoaded = function(filename, filetype){
-        var targetelement=(filetype=="js")? "script" : (filetype=="css")? "link" : "none" //determine element type to create nodelist from
-        var targetattr=(filetype=="js")? "src" : (filetype=="css")? "href" : "none" //determine corresponding attribute to test for
-        var allsuspects=document.getElementsByTagName(targetelement)
-        for (var i=allsuspects.length; i>=0; i--){ //search backwards within nodelist for matching elements to remove
-        if (allsuspects[i] && allsuspects[i].getAttribute(targetattr)!=null && allsuspects[i].getAttribute(targetattr).indexOf(filename)!=-1)
-            return true;
-        }
-        return false;
-    }
-
-    var removejscssfile = function(filename, filetype){
-        var targetelement=(filetype=="js")? "script" : (filetype=="css")? "link" : "none" //determine element type to create nodelist from
-        var targetattr=(filetype=="js")? "src" : (filetype=="css")? "href" : "none" //determine corresponding attribute to test for
-        var allsuspects=document.getElementsByTagName(targetelement)
-        for (var i=allsuspects.length; i>=0; i--){ //search backwards within nodelist for matching elements to remove
-        if (allsuspects[i] && allsuspects[i].getAttribute(targetattr)!=null && allsuspects[i].getAttribute(targetattr).indexOf(filename)!=-1)
-            allsuspects[i].parentNode.removeChild(allsuspects[i]) //remove element by calling parentNode.removeChild()
-        }
     }
 
   })

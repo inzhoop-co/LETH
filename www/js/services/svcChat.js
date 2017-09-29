@@ -399,12 +399,6 @@ angular.module('leth.services')
       msg.text = event.text;
       msg.from = event.from;
 
-      var payload = web3.fromUtf8(JSON.stringify(msg));
-      var message = {
-        from:  event.from,
-        payload: payload
-      };
-
       chatsDAPP.push({
         guid: guid,
         identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),

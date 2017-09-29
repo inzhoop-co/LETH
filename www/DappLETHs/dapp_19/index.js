@@ -1,10 +1,10 @@
 var dappleth = (function(){
 	return {
-		run:function(Ð){
-			Ð.scope.setId = function(){
+		run:function($D){
+			$D.scope.setId = function(){
 				console.log("sono un metodo esterno");
-				Ð.scope.activeApp.GUID=19;
-				Ð.scope.hasLogged = false;
+				$D.scope.Dapp.activeApp.GUID=19;
+				$D.scope.hasLogged = false;
 			}
 		}
 	};
