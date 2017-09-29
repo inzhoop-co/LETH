@@ -19,7 +19,7 @@ var app = angular.module('leth', [
   .constant('defaultLanguage', 'en-US')
   .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicScrollDelegate,
                 $lockScreen,$state,$window, $location, availableLanguages, defaultLanguage, 
-                $translate, $locale, tmhDynamicLocale ) {
+                $translate, $locale, tmhDynamicLocale, $cordovaGlobalization ) {
 
 
     function applyLanguage(language) {
