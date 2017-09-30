@@ -339,7 +339,8 @@ var app = angular.module('leth', [
       scope: false,
       templateUrl: "templates/chat-component.html",
       link: function(scope,element,attrs){
-          console.log("chat component");
+          scope.CHAT_HEIGHT = attrs.height;
+          console.log("chat component " + attrs.height);
       }
     };
   })

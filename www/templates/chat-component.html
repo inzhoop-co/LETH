@@ -1,0 +1,13 @@
+<ion-scroll direction="y" class="chatDapp message-list" style="height:{{CHAT_HEIGHT}}" ng-if="Dapp.activeApp.Chatboard">
+  <div id="chatDappDiv" ng-repeat="chat in DAPPchats | filter:isFromDapp | orderBy:'message.time'"
+    class="message-wrapper">
+    <div ng-class="chat.message.from === Dapp.activeApp.Address ? 'bubble bubble-mine' : 'bubble bubble-other'">
+        <img on-hold="chooseDappAction(Dapp.activeApp)" ng-src="{{chat.identity}}" ng-class="chat.message.from === Dapp.activeApp.Address ? 'rounded image image-mine' : 'rounded image image-other'""> 
+      <div class="message" ng-class="chat.message.from === Dapp.activeApp.Address ? 'message-mine' : 'message-other'" on-hold="chooseDappAction(Dapp.activeApp)">
+        <div class="message-text" ng-if="chat.message.text.length" ng-bind-html="chat.message.text"></div>
+        <img ng-src="{{chat.message.image}}" height="100px" width="auto" ng-if="chat.message.image.length"/>
+        <span class="message-timestamp">{{isFriend(chat.message.from) | strLimit: 5 : 0}} {{chat.message.time == undefined ? 'outdated v.' : chat.message.time | date: 'HH:mm'}}</span>
+      </div>
+    </div>
+  </div>
+</ion-scroll>
