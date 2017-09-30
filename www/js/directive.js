@@ -31,7 +31,17 @@ angular.module('leth')
       scope: false,
       templateUrl: "templates/components/navbar.html",
       link: function(scope,element,attrs){
-          console.log("header component " );
+          console.log("navbar component " );
+      }
+    };
+  })
+  .directive('dapplethContent', function($compile, $http){
+    return {
+      restrict: "EA",
+      scope: false,
+      templateUrl: "templates/components/content.html",
+      link: function(scope,element,attrs){
+          console.log("content component " );
       }
     };
   })
@@ -52,7 +62,7 @@ angular.module('leth')
       scope: false,
       templateUrl: "templates/components/footer.html",
       link: function(scope,element,attrs){
-          console.log("header component " );
+          console.log("footer component " );
       }
     };
   })
