@@ -92,7 +92,7 @@ angular.module('leth.controllers')
     $scope.$on("$ionicView.beforeLeave", function () {
       $ionicHistory.clearCache();
 
-      dappleth.destroy();
+      //dappleth.destroy();
       dappleth = null;
 
       angularLoad.resetScript($scope.Dapp.activeApp.ScriptUrl, "js");
@@ -104,21 +104,26 @@ angular.module('leth.controllers')
       $scope.$broadcast('scroll.refreshComplete');
     }
 
-    /*
-    $scope.scan = function() {
-      document.addEventListener("deviceready", function () {      
-      $cordovaBarcodeScanner
-        .scan()
-        .then(function (barcodeData) {
-          if(barcodeData.text!= ""){
-            console.log('read code: ' + barcodeData.text);
-          }
-        }, function (error) {
-          console.log('Error!' + error);
-        });
-      }, false);   
+    var isLoaded = function(filename, filetype){
+        var targetelement=(filetype=="js")? "script" : (filetype=="css")? "link" : "none" //determine element type to create nodelist from
+        var targetattr=(filetype=="js")? "src" : (filetype=="css")? "href" : "none" //determine corresponding attribute to test for
+        var allsuspects=document.getElementsByTagName(targetelement)
+        for (var i=allsuspects.length; i>=0; i--){ //search backwards within nodelist for matching elements to remove
+        if (allsuspects[i] && allsuspects[i].getAttribute(targetattr)!=null && allsuspects[i].getAttribute(targetattr).indexOf(filename)!=-1)
+            return true;
+        }
+        return false;
     }
-    */
+
+    var removejscssfile = function(filename, filetype){
+        var targetelement=(filetype=="js")? "script" : (filetype=="css")? "link" : "none" //determine element type to create nodelist from
+        var targetattr=(filetype=="js")? "src" : (filetype=="css")? "href" : "none" //determine corresponding attribute to test for
+        var allsuspects=document.getElementsByTagName(targetelement)
+        for (var i=allsuspects.length; i>=0; i--){ //search backwards within nodelist for matching elements to remove
+        if (allsuspects[i] && allsuspects[i].getAttribute(targetattr)!=null && allsuspects[i].getAttribute(targetattr).indexOf(filename)!=-1)
+            allsuspects[i].parentNode.removeChild(allsuspects[i]) //remove element by calling parentNode.removeChild()
+        }
+    }
 
     $scope.isFromDapp = function(item){
       if($scope.Dapp.activeApp.GUID == item.guid)

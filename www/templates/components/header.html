@@ -1,9 +1,13 @@
 <ion-header-bar align-title="center" class="bar-assertive">
+  <button class="button button-clear" on-touch="$ionicGoBack()">
+    <i class="icon ion-ios-arrow-back"></i>
+  </button>
   <h1 class="buttons title">
       <img ng-src="{{Dapp.activeApp.Logo}}" height="45px" width="auto"/>
       <span>&nbsp;{{Dapp.activeApp.Description | strLimit: 20 : 0}}</span>
   </h1>
+<!--span class="badge badge-energized" ng-hide="msgCounter+DMCounter==0"> {{msgCounter + DMCounter}}</span-->
   <div class="buttons">
-    <button id="rightBtnHeader" class="button"></button>
+    <button class="button"></button>
   </div>
 </ion-header-bar>

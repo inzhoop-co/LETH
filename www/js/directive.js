@@ -1,68 +1,67 @@
 angular.module('leth') 
 .directive('dapplethTemplate', function($compile, $http, StoreEndpoint){
     return {
-      restrict: "EA",
+      restrict: "E",
       scope: true,
       link: function(scope,element,attrs){
-
         $http.get(StoreEndpoint.url + attrs.page) 
         .success(function(data){
-          var customTemplate =  data;
-          
+          var customTemplate =  data;          
           element.append($compile(customTemplate)(scope));
-          
         })
       }
     };
   })
   .directive('dapplethHeader', function($compile, $http){
     return {
-      restrict: "EA",
+      restrict: "E",
       scope: false,
       templateUrl: "templates/components/header.html",
       link: function(scope,element,attrs){
-          console.log("header component " );
+          //console.log("header component " );
       }
     };
   })
   .directive('dapplethNavbar', function($compile, $http){
     return {
-      restrict: "EA",
+      restrict: "E",
       scope: false,
+      transclude: true,
       templateUrl: "templates/components/navbar.html",
       link: function(scope,element,attrs){
-          console.log("navbar component " );
+          //console.log("navbar component " );
       }
     };
   })
   .directive('dapplethContent', function($compile, $http){
     return {
-      restrict: "EA",
+      restrict: "E",
       scope: false,
+      transclude: true,
       templateUrl: "templates/components/content.html",
       link: function(scope,element,attrs){
-          console.log("content component " );
+          //console.log("content component " );
       }
     };
   })
   .directive('dapplethChat', function($compile, $http, StoreEndpoint){
     return {
-      restrict: "EA",
+      restrict: "E",
       scope: false,
       templateUrl: "templates/components/chat.html",
       link: function(scope,element,attrs){
           scope.CHAT_HEIGHT = attrs.height;
-          console.log("chat component " + attrs.height);
+          //console.log("chat component " + attrs.height);
       }
     };
   })
   .directive('dapplethFooter', function($compile, $http){
     return {
-      restrict: "EA",
+      restrict: "E",
       scope: false,
       templateUrl: "templates/components/footer.html",
       link: function(scope,element,attrs){
-          console.log("footer component " );
+          //console.log("footer component " );
       }
     };
   })

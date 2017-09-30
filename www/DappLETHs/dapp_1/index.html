@@ -1,11 +1,5 @@
-
-<dappleth-navbar>
-  <dappleth-header></dappleth-header>
-</dappleth-navbar>
-
-<!-- how to move content on editable directive like components/content.html -->  
-<ion-content class="has-header">
-<ion-refresher pulling-txt="load" on-refresh="refresh(Dapp.activeApp.GUID)"></ion-refresher>
+<dappleth-header></dappleth-header>
+<dappleth-content>
   <div class="card">
     <div class="item-divider">
         <img ng-src="http://www.inzhoop.com/dappleths/dapp_1/logo_full.png">
@@ -18,8 +12,16 @@
     Why don't you test me?
     <i class="icon ion-thumbsup"></i>
   </button>
-  <dappleth-chat height="330px"/>
-</ion-content>
+  <div class="card" ng-if="call">
+      <div class="item-divider">
+        Response
+    </div>
+    <div class="item item-text-wrap">
+      {{greeting}}
+    </div>
+  </div>
+  <!--dappleth-chat height="330px"/-->
+</dappleth-content>
 <dappleth-footer/>
 
 
