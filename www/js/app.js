@@ -317,7 +317,7 @@ var app = angular.module('leth', [
       return( this );
     };
   })
-  .directive('dapplethTemplate', function(AppService, $compile, $http, StoreEndpoint){
+  .directive('dapplethTemplate', function($compile, $http, StoreEndpoint){
     return {
       restrict: "EA",
       scope: true,
@@ -330,6 +330,16 @@ var app = angular.module('leth', [
           element.append($compile(customTemplate)(scope));
           
         })
+      }
+    };
+  })
+  .directive('chatComponent', function($compile, $http, StoreEndpoint){
+    return {
+      restrict: "EA",
+      scope: false,
+      templateUrl: "templates/chat-component.html",
+      link: function(scope,element,attrs){
+          console.log("chat component");
       }
     };
   })
