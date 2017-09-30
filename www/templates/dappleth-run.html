@@ -1,27 +1,3 @@
 <ion-view view-title=" " hide-tabs cache-view="false">
-  <ion-nav-bar class="bar-assertive">
-    <ion-nav-back-button>
-      <span class="badge badge-energized" ng-hide="msgCounter+DMCounter==0"> {{msgCounter + DMCounter}}</span>    
-    </ion-nav-back-button>  
-  </ion-nav-bar> 
-  <ion-header-bar align-title="center" class="bar-assertive">
-  <h1 class="buttons title">
-      <img ng-src="{{Dapp.activeApp.Logo}}" height="45px" width="auto">
-      <span>&nbsp;{{Dapp.activeApp.Description | strLimit: 20 : 0}}</span>
-  </h1>
-  <div class="buttons">
-    <button id="rightBtnHeader" class="button"></button>
-  </div>
-  </ion-header-bar> 
-  <ion-content class="has-header" delegate-handle="chatDappScroll">
-  <ion-refresher pulling-txt="load" on-refresh="refresh(Dapp.activeApp.GUID)"></ion-refresher>
-    <dappleth-template page="{{Dapp.activeApp.InstallUrl}}" script="{{Dapp.activeApp.ScriptUrl}}"/>
-  </ion-content>
-  <ion-footer-bar align-title="center" class="bar-assertive">
-    <button id="leftButton" class="button"></button>
-    <h2 class="title">
-      <button id="centerButton" class="button"></button>
-    </h2>
-    <button id="rightButton" class="button"></button>
-  </ion-footer-bar>
+  <dappleth-template page="{{Dapp.activeApp.InstallUrl}}" script="{{Dapp.activeApp.ScriptUrl}}"/>  
 </ion-view>

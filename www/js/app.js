@@ -317,50 +317,6 @@ var app = angular.module('leth', [
       return( this );
     };
   })
-  .directive('dapplethTemplate', function($compile, $http, StoreEndpoint){
-    return {
-      restrict: "EA",
-      scope: true,
-      link: function(scope,element,attrs){
-
-        $http.get(StoreEndpoint.url + attrs.page) 
-        .success(function(data){
-          var customTemplate = data;
-          
-          element.append($compile(customTemplate)(scope));
-          
-        })
-      }
-    };
-  })
-  .directive('chatComponent', function($compile, $http, StoreEndpoint){
-    return {
-      restrict: "EA",
-      scope: false,
-      templateUrl: "templates/chat-component.html",
-      link: function(scope,element,attrs){
-          scope.CHAT_HEIGHT = attrs.height;
-          console.log("chat component " + attrs.height);
-      }
-    };
-  })
-  .directive('hideTabs', function($rootScope) {
-    return {
-      restrict: 'A',
-      link: function($scope, $el) {
-        $rootScope.hideTabs = 'tabs-item-hide';
-        $scope.$on('$destroy', function() {
-            $rootScope.hideTabs = '';
-        });
-        $scope.$on('$ionicView.beforeLeave', function() {
-            $rootScope.hideTabs = '';
-        });
-        $scope.$on('$ionicView.beforeEnter', function() {
-            $rootScope.hideTabs = 'tabs-item-hide';
-        });
-      }
-    };
-  })
   .filter('inCategory', function($filter){
     return function(list, arrayFilter, element){
         if(arrayFilter){
