@@ -1,0 +1,25 @@
+
+<dappleth-navbar>
+  <dappleth-header></dappleth-header>
+</dappleth-navbar>
+
+<!-- how to move content on editable directive like components/content.html -->  
+<ion-content class="has-header">
+<ion-refresher pulling-txt="load" on-refresh="refresh(Dapp.activeApp.GUID)"></ion-refresher>
+  <div class="card">
+    <div class="item-divider">
+        <img ng-src="http://www.inzhoop.com/dappleths/dapp_1/logo_full.png">
+    </div>
+    <div class="item item-body">
+       A DAppleth is a light DApp that allow you to intercat with smart contracts directly from this mobile wallet.
+    </div>
+  </div>
+  <button class="button button-outline button-calm button-full" ng-click="greet()">
+    Why don't you test me?
+    <i class="icon ion-thumbsup"></i>
+  </button>
+  <dappleth-chat height="330px"/>
+</ion-content>
+<dappleth-footer/>
+
+
