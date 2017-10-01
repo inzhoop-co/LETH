@@ -9,7 +9,7 @@ var dappleth = (function(){
 			dappContract = web3.eth.contract(Dapp.ABI).at(Dapp.Address)
 			
 			$D.scope.greet = function(){
-				$D.service.confirm("Call contract ", "Do you want to call contract " +  dappContract.address + "?").then(function(res){
+				$D.service.popupConfirm("Call contract ", "Do you want to call contract " +  dappContract.address + "?").then(function(res){
 					$D.scope.call = true;
 					$D.scope.greeting = dappContract.greet();
 				}, function(err){

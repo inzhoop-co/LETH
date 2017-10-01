@@ -1,6 +1,6 @@
 angular.module('leth.services')
 .service('DappService', function ($rootScope, $http, $q, $timeout, 
-                                $ionicPopup, $ionicPlatform, $ionicLoading, $ionicScrollDelegate,
+                                $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicScrollDelegate,
                                 $cordovaBarcodeScanner,
                                 StoreEndpoint, AppService, Chat, ENSService, ExchangeService, 
                                 Friends, nfcService, SwarmService, Geolocation) {
@@ -9,7 +9,7 @@ angular.module('leth.services')
     	var payload = {from: sender, text: message};
     	Chat.sendDappMessage(payload,id);
     },
-    confirm: function(txtTitle, txtTemplate){
+    popupConfirm: function(txtTitle, txtTemplate){
       var q = $q.defer();
       
       var confirmPopup = $ionicPopup.confirm({
@@ -25,9 +25,8 @@ angular.module('leth.services')
        });
       
       return q.promise;
-
     },
-    prompt: function(txtTitle, txtSubtitle, inputType, inputPlaceholder){
+    popupPrompt: function(txtTitle, txtSubtitle, inputType, inputPlaceholder){
       var q = $q.defer();
     
       var promptPopup = $ionicPopup.prompt({
@@ -45,7 +44,29 @@ angular.module('leth.services')
        });
       
       return q.promise;
-
     },
+    popupAlert: function(txtTitle, txtTemplate){
+      var q = $q.defer();
+      
+      var alertPopup = $ionicPopup.alert({
+        title: txtTitle,
+        template: txtTemplate
+      });
+
+      alertPopup.then(function(res) {
+        if(res)
+          q.resolve(res);
+        else
+          q.reject(res);
+       });
+      
+      return q.promise;
+    },
+    nextSlide: function() {
+      $ionicSlideBoxDelegate.next();
+    },
+    prevSlide: function() {
+      $ionicSlideBoxDelegate.previous();
+    }
   }
 })

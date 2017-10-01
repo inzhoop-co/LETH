@@ -16,7 +16,7 @@
         Network
         <span class="{{badgeNetwork}}">{{nameNetwork}}&nbsp;</span>
       </div>
-      <div class="item subdued item-icon-left" ng-click="openInEtherscan('{{token.Address}}')">
+      <div class="item subdued item-icon-left" ng-click="openInEtherscan('address','{{token.Address}}')">
         {{token.Address | strLimit: 25 : 5}}
         <i class="icon ion-link"></i>
       </div>
