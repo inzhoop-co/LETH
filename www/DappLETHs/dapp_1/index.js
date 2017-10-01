@@ -6,21 +6,19 @@ var dappleth = (function(){
 	return {
 		run:function($D){
 			Dapp = $D.scope.Dapp.activeApp;
-			
 			dappContract = web3.eth.contract(Dapp.ABI).at(Dapp.Address)
 			
 			$D.scope.greet = function(){
-				//$D.service.sendMessage(Dapp.GUID, Dapp.Address, "Calling contract at " +  dappContract.address + "...");
-				//$D.service.sendMessage(Dapp.GUID, Dapp.Address, dappContract.greet());
-
 				$D.service.confirm("Call contract ", "Do you want to call contract " +  dappContract.address + "?").then(function(res){
 					$D.scope.call = true;
 					$D.scope.greeting = dappContract.greet();
 				}, function(err){
 					$D.scope.call = false;
 				})
+			}
 
-
+			$D.scope.clearResponse = function(){
+				$D.scope.call=false;
 			}
 		}
 	};

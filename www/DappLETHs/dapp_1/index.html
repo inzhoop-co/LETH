@@ -13,12 +13,16 @@
     <i class="icon ion-thumbsup"></i>
   </button>
   <div class="card" ng-if="call">
-      <div class="item-divider">
-        Response
+      <div class="item-divider" >
+        Response {{Dapp.activeApp.Address | strLimit: 15 : 5 }}
     </div>
     <div class="item item-text-wrap">
       {{greeting}}
     </div>
+    <a class="item text-right item-icon-right dark" ng-click="clearResponse()">
+      <i class="icon ion-ios-close-outline"></i>
+      Close
+    </a>
   </div>
   <!--dappleth-chat height="330px"/-->
 </dappleth-content>

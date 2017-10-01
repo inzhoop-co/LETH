@@ -82,7 +82,7 @@ angular.module('leth.controllers')
     $scope.$on("$ionicView.afterEnter", function () {
         
         angularLoad.loadScript(StoreEndpoint.url + $scope.Dapp.activeApp.ScriptUrl).then(function(result) {
-            dappleth.run({scope: $scope, service: DappService});
+            dappleth.run({scope: $scope, service: DappService, plugin: $ionicSlideBoxDelegate});
             $ionicLoading.hide();
         }).catch(function(err) {
             console.log('ERROR :' + StoreEndpoint.url + $scope.Dapp.activeApp.ScriptUrl);
