@@ -51,7 +51,7 @@ var app = angular.module('leth', [
   }])
   .run(function (renameDirective,$ionicPlatform, $rootScope, $ionicLoading, $ionicScrollDelegate,
                 $lockScreen,$state,$window, $location, availableLanguages, defaultLanguage, 
-                $translate, $locale, tmhDynamicLocale ) {
+                $translate, $locale, $cordovaGlobalization, tmhDynamicLocale ) {
 
     function applyLanguage(language) {
       tmhDynamicLocale.set(language.toLowerCase());

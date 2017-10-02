@@ -59,6 +59,7 @@ angular.module('leth')
     return {
       restrict: "E",
       scope: false,
+      transclude: true,
       templateUrl: "templates/components/footer.html",
       link: function(scope,element,attrs){
           //console.log("footer component " );

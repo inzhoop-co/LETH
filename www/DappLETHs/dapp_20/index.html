@@ -1,42 +1,41 @@
 <style>
-body {
-  cursor: url('https://ionicframework.com/img/finger.png'), auto;
+  body {
+    cursor: url('https://ionicframework.com/img/finger.png'), auto;
+  }
+  .slider {
+    height: 100%;
+  }
+  .slider-slide {
+    padding-top: 50px;
+    color: #000;
+    background-color: #fff;
+    text-align: center;
 
-}
-.slider {
-  height: 100%;
-}
-.slider-slide {
-  padding-top: 50px;
-  color: #000;
-  background-color: #fff;
-  text-align: center;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-weight: 200;
+  }
 
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
-  font-weight: 200;
-}
+  #logo {
+    margin: 30px 0px;
+  }
 
-#logo {
-  margin: 30px 0px;
-}
+  #list {
+    width: 170px;
+    margin: 30px auto;
+    font-size: 20px;
+  }
+  #list ol {
+    margin-top: 30px;
+  }
+  #list ol li {
+    text-align: left;
+    list-style: decimal;
+    margin: 10px 0px;
+  }
 
-#list {
-  width: 170px;
-  margin: 30px auto;
-  font-size: 20px;
-}
-#list ol {
-  margin-top: 30px;
-}
-#list ol li {
-  text-align: left;
-  list-style: decimal;
-  margin: 10px 0px;
-}
-
-.button.ng-hide{
-  display:none;
-}
+  .button.ng-hide{
+    display:none;
+  }
 </style>
 <dappleth-header></dappleth-header>
 <dappleth-content>
@@ -121,20 +120,11 @@ body {
     </ion-slide>
   </ion-slide-box>
   
-  <div class="button-bar padding">
-    <a class="button icon-left ion-chevron-left button-clear button-dark" ng-click="previous()" ng-show="slideIndex > 0">Previous</a>
-    <a class="button icon-right ion-chevron-right button-clear button-dark" ng-click="next()" ng-show="slideIndex < 3">Next</a>
-    <!--
-    <button class="button button-positive button-clear no-animation"
-            ng-click="previous()" ng-show="slideIndex > 0">
-      < Previous
-    </button>
 
-    <button class="button button-positive button-clear no-animation"
-            ng-click="next()" ng-show="slideIndex < 3">
-      Next >
-    </button>  
-    -->
-  </div>
 </dappleth-content>
-<dappleth-footer/>
+<dappleth-footer>
+    <div class="bar bar-footer bar-assertive">
+    <a class="button icon-left ion-chevron-left button-clear button-light" ng-click="previous()" ng-show="slideIndex > 0"> Previous</a>
+    <a class="button icon-right ion-chevron-right button-clear button-light" ng-click="next()" ng-show="slideIndex < 3">Next </a>
+  </div>
+</dappleth-footer>
