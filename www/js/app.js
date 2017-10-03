@@ -15,8 +15,11 @@ var app = angular.module('leth', [
     url: 'DappLETHs'
     //url: StorePath
   })
-  .constant('availableLanguages', ['en-US', 'it-IT'])
-  .constant('defaultLanguage', 'en-US')
+  .constant('availableLanguages', [
+              {'Language':'English', 'ISO':'en-GB'},
+              {'Language':'Italiano', 'ISO':'it-IT'},
+              {'Language':'Deutsch', 'ISO':'de-DE'}])
+  .constant('defaultLanguage', {'Language':'English', 'ISO':'en-GB'})
   .provider('renameDirective', ['$provide' , '$compileProvider' , function($provide, $compileProvider){
     //that's provider could rename directive using decorator
     var directiveSet;
@@ -60,19 +63,19 @@ var app = angular.module('leth', [
 
     function getSuitableLanguage(language) {
       for (var index = 0; index < availableLanguages.length; index++) {
-        if (availableLanguages[index].toLowerCase() === language.toLocaleLowerCase()) {
-          return availableLanguages[index];
+        if (availableLanguages[index].ISO.toLowerCase() === language.toLocaleLowerCase()) {
+          return availableLanguages[index].ISO;
         }
       }
-      return defaultLanguage;
+      return defaultLanguage.ISO;
     }
 
     function setLanguage() {
         if (typeof navigator.globalization !== "undefined") {
           $cordovaGlobalization.getPreferredLanguage().then(function (result) {
             var language = getSuitableLanguage(result.value);
-            applyLanguage(language);
-            $translate.use(language);
+            applyLanguage(language.ISO);
+            $translate.use(language.ISO);
           });
         } else {
           applyLanguage(localStorage.Language);
@@ -84,7 +87,7 @@ var app = angular.module('leth', [
 
     $ionicPlatform.ready(function () {
       //Start Settings
-      if (typeof localStorage.Language == 'undefined') {localStorage.Language=defaultLanguage;}
+      if (typeof localStorage.Language == 'undefined') {localStorage.Language=defaultLanguage.ISO;}
       if (typeof localStorage.Blacklist == 'undefined') {localStorage.Blacklist='[]';}
       if (typeof localStorage.NfcOn == 'undefined') {localStorage.NfcOn="false";}
       if (typeof localStorage.Vibration == 'undefined') {localStorage.Vibration="false";}

@@ -9,33 +9,9 @@
 		 		<span class="item-note">#{{lastBlock}}</span></div>
 				 <div class="col text-left col-center col-66">
 					<span class="{{badgeNetwork}} relative-position">{{nameNetwork}}&nbsp;</span>
-				</div>
-				<!--div class="col text-right no-bmp col-20 col-center">
-					<button class="button button-clear" ng-click="enableEditHost(!editableHost)">
-				 		<i class="icon ion-edit"></i>
-				 	</button>
-				 </div-->				
+				</div>			
 		 	</div>
 		</div>
-		<!--div class="item item-input" ng-if="showEditHost()">
-		    <label class="item-input-wrapper"><input type="text" ng-model="addrHost" placeholder="type host address"></label>
-		    <button class="button button-clear" ng-click="editHost(addrHost)">
-		        <i class="icon ion-plus-circled"></i>
-		     </button>
-			<button class="button button-clear" ng-click="deleteHost(addrHost)">
-				<i class="icon ion-minus-circled"></i>
-		    </button>
-		</div>
-		<div class="item item-select">
-			<div class="row no-bmp">
-				<div class="col text-left no-bmp col-center">Host </div>
-				<div class="col padding-on-borders  col-center">	
-					<select class="item-select " ng-model="addrHost" ng-required="true" ng-init="addrHost" ng-change="editHost(addrHost)">
-						<option ng-repeat="host in hostsList" value="{{host}}" ng-selected="addrHost==host"  ng-model="addrHost">{{host}}</option>
-					</select>
-				</div>		
-			</div>		
-		</div-->
 		<ion-item class="item item-icon-right" href="#/tab/hostnodes">
             {{addrHost}}
 		     <i class="icon ion-chevron-right icon-accessory"></i>
@@ -76,8 +52,8 @@
       	</ion-item>
 		<div class="padding subdued">Languages <i class="ion-earth"></i></div>
 		<ion-item class="item item-icon-right" href="#/tab/languages">
-            Set Language 
-			 <span class="badge badge-stable">{{language}}</span>
+            Set language 
+			 <span class="item-note ">{{language}}</span>
 		     <i class="icon ion-chevron-right icon-accessory"></i>
       	</ion-item>
 		<div class="padding subdued">Activity</div>

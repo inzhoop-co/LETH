@@ -21,15 +21,22 @@
       "locator": "https://github.com/wildabeast/BarcodeScanner.git",
       "id": "phonegap-plugin-barcodescanner"
     },
+    {
+      "locator": "https://github.com/katzer/cordova-plugin-local-notifications.git",
+      "id": "de.appplant.cordova.plugin.local-notification"
+    },
     "cordova-plugin-device",
+    "cordova-plugin-app-event",
+    "phonegap-nfc",
+    "cordova-plugin-http",
+    "cordova-plugin-file",
+    "cordova-plugin-compat",
     "cordova-plugin-console",
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     "cordova-plugin-webserver",
     "cordova-plugin-whitelist",
-    "cordova-plugin-file",
-    "cordova-plugin-compat",
     "cordova-plugin-contacts",
     "cordova-plugin-touchid",
     {
@@ -38,7 +45,7 @@
     },
     {
       "locator": "https://github.com/cordova-sms/cordova-sms-plugin.git",
-      "id": "com.cordova.plugins.sms"
+      "id": "cordova-sms-plugin"
     },
     {
       "id": "cordova-plugin-customurlscheme",
@@ -52,7 +59,6 @@
       "id": "cordova-plugin-actionsheet"
     },
     "cordova-plugin-device-motion",
-    "cordova-plugin-app-event",
     {
       "locator": "https://github.com/katzer/cordova-plugin-badge.git",
       "id": "cordova-plugin-badge"
@@ -68,13 +74,28 @@
     "cordova-plugin-camera",
     "cordova-plugin-inappbrowser",
     "cordova-plugin-vibration",
-    "phonegap-nfc",
-    "cordova-plugin-http",
-    "cordova-plugin-email-composer",
+    {
+      "locator": "https://github.com/katzer/cordova-plugin-email-composer.git",
+      "id": "cordova-plugin-email-composer"
+    },
+    {
+      "locator": "https://github.com/katzer/cordova-plugin-email-composer.git",
+      "id": "de.appplant.cordova.plugin.email-composer"
+    },
     "cordova-plugin-globalization"
   ],
   "cordovaPlatforms": [
     "android",
-    "ios"
+    "ios",
+    {
+      "platform": "android",
+      "version": "",
+      "locator": "android"
+    },
+    {
+      "platform": "ios",
+      "version": "",
+      "locator": "ios"
+    }
   ]
 }
