@@ -1,6 +1,6 @@
 <ion-view view-title="LΞTH" can-swipe-back="false">
   <ion-content class="has-header has-tabs scrollBg" >
-    <ion-slide-box auto-play="true" does-continue="false" show-pager="true">
+    <ion-slide-box auto-play="true" does-continue="false" show-pager="false">
       <ion-slide>
         <div>
           <a href="#" onclick="window.open('https://www.inzhoop.com','_blank','location=yes','closebuttoncaption=Return');"><img src="img/banners/header1.png"  height="150" ng-click="nextSlide()"/></a>
@@ -78,7 +78,7 @@
             <p>Add a custom token</p>
             <i class="icon ion-ios-plus-outline positive"></i>
       </ion-item>
-       <ion-item class="item item-avatar-left item-icon-right" ng-click="deployTest()">
+      <!--ion-item class="item item-avatar-left item-icon-right" ng-click="deployTest()">
             <img ng-src="img/dappbuilder.png"/>
             <h2>Custom Dappleth to Greet</h2>
             <p>Deploy your custom greet</p>
@@ -87,7 +87,7 @@
               <i class="icon ion-play"></i>
               <span>Test</span>
             </ion-option-button>
-      </ion-item>
+      </ion-item-->
     </ion-list>  
     <div ng-bind-html="appContainer">
     </div>

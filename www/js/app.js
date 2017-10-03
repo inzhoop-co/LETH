@@ -12,18 +12,49 @@ var app = angular.module('leth', [
     template: 'Loading...'
   })
   .constant('StoreEndpoint', {
-    //url: 'DappLETHs'
-    url: StorePath
+    url: 'DappLETHs'
+    //url: StorePath
   })
   .constant('availableLanguages', [
               {'Language':'English', 'ISO':'en-GB'},
               {'Language':'Italiano', 'ISO':'it-IT'},
               {'Language':'Deutsch', 'ISO':'de-DE'}])
   .constant('defaultLanguage', {'Language':'English', 'ISO':'en-GB'})
-  .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicScrollDelegate,
-                $lockScreen,$state,$window, $location, availableLanguages, defaultLanguage, 
-                $translate, $locale, tmhDynamicLocale, $cordovaGlobalization ) {
+  .provider('renameDirective', ['$provide' , '$compileProvider' , function($provide, $compileProvider){
+    //that's provider could rename directive using decorator
+    var directiveSet;
+ 
+    this.setConfig = function setConfig(config){
+      directiveSet = config;
+       
+       angular.forEach(directiveSet, function iterator(targetDir, sourceDir){
+          sourceDir +=  'Directive';
+          //Set up decorators
+          $provide.decorator(sourceDir, function decorate($delegate){
+            
+             $compileProvider.directive(targetDir, function(){
+              return $delegate[0];
+             });
+             
+              return function() { return angular.noop };
+          });
+      });
+    };
 
+    this.$get  = ['$injector', function renameDirectiveService($injector){
+      return { 
+        rename : function rename(){
+          angular.forEach(directiveSet, function(_,dir){
+             var sourceDir = dir + 'Directive';
+            $injector.get(sourceDir);
+          });
+        }
+      }
+    }];
+  }])
+  .run(function (renameDirective,$ionicPlatform, $rootScope, $ionicLoading, $ionicScrollDelegate,
+                $lockScreen,$state,$window, $location, availableLanguages, defaultLanguage, 
+                $translate, $locale, $cordovaGlobalization, tmhDynamicLocale ) {
 
     function applyLanguage(language) {
       tmhDynamicLocale.set(language.toLowerCase());
@@ -50,6 +81,9 @@ var app = angular.module('leth', [
           applyLanguage(localStorage.Language);
         }
     }
+
+    // call to rename 
+    //renameDirective.rename();
 
     $ionicPlatform.ready(function () {
       //Start Settings
@@ -129,6 +163,14 @@ var app = angular.module('leth', [
       }, false);     
 
     });
+  })
+  .config(function(renameDirectiveProvider){
+    //config to rename directive
+    /*
+    renameDirectiveProvider.setConfig({
+      'ionSlideBox' : 'slideBox'
+    });
+    */
   })
   .config(function (tmhDynamicLocaleProvider, $translateProvider, defaultLanguage) {
     tmhDynamicLocaleProvider.localeLocationPattern('locales/angular-locale_{{locale}}.js');
@@ -318,23 +360,6 @@ var app = angular.module('leth', [
     app.controller = function( name, constructor ) {
       $controllerProvider.register( name, constructor );
       return( this );
-    };
-  })
-  .directive('hideTabs', function($rootScope) {
-    return {
-      restrict: 'A',
-      link: function($scope, $el) {
-        $rootScope.hideTabs = 'tabs-item-hide';
-        $scope.$on('$destroy', function() {
-            $rootScope.hideTabs = '';
-        });
-        $scope.$on('$ionicView.beforeLeave', function() {
-            $rootScope.hideTabs = '';
-        });
-        $scope.$on('$ionicView.beforeEnter', function() {
-            $rootScope.hideTabs = 'tabs-item-hide';
-        });
-      }
     };
   })
   .filter('inCategory', function($filter){

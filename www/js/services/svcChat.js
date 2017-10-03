@@ -1,6 +1,6 @@
 angular.module('leth.services')
 .factory('Chat', function ($rootScope, $http, $q, $sce, $filter, AppService, Friends, SwarmService) {
-  var ttlTime = 600;
+  var ttlTime = 6000;
   var targetPow = 1.01;
   var timePow = 19;
   var identity ="";
@@ -282,7 +282,7 @@ angular.module('leth.services')
       var msg = this.envelop('transaction');
       msg.text = 'I sent ' + transaction.symbol + " " + (transaction.value / transaction.unit).toFixed(6) + '&#x1F4B8;';
       msg.attach = transaction;
-      msg.to = [toAddr,AppService.account()];
+      msg.to = [transaction.addr,AppService.account()];
       var svc = this;
 
       var payload = web3.fromUtf8(JSON.stringify(msg));
@@ -299,7 +299,7 @@ angular.module('leth.services')
       var msg = this.envelop('transaction');
       msg.text = 'I sent ' + transaction.symbol + " " + (transaction.value / transaction.unit).toFixed(6) + '&#x1F4B8;';
       msg.attach = transaction;
-      msg.to = [toAddr,AppService.account()];
+      msg.to = [transaction.addr,AppService.account()];
       var svc = this;
      
       chatsDM.push({
@@ -399,12 +399,6 @@ angular.module('leth.services')
       msg.text = event.text;
       msg.from = event.from;
 
-      var payload = web3.fromUtf8(JSON.stringify(msg));
-      var message = {
-        from:  event.from,
-        payload: payload
-      };
-
       chatsDAPP.push({
         guid: guid,
         identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
@@ -437,7 +431,7 @@ angular.module('leth.services')
           $scope.$broadcast("incomingMessage", payload);
       };
 
-      filter =  web3.shh.newMessageFilter({symKeyID: this.identity()}, null, function(error) {console.log(error);});
+      filter =  web3.shh.newMessageFilter({symKeyID: this.identity(), topic: topics}, null, function(error) {console.log(error);});
       
       filter.watch(function (error, result) {
         var isBanned=false;

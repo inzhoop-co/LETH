@@ -27,8 +27,10 @@ angular.module('leth.controllers', [])
     localStorage.Transactions = JSON.stringify($scope.transactions);
     isNfcAvailable();
     $scope.readCategoryList();
-    $scope.readDappsList();
-    $scope.readCoinsList();
+    if($scope.isDapp)
+      $scope.readDappsList();
+    else
+      $scope.readCoinsList();
     $scope.blacklisted = JSON.parse(localStorage.Blacklist);
 
     $timeout(function() {$ionicLoading.hide();}, 1000);
@@ -177,12 +179,12 @@ angular.module('leth.controllers', [])
   };
   
 
-  $scope.openInEtherscan = function(addr){
+  $scope.openInEtherscan = function(path,addr){
     var etherscanUrl;
     if($scope.nameNetwork=="Ropsten")
-      etherscanUrl="https://ropsten.etherscan.io/address/";
+      etherscanUrl="https://ropsten.etherscan.io/" + path +"/";
     if($scope.nameNetwork=="Mainet")
-      etherscanUrl="https://etherscan.io/address/";
+      etherscanUrl="https://etherscan.io/" + path +"/";
     
     var pinUrl = etherscanUrl + addr;    
       var options = {

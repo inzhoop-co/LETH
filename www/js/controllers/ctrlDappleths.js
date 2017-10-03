@@ -66,80 +66,41 @@ angular.module('leth.controllers')
   })
   .controller('DapplethRunCtrl', function ($scope, $rootScope, $ionicHistory, angularLoad, $ionicLoading, $templateRequest, 
                                           $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout, 
-                                           StoreEndpoint, AppService, Chat) {
+                                           StoreEndpoint, AppService, Chat, DappService) {
     var id = $stateParams.Id;
-    $scope.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
+    $scope.Dapp=[];
+    $scope.Dapp.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
+    
 
     $scope.$on("$ionicView.enter", function () {
       $ionicHistory.clearCache();
-      $scope.scrollTo('chatScroll','bottom');
-      $scope.$digest(); 
+      //$scope.scrollTo('chatScroll','bottom');
+      //$scope.$digest(); 
     });
     
 
-    $scope.$on("$ionicView.afterEnter", function () {
-      $http.get(StoreEndpoint.url + $scope.activeApp.InstallUrl) 
-        .success(function(data){
-          $ionicLoading.show(); 
-          $scope.appContainer = $sce.trustAsHtml(data);  
-
-          angularLoad.loadScript('js/api.js').then(function() {
-              console.log('loading ' + 'js/api.js');
-
-              angularLoad.loadScript(StoreEndpoint.url + $scope.activeApp.ScriptUrl).then(function(result) {
-                  console.log('loading ' + StoreEndpoint.url + $scope.activeApp.ScriptUrl);
-                  $scope.initDapp(); 
-                  $ionicLoading.hide();
-              }).catch(function(err) {
-                  console.log('ERROR :' + StoreEndpoint.url + $scope.activeApp.ScriptUrl);
-              });
-
-          }).catch(function() {
-              console.log('ERROR :' + 'js/api.js');
-          });
-          
-          $timeout(function() {$ionicLoading.hide();}, 1000);
-      });
+    $scope.$on("$ionicView.afterEnter", function () {    
+        angularLoad.loadScript(StoreEndpoint.url + $scope.Dapp.activeApp.ScriptUrl).then(function(result) {
+            dappleth.run({scope: $scope, service: DappService, plugin: $ionicSlideBoxDelegate});
+            $ionicLoading.hide();
+        }).catch(function(err) {
+            console.log('ERROR :' + StoreEndpoint.url + $scope.Dapp.activeApp.ScriptUrl);
+        });
     });
 
     $scope.$on("$ionicView.beforeLeave", function () {
       $ionicHistory.clearCache();
 
-      dappleth.destroy();
+      //dappleth.destroy();
       dappleth = null;
 
-      angularLoad.resetScript($scope.activeApp.ScriptUrl, "js");
-      removejscssfile($scope.activeApp.ScriptUrl, "js"); 
+      angularLoad.resetScript($scope.Dapp.activeApp.ScriptUrl, "js");
+      removejscssfile($scope.Dapp.activeApp.ScriptUrl, "js"); 
     });
     
     $scope.refresh = function() {
-      dappleth.update();
+      //dappleth.update();
       $scope.$broadcast('scroll.refreshComplete');
-    }
-
-    $scope.initDapp = function() {
-      $scope.chatBoard = $scope.activeApp.Chatboard;
-      dappleth.run($scope.activeApp.GUID,$scope.activeApp.ABI,$scope.activeApp.Address);
-    }
-
-    $scope.scan = function() {
-      document.addEventListener("deviceready", function () {      
-      $cordovaBarcodeScanner
-        .scan()
-        .then(function (barcodeData) {
-          if(barcodeData.text!= ""){
-            console.log('read code: ' + barcodeData.text);
-          }
-        }, function (error) {
-          console.log('Error!' + error);
-        });
-      }, false);   
-    }
-
-    $scope.isFromDapp = function(item){
-      if($scope.activeApp.GUID == item.guid)
-        return true; 
-      return false;
     }
 
     var isLoaded = function(filename, filetype){
@@ -161,6 +122,12 @@ angular.module('leth.controllers')
         if (allsuspects[i] && allsuspects[i].getAttribute(targetattr)!=null && allsuspects[i].getAttribute(targetattr).indexOf(filename)!=-1)
             allsuspects[i].parentNode.removeChild(allsuspects[i]) //remove element by calling parentNode.removeChild()
         }
+    }
+
+    $scope.isFromDapp = function(item){
+      if($scope.Dapp.activeApp.GUID == item.guid)
+        return true; 
+      return false;
     }
 
   })
