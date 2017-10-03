@@ -1,11 +1,11 @@
-<ion-view view-title="Settings">
+<ion-view view-title="{{'SETTINGS_TITLE' | translate}}">
   <ion-content class="has-header has-tabs">
     <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
   	<ion-scroll class="list scrollBg" overflow-scroll="true" >
-   	 	<div class="padding subdued">Host Provider Address  </div>
+   	 	<div class="padding subdued">{{'HOST_PROVIDER_ADDRESS' | translate}}  </div>
 		<div class="item padding-on-borders" >
 		 	<div class="row no-bmp">
-		 		<div class="col text-left no-bmp col-50 col-center">Host type 
+		 		<div class="col text-left no-bmp col-50 col-center">{{'HOST_TYPE' | translate}} 
 		 		<span class="item-note">#{{lastBlock}}</span></div>
 				 <div class="col text-left col-center col-66">
 					<span class="{{badgeNetwork}} relative-position">{{nameNetwork}}&nbsp;</span>
@@ -16,25 +16,25 @@
             {{addrHost}}
 		     <i class="icon ion-chevron-right icon-accessory"></i>
       	</ion-item>		
-		<div class="padding subdued">Backup</div>
+		<div class="padding subdued">{{'BACKUP' | translate}}</div>
 		<div class="item item-button-right">
-		    Backup your Wallet
+		    {{'BACKUP_WALLET' | translate}}
 		    <button class="button button-clear" ng-click="backupWallet()">
 		        <i class="icon ion-ios-download"></i>
 		    </button>
 		</div>
 		<div class="item item-button-right">
-		    Restore a Wallet
+		    {{'RESTORE_WALLET' | translate}}
 		    <button class="button button-clear" ng-click="chooseImportWallet()">
 		        <i class="icon ion-ios-upload"></i>
 		    </button>
 		</div>
-		<div class="padding subdued">PIN</div>
+		<div class="padding subdued">{{'PIN' | translate}}</div>
 	    <ion-toggle  ng-model="pin.checked" ng-checked="pin.checked">
-			Enable
+			{{'PIN_ENABLE' | translate}}
 		</ion-toggle>
 	    <ion-toggle  ng-model="touch.checked" ng-checked="touch.checked" ng-if="isIOS()">
-			Touch ID 
+			{{'TOUCHID' | translate}} 
 		</ion-toggle>
 		<!-- temporary disabled used to encrypt
 		<div class="item item-button-right">
@@ -44,36 +44,36 @@
 		    </button>
 		</div> 
 		-->
-		<div class="padding subdued">Banned Users <i class="ion-android-hand"></i></div>
+		<div class="padding subdued">{{'BANNED_USERS' | translate}} <i class="ion-android-hand"></i></div>
 		<ion-item class="item item-icon-right" href="#/tab/blacklist">
-            Manage blacklist 
+            {{'MANAGE_BLACKLIST' | translate}} 
 			 <span class="badge badge-stable" ng-show="blacklisted.length>0">{{blacklisted.length}}</span>
 		     <i class="icon ion-chevron-right icon-accessory"></i>
       	</ion-item>
-		<div class="padding subdued">Languages <i class="ion-earth"></i></div>
+		<div class="padding subdued">{{'LANGUAGES' | translate}} <i class="ion-earth"></i></div>
 		<ion-item class="item item-icon-right" href="#/tab/languages">
-            Set language 
+            {{'SET_LANGUAGES' | translate}} 
 			 <span class="item-note ">{{language}}</span>
 		     <i class="icon ion-chevron-right icon-accessory"></i>
       	</ion-item>
-		<div class="padding subdued">Activity</div>
+		<div class="padding subdued">{{'ACTIVITY' | translate}}</div>
 		<ion-toggle  ng-model="backmode.checked" ng-checked="backmode.checked">
-			Background mode 
+			{{'BACKGROUND_MODE' | translate}} 
 		</ion-toggle>
 		<ion-toggle  ng-model="vibration.checked" ng-checked="vibration.checked">
-			Vibrate notification 
+			{{'VIBRATE_NOTIFICATION' | translate}} 
 		</ion-toggle>
-		<div class="padding subdued" ng-if="nfcAvailable">Communication</div>
+		<div class="padding subdued" ng-if="nfcAvailable">{{'COMMUNICATION' | translate}}</div>
 	    <ion-toggle  ng-model="nfc.checked" ng-checked="nfc.checked" ng-if="nfcAvailable">
-			NFC sensor
+			{{'NFC_SENSOR' | translate}}
 		</ion-toggle>
-		<div class="padding subdued">Geolocation</div>
+		<div class="padding subdued">{{'GEOLOCATION' | translate}}</div>
 	    <ion-toggle  ng-model="geo.checked" ng-checked="geo.checked">
 			{{lat}} {{long}}
 		</ion-toggle>
-		<div class="padding subdued">Exchange</div>
+		<div class="padding subdued">{{'EXCHANGE' | translate}}</div>
 		<div class="item item-select">
-			Base Currency
+			{{'BASE_CURRENCY' | translate}}
 		   	<select class="item-select" ng-model="baseCurrency" ng-init="baseCurrency" ng-change="setCurrency(baseCurrency)">
 				<option ng-repeat="c in currencies" value="{{c}}" ng-selected="baseCurrency.name==c.name">{{c.name}} {{c.symbol}}</option>
 			</select>
