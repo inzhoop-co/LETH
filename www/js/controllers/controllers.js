@@ -27,8 +27,10 @@ angular.module('leth.controllers', [])
     localStorage.Transactions = JSON.stringify($scope.transactions);
     isNfcAvailable();
     $scope.readCategoryList();
-    $scope.readDappsList();
-    $scope.readCoinsList();
+    if($scope.isDapp)
+      $scope.readDappsList();
+    else
+      $scope.readCoinsList();
     $scope.blacklisted = JSON.parse(localStorage.Blacklist);
 
     $timeout(function() {$ionicLoading.hide();}, 1000);

@@ -431,7 +431,7 @@ angular.module('leth.services')
           $scope.$broadcast("incomingMessage", payload);
       };
 
-      filter =  web3.shh.newMessageFilter({symKeyID: this.identity()}, null, function(error) {console.log(error);});
+      filter =  web3.shh.newMessageFilter({symKeyID: this.identity(), topic: topics}, null, function(error) {console.log(error);});
       
       filter.watch(function (error, result) {
         var isBanned=false;

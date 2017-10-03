@@ -74,13 +74,12 @@ angular.module('leth.controllers')
 
     $scope.$on("$ionicView.enter", function () {
       $ionicHistory.clearCache();
-      $scope.scrollTo('chatScroll','bottom');
-      $scope.$digest(); 
+      //$scope.scrollTo('chatScroll','bottom');
+      //$scope.$digest(); 
     });
     
 
-    $scope.$on("$ionicView.afterEnter", function () {
-        
+    $scope.$on("$ionicView.afterEnter", function () {    
         angularLoad.loadScript(StoreEndpoint.url + $scope.Dapp.activeApp.ScriptUrl).then(function(result) {
             dappleth.run({scope: $scope, service: DappService, plugin: $ionicSlideBoxDelegate});
             $ionicLoading.hide();

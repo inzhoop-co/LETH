@@ -1,6 +1,6 @@
 angular.module('leth.services')
 .service('DappService', function ($rootScope, $http, $q, $timeout, 
-                                $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicScrollDelegate,
+                                $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, $ionicScrollDelegate,
                                 $cordovaBarcodeScanner,
                                 StoreEndpoint, AppService, Chat, ENSService, ExchangeService, 
                                 Friends, nfcService, SwarmService, Geolocation) {
@@ -67,6 +67,13 @@ angular.module('leth.services')
     },
     prevSlide: function() {
       $ionicSlideBoxDelegate.previous();
+    },
+    toggleLeft: function() {
+      $ionicSideMenuDelegate.toggleLeft();
+    },
+    toggleRight: function() {
+      $ionicSideMenuDelegate.toggleRight();
     }
+
   }
 })
