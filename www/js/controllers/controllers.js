@@ -3,7 +3,7 @@ angular.module('leth.controllers', [])
                                 $ionicPopup, $ionicTabsDelegate, $timeout, $cordovaBarcodeScanner, $state, 
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
                                 $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,
-                                $cordovaBadge,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, $cordovaVibration,
+                                $cordovaBadge,$translate,tmhDynamicLocale,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, $cordovaVibration,
                                 UIService, ENSService, AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, nfcService, SwarmService) {
 
   window.refresh = function () {
@@ -32,6 +32,9 @@ angular.module('leth.controllers', [])
     else
       $scope.readCoinsList();
     $scope.blacklisted = JSON.parse(localStorage.Blacklist);
+
+    tmhDynamicLocale.set(localStorage.Language);
+    $translate.use(localStorage.Language);
 
     $timeout(function() {$ionicLoading.hide();}, 1000);
   };

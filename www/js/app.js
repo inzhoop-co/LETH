@@ -56,11 +56,6 @@ var app = angular.module('leth', [
                 $lockScreen,$state,$window, $location, availableLanguages, defaultLanguage, 
                 $translate, $locale, $cordovaGlobalization, tmhDynamicLocale ) {
 
-    function applyLanguage(language) {
-      tmhDynamicLocale.set(language.toLowerCase());
-      $translate.use(language.toLowerCase());
-    }
-
     function getSuitableLanguage(language) {
       for (var index = 0; index < availableLanguages.length; index++) {
         if (availableLanguages[index].ISO.toLowerCase() === language.toLocaleLowerCase()) {
@@ -70,23 +65,27 @@ var app = angular.module('leth', [
       return defaultLanguage.ISO;
     }
 
-    function setLanguage() {
-        if (typeof navigator.globalization !== "undefined") {
-          $cordovaGlobalization.getPreferredLanguage().then(function (result) {
-            var language = getSuitableLanguage(result.value);
-            applyLanguage(language.ISO);
-            $translate.use(language.ISO);
-          });
-        } else {
-          applyLanguage(localStorage.Language);
-        }
+    //Start Settings
+    if (typeof localStorage.Language == 'undefined'){
+      if(typeof navigator.globalization !== "undefined"){
+        $cordovaGlobalization.getPreferredLanguage().then(function (result) {
+          var language = getSuitableLanguage(result.value);
+          tmhDynamicLocale.set(language);
+          $translate.use(language);
+          localStorage.Language = language;
+        });
+      } else {
+        localStorage.Language=defaultLanguage.ISO;
+        tmhDynamicLocale.set(localStorage.Language);
+        $translate.use(localStorage.Language);
+
+      }
     }
 
     // call to rename 
     //renameDirective.rename();
 
     $ionicPlatform.ready(function () {
-      //Start Settings
       if (typeof localStorage.Language == 'undefined') {localStorage.Language=defaultLanguage.ISO;}
       if (typeof localStorage.Blacklist == 'undefined') {localStorage.Blacklist='[]';}
       if (typeof localStorage.NfcOn == 'undefined') {localStorage.NfcOn="false";}
@@ -106,7 +105,6 @@ var app = angular.module('leth', [
         localStorage.HostsList=JSON.stringify(["http://wallet.inzhoop.com:8546","http://wallet.inzhoop.com:8545"]);
       }
       
-      setLanguage();
 
       if (typeof localStorage.BaseCurrency == 'undefined') {localStorage.BaseCurrency = JSON.stringify({ name: 'EUR', symbol:'€', value: 'ZEUR'});}      
 	    if(localStorage.PinOn=="true"){
