@@ -1,0 +1,14 @@
+{
+  "name": "openlayers",
+  "_cacheHeaders": {
+    "ETag": "\"a8ff409d658700f30e67275f58de829a\"",
+    "Last-Modified": "Mon, 22 May 2017 19:51:35 GMT",
+    "Content-Length": "768531",
+    "Content-Type": "application/octet-stream",
+    "Content-Disposition": "attachment; filename=v3.16.0-dist.zip"
+  },
+  "_release": "e-tag:a8ff409d6",
+  "_source": "https://github.com/openlayers/ol3/releases/download/v3.16.0/v3.16.0-dist.zip",
+  "_target": "*",
+  "_originalSource": "https://github.com/openlayers/ol3/releases/download/v3.16.0/v3.16.0-dist.zip"
+}

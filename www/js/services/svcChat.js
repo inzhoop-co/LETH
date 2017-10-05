@@ -296,6 +296,10 @@ angular.module('leth.services')
       });
     },
     sendTransactionNote: function (transaction) {
+      var toKey = Friends.get(transaction.to);
+      //sesinamiku
+      if(typeof toKey == "undefined") return;
+
       var msg = this.envelop('transaction');
       msg.text = 'I sent ' + transaction.symbol + " " + (transaction.value / transaction.unit).toFixed(6) + '&#x1F4B8;';
       msg.attach = transaction;
@@ -308,12 +312,11 @@ angular.module('leth.services')
         message: msg
       });
 
-      var toKey = Friends.get(transaction.to).idkey;
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encNote = angular.copy(msg);
-        encNote.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,msg.text,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath); 
-        encNote.attach = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,JSON.stringify(transaction),AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
+        encNote.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,msg.text,AppService.idkey(),[toKey.idkey.replace("0x",""),AppService.idkey()],hdPath); 
+        encNote.attach = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,JSON.stringify(transaction),AppService.idkey(),[toKey.idkey.replace("0x",""),AppService.idkey()],hdPath);
 
         var payload = web3.fromUtf8(JSON.stringify(encNote));
         var message = svc.wrap(payload);

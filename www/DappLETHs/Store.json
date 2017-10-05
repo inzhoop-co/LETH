@@ -4,7 +4,7 @@
 			"Name": "Factory - self service",
 			"Description": "Issue and deploy your Dappleth",
 			"Network" : "Ropsten",
-			"List":["F01","F02","F03"]
+			"List":["F01","F02","F03","F04"]
 		},
 		{
 			"Name": "Generic",
@@ -97,6 +97,20 @@
 			"InstallUrl" : "/dapp_21/index.html",
 			"TemplateUrl" : "/dapp_21/index.html",
 			"ScriptUrl" : "/dapp_21/index.js"
+		},
+		{
+			"GUID" : "F04",
+			"Name" : "Helbiz",
+			"Network" : "Ropsten",
+			"Company" : "Inzhoop",
+			"Address" : "0x",
+			"ABI" : [],
+			"Chatboard" : false,
+			"Logo" : "dappleths/dapp_22/logo.png",
+			"Description" : "Share your drive",
+			"InstallUrl" : "/dapp_22/index.html",
+			"TemplateUrl" : "/dapp_22/index.html",
+			"ScriptUrl" : "/dapp_22/index.js"
 		},
 		{
 			"GUID" : "T01",

@@ -318,10 +318,9 @@ angular.module('leth.services', [])
       var gas = web3.eth.estimateGas({});
       var gasPrice = web3.eth.gasPrice; 
       console.log("fee: " + fee);
-      var gPrice =   web3.toBigNumber(fee).dividedBy(gas).round();
+      var gPrice =  web3.toBigNumber(fee/gas).round();
       console.log(gPrice.toNumber());
 
-      //web3.toBigNumber(web3.toWei(fee)/gas);
       return $q(function (resolve, reject) {
         try {
           web3.eth.sendTransaction({

@@ -6,6 +6,14 @@ angular.module('leth.controllers', [])
                                 $cordovaBadge,$translate,tmhDynamicLocale,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, $cordovaVibration,
                                 UIService, ENSService, AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, nfcService, SwarmService) {
 
+  angular.extend($scope, {
+      center: {
+          lat: 51.505,
+          lon: -0.09,
+          zoom: 8
+      }
+  });
+
   window.refresh = function () {
     $ionicLoading.show();
     

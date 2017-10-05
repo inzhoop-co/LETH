@@ -7,7 +7,7 @@ var app = angular.module('leth', [
       'ionic', 'nfcFilters', 'ngTagsInput', 'angularLoad',
       'ionic.contrib.ui.cards', 'ngSanitize', 'ionic.service.core', 
       'ngCordova', 'ja.qr', 'leth.controllers', 'leth.services',
-      'ionic-lock-screen', 'pascalprecht.translate', 'tmh.dynamicLocale'])
+      'ionic-lock-screen', 'pascalprecht.translate', 'tmh.dynamicLocale', 'openlayers-directive'])
   .constant('$ionicLoadingConfig', {
     template: 'Loading...'
   })
