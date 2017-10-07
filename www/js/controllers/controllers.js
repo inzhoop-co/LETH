@@ -143,7 +143,7 @@ angular.module('leth.controllers', [])
     //Flush chat messages
     Chat.flush();
     $scope.DMchats = Chat.findDM(); 
-    $scope.DAPPchats = Chat.findDAPP(); 
+    //$scope.DAPPchats = Chat.findDAPP(); 
     $scope.chats = Chat.find();
   }
 
@@ -1251,7 +1251,7 @@ angular.module('leth.controllers', [])
   $scope.msgCounter = 0;
   $scope.DMCounter = 0;
   $scope.DMchats = Chat.findDM(); 
-  $scope.DAPPchats = Chat.findDAPP(); 
+  //$scope.DAPPchats = Chat.findDAPP(); 
   $scope.chats = Chat.find(); 
 
   $scope.setBadge = function(value) {

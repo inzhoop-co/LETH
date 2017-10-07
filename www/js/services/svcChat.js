@@ -1,6 +1,6 @@
 angular.module('leth.services')
 .factory('Chat', function ($rootScope, $http, $q, $sce, $filter, AppService, Friends, SwarmService) {
-  var ttlTime = 6000;
+  var ttlTime = 10000;
   var targetPow = 1.01;
   var timePow = 19;
   var identity ="";

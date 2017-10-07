@@ -1,4 +1,4 @@
-<ion-view view-title="{{friend.name | strLimit: 10 : 2}}" hide-tabs>
+<ion-view view-title="{{friend.name | strLimit: 10 : 2}}" hide-tabs can-swipe-back="false">
   <ion-nav-bar class="bar-stable bar-assertive">
     <ion-nav-back-button>
       <span class="badge badge-energized" ng-hide="msgCounter+DMCounter==0"> {{msgCounter + DMCounter}}</span>    
