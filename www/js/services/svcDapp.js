@@ -5,6 +5,17 @@ angular.module('leth.services')
                                 StoreEndpoint, AppService, Chat, ENSService, ExchangeService, 
                                 Friends, nfcService, SwarmService, Geolocation) {
   return{
+    swarmUpload: function(content){
+      SwarmService.upload(content).then(function(res){
+        console.log(res);
+      }); 
+    },
+    swarmDownload: function(hash){
+      SwarmService.download(hash).then(function(res){
+        console.log(res);
+        return res;
+      }).catch(console.log);
+    },
     readMessages: function(){
         return Chat.findDAPP(); 
     },

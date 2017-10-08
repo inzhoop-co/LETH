@@ -6,14 +6,7 @@ angular.module('leth.controllers', [])
                                 $cordovaBadge,$translate,tmhDynamicLocale,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, $cordovaVibration,
                                 UIService, ENSService, AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, nfcService, SwarmService) {
 
-  angular.extend($scope, {
-      center: {
-          lat: 51.505,
-          lon: -0.09,
-          zoom: 8
-      }
-  });
-
+  
   window.refresh = function () {
     $ionicLoading.show();
     
@@ -237,7 +230,7 @@ angular.module('leth.controllers', [])
       });
     
       $timeout(function() {
-         alertPopup.close(); //close the popup after x seconds for some reason
+         alertPopup.close();
       }, 3000);
     }
   }
@@ -626,23 +619,6 @@ angular.module('leth.controllers', [])
   }
   */
 
-  $scope.scanSesamo = function () {
-    document.addEventListener("deviceready", function () {      
-      $cordovaBarcodeScanner
-        .scan()
-        .then(function (barcodeData) {
-          if(barcodeData.text!= ""){
-            var addr = barcodeData.text.split('@')[0];
-            var session = barcodeData.text.split('@')[1];
-            AppService.loginTest(addr,session);
-            console.log('read code: ' + barcodeData.text);
-          }
-        }, function (error) {
-          // An error occurred
-          console.log('Error!' + error);
-        });
-    }, false);          
-  };
 
   $scope.getNetwork = function(){
     try{

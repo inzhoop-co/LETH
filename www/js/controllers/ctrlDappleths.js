@@ -74,8 +74,6 @@ angular.module('leth.controllers')
 
     $scope.$on("$ionicView.enter", function () {
       $ionicHistory.clearCache();
-      //$scope.scrollTo('chatScroll','bottom');
-      //$scope.$digest(); 
     });
     
 

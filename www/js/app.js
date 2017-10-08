@@ -83,56 +83,54 @@ var app = angular.module('leth', [
       }
     }
 
+    if (typeof localStorage.Language == 'undefined') {localStorage.Language=defaultLanguage.ISO;}
+    if (typeof localStorage.Blacklist == 'undefined') {localStorage.Blacklist='[]';}
+    if (typeof localStorage.NfcOn == 'undefined') {localStorage.NfcOn="false";}
+    if (typeof localStorage.Vibration == 'undefined') {localStorage.Vibration="false";}
+    if (typeof localStorage.BackMode == 'undefined') {localStorage.BackMode="false";}
+    if (typeof localStorage.PinOn == 'undefined') {localStorage.PinOn="false";}
+    if (typeof localStorage.TouchOn == 'undefined') {localStorage.TouchOn="false";}
+    if (typeof localStorage.GeoOn == 'undefined') {localStorage.GeoOn="false";}
+    if (typeof localStorage.Friends == 'undefined') {localStorage.Friends = '[]';}
+    if (typeof localStorage.LastMsg == 'undefined') {localStorage.LastMsg= JSON.stringify({time:0, hash:"0x"});}
+    if (typeof localStorage.Transactions == 'undefined') {localStorage.Transactions = '[]';}
+    if (typeof localStorage.Coins == 'undefined') {localStorage.Coins = '[]';}
+    if (typeof localStorage.NodeHost == 'undefined') {
+      localStorage.NodeHost = "http://wallet.inzhoop.com:8546";
+    }
+    if (typeof localStorage.HostsList == 'undefined') {
+      localStorage.HostsList=JSON.stringify(["http://wallet.inzhoop.com:8546","http://wallet.inzhoop.com:8545"]);
+    }
+    
+    if (typeof localStorage.BaseCurrency == 'undefined') {localStorage.BaseCurrency = JSON.stringify({ name: 'EUR', symbol:'€', value: 'ZEUR'});}      
+    if(localStorage.PinOn=="true"){
+      $lockScreen.show({
+        code: JSON.parse(localStorage.AppCode).code,
+        touchId: JSON.parse(localStorage.TouchOn),
+        ACDelbuttons: true,
+        onCorrect: function () {},
+        onWrong: function (attemptNumber) {},
+      });
+    }
+    if (typeof localStorage.AppKeys == 'undefined') {
+        //console.log("wallet not found");
+        $rootScope.hasLogged = false;
+        localStorage.HasLogged = $rootScope.hasLogged;          
+        $location.path('/tab/login');
+      }
+      else {
+        //console.log("login successfully");
+        $rootScope.hasLogged = true; 
+        localStorage.HasLogged = $rootScope.hasLogged;
+        $location.path('/tab/dappleths');
+    } 
+
     // call to rename 
     //renameDirective.rename();
 
     $ionicPlatform.ready(function () {
-      if (typeof localStorage.Language == 'undefined') {localStorage.Language=defaultLanguage.ISO;}
-      if (typeof localStorage.Blacklist == 'undefined') {localStorage.Blacklist='[]';}
-      if (typeof localStorage.NfcOn == 'undefined') {localStorage.NfcOn="false";}
-      if (typeof localStorage.Vibration == 'undefined') {localStorage.Vibration="false";}
-      if (typeof localStorage.BackMode == 'undefined') {localStorage.BackMode="false";}
-      if (typeof localStorage.PinOn == 'undefined') {localStorage.PinOn="false";}
-      if (typeof localStorage.TouchOn == 'undefined') {localStorage.TouchOn="false";}
-      if (typeof localStorage.GeoOn == 'undefined') {localStorage.GeoOn="false";}
-      if (typeof localStorage.Friends == 'undefined') {localStorage.Friends = '[]';}
-      if (typeof localStorage.LastMsg == 'undefined') {localStorage.LastMsg= JSON.stringify({time:0, hash:"0x"});}
-      if (typeof localStorage.Transactions == 'undefined') {localStorage.Transactions = '[]';}
-      if (typeof localStorage.Coins == 'undefined') {localStorage.Coins = '[]';}
-      if (typeof localStorage.NodeHost == 'undefined') {
-        localStorage.NodeHost = "http://wallet.inzhoop.com:8546";
-      }
-      if (typeof localStorage.HostsList == 'undefined') {
-        localStorage.HostsList=JSON.stringify(["http://wallet.inzhoop.com:8546","http://wallet.inzhoop.com:8545"]);
-      }
-      
-
-      if (typeof localStorage.BaseCurrency == 'undefined') {localStorage.BaseCurrency = JSON.stringify({ name: 'EUR', symbol:'€', value: 'ZEUR'});}      
-	    if(localStorage.PinOn=="true"){
-    		$lockScreen.show({
-    			code: JSON.parse(localStorage.AppCode).code,
-          touchId: JSON.parse(localStorage.TouchOn),
-    			ACDelbuttons: true,
-    			onCorrect: function () {},
-    			onWrong: function (attemptNumber) {},
-  		  });
-		  }
-      if (typeof localStorage.AppKeys == 'undefined') {
-          //console.log("wallet not found");
-          $rootScope.hasLogged = false;
-          localStorage.HasLogged = $rootScope.hasLogged;          
-          $location.path('/tab/login');
-        }
-        else {
-          //console.log("login successfully");
-          $rootScope.hasLogged = true; 
-          localStorage.HasLogged = $rootScope.hasLogged;
-          $location.path('/tab/dappleths');
-      } 
-
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.disableScroll(true);   
-        //window.addEventListener('native.keyboardshow', keyboardShowHandler);     
       }
       if (window.StatusBar) {
         StatusBar.styleLightContent();
