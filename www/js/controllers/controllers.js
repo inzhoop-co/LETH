@@ -1307,8 +1307,8 @@ angular.module('leth.controllers', [])
   $scope.chooseAction = function(msg){
     var buttonsOpt= [{ text: '<i class="icon ion-ios-copy-outline"></i> Copy message', index: 1 }];
 
-    if((msg.mode=='plain' || msg.mode=="contact") && msg.attach.addr && msg.attach.idkey){
-      if($scope.isFriend(msg.attach.addr) && msg.attach.addr!=AppService.account())
+    if((msg.mode=='plain' || msg.mode=="contact") && msg.from && msg.senderKey){
+      if($scope.isFriend(msg.from) && msg.from!=AppService.account())
         buttonsOpt.push({ text: '<i class="icon ion-ios-person-outline"></i>Go to Friend', index: 2 })
       else if(msg.from!=AppService.account()){
         buttonsOpt.push({ text: '<i class="icon ion-ios-personadd-outline"></i>Add to Friends', index: 3 })
@@ -1325,7 +1325,7 @@ angular.module('leth.controllers', [])
         buttonsOpt.push({ text: '<i class="icon ion-image"></i>Show Image', index: 7 })
     }
     //ban spammers
-    if(msg.attach.addr!=AppService.account())
+    if(msg.from!=AppService.account())
       buttonsOpt.push({ text: '<i class="icon ion-android-hand"></i>Ban User...', index: 8 })
 
     var hideSheet = $ionicActionSheet.show({
@@ -1355,10 +1355,10 @@ angular.module('leth.controllers', [])
             }, false);
             break;
           case 2: //go to friend
-            $state.go('tab.friend', {Friend: msg.attach.addr}, { relative: $state.$current.view});
+            $state.go('tab.friend', {Friend: msg.from}, { relative: $state.$current.view});
             break;
           case 3: // add to friends
-            $scope.addAddress(msg.attach.addr, msg.text, msg.attach.addr,msg.attach.idkey)
+            $scope.addAddress(msg.from, msg.text, msg.form,msg.semderKey)
             break;
           case 4: // open location
             var pinUrl = "https://www.google.com/maps/place/" + msg.attach.latitude + "," + msg.attach.longitude
@@ -1381,7 +1381,7 @@ angular.module('leth.controllers', [])
             }, false);
             break;
           case 5: // pay request
-            $state.go('tab.wallet', {addr: msg.attach.addr + "#" + msg.attach.idkey + "@" + msg.attach.payment}, { relative: $state.$current.view});
+            $state.go('tab.wallet', {addr: msg.from + "#" + msg.senderKey + "@" + msg.attach.payment}, { relative: $state.$current.view});
             break;
           case 6: // install token
             var msgTxt = "<h2 class='text-center'>Custom Token " + msg.attach.Name + " Shared! </h2>";
@@ -1413,8 +1413,8 @@ angular.module('leth.controllers', [])
             confirmBan.then(function(res) {
               if(res) {
                 //add user to black list
-                if(!$scope.blacklisted.includes(msg.attach.addr)) {
-                  var banned = {addr:msg.attach.addr, icon: blockies.create({seed: msg.attach.addr}).toDataURL("image/jpeg"),  date: Date.now(), comment: msg.text};
+                if(!$scope.blacklisted.includes(msg.from)) {
+                  var banned = {addr:msg.from, icon: blockies.create({seed: msg.from}).toDataURL("image/jpeg"),  date: Date.now(), comment: msg.text};
                   $scope.blacklisted.push(banned);
                   localStorage.Blacklist=JSON.stringify($scope.blacklisted);
                 }

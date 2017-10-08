@@ -47,6 +47,26 @@ angular.module('leth.services')
         payload: payload
       }
     },
+    pushChatDM: function(msg, payload){
+      chatsDM.push({
+            identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
+            timestamp: Date.now(),
+            message: msg,
+            hash: payload,
+            delivered: false
+      });
+      
+    },
+    pushChat: function(msg, payload){
+      chats.push({
+            identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
+            timestamp: Date.now(),
+            message: msg,
+            hash: payload,
+            delivered: false
+      });
+     
+    },
     identity: function(){
       try{
         if(!web3.shh.hasSymKey(identity)){
@@ -81,7 +101,21 @@ angular.module('leth.services')
       //var index = list.indexOf("leth");
       //list.splice(index, 1);
       return list;
-    },      
+    },
+    sendACK: function (content,toAddr) {
+      var msg = this.envelop('ack');
+      msg.to = [toAddr,AppService.account()];
+      msg.attach = content;
+      var svc = this;
+
+      var payload = web3.fromUtf8(JSON.stringify(msg));        
+      var message = svc.wrap(payload);
+
+      web3.shh.post(message, function(err,res){
+        //console.log(err,res);
+      }); 
+
+    },
     sendMessage: function (content) {
       var msg = this.envelop('plain');
       msg.text = content;
@@ -89,24 +123,17 @@ angular.module('leth.services')
       var payload = web3.fromUtf8(JSON.stringify(msg));
       var message = this.wrap(payload);
 
-      web3.shh.post(message); 
+      this.pushChat(msg,payload);
 
-      chats.push({
-        identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-        timestamp: Date.now(),
-        message: msg
-      });
+      web3.shh.post(message, function(err,res){
+        //console.log(err,res);
+      });       
     },
     sendCryptedMessage: function (content,toAddr,toKey) {
       var msg = this.envelop('encrypted');
       msg.to = [toAddr,AppService.account()];
       msg.text = content;
       var svc = this;
-      chatsDM.push({
-            identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-            timestamp: Date.now(),
-            message: msg
-      });
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
@@ -114,7 +141,11 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(encMsg));        
         var message = svc.wrap(payload);
 
-        web3.shh.post(message); 
+        svc.pushChatDM(msg,payload);
+
+        web3.shh.post(message, function(err,res){
+          //console.log(err,res);
+        }); 
       });
     },
     sendImageShh: function (content) {
@@ -122,13 +153,12 @@ angular.module('leth.services')
       msg.image=content;
       var payload = web3.fromUtf8(JSON.stringify(msg));
       var message = this.wrap(payload);
-      web3.shh.post(message); 
 
-      chats.push({
-        identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-        timestamp: Date.now(),
-        message: msg
-      });
+      this.pushChat(msg,payload);
+      
+      web3.shh.post(message, function(err,res){
+        //console.log(err,res);
+      }); 
     },
     sendImage: function (content) {
       var msg = this.envelop('plain');
@@ -142,7 +172,9 @@ angular.module('leth.services')
         
         var payload = web3.fromUtf8(JSON.stringify(nMsg));
         var message = svc.wrap(payload);
-        web3.shh.post(message); 
+        web3.shh.post(message, function(err,res){
+          //console.log(err,res);
+        }); 
 
       }).catch(console.log);
     },
@@ -154,12 +186,6 @@ angular.module('leth.services')
       msg.text = content;
       var svc = this;
 
-      chatsDM.push({
-          identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-          timestamp: Date.now(),
-          message: msg
-        });
-
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
         encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
@@ -168,7 +194,11 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = svc.wrap(payload);
 
-        web3.shh.post(message); 
+        svc.pushChatDM(msg,payload);
+
+        web3.shh.post(message, function(err,res){
+          //console.log(err,res);
+        }); 
       });
     },
     sendCryptedCustomToken: function (content,token,toAddr,toKey) {
@@ -178,12 +208,6 @@ angular.module('leth.services')
       msg.to = [toAddr,AppService.account()];
       msg.text = content;
       var svc = this;
-     
-      chatsDM.push({
-          identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-          timestamp: Date.now(),
-          message: msg
-        });
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
@@ -194,7 +218,11 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = svc.wrap(payload);
 
-        web3.shh.post(message); 
+        svc.pushChatDM(msg,payload);
+
+        web3.shh.post(message, function(err,res){
+          //console.log(err,res);
+        });
       });
     },
     sendInviteToDapp: function (dapp,toAddr,toKey) {
@@ -202,25 +230,17 @@ angular.module('leth.services')
       var msg = {type: 'leth', mode: 'encrypted', time: Date.now(), from: AppService.account(), to: [toAddr,AppService.account()] , senderKey: AppService.idkey() , text: content, image: '', attach: dapp };
       var idFrom = this.identity();
 
-      chatsDM.push({
-          identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-          timestamp: Date.now(),
-          message: msg
-        });
-
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
         encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
-        var message = {
-          from:  idFrom,
-          topics: topics,
-          payload: payload,
-          ttl: ttlTime,
-          workToProve: wtpTime
-        };
+        var message = svc.wrap(payload);
 
-        web3.shh.post(message); 
+        svc.pushChatDM(msg,payload);
+
+        web3.shh.post(message, function(err,res){
+          console.log(err,res);
+        });
       });
     },
     sendCryptedPhotoShh: function (content,toAddr,toKey) {
@@ -229,12 +249,6 @@ angular.module('leth.services')
       msg.to = [toAddr,AppService.account()];
       var svc = this;
 
-      chatsDM.push({
-          identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-          timestamp: Date.now(),
-          message: msg
-        });
-
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
         crptMsg.payload.image = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,content,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
@@ -242,7 +256,11 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = svc.wrap(payload);
 
-        web3.shh.post(message); 
+        svc.pushChatDM(msg,payload);
+
+        web3.shh.post(message, function(err,res){
+          //console.log(err,res);
+        }); 
       });
     },
     sendCryptedPhoto: function (content,toAddr,toKey) {
@@ -250,12 +268,6 @@ angular.module('leth.services')
       msg.image = content;
       msg.to = [toAddr,AppService.account()];
       var svc = this;
-
-      chatsDM.push({
-          identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-          timestamp: Date.now(),
-          message: msg
-        });
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
@@ -270,7 +282,11 @@ angular.module('leth.services')
           var payload = web3.fromUtf8(JSON.stringify(encMsg));
           var message = svc.wrap(payload);
 
-          web3.shh.post(message); 
+          svc.pushChatDM(msg,payload);
+
+          web3.shh.post(message, function(err,res){
+            //console.log(err,res);
+          }); 
         }).catch(console.log);
       });
     },
@@ -283,12 +299,11 @@ angular.module('leth.services')
 
       var payload = web3.fromUtf8(JSON.stringify(msg));
       var message = svc.wrap(payload);
-      web3.shh.post(message); 
+    
+      svc.pushChatDM(msg,payload);
 
-      chatsDM.push({
-        identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-        timestamp: Date.now(),
-        message: msg
+      web3.shh.post(message, function(err,res){
+        //console.log(err,res);
       });
     },
     sendTransactionNote: function (transaction) {
@@ -301,13 +316,6 @@ angular.module('leth.services')
       msg.attach = transaction;
       msg.to = [transaction.addr,AppService.account()];
       var svc = this;
-     
-      chatsDM.push({
-        identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-        timestamp: Date.now(),
-        message: msg
-      });
-
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encNote = angular.copy(msg);
@@ -317,7 +325,11 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(encNote));
         var message = svc.wrap(payload);
   
-        web3.shh.post(message); 
+        svc.pushChatDM(msg,payload);
+
+        web3.shh.post(message, function(err,res){
+          //console.log(err,res);
+        });
       });
     },      
     sendContact: function () {
@@ -327,13 +339,14 @@ angular.module('leth.services')
 
       var payload = web3.fromUtf8(JSON.stringify(msg));
       var message = svc.wrap(payload);
-      web3.shh.post(message); 
+      
+      svc.pushChat(msg,payload);
 
-      chats.push({
-        identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-        timestamp: Date.now(),
-        message: msg
-      });
+      web3.shh.post(message, function(err,res){
+        //console.log(err,res);
+      }); 
+
+      
     },      
     sendPosition: function (toAddr, position) {
       var msg = this.envelop('geolocation');
@@ -343,13 +356,12 @@ angular.module('leth.services')
 
       var payload = web3.fromUtf8(JSON.stringify(msg));
       var message = svc.wrap(payload);
-      web3.shh.post(message); 
       
-      chats.push({
-        identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-        timestamp: Date.now(),
-        message: msg
-      });
+      svc.pushChat(msg,payload);
+
+      web3.shh.post(message, function(err,res){
+        //console.log(err,res);
+      }); 
     },
     sendCryptedPosition: function (toAddr, position) {
       var msg = this.envelop('geolocation');
@@ -358,12 +370,6 @@ angular.module('leth.services')
       msg.to = [toAddr,AppService.account()];
       var svc = this;
     
-      chatsDM.push({
-        identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
-        timestamp: Date.now(),
-        message: msg
-      });
-
       var toKey = Friends.get(toAddr).idkey;
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
@@ -374,7 +380,11 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = svc.wrap(payload);
   
-        web3.shh.post(message); 
+        svc.pushChatDM(msg,payload);
+
+        web3.shh.post(message, function(err,res){
+          //console.log(err,res);
+        });
       });      
     },
     sendDappMessageShh: function (text, dapp) {
@@ -385,6 +395,7 @@ angular.module('leth.services')
 
       var payload = web3.fromUtf8(JSON.stringify(msg));
       var message = svc.wrap(payload);
+      
       web3.shh.post(message); 
 
       chatsDAPP.push({
@@ -406,41 +417,52 @@ angular.module('leth.services')
       });
     },
     listenMessage: function($scope){
-      
-      var pushChat = function(payload, result){
-          chats.push({
-            identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
-            timestamp: payload.time,
-            message: payload
-          });  
-          
-          payload.hash = result.hash;
-          
-          $scope.$broadcast("incomingMessage", payload);
-      };
-
-      var pushChatDM = function(payload, result){         
-          chatsDM.push({
-            identity: blockies.create({ seed: payload.from}).toDataURL("image/jpeg"),
-            timestamp: payload.time,
-            message: payload
-          });
-
-          payload.hash = result.hash;
-          $scope.$broadcast("incomingMessage", payload);
-      };
-
+      var svc = this;
       filter =  web3.shh.newMessageFilter({symKeyID: this.identity(), topic: topics}, null, function(error) {console.log(error);});
       
       filter.watch(function (error, result) {
-        var isBanned=false;
-        
         //exit on error
         if(error) return; 
 
         var payload = JSON.parse(web3.toUtf8(result.payload));
 
+        //if ack message
+        if(payload.mode=="ack"){
+          chats.filter(function (c) {
+            if(c.hash === payload.attach){
+              c.delivered=true;
+              exist=true;
+            }
+          })
+          
+          chatsDM.filter(function (c) {
+            if(c.hash === payload.attach){
+              c.delivered=true;
+              exist=true;
+            }
+          })
+          
+          if(exist) return;
+        };
+
+        //if just in chats array exit
+        var exist=false;
+        chats.filter(function (c) {
+          if(c.hash === result.payload){
+            exist=true;
+          }
+        })
+        chatsDM.filter(function (c) {
+          if(c.hash === result.payload){
+            exist=true;
+          }
+        })
+
+        //exit if exist in chats/chatsDM array
+        if(exist) return;
+
         //if in blacklist exit
+        var isBanned=false;
         var blist = JSON.parse(localStorage.Blacklist);
         blist.filter(function (val) {
           if(val.addr === payload.from) 
@@ -451,34 +473,24 @@ angular.module('leth.services')
         //exit if outdated  get only 1 hour before last msg
         if(payload.time*3600 < JSON.parse(localStorage.LastMsg).time){return;} 
         
-        //exit if mine
-        if(payload.from == AppService.account()){
-          var exist=false;
-          angular.forEach(chats, function(value, key) {
-            if(angular.equals(value.message,payload)){
-             exist=true;
-             return;
-            }
-          })
-          //exit if exist in chats/chatsDM array
-          if(exist)
-            return;
-        }
         //if is public
-        
-
         if(!payload.to[0]){
           if(payload.image != ''){
             SwarmService.download(payload.image).then(function(val){
               payload.image = val;
-              pushChat(payload, result);
+              svc.pushChat(payload, result.payload);
+              $scope.$broadcast("incomingMessage", payload);
+              svc.sendACK(result.payload, null);
             }).catch(console.log);
           }else{
-            pushChat(payload, result);
+            svc.pushChat(payload, result.payload);
+            $scope.$broadcast("incomingMessage", payload);
+            svc.sendACK(result.payload, null);
+
           }
         };
         
-
+        //if is DM encrypted
         if(payload.to[0] && payload.to[0]==AppService.account()){
           lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
             if(payload.text != '')
@@ -491,16 +503,21 @@ angular.module('leth.services')
                 payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,img, payload.senderKey,AppService.idkey(),hdPath);
                 
                 pushChatDM(payload, result);
+                $scope.$broadcast("incomingMessage", payload);
+                svc.sendACK(result.payload, payload.to[1]);
+
               }, function(err){
                 payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,payload.image, payload.senderKey,AppService.idkey(),hdPath);
-                pushChatDM(payload, result);
+                svc.pushChatDM(payload, result.payload);
+                $scope.$broadcast("incomingMessage", payload);
+                svc.sendACK(result.payload, payload.to[1]);
               }).catch(console.log);
             }else
-               pushChatDM(payload, result);
+              svc.pushChatDM(payload, result.payload);
+              $scope.$broadcast("incomingMessage", payload);
+              svc.sendACK(result.payload, payload.to[1]);
           });
         }
-
-        //filter.stopWatching();
 
       });  
     },

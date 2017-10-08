@@ -18,6 +18,7 @@ var app = angular.module('leth', [
   .constant('availableLanguages', [
               {'Language':'English', 'ISO':'en-GB'},
               {'Language':'Italiano', 'ISO':'it-IT'},
+              {'Language':'Español', 'ISO':'es-ES'},
               {'Language':'Deutsch', 'ISO':'de-DE'}])
   .constant('defaultLanguage', {'Language':'English', 'ISO':'en-GB'})
   .provider('renameDirective', ['$provide' , '$compileProvider' , function($provide, $compileProvider){
