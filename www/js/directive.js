@@ -4,7 +4,7 @@ angular.module('leth')
       restrict: "E",
       scope: true,
       link: function(scope,element,attrs){
-        $http.get(StoreEndpoint.url + attrs.page) 
+        $http.get(attrs.page) 
         .success(function(data){
           var customTemplate =  data;          
           element.append($compile(customTemplate)(scope));

@@ -19,8 +19,8 @@
     </span>
     <span class="item-note">{{friendBalance | currency:'Ξ ':6}}</span>
   </div>
-  <ion-content class="has-header has-subheader has-footer has-chat-footer chat" delegate-handle="chatDMScroll">    
-    <div class="message-list has-chat-header has-chat-footer">
+  <ion-content class="has-header has-subheader has-footer has-chat-footer chat" delegate-handle="chatDMScroll">   
+    <div class="message-list has-chat-header has-chat-footer" ng-show="shhEnabled">
       <div ng-repeat="chat in DMchats | filter:isFromTo | orderBy:'message.time'"
         class="message-wrapper">
         <div ng-class="chat.message.from === myidentity ? 'bubble bubble-mine' : 'bubble bubble-other'">
@@ -34,7 +34,10 @@
     </div>
   </div>
   </ion-content>
-  <div align-title="left" keyboard-attach class="bar bar-footer bar-stable item-input-inset">
+  <div class="assertive bar bar-footer bar-stable" ng-show="!shhEnabled">
+    <p>Chat not available :-(  Choose a host node with shh enabled</p>
+  </div> 
+  <div align-title="left" keyboard-attach class="bar bar-footer bar-stable item-input-inset" ng-show="shhEnabled">
     <button class="button button-clear button-icon button-positive icon ion-ios-plus-empty" ng-click="shareItems()"></button>
     <label class="item-input-wrapper">
       <input

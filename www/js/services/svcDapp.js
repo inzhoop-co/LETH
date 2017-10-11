@@ -1,6 +1,7 @@
 angular.module('leth.services')
 .service('DappService', function ($rootScope, $http, $q, $timeout, 
-                                $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSideMenuDelegate, $ionicSlideBoxDelegate, $ionicScrollDelegate,
+                                $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSideMenuDelegate, 
+                                $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicActionSheet,
                                 $cordovaBarcodeScanner,
                                 StoreEndpoint, AppService, Chat, ENSService, ExchangeService, 
                                 Friends, nfcService, SwarmService, Geolocation) {
@@ -75,6 +76,39 @@ angular.module('leth.services')
        });
       
       return q.promise;
+    },
+    scanQR : function(){
+      var q = $q.defer();
+
+      $ionicPlatform.ready(function () {
+        if($rootScope.deviceready){
+          $cordovaBarcodeScanner
+          .scan()
+          .then(function (barcodeData) {
+            if(barcodeData.text!= ""){
+              console.log('read code: ' + barcodeData.text);
+              q.resolve(barcodeData.text);
+            }
+          }, function (error) {
+            // An error occurred
+            console.log('Error!' + error);
+            q.reject(error);
+          });
+        }
+      });
+      return q.promise;
+    },
+    actionSheet: function(){
+      return $ionicActionSheet;
+    },
+    loadingOn: function(){
+      $ionicLoading.show();
+    },
+    loadingOff: function(){
+      $ionicLoading.hide();
+    },
+    loadingFade: function(content,elapsed){
+      $ionicLoading.show({template: content, duration: elapsed});
     },
     nextSlide: function() {
       $ionicSlideBoxDelegate.next();

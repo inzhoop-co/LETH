@@ -72,12 +72,17 @@
 			{{lat}} {{long}}
 		</ion-toggle>
 		<div class="padding subdued">{{'EXCHANGE' | translate}}</div>
-		<div class="item item-select">
+		<ion-item class="item item-icon-right" href="#/tab/currencies">
+			{{'BASE_CURRENCY' | translate}}
+            <span class="item-note ">{{baseCurrency.name}} {{baseCurrency.symbol}}</span>
+		     <i class="icon ion-chevron-right icon-accessory"></i>
+      	</ion-item>
+		<!--div class="item item-select">
 			{{'BASE_CURRENCY' | translate}}
 		   	<select class="item-select" ng-model="baseCurrency" ng-init="baseCurrency" ng-change="setCurrency(baseCurrency)">
 				<option ng-repeat="c in currencies" value="{{c}}" ng-selected="baseCurrency.name==c.name">{{c.name}} {{c.symbol}}</option>
 			</select>
-		</div>		
+		</div-->		
 		<div class="divider padding" align="center">
 			<p><img ng-src="img/inzhoop.png" id="headerSetting"></p>
 			<p>LΞTH v.0.26.3

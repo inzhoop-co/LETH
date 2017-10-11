@@ -3,8 +3,8 @@
     <i class="icon ion-ios-arrow-back"></i>
   </button>
   <h1 class="buttons title">
-      <img ng-src="{{Dapp.activeApp.Logo}}" height="45px" width="auto"/>
-      <span>&nbsp;{{Dapp.activeApp.Description | strLimit: 20 : 0}}</span>
+      <img ng-src="{{Dapp.activeApp.Path + Dapp.activeApp.Logo.Full}}" height="45px" width="auto"/>
+      <span>&nbsp;{{Dapp.activeApp.Descriptions.Title | strLimit: 20 : 0}}</span>
   </h1>
 <!--span class="badge badge-energized" ng-hide="msgCounter+DMCounter==0"> {{msgCounter + DMCounter}}</span-->
   <div class="buttons">

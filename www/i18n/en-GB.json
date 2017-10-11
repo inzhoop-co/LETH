@@ -14,6 +14,7 @@
   "CHATS_TITLE":"Chat",
   "FRIENDS_TITLE": "Friends",
   "HOST_NODES_TITLE":"Host nodes",
+  "CURRENT_NODE_RUNNING" : "Current node runnning on",
   "TRANSACTIONS_TITLE":"Transactions",
   "WALLET_TITLE":"Wallet",
   "SETTINGS_TITLE":"Settings",
@@ -37,5 +38,7 @@
   "NFC_SENSOR": "NFC Sensor",
   "GEOLOCATION": "Geolocation",
   "EXCHANGE": "Exchange",
-  "BASE_CURRENCY":"Base Currency"
+  "BASE_CURRENCY":"Base Currency",
+  "CURRENCIES_TITLE":"Currencies",
+  "EXCHANGE_CURRENCY":"Choose a base currency"
 }

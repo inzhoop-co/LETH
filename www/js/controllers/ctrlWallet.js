@@ -30,8 +30,7 @@ angular.module('leth.controllers')
         $scope.symbolFee = $scope.symbolCoin;        
       }
       else {
-      	$scope.getNetwork();
-    		var activeCoins=$scope.listCoins.filter( function(obj) {return obj.Network==$scope.nameNetwork && obj.Installed ;} );
+    		var activeCoins=$scope.listTokens.filter( function(obj) {return obj.Installed ;} );
         $scope.idCoin = index;
         $scope.logoCoin = activeCoins[index-1].Logo;
         $scope.descCoin = activeCoins[index-1].Abstract;
@@ -106,7 +105,7 @@ angular.module('leth.controllers')
     }
 
     $scope.sendCoins = function (addr, amount, unit, idCoin) {
-      if(addr.split('.')[1]==ENSService.suffix){
+      if(typeof addr.split('.')[1] != 'undefined' && addr.split('.')[1]==ENSService.suffix){
         addr = ENSService.getAddress(addr);
       } 
 
@@ -225,7 +224,7 @@ angular.module('leth.controllers')
 
     $scope.confirmSend = function (addr, amount,unit) {
       var addrEns="";
-      if(addr.split('.')[1]==ENSService.suffix){
+      if(typeof addr.split('.')[1] != 'undefined' && addr.split('.')[1]==ENSService.suffix){
         addrEns = ENSService.getAddress(addr);
       }
       var receiver = addr + " " + addrEns;
@@ -273,10 +272,9 @@ angular.module('leth.controllers')
     }
 
     $scope.chooseCoin = function(){  
-		  //$scope.getNetwork();
       var buttonsGroup = [{text: '<span style="text-align:left"><img width="30px" heigth="30px" src="img/ethereum-icon.png"/> Ether [Ξ]</span>'}];
 
-	   var activeCoins=$scope.listCoins.filter( function(obj) {return (obj.Network==$scope.nameNetwork) && (obj.Installed);} );
+	   var activeCoins=$scope.listTokens.filter( function(obj) {return obj.Installed;} );
       for (var i = 0; i < activeCoins.length; i++) {
         var text = {text: '<img width="30px" heigth="30px" src="' + activeCoins[i].Logo + '"/> ' + activeCoins[i].Name + " [" + activeCoins[i].Symbol + "]"};
         buttonsGroup.push(text);

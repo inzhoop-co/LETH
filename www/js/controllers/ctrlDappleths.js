@@ -1,5 +1,8 @@
 angular.module('leth.controllers')  
-  .controller('DapplethsCtrl', function ($scope, $state, angularLoad, $ionicLoading, $ionicListDelegate, $ionicPopup, $timeout, $templateRequest, $sce, $compile, $ionicSlideBoxDelegate, $http, $cordovaInAppBrowser, AppService) {
+  .controller('DapplethsCtrl', function ($scope, $state, angularLoad, $ionicLoading, 
+                                          $ionicListDelegate, $ionicPopup, $timeout, $templateRequest, 
+                                          $sce, $compile, $ionicSlideBoxDelegate, $http, 
+                                          $cordovaInAppBrowser, StoreEndpoint, AppService) {
     $ionicSlideBoxDelegate.start();
     $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
@@ -9,58 +12,41 @@ angular.module('leth.controllers')
     };
 
     refresh();
-    
+
     $scope.installCoin = function(coin) {
       coin.Progress = true;
       $timeout(function() {
         coin.Installed = true;
-        $scope.listCoins.filter(function (c) {
+        $scope.listTokens.filter(function (c) {
           if(c.GUID === coin.GUID){
             c.Installed = true;
             c.Progress = false;
+            c.Network = $scope.nameNetwork;
           }
         })
         coin.Progress = false;
-        if($scope.listCoins.indexOf(coin)==-1)
-          $scope.listCoins.push(coin);
-        localStorage.Coins = JSON.stringify($scope.listCoins);
-      }, 3000);
+        if($scope.listTokens.indexOf(coin)==-1)
+          $scope.listTokens.push(coin);
+        
+        AppService.addLocalToken(coin);
+      }, 1500);
     };
 
     $scope.uninstallCoin = function(coin) {
       coin.Progress = true;
       $timeout(function() {
         coin.Installed = false;
-        $scope.listCoins.filter(function (c) {
+        $scope.listTokens.filter(function (c) {
           if(c.GUID === coin.GUID){
             c.Installed = false;
             c.Progress = false;
           }
         })
         coin.Progress = false;
-        localStorage.Coins = JSON.stringify($scope.listCoins);
-      }, 2000);
-      $ionicListDelegate.closeOptionButtons();
-    };
+        
+        AppService.deleteLocalToken(coin);
 
-    $scope.uninstallCoinOLD = function(coin) {
-      coin.Progress = true;
-      var coins = $scope.listCoins;
-      $timeout(function() {
-        if(!coin.Custom){
-          coins.splice(coins.indexOf(coin), 1);
-        }else{
-          coins.filter(function (c) {
-            if(c.GUID === coin.GUID){
-              c.Installed = false;
-              c.Progress = false;
-            }
-          })
-        }
-        coin.Progress = false;
-        localStorage.Coins = JSON.stringify(coins);
-        $scope.listCoins = JSON.parse(localStorage.Coins);
-      }, 2000);
+      }, 1500);
       $ionicListDelegate.closeOptionButtons();
     };
   })
@@ -70,7 +56,10 @@ angular.module('leth.controllers')
     var id = $stateParams.Id;
     $scope.Dapp=[];
     $scope.Dapp.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
-    
+    //$scope.Dapp.activeApp.Logo.Full = $scope.getDappPath($scope.Dapp.activeApp.GUID,$scope.Dapp.activeApp.Logo.Full);
+    $scope.Dapp.activeApp.Path = $scope.getDappPath($scope.Dapp.activeApp.GUID,"");    
+    $scope.Dapp.activeApp.Url.Install = $scope.getDappPath($scope.Dapp.activeApp.GUID,$scope.Dapp.activeApp.Url.Install);
+    $scope.Dapp.activeApp.Url.Script = $scope.getDappPath($scope.Dapp.activeApp.GUID,$scope.Dapp.activeApp.Url.Script);
 
     $scope.$on("$ionicView.enter", function () {
       $ionicHistory.clearCache();
@@ -78,26 +67,25 @@ angular.module('leth.controllers')
     
 
     $scope.$on("$ionicView.afterEnter", function () {    
-        angularLoad.loadScript(StoreEndpoint.url + $scope.Dapp.activeApp.ScriptUrl).then(function(result) {
-            dappleth.run({scope: $scope, service: DappService, plugin: $ionicSlideBoxDelegate});
+        angularLoad.loadScript($scope.Dapp.activeApp.Url.Script).then(function(result) {
+            dappleth.run({scope: $scope, service: DappService});
             $ionicLoading.hide();
         }).catch(function(err) {
-            console.log('ERROR :' + StoreEndpoint.url + $scope.Dapp.activeApp.ScriptUrl);
+            console.log('ERROR :' + $scope.Dapp.activeApp.Url.Script);
         });
     });
 
     $scope.$on("$ionicView.beforeLeave", function () {
       $ionicHistory.clearCache();
 
-      //dappleth.destroy();
-      dappleth = null;
+      angularLoad.resetScript($scope.Dapp.activeApp.Url.Script, "js");
+      removejscssfile($scope.Dapp.activeApp.Url.Script, "js"); 
 
-      angularLoad.resetScript($scope.Dapp.activeApp.ScriptUrl, "js");
-      removejscssfile($scope.Dapp.activeApp.ScriptUrl, "js"); 
+      $scope.Dapp.activeApp=null;
+      dappleth = null;
     });
     
     $scope.refresh = function() {
-      //dappleth.update();
       $scope.$broadcast('scroll.refreshComplete');
     }
 

@@ -25,6 +25,16 @@ angular.module('leth.services')
   };
 
   return{
+    isEnabled: function(){
+      try{
+        console.log(web3.shh.version());
+        return true;
+      }
+      catch(e){
+        console.log(e);
+        return false;
+      }
+    },
     envelop: function(mode){
       return {
         type: 'leth', 
@@ -221,7 +231,7 @@ angular.module('leth.services')
         svc.pushChatDM(msg,payload);
 
         web3.shh.post(message, function(err,res){
-          //console.log(err,res);
+          console.log(err,res);
         });
       });
     },
@@ -418,6 +428,9 @@ angular.module('leth.services')
     },
     listenMessage: function($scope){
       var svc = this;
+
+      if(!this.isEnabled()) return;
+
       filter =  web3.shh.newMessageFilter({symKeyID: this.identity(), topic: topics}, null, function(error) {console.log(error);});
       
       filter.watch(function (error, result) {
@@ -525,7 +538,7 @@ angular.module('leth.services')
 
     },
     unlistenMessage: function(){
-      if(filter.filterId!=null)
+      if(this.isEnabled() && filter.filterId != null)
         filter.stopWatching();
     },
     flush: function(){

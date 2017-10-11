@@ -15,22 +15,7 @@ angular.module('leth.controllers')
     $scope.addrHost = localStorage.NodeHost;
     $scope.language = localStorage.Language;
     $scope.availableLanguages = availableLanguages;
-    //$scope.$digest(); 
   });
-
-  $scope.setIndexHost = function(index){    
-    localStorage.NodeHost = $scope.hostsList[index];
-    AppService.setWeb3Provider(global_keystore);
-    $scope.addrHost = localStorage.NodeHost;
-  }
-
-  $scope.plusIndexHost = function(){    
-    $scope.setIndexHost( $scope.hostsList.indexOf($scope.addrHost) + 1);    
-  }
-
-  $scope.minIndexHost = function(){    
-    $scope.setIndexHost( $scope.hostsList.indexOf($scope.addrHost) - 1);        
-  }
 
   var seedModal;
   var createSeedModal = function () {
@@ -142,8 +127,8 @@ angular.module('leth.controllers')
   };
 
   $scope.setCurrency = function(currency){
-    localStorage.BaseCurrency =  currency; 
-    $scope.baseCurrency = localStorage.BaseCurrency;
+    localStorage.BaseCurrency =  JSON.stringify(currency); 
+    $scope.baseCurrency = JSON.parse(localStorage.BaseCurrency);
   };
 
   $scope.editHost = function (addr) {
@@ -154,24 +139,35 @@ angular.module('leth.controllers')
     confirmPopup.then(function (res) {
       if (res) {
         resetChatFilter(); 
-        localStorage.NodeHost = addr;
-        AppService.setWeb3Provider(global_keystore);
-        $scope.addrHost = localStorage.NodeHost;
-  		  if(!$scope.hostsList.includes(addr)) {
-  			  $scope.hostsList.push(addr);
-  			  localStorage.HostsList=JSON.stringify($scope.hostsList);
-  		  }
-        $scope.editableHost = false;  
-        setChatFilter();    
-        refresh();
-        console.log('provider host update to: ' + addr);
+        AppService.setWeb3ProviderNode(global_keystore, addr).then(function(res){
+          localStorage.NodeHost = addr;
+          $scope.addrHost = localStorage.NodeHost;
+
+          if(!$scope.hostsList.includes(addr)) {
+            $scope.hostsList.push(addr);
+            localStorage.HostsList=JSON.stringify($scope.hostsList);
+          }
+          setChatFilter();    
+          refresh();
+          console.log('provider host update to: ' + addr);
+
+        }, function(err){
+          console.log('provider host not valid!');
+          $ionicPopup.alert({
+            title: 'Provider Unvailable!',
+            template: addr + ' is unvailable, previous host will be restored'
+          });
+          AppService.setWeb3Provider(global_keystore);
+          setChatFilter();    
+          refresh();
+        });
       } else {
         console.log('provider host not modified');
       }
     });
   };
 
-  $scope.deleteHost = function (addr) {
+  $scope.deleteHost = function (index) {
     var confirmPopup = $ionicPopup.confirm({
       title: 'Delete Provider Host',
       template: 'Are you sure you want to delete the provider host? '
@@ -179,16 +175,14 @@ angular.module('leth.controllers')
     confirmPopup.then(function (res) {
       if (res) 
       {
-  		  if($scope.hostsList.includes(addr) && $scope.hostsList.length>1 ) {
-          var iHost = $scope.hostsList.indexOf(addr);
+  		  if($scope.hostsList.length>1 ) {
+          var iHost = index; //$scope.hostsList.indexOf(addr);
   			  $scope.hostsList.splice(iHost,1);
   			  localStorage.HostsList=JSON.stringify($scope.hostsList);
-  			  localStorage.NodeHost=$scope.hostsList[iHost];
   			  AppService.setWeb3Provider(global_keystore);
-          $scope.addrHost = localStorage.NodeHost;            
-          $scope.editableHost = false;          
+          $scope.addrHost = localStorage.NodeHost;                     
   			  refresh();
-  				console.log('provider <' + addr + '> deleted');
+  				console.log('provider deleted');
   		  }
   		  else if ($scope.hostsList.length==1){
   			  var confirmPopup = $ionicPopup.alert({
@@ -201,6 +195,9 @@ angular.module('leth.controllers')
         console.log('provider host not deleted');
       }
     });
+    
+    $ionicListDelegate.closeOptionButtons();
+
   };
 
   var confirmImport = function (val) {

@@ -4,12 +4,14 @@ angular.module('leth.controllers', [])
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
                                 $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,
                                 $cordovaBadge,$translate,tmhDynamicLocale,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, $cordovaVibration,
-                                UIService, ENSService, AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, nfcService, SwarmService) {
+                                StoreEndpoint, ENSService, AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, Geolocation, nfcService, SwarmService) {
 
-  
+  $scope.filterStoreCoins = 'button button-small button-outline button-positive';
+  $scope.filterStoreApps = 'button button-small button-outline button-positive';
+
   window.refresh = function () {
     $ionicLoading.show();
-    
+    $scope.shhEnabled = Chat.isEnabled();
     if($scope.idCoin==0 || $scope.idCoin==undefined)  //buggy from wallet refresh  
       $scope.balance = AppService.balance($scope.unit);
     else
@@ -21,17 +23,26 @@ angular.module('leth.controllers', [])
     $scope.account = AppService.account();
     $scope.nick = AppService.idkey();
     $scope.qrcodeString = $scope.account + "/" + $scope.nick ;
-    AppService.getNetwork();
-    $scope.getNetwork();
+    AppService.getNetwork().then(function(res){
+
+      $scope.nameNetwork = res.name;
+      $scope.classNetwork = res.class;               
+      $scope.badgeNetwork = res.badge;
+      getSync();
+
+      $scope.readCategoryList(res.name);
+      if($scope.isDapp)
+        $scope.readDappsList(res.name);
+      else
+        $scope.readCoinsList(res.name);    
+    }, function(err){
+        console.log('no Network');
+    });
+
     $scope.loadFriends();
     $scope.transactions = Transactions.all();
     localStorage.Transactions = JSON.stringify($scope.transactions);
     isNfcAvailable();
-    $scope.readCategoryList();
-    if($scope.isDapp)
-      $scope.readDappsList();
-    else
-      $scope.readCoinsList();
     $scope.blacklisted = JSON.parse(localStorage.Blacklist);
 
     tmhDynamicLocale.set(localStorage.Language);
@@ -39,6 +50,10 @@ angular.module('leth.controllers', [])
 
     $timeout(function() {$ionicLoading.hide();}, 1000);
   };
+
+  $scope.getDappPath = function(id,asset){
+    return StoreEndpoint.url + "/" + $scope.nameNetwork + "/" + id + "/" + asset;
+  }
 
   $scope.deployTest = function(){
 
@@ -247,7 +262,7 @@ angular.module('leth.controllers', [])
   }
 
   $scope.readCategoryList = function(){
-    AppService.getStoreCategories().then(function(response){
+    AppService.getStoreCategories($scope.nameNetwork).then(function(response){
       $scope.listCategory = response;
     }) 
   };
@@ -258,7 +273,7 @@ angular.module('leth.controllers', [])
     $scope.isDapp = true;
     $scope.isCoin = false;
 
-    AppService.getStoreApps().then(function(response){
+    AppService.getStoreApps($scope.nameNetwork).then(function(response){
       $scope.listApps = response;
     }) 
 
@@ -270,11 +285,18 @@ angular.module('leth.controllers', [])
     $scope.isDapp = false;
     $scope.isCoin = true;
 
-    $scope.listCoins = JSON.parse(localStorage.Coins);
+    AppService.getAllTokens($scope.nameNetwork).then(function(response){
+      $scope.listTokens = response;
+    }, function(err){
+      $scope.listTokens=null;
+    });
 
-    AppService.getStoreCoins().then(function(response){
-      angular.merge($scope.listCoins,response);
+    /*
+    $scope.listTokens = AppService.getLocalCoins($scope.nameNetwork);
+    AppService.getStoreCoins($scope.nameNetwork).then(function(response){
+      angular.merge($scope.listTokens,response);
     }) 
+    */
   };      
 
   $scope.shareByChat = function (friend,payment) {
@@ -467,7 +489,7 @@ angular.module('leth.controllers', [])
   $scope.addCustomToken = function (token) {
     var customToken = {
       "Name" : $scope.token.name,
-      "GUID" : "C" + $scope.listCoins.length+1,
+      "GUID" : "C" + $scope.listTokens.length+1,
       "Network" : $scope.nameNetwork, 
       "Company" : $scope.token.company,
       "Logo" : $scope.token.logo,
@@ -483,9 +505,10 @@ angular.module('leth.controllers', [])
       "Installed" : true
     }
 
-    $scope.listCoins.push(customToken);
-    localStorage.Coins = JSON.stringify($scope.listCoins);
-    
+    $scope.listTokens.push(customToken);
+
+    AppService.addLocalToken(customToken);
+
     $scope.closeTokenModal();
   };
 
@@ -497,8 +520,10 @@ angular.module('leth.controllers', [])
 
     confirmPopup.then(function(res) {
       if(res) {
-        $scope.listCoins.splice($scope.listCoins.indexOf(token),1);
-        localStorage.Coins = JSON.stringify($scope.listCoins);
+        $scope.listCoins.pop(token);
+        AppService.deleteLocalToken(token);
+        //$scope.listCoins.splice($scope.listCoins.indexOf(token),1);
+        //localStorage.Coins = JSON.stringify($scope.listCoins);
       }
     
       $scope.readCoinsList();
@@ -526,7 +551,7 @@ angular.module('leth.controllers', [])
 
   $scope.isValidAddr = function(addr){
     if(addr){      
-      if(addr.split('.')[1]==ENSService.suffix){
+      if(typeof addr.split('.')[1] != 'undefined' && addr.split('.')[1]==ENSService.suffix){
         //not able to change addrTo scope wallet variable!
         addr = ENSService.getAddress(angular.lowercase(addr));
         $scope.ENSResolved = addr;
@@ -620,17 +645,25 @@ angular.module('leth.controllers', [])
   */
 
 
-  $scope.getNetwork = function(){
+  $scope.setNetwork = function(network){
+  
+/*
+   
+
+
+
+
+
+
     try{
-      web3.eth.getBlock(0, function(e, res){
-        if(!e){
-          switch(res.hash) {
-            case '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303':
-              $scope.nameNetwork = 'Morden';
+
+          switch(network) {
+            case 'Morden':
+              $scope.nameNetwork = network;
               $scope.classNetwork = 'royal';                
               $scope.badgeNetwork = 'badge badge-royal';
               break;
-            case '0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d':
+            case 'Ropsten':
               $scope.nameNetwork = 'Ropsten';
               $scope.classNetwork = 'positive';                
               $scope.badgeNetwork = 'badge badge-positive';
@@ -638,9 +671,27 @@ angular.module('leth.controllers', [])
               ENSService.init($scope.nameNetwork);//find a better place
 
               break;
+            case '0xa3c565fc15c7478862d50ccd6561e3c06b24cc509bf388941c25ea985ce32cb9':
+              $scope.nameNetwork = 'Kovan';
+              $scope.classNetwork = 'calm';                
+              $scope.badgeNetwork = 'badge badge-calm';
+
+              break;
+            case '0x6341fd3daf94b748c72ced5a5b26028f2474f5f00d824504e4fa37a75767e177':
+              $scope.nameNetwork = 'Rinkeby';
+              $scope.classNetwork = 'energized';                
+              $scope.badgeNetwork = 'badge badge-energized';
+
+              break;
+            case '0xf8db90a3c81d9f86022cca1e12b4e05770aeae784d56cc5a31e78f6aea44698a':
+              $scope.nameNetwork = 'Infuranet';
+              $scope.classNetwork = 'dark';                
+              $scope.badgeNetwork = 'badge badge-dark';
+
+              break;
             case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
               web3.eth.getBlock(1920000, function(e, res){
-                if(!e){
+                if(!e && res){
                   //console.log(res.hash);
                   switch(res.hash) {
                    case '0x94365e3a8c0b35089c1d1195081fe7489b528a84b22199c916180db8b28ade7f':
@@ -666,10 +717,11 @@ angular.module('leth.controllers', [])
           }
         }
       });
-      getSync();
+
     } catch(err){
       console.log(err.message);
     }
+    */
   };
 
   $scope.sendFeedback = function(){
@@ -1370,9 +1422,9 @@ angular.module('leth.controllers', [])
 
             confirmPopup.then(function(res) {
               if(res) {
-                if($scope.listCoins.indexOf(msg.attach)==-1)
-                  $scope.listCoins.push(msg.attach);
-                localStorage.Coins = JSON.stringify($scope.listCoins);
+                if($scope.listTokens.indexOf(msg.attach)==-1)
+                  $scope.listTokens.push(msg.attach);
+                localStorage.listTokens = JSON.stringify($scope.listTokens);
                 $state.go('tab.dappleths', { relative: $state.$current.view});
                }
             });

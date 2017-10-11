@@ -1,7 +1,7 @@
 web3 = new Web3();
 hdPath = "m/44'/60'/0";
 hdPath2 = "m/44'/60'/0'/0";
-StorePath = 'https://www.inzhoop.com/dappleths'; 
+StorePath = 'https://www.inzhoop.com/repository'; 
 
 var app = angular.module('leth', [
       'ionic', 'nfcFilters', 'ngTagsInput', 'angularLoad',
@@ -12,8 +12,8 @@ var app = angular.module('leth', [
     template: 'Loading...'
   })
   .constant('StoreEndpoint', {
-    url: 'DappLETHs'
-    //url: StorePath
+    //url: 'Repository'
+    url: StorePath
   })
   .constant('availableLanguages', [
               {'Language':'English', 'ISO':'en-GB'},
@@ -94,7 +94,8 @@ var app = angular.module('leth', [
     if (typeof localStorage.Friends == 'undefined') {localStorage.Friends = '[]';}
     if (typeof localStorage.LastMsg == 'undefined') {localStorage.LastMsg= JSON.stringify({time:0, hash:"0x"});}
     if (typeof localStorage.Transactions == 'undefined') {localStorage.Transactions = '[]';}
-    if (typeof localStorage.Coins == 'undefined') {localStorage.Coins = '[]';}
+    localStorage.removeItem("Coins");
+    if (typeof localStorage.Tokens == 'undefined') {localStorage.Tokens = '[]';}
     if (typeof localStorage.NodeHost == 'undefined') {
       localStorage.NodeHost = "http://wallet.inzhoop.com:8546";
     }
@@ -243,6 +244,15 @@ var app = angular.module('leth', [
         views: {
           'settings': {
             templateUrl: 'templates/languages.html',
+            controller: 'SettingsCtrl'
+          }
+        }
+      })
+      .state('tab.currencies', {
+        url: '/currencies',
+        views: {
+          'settings': {
+            templateUrl: 'templates/currencies.html',
             controller: 'SettingsCtrl'
           }
         }

@@ -1,0 +1,16 @@
+<ion-view view-title="{{'CURRENCIES_TITLE' | translate}}">
+  <ion-header-bar class="bar bar-subheader bar-stable item-input-inset" hide-on-scroll="true">
+  	<div class="padding subdued">
+  	  {{'EXCHANGE_CURRENCY' | translate }} 
+  </div>
+  </ion-header-bar>
+  <ion-content class="has-header has-tabs scrollBg">
+  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+  <ion-list class="list" show-reorder="false" >
+    <ion-item ng-repeat="c in currencies track by $index" ng-value="c" ng-model="baseCurrency" ng-click="setCurrency(c)">
+      <i class="icon icon-positive ion-checkmark " ng-show="baseCurrency.name==c.name"></i>
+    	{{c.name}} {{c.symbol}} 
+    </ion-item>
+  </ion-list>
+  </ion-content>
+</ion-view>

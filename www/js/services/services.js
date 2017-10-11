@@ -1,86 +1,4 @@
 angular.module('leth.services', [])
-.service('UIService', function ($rootScope, $http, $q, $timeout,
-          StoreEndpoint, $ionicPopup,$ionicPlatform, $ionicLoading, $ionicScrollDelegate, $cordovaBarcodeScanner) {
-  return{
-    ionicPopup: function(){
-      return $ionicPopup;
-    },
-    loadOn: function(){
-      $ionicLoading.show();
-    },
-    loadOff: function(){
-      $ionicLoading.hide();
-    },
-    loadFade: function(content,elapsed){
-      $ionicLoading.show({template: content, duration: elapsed});
-    },
-    scrollTo: function(handle,where){
-       $timeout(function() {
-        $ionicScrollDelegate.$getByHandle(handle).resize();
-        $ionicScrollDelegate.$getByHandle(handle).scrollTo(where,350);
-      }, 1000);
-    },
-    popupConfirm: function(txtTitle, txtTemplate){
-      var q = $q.defer();
-      
-      var confirmPopup = $ionicPopup.confirm({
-        title: txtTitle,
-        template: txtTemplate
-      });
-
-      confirmPopup.then(function(res,err) {
-        if(res)
-          q.resolve(res);
-        else
-        q.reject(err);
-       });
-      
-      return q.promise;
-
-    },
-    popupPrompt: function(txtTitle, txtSubtitle, inputType, inputPlaceholder){
-      var q = $q.defer();
-    
-      var promptPopup = $ionicPopup.prompt({
-        title: txtTitle,
-        subTitle: txtSubtitle,
-        inputType: inputType,
-        inputPlaceholder: inputPlaceholder
-      });
-
-      promptPopup.then(function(res,err) {
-        if(res)
-          q.resolve(res);
-        else
-        q.reject(err);
-       });
-      
-      return q.promise;
-
-    },
-    scanQR : function(){
-      var q = $q.defer();
-
-      $ionicPlatform.ready(function () {
-        if($rootScope.deviceready){
-          $cordovaBarcodeScanner
-          .scan()
-          .then(function (barcodeData) {
-            if(barcodeData.text!= ""){
-              console.log('read code: ' + barcodeData.text);
-              q.resolve(barcodeData.text);
-            }
-          }, function (error) {
-            // An error occurred
-            console.log('Error!' + error);
-            q.reject(error);
-          });
-        }
-      });
-      return q.promise;
-    }
-  }
-})
 .service('BEService', function ($rootScope, $http, $window, $q, StoreEndpoint, $ionicLoading) {
   return{
     storeData: function(guid,key,data){
@@ -99,33 +17,84 @@ angular.module('leth.services', [])
 })                
 
 .service('AppService', function ($rootScope, $http, $q, StoreEndpoint) {
-  var network;
+  var networks = {
+      '0x': {
+        name: 'Private',
+        class: 'calm',            
+        badge: 'badge badge-calm'
+      },
+      '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303': {
+        name: 'Morden',
+        class: 'royal',
+        badge: 'badge badge-royal'
+      },
+      '0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d': {
+        name: 'Ropsten',
+        class: 'positive',
+        badge: 'badge badge-positive'
+      },
+      '0xa3c565fc15c7478862d50ccd6561e3c06b24cc509bf388941c25ea985ce32cb9': {
+        name: 'Kovan',
+        class: 'royal',
+        badge: 'badge badge-royal'
+      },
+      '0x6341fd3daf94b748c72ced5a5b26028f2474f5f00d824504e4fa37a75767e177': {
+        name: 'Rinkeby',
+        class: 'energized',            
+        badge: 'badge badge-energized'
+      },
+      '0xf8db90a3c81d9f86022cca1e12b4e05770aeae784d56cc5a31e78f6aea44698b': {
+        name: 'Infura',
+        class: 'dark',            
+        badge: 'badge badge-dark'
+      },
+      '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':{
+        name: 'Mainet',
+        class: 'balanced',            
+        badge: 'badge badge-balanced',
+        forkedAt: 1920000
+      }, 
+      '0x94365e3a8c0b35089c1d1195081fe7489b528a84b22199c916180db8b28ade7f': {
+        name: 'MainETC',
+        class: 'balanced',            
+        badge: 'badge badge-balanced'
+      }
+  }
+  
   return {
     getNetwork: function(){
+      var q = $q.defer();
+      var network;
       web3.eth.getBlock(0, function(e, res){
-        if(!e){
-          switch(res.hash) {
-            case '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303':
-              network = 'Morden';
-              break;
-            case '0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d':
-              network = 'Ropsten';
-              break;
-            case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
-              network = 'Mainet';
-              break;
-            default:
-              network = 'Private';
+        if(!e && res){
+          if(res.hash=='0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3'){
+             web3.eth.getBlock(1920000, function(e, res){
+                if(!e && res){
+                  if(res.hash=='0x94365e3a8c0b35089c1d1195081fe7489b528a84b22199c916180db8b28ade7f'){
+                    q.resolve(networks[res.hash]);
+                  }
+                  else{
+                    q.resolve(networks['0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3']);
+                  }
+                }
+              })
+          } else{
+            var net = networks[res.hash];
+            if(!net)
+              q.resolve(networks['0x']);
+            else
+              q.resolve(net);
           }
-        }
-        return network;
+        } else 
+          q.reject(e);
       });
+      return q.promise;
     },
-    getStore: function () {
+    getStore: function (network) {
       var q = $q.defer();
       $http({
         method: 'GET',
-        url: StoreEndpoint.url + '/Store.json'
+        url: StoreEndpoint.url + '/' + network + '/Store.json'
       }).then(function(response) {
         q.resolve(response.data);
       }, function(response) {
@@ -133,11 +102,11 @@ angular.module('leth.services', [])
       });
       return q.promise;
     },
-    getStoreCategories: function () {
+    getStoreCategories: function (network) {
       var q = $q.defer();
       $http({
         method: 'GET',
-        url: StoreEndpoint.url + '/Store.json'
+        url: StoreEndpoint.url + '/' + network + '/Store.json'
       }).then(function(response) {
         q.resolve(response.data.categories);
       }, function(response) {
@@ -145,40 +114,96 @@ angular.module('leth.services', [])
       });
       return q.promise;
     },
-    getStoreApps: function () {
+    getStoreApps: function (network) {
       var q = $q.defer();
       $http({
         method: 'GET',
-        url: StoreEndpoint.url + '/Store.json'
+        url: StoreEndpoint.url + '/' + network + '/Store.json'
       }).then(function(response) {
-        var apps = response.data.dappleths.filter(function (val) {
-          return val.Network === network;
-        });
-        q.resolve(apps);
+        q.resolve(response.data.dappleths);
       }, function(response) {
         q.reject(response);
       });
       return q.promise;
     },
-    getStoreCoins: function () {
+    getStoreCoins: function (network) {
       var q = $q.defer();
       $http({
         method: 'GET',
-        url: StoreEndpoint.url + '/Store.json'
+        url: StoreEndpoint.url + '/' + network + '/Store.json'
       }).then(function(response) {
-        q.resolve(response.data.coins);
+        q.resolve(response.data.tokens);
       }, function(response) {
         q.reject(response);
       });
       return q.promise;
     },    
+    getLocalCoins: function (network) {
+      var list = JSON.parse(localStorage.Tokens);
+      return list.filter( function(val) {return val.Network==network;} )
+    },  
+    getAllTokens: function(network){
+      var q = $q.defer();
+
+      var local = this.getLocalCoins(network);
+
+      this.getStoreCoins(network).then(function(response){ 
+        if(response){
+
+          var remote  = response.filter(function(store_el){
+             return local.filter(function(local_el){
+                return store_el.GUID == local_el.GUID;
+             }).length == 0
+          });
+
+          var list = local.concat(remote);
+          q.resolve(list);       
+        }else
+          q.resolve(local);
+      },function(err){
+        q.reject(err);
+      }) 
+      return q.promise;
+    }, 
+    addLocalToken: function(token){
+      var tmpstore = JSON.parse(localStorage.Tokens);
+      tmpstore.push(token);
+      localStorage.Tokens = JSON.stringify(tmpstore);
+    },
+    deleteLocalToken: function(token){
+      var tmpstore = JSON.parse(localStorage.Tokens);
+      tmpstore.pop(token);
+      localStorage.Tokens = JSON.stringify(tmpstore);
+    },
     setWeb3Provider: function (keys) {
+      var q = $q.defer();
+
       var web3Provider = new HookedWeb3Provider({
         host: localStorage.NodeHost,
         transaction_signer: keys
       });
+
       web3.setProvider(web3Provider);
-      return true;
+      if(web3.isConnected)
+        q.resolve();
+      else 
+        q.reject()
+      return q.promise;
+    },
+    setWeb3ProviderNode: function (keys, node) {
+      var q = $q.defer();
+
+      var web3Provider = new HookedWeb3Provider({
+        host: node,
+        transaction_signer: keys
+      });
+
+      web3.setProvider(web3Provider);
+      if(web3.isConnected())
+        q.resolve();
+      else 
+        q.reject()
+      return q.promise;
     },
     account: function () {
       var result;
@@ -201,7 +226,6 @@ angular.module('leth.services', [])
     balance: function (unit) {
       var result;
       try {
-        //result = (parseFloat(web3.eth.getBalance(this.account())) / unit).toFixed(6);
         result = parseFloat(web3.eth.getBalance(this.account()))/unit;
       }catch (e){
         result = undefined;

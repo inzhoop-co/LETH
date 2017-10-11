@@ -14,6 +14,7 @@
   "CHATS_TITLE":"Chat",
   "FRIENDS_TITLE": "Amici",
   "HOST_NODES_TITLE":"Nodi Host",
+  "CURRENT_NODE_RUNNING" : "Nodo corrente su",
   "TRANSACTIONS_TITLE":"Transactions",
   "WALLET_TITLE":"Portafoglio",
   "SETTINGS_TITLE":"Impostazioni",
@@ -37,5 +38,7 @@
   "NFC_SENSOR": "Sensore NFC",
   "GEOLOCATION": "Geolocalizzazione",
   "EXCHANGE": "Cambio",
-  "BASE_CURRENCY":"Valuta di base"
+  "BASE_CURRENCY":"Valuta di base",
+  "CURRENCIES_TITLE":"Valute",
+  "EXCHANGE_CURRENCY":"Seleziona la valuta di cambio"
 }

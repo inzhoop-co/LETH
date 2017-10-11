@@ -48,6 +48,11 @@ angular.module('leth.services')
                 this.address="0x112234455c3a32fd11230c42e7bccd4a84e02010";
                 this.publicResolver = this.resolverContract.at('0x4c641fb9bad9b60ef180c31f56051ce826d21a9a');
             }
+            if(networktype=="Rinkeby"){
+                this.suffix ="test"
+                this.address="0xe7410170f87102DF0055eB195163A03B7F2Bff4A";
+                this.publicResolver = this.resolverContract.at('0xb14fdee4391732ea9d2267054ead2084684c0ad8');
+            }
 
             this.ens = this.contract.at(this.address);
             this.testRegistrar = this.fifsRegistrarContract.at(this.ens.owner(this.namehash(this.suffix)));
