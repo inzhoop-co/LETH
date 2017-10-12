@@ -26,7 +26,7 @@ angular.module('leth.controllers')
         })
         coin.Progress = false;
         if($scope.listTokens.indexOf(coin)==-1)
-          $scope.listTokens.push(coin);
+          $scope.listTokens.splice($scope.listTokens.indexOf(coin),1);
         
         AppService.addLocalToken(coin);
       }, 1500);

@@ -444,18 +444,16 @@ angular.module('leth.services')
           chats.filter(function (c) {
             if(c.hash === payload.attach){
               c.delivered=true;
-              exist=true;
             }
           })
           
           chatsDM.filter(function (c) {
             if(c.hash === payload.attach){
               c.delivered=true;
-              exist=true;
             }
           })
           
-          if(exist) return;
+          return;
         };
 
         //if just in chats array exit

@@ -172,7 +172,7 @@ angular.module('leth.services', [])
     },
     deleteLocalToken: function(token){
       var tmpstore = JSON.parse(localStorage.Tokens);
-      tmpstore.pop(token);
+      tmpstore.splice(tmpstore.indexOf(token),1);
       localStorage.Tokens = JSON.stringify(tmpstore);
     },
     setWeb3Provider: function (keys) {
