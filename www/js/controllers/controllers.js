@@ -1386,7 +1386,7 @@ angular.module('leth.controllers', [])
             $state.go('tab.friend', {Friend: msg.from}, { relative: $state.$current.view});
             break;
           case 3: // add to friends
-            $scope.addAddress(msg.from, msg.text, msg.form,msg.semderKey)
+            $scope.addAddress(msg.from, msg.text, msg.from,msg.senderKey)
             break;
           case 4: // open location
             var pinUrl = "https://www.google.com/maps/place/" + msg.attach.latitude + "," + msg.attach.longitude
