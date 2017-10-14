@@ -83,6 +83,7 @@ var app = angular.module('leth', [
       }
     }
 
+    if (typeof localStorage.Shh == 'undefined') {localStorage.Shh=JSON.stringify({ttl:10000, targetPow: 1.01, timePow: 19});}
     if (typeof localStorage.Language == 'undefined') {localStorage.Language=defaultLanguage.ISO;}
     if (typeof localStorage.Blacklist == 'undefined') {localStorage.Blacklist='[]';}
     if (typeof localStorage.NfcOn == 'undefined') {localStorage.NfcOn="false";}
@@ -253,6 +254,15 @@ var app = angular.module('leth', [
         views: {
           'settings': {
             templateUrl: 'templates/currencies.html',
+            controller: 'SettingsCtrl'
+          }
+        }
+      })
+      .state('tab.advanced', {
+        url: '/advanced',
+        views: {
+          'settings': {
+            templateUrl: 'templates/settings_advanced.html',
             controller: 'SettingsCtrl'
           }
         }

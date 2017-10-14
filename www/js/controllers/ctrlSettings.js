@@ -15,6 +15,7 @@ angular.module('leth.controllers')
     $scope.addrHost = localStorage.NodeHost;
     $scope.language = localStorage.Language;
     $scope.availableLanguages = availableLanguages;
+    $scope.shhSettings = Chat.settings();
   });
 
   var seedModal;
@@ -51,13 +52,13 @@ angular.module('leth.controllers')
     localStorage.GeoOn = value? "true":"false";
     $scope.geo = { checked: value};
     if(value){   
-      document.addEventListener("deviceready", function () {
+      if (AppService.isPlatformReady()){
         Geolocation
           .getCurrentPosition()
             .then(function (position) {
               console.log(position);
-              $scope.lat  = position.coords.latitude;
-              $scope.long = position.coords.longitude;
+              $scope.lat  = position.coords.latitude.toFixed(4);
+              $scope.long = position.coords.longitude.toFixed(4);
             }, function (err) {
                 // error
             });
@@ -65,7 +66,7 @@ angular.module('leth.controllers')
           $timeout(function() {
             $scope.watchLocation();
           }, 10000);
-        });
+        };
       }
     else if($scope.geoWatch!=undefined){
       $scope.geoWatch.clearWatch();        
@@ -266,7 +267,7 @@ angular.module('leth.controllers')
   var importStorageWallet = function(){
     //show all value fileList[]
     var keystoreFilename = "leth_keystore.json";
-    document.addEventListener("deviceready", function () {
+    if (AppService.isPlatformReady()){
       $cordovaFile.readAsText(cordova.file.dataDirectory, keystoreFilename)
         .then(function (success) {
           // success
@@ -292,13 +293,13 @@ angular.module('leth.controllers')
           // error
           console.log(error);
       });
-    }, false);
+    };
   };
 
   var backupWalletToStorage = function(){
     //TODO: backup of localstorage.Enckeys
     var keystoreFilename = "leth_keystore.json";
-    document.addEventListener("deviceready", function () {
+    if (AppService.isPlatformReady()){
       $cordovaFile.writeFile(cordova.file.dataDirectory,
              keystoreFilename,
              localStorage.AppKeys,
@@ -315,7 +316,7 @@ angular.module('leth.controllers')
           }, function () {
           // not available
         });
-    }, false);     
+    };
   };
 
   var backupSeed = function(){
@@ -406,14 +407,18 @@ angular.module('leth.controllers')
     $scope.blacklisted.splice(index, 1);
     localStorage.Blacklist = JSON.stringify($scope.blacklisted);
     $ionicListDelegate.closeOptionButtons();
-  }
+  };
+
+  $scope.saveSettings = function(set){
+    var newSet = {ttl:set.ttl, targetPow: set.targetPow, timePow: set.timePow}
+    localStorage.Shh = JSON.stringify(newSet);
+  };
 
   var walletViaEmail = function(){
     //backup keys wallet via email 
     PasswordPopup.open("Digit your wallet password", "unlock account to proceed").then(
       function (password) {
-
-        document.addEventListener("deviceready", function () {
+        if (AppService.isPlatformReady()){
           var keystoreFilename = AppService.account() + "_lethKeystore.json";
           var directorySave=cordova.file.dataDirectory;
           var directoryAttach=cordova.file.dataDirectory.replace('file://','');
@@ -447,10 +452,11 @@ angular.module('leth.controllers')
             }, function () {
               // not available
             });
-        }, false);     
+        };
     },
       function (err) {
 
     })  
   };
+
 })

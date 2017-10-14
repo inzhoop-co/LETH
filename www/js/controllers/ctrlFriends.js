@@ -2,7 +2,6 @@ angular.module('leth.controllers')
   .controller('FriendsCtrl', function ($scope, Friends, $ionicListDelegate,  AppService, Chat) {    
     
     $scope.$on('$ionicView.enter', function() {
-      //$scope.loadFriends();
       $scope.cancelDMNotifications();
       $scope.clearBadge();
       $scope.$digest(); 
@@ -35,7 +34,9 @@ angular.module('leth.controllers')
 
     $scope.$on('$ionicView.enter', function() {
       $scope.myidentity = AppService.account();
-      $scope.friendBalance = Friends.balance($scope.friend);
+      Friends.balance($scope.friend).then(function(res){
+        $scope.friendBalance = res;
+      });
       $scope.cancelDMNotifications();
       Friends.clearUnread($scope.friend.addr);
       $scope.clearBadge();
@@ -56,7 +57,10 @@ angular.module('leth.controllers')
     $scope.isFromTo = function(chat){
       if($scope.friend.addr == AppService.account())
         return false; //no chat with yourself
-      if((chat.message.from == $scope.friend.addr && chat.message.to.indexOf(AppService.account())!=-1 )|| (chat.message.to.indexOf($scope.friend.addr)!=-1 && chat.message.from == AppService.account())){
+      if((chat.message.from == $scope.friend.addr && 
+          chat.message.to.indexOf(AppService.account())!=-1 ) || 
+          (chat.message.to.indexOf($scope.friend.addr)!=-1 && 
+          chat.message.from == AppService.account())){
             return true;
       }
       return false;
@@ -84,7 +88,7 @@ angular.module('leth.controllers')
     };
 
     $scope.getPhoto = function(){
-      document.addEventListener("deviceready", function () {
+      if (AppService.isPlatformReady()){
         var options = {
           quality: 50,
           destinationType: Camera.DestinationType.DATA_URL,
@@ -106,11 +110,11 @@ angular.module('leth.controllers')
           // error
         });
 
-      }, false);
+      };
     };
 
     $scope.getImage = function(){
-      document.addEventListener("deviceready", function () {
+      if (AppService.isPlatformReady()){
         var optionsImg = {
           maximumImagesCount: 1,
           width: 0,
@@ -135,7 +139,7 @@ angular.module('leth.controllers')
           }, function(error) {
               console.log('error get img');
         });
-      }, false);
+      };
     };
 
     $scope.shareItems = function(){

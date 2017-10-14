@@ -60,15 +60,16 @@ angular.module('leth.services')
 
         localStorage.Friends = JSON.stringify(addressbook);
       });
-    },      
+    },
     balance: function (friend) {
-      var result;
-      try {
-        result = (parseFloat(web3.eth.getBalance(friend.addr)) / 1.0e18).toFixed(6);
-      }catch (e){
-        result = undefined;
-      }
-      return result
+      var q = $q.defer();      
+          web3.eth.getBalance(friend.addr, function(err, res){
+            if(!err)
+              q.resolve((parseFloat(res) / 1.0e18).toFixed(6));
+            else
+              q.reject(err); 
+          });
+      return q.promise;
     }
   };
 })

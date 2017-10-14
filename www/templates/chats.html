@@ -15,6 +15,7 @@
             <span class="message-timestamp">{{isFriend(chat.message.from) | strLimit: 5 : 0}} {{chat.message.time == undefined ? 'outdated v.' : chat.message.time | date: 'HH:mm'}}</span>
           </div>
           <i class="icon ion-android-checkmark-circle balanced" ng-if="chat.delivered"></i>&nbsp;
+          <i class="icon ion-bug assertive" ng-if="chat.error"></i>&nbsp;
         </div>
       </div>
     </div>

@@ -34,7 +34,7 @@ angular.module('leth.controllers')
     $scope.shareBySms = function() {
       var content = "My address is ethereum://" + $scope.qrcodeString ;
       var phonenumber="";
-      document.addEventListener("deviceready", function () {      
+      if (AppService.isPlatformReady()){
         $cordovaContacts.pickContact().then(function (contactPicked) {
           phonenumber = contactPicked.phoneNumbers[0].value;
 
@@ -57,7 +57,7 @@ angular.module('leth.controllers')
           });
 
         });
-      }, false);      
+      };      
     }
 
     $scope.shareByEmail = function(){
@@ -65,8 +65,8 @@ angular.module('leth.controllers')
       //I need to remove header of bitestream and replace with the new one
       var allegato = 'base64:qr.png//'+imgQrcode.replace('data:image/png;base64,','');
      
-      document.addEventListener("deviceready", function () {
-        $cordovaEmailComposer.isAvailable().then(function() {
+      if (AppService.isPlatformReady()){
+         $cordovaEmailComposer.isAvailable().then(function() {
         
           var emailOpts = {
             to: [''],
@@ -85,11 +85,11 @@ angular.module('leth.controllers')
           console.log("cordovaEmailComposer not available");
           return;
         });
-      }, false);         
+      };         
     }
 
     $scope.copyAddr = function(){
-      document.addEventListener("deviceready", function () {  
+      if (AppService.isPlatformReady()){
         $cordovaClipboard
         .copy($scope.qrcodeString)
         .then(function () {
@@ -107,6 +107,6 @@ angular.module('leth.controllers')
           // error
           console.log('Copy error');
         });
-      }, false);         
+      };
     }
   })

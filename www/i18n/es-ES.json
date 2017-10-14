@@ -1,6 +1,6 @@
 {
   "STORE_TAB": "Store",
-  "CHAT_TAB": "Chat",
+  "CHAT_TAB": "Whisper",
   "FRIENDS_TAB": "Amigos",
   "WALLET_TAB": "Wallet",
   "ADDRESS_TAB": "Address",
@@ -11,7 +11,7 @@
   "ADD_CUSTOM_TOKEN": "Add Custom Token",
   "ADDRESS_TITLE":"Address",
   "BLACKLIST_TITLE":"Blacklist",
-  "CHATS_TITLE":"Chat",
+  "CHATS_TITLE":"Whisper",
   "FRIENDS_TITLE": "Amigos",
   "HOST_NODES_TITLE":"Host nodes",
   "CURRENT_NODE_RUNNING" : "Current node runnning on",
@@ -40,5 +40,11 @@
   "EXCHANGE": "Exchange",
   "BASE_CURRENCY":"Base Currency",
   "CURRENCIES_TITLE":"Currencies",
-  "EXCHANGE_CURRENCY":"Choose a base currency"
+  "EXCHANGE_CURRENCY":"Choose a base currency",
+  "DEVELOPERS":"Developers",
+  "ADVANCED_SETTINGS":"Advanced Settings",
+  "PHOTO":"Photo",
+  "POSITION":"Position",
+  "CONTACT":"Contact",
+  "CHOOSETOSHARE": "Choose to share your"
 }

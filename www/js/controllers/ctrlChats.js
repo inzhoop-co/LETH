@@ -1,5 +1,6 @@
 angular.module('leth.controllers')  
-  .controller('ChatsCtrl', function ($scope, $ionicListDelegate, $ionicModal, $ionicActionSheet, $ionicScrollDelegate, $cordovaImagePicker, $cordovaCamera, $timeout, 
+  .controller('ChatsCtrl', function ($scope, $ionicListDelegate, $ionicModal, $ionicActionSheet, $translate,
+                                      $ionicScrollDelegate, $cordovaImagePicker, $cordovaCamera, $timeout, 
                                       Friends, Chat, AppService, Geolocation) {    
 
     $scope.$on('$ionicView.enter', function() {
@@ -46,7 +47,7 @@ angular.module('leth.controllers')
     };
   
     $scope.getPhoto = function(){
-      document.addEventListener("deviceready", function () {
+      if (AppService.isPlatformReady()){
         var options = {
           quality: 50,
           destinationType: Camera.DestinationType.DATA_URL,
@@ -68,11 +69,11 @@ angular.module('leth.controllers')
           // error
         });
 
-      }, false);
+      };
     };
 
     $scope.getImage = function(){
-      document.addEventListener("deviceready", function () {
+      if (AppService.isPlatformReady()){
         var optionsImg = {
           maximumImagesCount: 1,
           width: 0,
@@ -97,19 +98,19 @@ angular.module('leth.controllers')
           }, function(error) {
               console.log('error get img');
         });
-      }, false);
+      };
     };
 
     $scope.shareItems = function(){
       var hideSheet = $ionicActionSheet.show({
         buttons: [
-          { text: '<i class="icon ion-ios-camera-outline"></i> Photo...' },
-          { text: '<i class="icon ion-ios-location-outline"></i> Position'  },
-          { text: '<i class="icon ion-ios-person-outline"></i> Contact'  }
+          { text: '<i class="icon ion-ios-camera-outline"></i> ' + $translate.instant('PHOTO') + '...' },
+          { text: '<i class="icon ion-ios-location-outline"></i> ' + $translate.instant('POSITION') },
+          { text: '<i class="icon ion-ios-person-outline"></i> ' + $translate.instant('CONTACT')  }
         ],
         destructiveText: (ionic.Platform.isAndroid()?'<i class="icon ion-android-exit assertive"></i> ':'')+'Cancel',
         //destructiveText: 'Cancel',
-        titleText: 'Choose to share your:',
+        titleText: $translate.instant('CHOOSETOSHARE') + ':',
         destructiveButtonClicked:  function() {
           hideSheet();
         },

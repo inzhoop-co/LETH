@@ -1,0 +1,36 @@
+<ion-view view-title="{{'SETTINGS_TITLE' | translate}}">
+  <ion-content class="has-header has-tabs">
+    <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+  	<ion-scroll class="list scrollBg" overflow-scroll="true" >
+      	<div class="padding subdued">Shh settings</div>
+		<div class="item item-input-inset">
+		  <div class="col col-70">Message TTL</div>
+		  <div class="col">
+			<label class="item-input-wrapper">
+				<input type="number" ng-model="shhSettings.ttl" placeholder="message time to live">
+			</label>
+		  </div>
+		</div>
+		<div class="item item-input-inset">
+		  <div class="col col-70">Target PoW</div>
+		  <div class="col">
+			<label class="item-input-wrapper">
+				<input type="number" ng-model="shhSettings.targetPow" placeholder="target pow">
+			</label>
+		  </div>
+		</div>
+		<div class="item item-input-inset">
+		  <div class="col col-70">Time PoW</div>
+		  <div class="col">
+			<label class="item-input-wrapper">
+				<input type="number" ng-model="shhSettings.timePow" placeholder="time pow">
+			</label>
+		  </div>
+		</div>
+	</ion-scroll>
+	<button class="button button-block button-outline button-positive" ng-click="saveSettings(shhSettings)">
+		Save
+	</button>
+
+  </ion-content>
+</ion-view>

@@ -60,8 +60,16 @@ angular.module('leth.services', [])
         badge: 'badge badge-balanced'
       }
   }
+  var deviceReady = false;
+
+  document.addEventListener("deviceready", function(){
+    deviceReady = true;
+  });
   
   return {
+    isPlatformReady: function(){
+      return deviceReady;
+    },
     getNetwork: function(){
       var q = $q.defer();
       var network;
@@ -167,6 +175,7 @@ angular.module('leth.services', [])
     }, 
     addLocalToken: function(token){
       var tmpstore = JSON.parse(localStorage.Tokens);
+      tmpstore.splice(tmpstore.indexOf(token),1);
       tmpstore.push(token);
       localStorage.Tokens = JSON.stringify(tmpstore);
     },
@@ -224,6 +233,7 @@ angular.module('leth.services', [])
       return result;
     },
     balance: function (unit) {
+      //to deferr $q
       var result;
       try {
         result = parseFloat(web3.eth.getBalance(this.account()))/unit;
@@ -336,7 +346,6 @@ angular.module('leth.services', [])
             q.reject(e);
         }
       return q.promise;
-
     },
     transferEth: function (from, to, value, fee) {
       var gas = web3.eth.estimateGas({});

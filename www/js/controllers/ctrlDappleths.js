@@ -44,7 +44,7 @@ angular.module('leth.controllers')
         })
         coin.Progress = false;
         
-        AppService.deleteLocalToken(coin);
+        AppService.addLocalToken(coin);
 
       }, 1500);
       $ionicListDelegate.closeOptionButtons();

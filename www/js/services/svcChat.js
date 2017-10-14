@@ -1,8 +1,5 @@
 angular.module('leth.services')
 .factory('Chat', function ($rootScope, $http, $q, $sce, $filter, AppService, Friends, SwarmService) {
-  var ttlTime = 10000;
-  var targetPow = 1.01;
-  var timePow = 19;
   var identity ="";
   var chats=[];
   var chatsDM=[];
@@ -10,21 +7,10 @@ angular.module('leth.services')
   var topics = web3.fromUtf8('leth');
   var filter =  null;
 
-  var envelopvar = {
-    type: 'leth', 
-    mode: 'plain', 
-    time: Date.now(), 
-    from: AppService.account(), 
-    to: [null], 
-    text: '', 
-    image: '', 
-    attach: {
-      addr: AppService.account(), 
-      idkey: AppService.idkey()
-    }
-  };
-
   return{
+    settings: function(){
+      return JSON.parse(localStorage.Shh);
+    },
     isEnabled: function(){
       try{
         console.log(web3.shh.version());
@@ -51,28 +37,28 @@ angular.module('leth.services')
       return {
         symKeyID: this.identity(),
         topic: topics,
-        ttl: ttlTime,
-        powTarget: targetPow,
-        powTime: timePow,
+        ttl: this.settings().ttl,
+        powTarget: this.settings().targetPow,
+        powTime: this.settings().timePow,
         payload: payload
       }
     },
-    pushChatDM: function(msg, payload){
+    pushChatDM: function(msg, hashId){
       chatsDM.push({
             identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
             timestamp: Date.now(),
             message: msg,
-            hash: payload,
+            hash: hashId,
             delivered: false
       });
       
     },
-    pushChat: function(msg, payload){
+    pushChat: function(msg, hashId){
       chats.push({
             identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
             timestamp: Date.now(),
             message: msg,
-            hash: payload,
+            hash: hashId,
             delivered: false
       });
      
@@ -122,28 +108,39 @@ angular.module('leth.services')
       var message = svc.wrap(payload);
 
       web3.shh.post(message, function(err,res){
-        //console.log(err,res);
+        console.log(err,res);
       }); 
 
     },
     sendMessage: function (content) {
       var msg = this.envelop('plain');
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg))
       msg.text = content;
 
       var payload = web3.fromUtf8(JSON.stringify(msg));
       var message = this.wrap(payload);
 
-      this.pushChat(msg,payload);
+      this.pushChat(msg,hashMsg);
 
       web3.shh.post(message, function(err,res){
-        //console.log(err,res);
+        if(!res){
+          chats.filter(function (c) {
+            if(c.hash === hashMsg){
+              c.error=true;
+            }
+          }); 
+        }
       });       
     },
     sendCryptedMessage: function (content,toAddr,toKey) {
       var msg = this.envelop('encrypted');
+      //is this the minimal set to identify msg?
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg))
       msg.to = [toAddr,AppService.account()];
       msg.text = content;
       var svc = this;
+      
+      svc.pushChatDM(msg, hashMsg);
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
@@ -151,10 +148,14 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(encMsg));        
         var message = svc.wrap(payload);
 
-        svc.pushChatDM(msg,payload);
-
         web3.shh.post(message, function(err,res){
-          //console.log(err,res);
+          if(!res){
+            chatsDM.filter(function (c) {
+              if(c.hash === hashMsg){
+                c.error = true;
+              }
+            }); 
+          }
         }); 
       });
     },
@@ -167,7 +168,13 @@ angular.module('leth.services')
       this.pushChat(msg,payload);
       
       web3.shh.post(message, function(err,res){
-        //console.log(err,res);
+        if(err){
+          chats.filter(function (c) {
+            if(c.hash === payload){
+              c.error=true;
+            }
+          }); 
+        }
       }); 
     },
     sendImage: function (content) {
@@ -183,9 +190,8 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(nMsg));
         var message = svc.wrap(payload);
         web3.shh.post(message, function(err,res){
-          //console.log(err,res);
+          
         }); 
-
       }).catch(console.log);
     },
     sendCryptedPaymentReq: function (content,request,toAddr,toKey) {
@@ -207,7 +213,13 @@ angular.module('leth.services')
         svc.pushChatDM(msg,payload);
 
         web3.shh.post(message, function(err,res){
-          //console.log(err,res);
+          if(err){
+            chatsDM.filter(function (c) {
+              if(c.hash === payload){
+                c.error=true;
+              }
+            }); 
+          }
         }); 
       });
     },
@@ -231,7 +243,13 @@ angular.module('leth.services')
         svc.pushChatDM(msg,payload);
 
         web3.shh.post(message, function(err,res){
-          console.log(err,res);
+          if(err){
+            chatsDM.filter(function (c) {
+              if(c.hash === payload){
+                c.error=true;
+              }
+            }); 
+          }
         });
       });
     },
@@ -269,8 +287,15 @@ angular.module('leth.services')
         svc.pushChatDM(msg,payload);
 
         web3.shh.post(message, function(err,res){
-          //console.log(err,res);
+          if(err){
+            chatsDM.filter(function (c) {
+              if(c.hash === payload){
+                c.error=true;
+              }
+            }); 
+          }
         }); 
+
       });
     },
     sendCryptedPhoto: function (content,toAddr,toKey) {
@@ -295,7 +320,13 @@ angular.module('leth.services')
           svc.pushChatDM(msg,payload);
 
           web3.shh.post(message, function(err,res){
-            //console.log(err,res);
+            if(err){
+            chatsDM.filter(function (c) {
+              if(c.hash === payload){
+                c.error=true;
+              }
+            }); 
+          }
           }); 
         }).catch(console.log);
       });
@@ -313,7 +344,7 @@ angular.module('leth.services')
       svc.pushChatDM(msg,payload);
 
       web3.shh.post(message, function(err,res){
-        //console.log(err,res);
+        console.log(err,res);
       });
     },
     sendTransactionNote: function (transaction) {
@@ -338,7 +369,7 @@ angular.module('leth.services')
         svc.pushChatDM(msg,payload);
 
         web3.shh.post(message, function(err,res){
-          //console.log(err,res);
+          console.log(err,res);
         });
       });
     },      
@@ -353,7 +384,13 @@ angular.module('leth.services')
       svc.pushChat(msg,payload);
 
       web3.shh.post(message, function(err,res){
-        //console.log(err,res);
+        if(err){
+            chats.filter(function (c) {
+              if(c.hash === payload){
+                c.error=true;
+              }
+            }); 
+          }
       }); 
 
       
@@ -370,7 +407,13 @@ angular.module('leth.services')
       svc.pushChat(msg,payload);
 
       web3.shh.post(message, function(err,res){
-        //console.log(err,res);
+        if(err){
+            chats.filter(function (c) {
+              if(c.hash === payload){
+                c.error=true;
+              }
+            }); 
+          }
       }); 
     },
     sendCryptedPosition: function (toAddr, position) {
@@ -393,7 +436,13 @@ angular.module('leth.services')
         svc.pushChatDM(msg,payload);
 
         web3.shh.post(message, function(err,res){
-          //console.log(err,res);
+          if(err){
+            chats.filter(function (c) {
+              if(c.hash === payload){
+                c.error=true;
+              }
+            }); 
+          }
         });
       });      
     },
@@ -438,17 +487,24 @@ angular.module('leth.services')
         if(error) return; 
 
         var payload = JSON.parse(web3.toUtf8(result.payload));
+        //build hashId for ack message
+        var sign = svc.envelop(payload.mode);
+        sign.time = payload.time; 
+        sign.from = payload.from;
+        sign.senderKey = payload.senderKey;
+
+        payload.hash = web3.fromUtf8(JSON.stringify(sign));
 
         //if ack message
         if(payload.mode=="ack"){
           chats.filter(function (c) {
-            if(c.hash === payload.attach){
+            if(c.hash === payload.attach && c.message.from == AppService.account()){
               c.delivered=true;
             }
           })
           
           chatsDM.filter(function (c) {
-            if(c.hash === payload.attach){
+            if(c.hash === payload.attach && c.message.from == AppService.account()){
               c.delivered=true;
             }
           })
@@ -459,12 +515,12 @@ angular.module('leth.services')
         //if just in chats array exit
         var exist=false;
         chats.filter(function (c) {
-          if(c.hash === result.payload){
+          if(c.hash === payload.hash){
             exist=true;
           }
         })
         chatsDM.filter(function (c) {
-          if(c.hash === result.payload){
+          if(c.hash === payload.hash){
             exist=true;
           }
         })
@@ -482,21 +538,21 @@ angular.module('leth.services')
         if(isBanned) return;
 
         //exit if outdated  get only 1 hour before last msg
-        if(payload.time*3600 < JSON.parse(localStorage.LastMsg).time){return;} 
+        //if(payload.time*3600 < JSON.parse(localStorage.LastMsg).time){return;} 
         
         //if is public
         if(!payload.to[0]){
           if(payload.image != ''){
             SwarmService.download(payload.image).then(function(val){
               payload.image = val;
-              svc.pushChat(payload, result.payload);
+              svc.pushChat(payload, payload.hash);
               $scope.$broadcast("incomingMessage", payload);
-              svc.sendACK(result.payload, null);
+              svc.sendACK(payload.hash, null);
             }).catch(console.log);
           }else{
-            svc.pushChat(payload, result.payload);
+            svc.pushChat(payload, payload.hash);
             $scope.$broadcast("incomingMessage", payload);
-            svc.sendACK(result.payload, null);
+            svc.sendACK(payload.hash, null);
 
           }
         };
@@ -513,20 +569,20 @@ angular.module('leth.services')
                 var img = JSON.parse(web3.toUtf8(val.toString()));
                 payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,img, payload.senderKey,AppService.idkey(),hdPath);
                 
-                pushChatDM(payload, result);
+                pushChatDM(payload, payload.hash);
                 $scope.$broadcast("incomingMessage", payload);
-                svc.sendACK(result.payload, payload.to[1]);
+                svc.sendACK(payload.hash, payload.to[1]);
 
               }, function(err){
                 payload.image = lightwallet.encryption.multiDecryptString(local_keystore,pwDerivedKey,payload.image, payload.senderKey,AppService.idkey(),hdPath);
-                svc.pushChatDM(payload, result.payload);
+                svc.pushChatDM(payload, payload.hash);
                 $scope.$broadcast("incomingMessage", payload);
-                svc.sendACK(result.payload, payload.to[1]);
+                svc.sendACK(payload.hash, payload.to[1]);
               }).catch(console.log);
             }else
-              svc.pushChatDM(payload, result.payload);
+              svc.pushChatDM(payload, payload.hash);
               $scope.$broadcast("incomingMessage", payload);
-              svc.sendACK(result.payload, payload.to[1]);
+              svc.sendACK(payload.hash, payload.to[1]);
           });
         }
 

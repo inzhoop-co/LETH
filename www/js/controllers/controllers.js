@@ -151,8 +151,8 @@ angular.module('leth.controllers', [])
     //Flush chat messages
     Chat.flush();
     $scope.DMchats = Chat.findDM(); 
-    //$scope.DAPPchats = Chat.findDAPP(); 
     $scope.chats = Chat.find();
+    //$scope.DAPPchats = Chat.findDAPP(); 
   }
 
   window.resetChatFilter = function(){
@@ -212,16 +212,15 @@ angular.module('leth.controllers', [])
         toolbar: 'yes'
       };
 
-      document.addEventListener("deviceready", function () {
+      if (AppService.isPlatformReady()){
         $cordovaInAppBrowser.open(pinUrl, '_system', options)
           .then(function(event) {
             // success
           })
           .catch(function(event) {
             // error
-          });
-          //$cordovaInAppBrowser.close();
-      }, false);
+          }); 
+      }
   }
 
   var getSync = function(){
@@ -370,14 +369,14 @@ angular.module('leth.controllers', [])
     });
   };
   $scope.chooseFriend = function (friend) {
-    if($ionicHistory.currentTitle()=="Wallet"){
+    if($ionicHistory.currentStateName()=="tab.wallet"){
      $scope.addrTo = friend.addr;
     }
-    if($ionicHistory.currentTitle()=="Address")
+    if($ionicHistory.currentStateName()=="tab.address")
       $scope.shareByChat(friend, $scope.param);
-    if($ionicHistory.currentTitle()=="LΞTH")
+    if($ionicHistory.currentStateName()=="tab.dappleths")
       $scope.shareCustomToken(friend, $scope.param);
-    if($ionicHistory.currentView().stateName == "tab.dappleth-run"){
+    if($ionicHistory.currentStateName() == "tab.dappleth-run"){
       if($scope.param.action=="invite")
         $scope.inviteFriend(friend, $scope.param);
     }
@@ -520,10 +519,8 @@ angular.module('leth.controllers', [])
 
     confirmPopup.then(function(res) {
       if(res) {
-        $scope.listCoins.pop(token);
+        $scope.listTokens.splice($scope.listTokens.indexOf(token),1);
         AppService.deleteLocalToken(token);
-        //$scope.listCoins.splice($scope.listCoins.indexOf(token),1);
-        //localStorage.Coins = JSON.stringify($scope.listCoins);
       }
     
       $scope.readCoinsList();
@@ -566,7 +563,8 @@ angular.module('leth.controllers', [])
   };
 
   var isNfcAvailable = function(){
-    document.addEventListener("deviceready", function () {
+    if (AppService.isPlatformReady()){
+    
       try{
         nfc.enabled(function(){
           $scope.nfcAvailable = true;
@@ -597,132 +595,49 @@ angular.module('leth.controllers', [])
         })
       }catch(e){
       }
-    }, false);
+    }
     
     return false;
   };
   
 
   $scope.scanTo = function () {
-    $ionicPlatform.ready(function () {
-      if($rootScope.deviceready){
-          $cordovaBarcodeScanner
-          .scan()
-          .then(function (barcodeData) {
-            if(barcodeData.text!= ""){
-              $state.go('tab.wallet', {addr: barcodeData.text});
-              console.log('read code: ' + barcodeData.text);
-            }
-          }, function (error) {
-            // An error occurred
-            console.log('Error!' + error);
-          });
-      }//if
-    });        
+    if (AppService.isPlatformReady()){
+      $cordovaBarcodeScanner
+      .scan()
+      .then(function (barcodeData) {
+        if(barcodeData.text!= ""){
+          $state.go('tab.wallet', {addr: barcodeData.text});
+          console.log('read code: ' + barcodeData.text);
+        }
+      }, function (error) {
+        // An error occurred
+        console.log('Error!' + error);
+      });
+    }
   };
 
   $scope.lat = "N/A";
   $scope.long = "";
-
   $scope.geoWatch;    
-  /*
+  
   $scope.watchLocation = function(){
     $scope.geoWatch = Geolocation.watchPosition();
     $scope.geoWatch.then(
       null,
       function (err) {
-        console.log(err);
+        //console.log(err);
         $scope.geoWatch.clearWatch();
         $scope.watchLocation();
       },
       function (position) {
         console.log(position);
-        $scope.lat  = position.coords.latitude;
-        $scope.long = position.coords.longitude;
+        $scope.lat  = position.coords.latitude.toFixed(4);
+        $scope.long = position.coords.longitude.toFixed(4);
         //Chat.sendPosition(position);
       });
   }
-  */
-
-
-  $scope.setNetwork = function(network){
   
-/*
-   
-
-
-
-
-
-
-    try{
-
-          switch(network) {
-            case 'Morden':
-              $scope.nameNetwork = network;
-              $scope.classNetwork = 'royal';                
-              $scope.badgeNetwork = 'badge badge-royal';
-              break;
-            case 'Ropsten':
-              $scope.nameNetwork = 'Ropsten';
-              $scope.classNetwork = 'positive';                
-              $scope.badgeNetwork = 'badge badge-positive';
-              
-              ENSService.init($scope.nameNetwork);//find a better place
-
-              break;
-            case '0xa3c565fc15c7478862d50ccd6561e3c06b24cc509bf388941c25ea985ce32cb9':
-              $scope.nameNetwork = 'Kovan';
-              $scope.classNetwork = 'calm';                
-              $scope.badgeNetwork = 'badge badge-calm';
-
-              break;
-            case '0x6341fd3daf94b748c72ced5a5b26028f2474f5f00d824504e4fa37a75767e177':
-              $scope.nameNetwork = 'Rinkeby';
-              $scope.classNetwork = 'energized';                
-              $scope.badgeNetwork = 'badge badge-energized';
-
-              break;
-            case '0xf8db90a3c81d9f86022cca1e12b4e05770aeae784d56cc5a31e78f6aea44698a':
-              $scope.nameNetwork = 'Infuranet';
-              $scope.classNetwork = 'dark';                
-              $scope.badgeNetwork = 'badge badge-dark';
-
-              break;
-            case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
-              web3.eth.getBlock(1920000, function(e, res){
-                if(!e && res){
-                  //console.log(res.hash);
-                  switch(res.hash) {
-                   case '0x94365e3a8c0b35089c1d1195081fe7489b528a84b22199c916180db8b28ade7f':
-                    $scope.nameNetwork = 'Main-ETC';
-                    $scope.classNetwork = 'balanced';                
-                    $scope.badgeNetwork = 'badge badge-balanced';
-                    break;
-                   default:
-                    $scope.nameNetwork = 'Mainet';
-                    $scope.classNetwork = 'balanced';                
-                    $scope.badgeNetwork = 'badge badge-balanced';
-              
-                    ENSService.init($scope.nameNetwork);//find a better place
-
-                  }
-                }
-              }) 
-              break;
-            default:
-              $scope.nameNetwork = 'Private';
-              $scope.classNetwork = 'calm';                
-              $scope.badgeNetwork = 'badge badge-calm';              
-          }
-        }
-      });
-
-    } catch(err){
-      console.log(err.message);
-    }
-    */
-  };
 
   $scope.sendFeedback = function(){
     // Show the action sheet
@@ -773,7 +688,7 @@ angular.module('leth.controllers', [])
 
 
   $scope.scanAddr = function () {
-    document.addEventListener("deviceready", function () {  
+    if (AppService.isPlatformReady()){
      $cordovaBarcodeScanner
       .scan()
       .then(function (barcodeData) {
@@ -784,7 +699,7 @@ angular.module('leth.controllers', [])
         // An error occurred
         console.log('Error!' + error);
       });
-    }, false);
+    }
   };
 
   $scope.exitApp = function () {
@@ -965,7 +880,7 @@ angular.module('leth.controllers', [])
   };
 
   var startWatching = function() { 
-    document.addEventListener("deviceready", function () {   
+    if (AppService.isPlatformReady()){
       $scope.watch = $cordovaDeviceMotion.watchAcceleration($scope.options);
       $scope.watch.then(null, function(error) {
           console.log('Error');
@@ -978,7 +893,7 @@ angular.module('leth.controllers', [])
           // Detecta shake  
           detectShake(result);   
       });   
-    });
+    };
   };       
 
   var stopWatching = function() {  
@@ -1162,7 +1077,7 @@ angular.module('leth.controllers', [])
   };
 
   $scope.sendSeedByEmail = function(){
-    document.addEventListener("deviceready", function () {  
+    if (AppService.isPlatformReady()){
       $cordovaEmailComposer.isAvailable().then(function() {
       var emailOpts = {
         to: [''],
@@ -1181,13 +1096,13 @@ angular.module('leth.controllers', [])
         console.log("cordovaEmailComposer not available");
         return;
       }); 
-    }, false);        
+    };
   };
 
   $scope.installDapp = function(id) {
     var dappToInstall = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
 
-    document.addEventListener("deviceready", function () {
+    if (AppService.isPlatformReady()){
       var directoryTemplate=cordova.file.dataDirectory;
       if(ionic.Platform.isAndroid()) {
         directoryTemplate = cordova.file.externalDataDirectory;
@@ -1224,11 +1139,11 @@ angular.module('leth.controllers', [])
         }, function () {
         // not available
       });
-    }, false);  
+    };
   }
 
   $scope.readDapp = function(filename){
-    document.addEventListener("deviceready", function () {
+    if (AppService.isPlatformReady()){
       var directoryTemplate=cordova.file.dataDirectory;
       if(ionic.Platform.isAndroid()) {
         directoryTemplate = cordova.file.externalDataDirectory;
@@ -1242,7 +1157,7 @@ angular.module('leth.controllers', [])
           // error
           console.log(error);
       });
-    }, false);
+    };
   }
   //init
   $scope.friends = [];    
@@ -1283,37 +1198,37 @@ angular.module('leth.controllers', [])
   $scope.chats = Chat.find(); 
 
   $scope.setBadge = function(value) {
-    document.addEventListener("deviceready",function() {    
+    if (AppService.isPlatformReady()){
       $cordovaBadge.hasPermission().then(function(result) {
           $cordovaBadge.set(value);
       }, function(error) {
           console.log(error);
       });
-    }, false);
+    };
   }
 
   $scope.increaseBadge = function() {
-    document.addEventListener("deviceready",function() {      
+    if (AppService.isPlatformReady()){
       $cordovaBadge.hasPermission().then(function(result) {
           $cordovaBadge.increase();
       }, function(error) {
           console.log(error);
       });
-    }, false);
+    };
   }
 
   $scope.clearBadge = function() {
-    document.addEventListener("deviceready",function() { 
+    if (AppService.isPlatformReady()){
       $cordovaBadge.hasPermission().then(function(result) {
           $cordovaBadge.clear();
       }, function(error) {
           console.log(error);
       });
-    }, false);
+    };
   }
 
   $scope.scheduleSingleNotification = function (title, text, id) {
-    document.addEventListener("deviceready", function () {        
+    if (AppService.isPlatformReady()){
       $cordovaLocalNotification.schedule({
           id: id,
           //title: title,
@@ -1321,7 +1236,7 @@ angular.module('leth.controllers', [])
         }).then(function (result) {
           //console.log('Notification 1 triggered');
         });
-    }, false); 
+    };
   };
 
   $scope.scrollTo = function(handle,where){
@@ -1366,7 +1281,7 @@ angular.module('leth.controllers', [])
       buttonClicked: function(index) {
         switch(this.buttons[index].index){
           case 1: //copy message
-            document.addEventListener("deviceready", function () {  
+            if (AppService.isPlatformReady()){
               if(msg.image){
                 $cordovaClipboard.copy(msg.image).then(function () {
                   // success
@@ -1380,7 +1295,7 @@ angular.module('leth.controllers', [])
                     // error
                 });
               }
-            }, false);
+            };
             break;
           case 2: //go to friend
             $state.go('tab.friend', {Friend: msg.from}, { relative: $state.$current.view});
@@ -1397,7 +1312,7 @@ angular.module('leth.controllers', [])
               toolbar: 'yes'
             };
 
-            document.addEventListener("deviceready", function () {
+            if (AppService.isPlatformReady()){
               $cordovaInAppBrowser.open(pinUrl, '_blank', options)
                 .then(function(event) {
                   // success
@@ -1405,8 +1320,7 @@ angular.module('leth.controllers', [])
                 .catch(function(event) {
                   // error
                 });
-                //$cordovaInAppBrowser.close();
-            }, false);
+            };
             break;
           case 5: // pay request
             $state.go('tab.wallet', {addr: msg.from + "#" + msg.senderKey + "@" + msg.attach.payment}, { relative: $state.$current.view});
@@ -1485,9 +1399,9 @@ angular.module('leth.controllers', [])
 
   $scope.vibrate = function(){
     if(localStorage.Vibration){
-      document.addEventListener('deviceready', function () {
+      if (AppService.isPlatformReady()){
         $cordovaVibration.vibrate(100);
-      });
+      };
     }
   }
 
@@ -1539,7 +1453,7 @@ angular.module('leth.controllers', [])
   });
 
 
-  document.addEventListener('deviceready', function () {
+  if (AppService.isPlatformReady()){
     // Android customization
     cordova.plugins.backgroundMode.setDefaults({ text:'Doing heavy tasks.'});
     // Enable background mode
@@ -1549,8 +1463,7 @@ angular.module('leth.controllers', [])
     }else
     console.log('backmode not activated');
 
-    
-     // Called when background mode has been activated
+    // Called when background mode has been activated
     cordova.plugins.backgroundMode.onactivate = function() {
       console.log('backgroundMode activated');
       $scope.$on('incomingMessage', function (e, payload) {
@@ -1589,25 +1502,24 @@ angular.module('leth.controllers', [])
         });
       };
     };
-
-  }, false);
+  };
 
   $scope.cancelAllNotifications = function () {
     $scope.msgCounter = 0;
-    document.addEventListener("deviceready", function () {        
+    if (AppService.isPlatformReady()){
       $cordovaLocalNotification.cancelAll().then(function (result) {
-            console.log('All Notification Canceled');
+        console.log('All Notification Canceled');
       });
-    }, false); 
+    };
   };
 
   $scope.cancelDMNotifications = function () {
-    $scope.DMCounter = 0;      
-    document.addEventListener("deviceready", function () {        
+    $scope.DMCounter = 0;
+    if (AppService.isPlatformReady()){
       $cordovaLocalNotification.cancelAll().then(function (result) {
-            console.log('DM Notification Canceled');
+        console.log('DM Notification Canceled');
       });
-    }, false); 
+    };
   };
 
   //clear notification and badge on click (todo: add on open)
