@@ -1,4 +1,4 @@
-# LΞTH 
+# LΞTH
 The Only mobile ligthwallet built with Ξthereum community in mind!
 
 # About
@@ -10,7 +10,7 @@ Every transaction could be signed directly with the smartphone and sent to an et
 
 With LETH you could:
 
-- Create a HD ligthwallet 
+- Create a HD ligthwallet
 - Manage an Ethereum wallet address
 - Set host node address private/test/public
 - Send / Receive ETH
@@ -39,7 +39,7 @@ https://github.com/ConsenSys/eth-lightwallet
 
 # Stuff and info for the project (Draft!)
 
-Install some stuff lke Node.js and npm  
+Install some stuff lke Node.js and npm
 ```bash
 https://nodejs.org/dist/v4.2.3/node-v4.2.3.pkg
 ```
@@ -60,11 +60,18 @@ ionic serve
 ```
 
 # Screenshoots
-<img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6342.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6343.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6344.PNG" width="30%">  
 
-<img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6345.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6346.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6347.PNG" width="30%">
+<img src="https://rawgit.com/inzhoop-co/LETH/master/resources/screenshot/v097/IMG_6345.PNG" width="30%">
+<img src="https://rawgit.com/inzhoop-co/LETH/master/resources/screenshot/v097/IMG_6343.PNG" width="30%">
+<img src="https://rawgit.com/inzhoop-co/LETH/master/resources/screenshot/v097/IMG_6344.PNG" width="30%">
 
-<img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6348.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6349.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6350.PNG" width="30%">
+<img src="https://rawgit.com/inzhoop-co/LETH/master/resources/screenshot/v097/IMG_6345.PNG" width="30%">
+<img src="https://rawgit.com/inzhoop-co/LETH/master/resources/screenshot/v097/IMG_6346.PNG" width="30%">
+<img src="https://rawgit.com/inzhoop-co/LETH/master/resources/screenshot/v097/IMG_6347.PNG" width="30%">
+
+<img src="https://rawgit.com/inzhoop-co/LETH/master/resources/screenshot/v097/IMG_6348.PNG" width="30%">
+<img src="https://rawgit.com/inzhoop-co/LETH/master/resources/screenshot/v097/IMG_6349.PNG" width="30%">
+<img src="https://rawgit.com/inzhoop-co/LETH/master/resources/screenshot/v097/IMG_6350.PNG" width="30%">
 
 # License
  GNU GENERAL PUBLIC LICENSE
