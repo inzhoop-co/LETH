@@ -36,6 +36,20 @@
   .button.ng-hide{
     display:none;
   }
+
+  .list .item.item-accordion {
+    line-height: 38px;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition: 0.09s all linear;
+  }
+  .list .item.item-accordion.ng-hide {
+    line-height: 0px;
+  }
+  .list .item.item-accordion.ng-hide-add,
+  .list .item.item-accordion.ng-hide-remove {
+    display: block !important;
+  }
 </style>
 <dappleth-header></dappleth-header>
 <dappleth-content>
@@ -106,21 +120,32 @@
       <button class="button button-positive button-block" ng-click="install()"> Install </button>
     </ion-slide>
     <ion-slide>
-      <div class="list text-left">
-
+      <!--div class="list text-left">
         <a class="item item-icon-left" ng-repeat="f in Dapp.functions | filter:{type:'function', constant: Dapp.read}" ng-click="funCall(f.name)">
           <i class="icon ion-code-working"></i>
           {{f.name}}
           <span class="item-note">{{f.type}}</span>
-          <!--span class="badge badge-assertive">0</span-->
         </a>
-
-      </div>
-
+      </div-->
+      <ion-list class="text-left">
+        <div ng-repeat="f in Dapp.functions | filter:{type:'function', constant: Dapp.read}">
+          <ion-item class="item-stable"
+                    ng-class="{active: isGroupShown(f)}">
+              <i class="icon" ng-class="isGroupShown(f) ? 'ion-minus' : 'ion-plus'" ng-if="f.inputs.length" ng-click="toggleGroup(f)"></i>
+            &nbsp;
+             <i class="icon ion-code-working" ng-if="!f.inputs.length"></i> 
+             {{f.name}}
+             <i class="item-note icon ion-ios-play" ng-click="funCall(f.name)"></i>
+          </ion-item>
+          <ion-item class="item-accordion"
+                    ng-repeat="item in f.inputs"
+                    ng-show="isGroupShown(f)">
+            {{item.name}} <input type="text" placeholder="{{item.type}}">
+          </ion-item>
+        </div>
+      </ion-list>
     </ion-slide>
   </ion-slide-box>
-  
-
 </dappleth-content>
 <dappleth-footer>
     <div class="bar bar-footer bar-assertive">

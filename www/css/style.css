@@ -318,6 +318,14 @@ bottom: 150;
    Bot Style Dappleth Templates
   ========================================================================== 
 */
+.dappleth-title {
+  color: #fff;
+  display: inherit;
+  font-size: 17px;
+  line-height: 44px;
+  margin: 0 25px;
+  width: 100%;
+}
 .has-dappleth {
   top: 87px; }
 

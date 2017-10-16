@@ -1,43 +1,49 @@
 var dappleth = (function(){
 	var dappContract;
 	var Dapp;
+	var $scope;
+	var $service;
+
 	
 	var _init = function(core) {
-		$D = core;
+		$scope = core.scope;
+		$service = core.service;
 
-		Dapp = $D.scope.Dapp.activeApp;
-		dappContract = web3.eth.contract(Dapp.Contracts[0].ABI).at(Dapp.Contracts[0].Address);		
+		Dapp = $scope.Dapp.activeApp;
+		dappContract = web3.eth.contract(Dapp.Contracts[0].ABI).at(Dapp.Contracts[0].Address);
+
+		angular.extend($scope, context);		
 	}
 
-	var _start = function(){
-		$D.scope.greet = function(){
-			$D.service.popupConfirm("Call contract ", "Do you want to call contract " +  dappContract.address + "?").then(function(res){
-				$D.scope.call = true;
+	var context = {
+		greet: function(){
+			$service.popupConfirm("Call contract ", "Do you want to call contract " +  dappContract.address + "?").then(function(res){
+				$scope.call = true;
 				dappContract.greet(function(err,res){
 					if(err){
-						$D.service.popupAlert("ERROR",err);
-						$D.scope.greeting = err.message;
+						$service.popupAlert("ERROR",err);
+						$scope.greeting = err.message;
 					}
-					if(res)
-						$D.scope.greeting = res;
+					if(res){
+						$scope.greeting = res;
+						$scope.$digest();
+					}
+
 				});
 			}, function(err){
-				$D.scope.call = false;
+				$scope.call = false;
 			})
+		},
+		clearResponse: function(){
+			$scope.call = false;
+		},
+		dappRefresh: function(value){
+			$scope.$broadcast('scroll.refreshComplete');
 		}
-
-		$D.scope.clearResponse = function(){
-			$D.scope.call=false;
-		}
-
 	}
-			
 
 	return {
-		run:function(core){
-			_init(core);
-			_start();
-		}
+		run: _init
 	};
 
 })();

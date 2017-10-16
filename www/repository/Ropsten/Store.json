@@ -14,7 +14,7 @@
 		{
 			"Name": "Game",
 			"Description": "",
-			"List": []
+			"List": ["3","4"]
 		},
 		{
 			"Name" : "Social",
@@ -70,6 +70,50 @@
 			"Descriptions" : {
 				"Title": "Give contract a face",
 				"Abstract": "Dapp to explore every smart contract"
+			}
+		},
+		{
+			"GUID": "3",
+			"Name" : "Flappy Eth",
+			"Company" : "Inzhoop",
+			"Url" :{
+				"Install" : "index.html",
+				"Template" : "index.html",
+				"Script" : "index.js"
+			},
+			"Contracts" :[
+				{"Address":"0x", "ABI": [{}]
+			}],
+			"Logo" :{ 
+				"Full":"logo.png",
+				"Mini":"logo.png",
+				"Banner":"logo.png"
+			},
+			"Descriptions" : {
+				"Title": "Flappy Eth",
+				"Abstract": "Funny dimostrative game"
+			}
+		},
+		{
+			"GUID": "4",
+			"Name" : "Whormhole",
+			"Company" : "Inzhoop",
+			"Url" :{
+				"Install" : "index.html",
+				"Template" : "index.html",
+				"Script" : "index.js"
+			},
+			"Contracts" :[
+				{"Address":"0x", "ABI": [{}]
+			}],
+			"Logo" :{ 
+				"Full":"logo.png",
+				"Mini":"logo.png",
+				"Banner":"logo.png"
+			},
+			"Descriptions" : {
+				"Title": "Demo UI capabilities",
+				"Abstract": "Funny dimostrative game"
 			}
 		}
 	],

@@ -16,9 +16,14 @@ angular.module('leth')
     return {
       restrict: "E",
       scope: false,
+      transclude: true,
       templateUrl: "templates/components/header.html",
       link: function(scope,element,attrs){
-          //console.log("header component " );
+        if(attrs.class)
+          scope.HEADER_CLASS = attrs.class;
+        else
+          scope.HEADER_CLASS =  "bar bar-header bar-assertive";  
+
       }
     };
   })
@@ -62,7 +67,10 @@ angular.module('leth')
       transclude: true,
       templateUrl: "templates/components/footer.html",
       link: function(scope,element,attrs){
-          //console.log("footer component " );
+        if(attrs.class)
+          scope.FOOTER_CLASS = attrs.class;
+        else
+          scope.FOOTER_CLASS =  "bar bar-footer bar-assertive";  
       }
     };
   })

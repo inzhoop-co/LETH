@@ -17,7 +17,6 @@ var dappleth = (function(){
 
 	var context = {
 		greet: function(){
-
 			$service.popupConfirm("Call contract ", "Do you want to call contract " +  dappContract.address + "?").then(function(res){
 				$scope.call = true;
 				dappContract.greet(function(err,res){
@@ -37,16 +36,11 @@ var dappleth = (function(){
 		},
 		clearResponse: function(){
 			$scope.call = false;
+		},
+		dappRefresh: function(value){
+			$scope.$broadcast('scroll.refreshComplete');
 		}
-
-
 	}
-
-
-	var _start = function(){
-		
-	}
-			
 
 	return {
 		run: _init
