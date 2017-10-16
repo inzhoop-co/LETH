@@ -45,6 +45,7 @@ angular.module('leth')
       transclude: true,
       templateUrl: "templates/components/content.html",
       link: function(scope,element,attrs){
+        //class="has-header"
           //console.log("content component " );
       }
     };

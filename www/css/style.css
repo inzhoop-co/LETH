@@ -40,6 +40,13 @@ img#headerSetting
   
 }
 
+button {
+  -webkit-appearance:none;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
 
 @-webkit-keyframes shakeit {
 0% { -webkit-transform: rotate(0deg) translate(3px, 1px); }
@@ -322,10 +329,9 @@ bottom: 150;
   color: #fff;
   display: inherit;
   font-size: 17px;
-  line-height: 44px;
   margin: 0 25px;
-  width: 100%;
-}
+  width: 100%; }
+
 .has-dappleth {
   top: 87px; }
 
@@ -561,33 +567,3 @@ bottom: 150;
 }
 
 
-
-/*
-.dapp-ion-scroll{
-  height:150px;
-  width:100%;
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-}
-
-.categoryContainer{
-  width: 3020px;
-}
-.cardDapp{
-  display: inline-block !important;
-  font-size: 0.8em;
-  height: 120px;
-  margin: 5px;
-  text-align: left;
-  text-decoration: none;
-  text-shadow: none;
-  width: 280px;
-  border:none;
-}
-.cardDapp:nth-child(2n+2) {
-  color: #fff;
-}
-.cardDapp:first-child{
-  margin-left: 10px;
-}
-*/
