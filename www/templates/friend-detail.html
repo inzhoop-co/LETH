@@ -1,5 +1,5 @@
 <ion-view view-title="{{friend.name | strLimit: 10 : 2}}" hide-tabs can-swipe-back="false">
-  <ion-nav-bar class="bar-stable bar-assertive">
+  <ion-nav-bar class="bar-assertive">
     <ion-nav-back-button>
       <span class="badge badge-energized" ng-hide="msgCounter+DMCounter==0"> {{msgCounter + DMCounter}}</span>    
     </ion-nav-back-button>
@@ -12,7 +12,7 @@
       </a>
     </ion-nav-buttons>
   </ion-nav-bar>
-  <div class="bar bar-subheader bar-transparent">
+  <div class="bar bar-subheader">
     <span class="item-avatar">
       {{friend.addr | strLimit: 10 : 10}}
       <img class="rounded" ng-src="{{friend.icon}}">    

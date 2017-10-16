@@ -40,12 +40,7 @@ img#headerSetting
   
 }
 
-button {
-  -webkit-appearance:none;
-  padding: 0;
-  margin: 0;
-  border: 0;
-}
+
 
 
 @-webkit-keyframes shakeit {
@@ -329,6 +324,7 @@ bottom: 150;
   color: #fff;
   display: inherit;
   font-size: 17px;
+  line-height: 44px;
   margin: 0 25px;
   width: 100%; }
 

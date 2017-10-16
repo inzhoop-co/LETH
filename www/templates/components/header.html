@@ -9,5 +9,5 @@
       <img ng-src="{{Dapp.activeApp.Path + Dapp.activeApp.Logo.Mini}}" height="45px" width="auto"/>
       <span>&nbsp;{{Dapp.activeApp.Descriptions.Title | strLimit: 20 : 0}}</span>
   </h1>
-  <button ng-transclude="buttons"></button>
+  <div ng-transclude="buttons"></div>
 </ion-header-bar>

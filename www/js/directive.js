@@ -19,11 +19,10 @@ angular.module('leth')
       transclude: true,
       templateUrl: "templates/components/header.html",
       link: function(scope,element,attrs){
-        if(attrs.class)
-          scope.HEADER_CLASS = attrs.class;
+        if(attrs.styleclass)
+          scope.HEADER_CLASS = attrs.styleclass;
         else
-          scope.HEADER_CLASS =  "bar bar-header bar-assertive";  
-
+          scope.HEADER_CLASS =  "bar bar-header bar-assertive";
       }
     };
   })
@@ -34,7 +33,7 @@ angular.module('leth')
       transclude: true,
       templateUrl: "templates/components/navbar.html",
       link: function(scope,element,attrs){
-          //console.log("navbar component " );
+
       }
     };
   })
@@ -45,8 +44,7 @@ angular.module('leth')
       transclude: true,
       templateUrl: "templates/components/content.html",
       link: function(scope,element,attrs){
-        //class="has-header"
-          //console.log("content component " );
+
       }
     };
   })
@@ -57,7 +55,6 @@ angular.module('leth')
       templateUrl: "templates/components/chat.html",
       link: function(scope,element,attrs){
           scope.CHAT_HEIGHT = attrs.height;
-          //console.log("chat component " + attrs.height);
       }
     };
   })
@@ -68,8 +65,8 @@ angular.module('leth')
       transclude: true,
       templateUrl: "templates/components/footer.html",
       link: function(scope,element,attrs){
-        if(attrs.class)
-          scope.FOOTER_CLASS = attrs.class;
+        if(attrs.styleclass)
+          scope.FOOTER_CLASS = attrs.styleclass;
         else
           scope.FOOTER_CLASS =  "bar bar-footer bar-assertive";  
       }
