@@ -16,6 +16,10 @@
     Why don't you test me?
     <i class="icon ion-thumbsup"></i>
   </button>
+   <button class="button button-block button-positive" ng-click="deploy()">
+    Deploy
+    <i class="icon ion-play"></i>
+  </button>
   <div class="card" ng-if="call">
       <div class="item-divider" >
         Response {{Dapp.activeApp.Address | strLimit: 15 : 5 }}

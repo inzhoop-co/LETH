@@ -6,6 +6,12 @@ angular.module('leth.services')
                                 StoreEndpoint, AppService, Chat, ENSService, ExchangeService, 
                                 Friends, nfcService, SwarmService, Geolocation) {
   return{
+    address: function(){
+      return AppService.account();
+    },
+    balance: function(){
+      return AppService.balance(1.0e18);
+    },
     swarmUpload: function(content){
       SwarmService.upload(content).then(function(res){
         console.log(res);
