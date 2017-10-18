@@ -3,15 +3,11 @@
     <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
   	<ion-scroll class="list scrollBg" overflow-scroll="true" >
    	 	<div class="padding subdued">{{'HOST_PROVIDER_ADDRESS' | translate}}  </div>
-		<div class="item padding-on-borders" >
-		 	<div class="row no-bmp">
-		 		<div class="col text-left no-bmp col-50 col-center">{{'HOST_TYPE' | translate}} 
-		 		<span class="item-note">#{{lastBlock}}</span></div>
-				 <div class="col text-left col-center col-66">
-					<span class="{{badgeNetwork}} relative-position">{{nameNetwork}}&nbsp;</span>
-				</div>			
-		 	</div>
-		</div>
+		<ion-item class="item">
+            {{'HOST_TYPE' | translate}} 
+			<span class="item-note">{{nameNetwork}} #{{lastBlock}} </span>
+      	</ion-item>		
+
 		<ion-item class="item item-icon-right" href="#/tab/hostnodes">
             {{addrHost}}
 		     <i class="icon ion-chevron-right icon-accessory"></i>

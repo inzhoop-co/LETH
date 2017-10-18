@@ -24,7 +24,6 @@ angular.module('leth.controllers', [])
     $scope.nick = AppService.idkey();
     $scope.qrcodeString = $scope.account + "/" + $scope.nick ;
     AppService.getNetwork().then(function(res){
-
       $scope.nameNetwork = res.name;
       $scope.classNetwork = res.class;               
       $scope.badgeNetwork = res.badge;
@@ -267,12 +266,11 @@ angular.module('leth.controllers', [])
 
   var getSync = function(){
     if(!web3.currentProvider) return;
-
     try {    
         if(web3.eth.syncing)
-          $scope.syncStatus = "icon ion-eye-disabled ";
+          $scope.syncStatus = "blinking";
         else
-          $scope.syncStatus = "icon ion-eye ";
+          $scope.syncStatus = "";
 
         $scope.lastBlock = web3.eth.blockNumber;
     } catch (err) {
@@ -294,7 +292,10 @@ angular.module('leth.controllers', [])
   $scope.infoSync = function(){
      var alertPopup = $ionicPopup.alert({
         title: 'Info Sync Node',
-        template: web3.eth.syncing=='false' ? 'Sync status: OK' : 'Sync status: progress' + '<br/>BlockNumber: ' + web3.eth.blockNumber + '<br/>Network: ' + $scope.nameNetwork
+        template: web3.eth.syncing ? 'Sync status: progress...' : 'Sync status: OK' + 
+                  '<br/>BlockNumber: ' + web3.eth.blockNumber + 
+                  '<br/>Network: ' + $scope.nameNetwork + 
+                  '<br/>Change Network type from Settings'
       });
 
       alertPopup.then(function(res) {
