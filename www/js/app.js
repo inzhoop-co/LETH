@@ -115,20 +115,15 @@ var app = angular.module('leth', [
       });
     }
     if (typeof localStorage.AppKeys == 'undefined') {
-        //console.log("wallet not found");
         $rootScope.hasLogged = false;
         localStorage.HasLogged = $rootScope.hasLogged;          
         $location.path('/tab/login');
       }
       else {
-        //console.log("login successfully");
         $rootScope.hasLogged = true; 
         localStorage.HasLogged = $rootScope.hasLogged;
         $location.path('/tab/dappleths');
     } 
-
-    // call to rename 
-    //renameDirective.rename();
 
     $ionicPlatform.ready(function () {
       if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -136,10 +131,9 @@ var app = angular.module('leth', [
       }
       if (window.StatusBar) {
         StatusBar.styleLightContent();
-        //StatusBar.styleBlackOpaque()
-        //StatusBar.styleBlackTranslucent();
       }
-      
+
+      /*      
       $rootScope.$on('loading:show', function () {
         $ionicLoading.show({
          template: 'Loading...'
@@ -148,7 +142,8 @@ var app = angular.module('leth', [
       $rootScope.$on('loading:hide', function () {
         $ionicLoading.hide()
       })
-
+      */
+      
       $window.addEventListener('LaunchUrl', function(event) {
         // gets page name from url
         var page =/.*:[/]{2}([^?]*)[?]?(.*)/.exec(event.detail.url)[1];

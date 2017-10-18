@@ -238,8 +238,12 @@ angular.module('leth.controllers', [])
 
   $scope.openInEtherscan = function(path,addr){
     var etherscanUrl;
+    if($scope.nameNetwork=="Kovan")
+      etherscanUrl="https://kovan.etherscan.io/" + path +"/";
     if($scope.nameNetwork=="Ropsten")
       etherscanUrl="https://ropsten.etherscan.io/" + path +"/";
+    if($scope.nameNetwork=="Rinkeby")
+      etherscanUrl="https://rinkeby.etherscan.io/" + path +"/";
     if($scope.nameNetwork=="Mainet")
       etherscanUrl="https://etherscan.io/" + path +"/";
     

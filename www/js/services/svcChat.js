@@ -114,7 +114,7 @@ angular.module('leth.services')
     },
     sendMessage: function (content) {
       var msg = this.envelop('plain');
-      var hashMsg = web3.fromUtf8(JSON.stringify(msg))
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
       msg.text = content;
 
       var payload = web3.fromUtf8(JSON.stringify(msg));
@@ -135,7 +135,7 @@ angular.module('leth.services')
     sendCryptedMessage: function (content,toAddr,toKey) {
       var msg = this.envelop('encrypted');
       //is this the minimal set to identify msg?
-      var hashMsg = web3.fromUtf8(JSON.stringify(msg))
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
       msg.to = [toAddr,AppService.account()];
       msg.text = content;
       var svc = this;
@@ -161,16 +161,18 @@ angular.module('leth.services')
     },
     sendImageShh: function (content) {
       var msg = this.envelop('plain');
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
+
       msg.image=content;
       var payload = web3.fromUtf8(JSON.stringify(msg));
       var message = this.wrap(payload);
 
-      this.pushChat(msg,payload);
+      this.pushChat(msg,hashMsg);
       
       web3.shh.post(message, function(err,res){
         if(err){
           chats.filter(function (c) {
-            if(c.hash === payload){
+            if(c.hash === hashMsg){
               c.error=true;
             }
           }); 
@@ -179,6 +181,8 @@ angular.module('leth.services')
     },
     sendImage: function (content) {
       var msg = this.envelop('plain');
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
+
       msg.image=content;
       var svc = this;
 
@@ -189,18 +193,29 @@ angular.module('leth.services')
         
         var payload = web3.fromUtf8(JSON.stringify(nMsg));
         var message = svc.wrap(payload);
+
         web3.shh.post(message, function(err,res){
-          
+          if(err){
+            chats.filter(function (c) {
+              if(c.hash === hashMsg){
+                c.error=true;
+              }
+            }); 
+          }
         }); 
       }).catch(console.log);
     },
     sendCryptedPaymentReq: function (content,request,toAddr,toKey) {
       var msg = this.envelop('payment');
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
+
       var paymentRequest = {addr: AppService.account(), idkey: AppService.idkey(), payment: request};
       msg.to = [toAddr,AppService.account()];
       msg.attach = paymentRequest;
       msg.text = content;
       var svc = this;
+
+      svc.pushChatDM(msg,hashMsg);
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
@@ -210,12 +225,11 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = svc.wrap(payload);
 
-        svc.pushChatDM(msg,payload);
 
         web3.shh.post(message, function(err,res){
           if(err){
-            chatsDM.filter(function (c) {
-              if(c.hash === payload){
+            chats.filter(function (c) {
+              if(c.hash === hashMsg){
                 c.error=true;
               }
             }); 
@@ -225,11 +239,15 @@ angular.module('leth.services')
     },
     sendCryptedCustomToken: function (content,token,toAddr,toKey) {
       var msg = this.envelop('token');
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
+
       msg.image = token.Logo;
       msg.attach = token;
       msg.to = [toAddr,AppService.account()];
       msg.text = content;
       var svc = this;
+
+      svc.pushChatDM(msg,hashMsg);
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
@@ -240,12 +258,10 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = svc.wrap(payload);
 
-        svc.pushChatDM(msg,payload);
-
         web3.shh.post(message, function(err,res){
           if(err){
             chatsDM.filter(function (c) {
-              if(c.hash === payload){
+              if(c.hash === hashMsg){
                 c.error=true;
               }
             }); 
@@ -273,9 +289,13 @@ angular.module('leth.services')
     },
     sendCryptedPhotoShh: function (content,toAddr,toKey) {
       var msg = this.envelop('encrypted');
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
+
       msg.image = content;
       msg.to = [toAddr,AppService.account()];
       var svc = this;
+
+      svc.pushChatDM(msg,hashMsg);
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
@@ -284,12 +304,10 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = svc.wrap(payload);
 
-        svc.pushChatDM(msg,payload);
-
         web3.shh.post(message, function(err,res){
           if(err){
             chatsDM.filter(function (c) {
-              if(c.hash === payload){
+              if(c.hash === hashMsg){
                 c.error=true;
               }
             }); 
@@ -300,9 +318,13 @@ angular.module('leth.services')
     },
     sendCryptedPhoto: function (content,toAddr,toKey) {
       var msg = this.envelop('encrypted');
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
+
       msg.image = content;
       msg.to = [toAddr,AppService.account()];
       var svc = this;
+
+      svc.pushChatDM(msg,hashMsg);
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encMsg = angular.copy(msg);
@@ -317,12 +339,11 @@ angular.module('leth.services')
           var payload = web3.fromUtf8(JSON.stringify(encMsg));
           var message = svc.wrap(payload);
 
-          svc.pushChatDM(msg,payload);
 
           web3.shh.post(message, function(err,res){
             if(err){
             chatsDM.filter(function (c) {
-              if(c.hash === payload){
+              if(c.hash === hashMsg){
                 c.error=true;
               }
             }); 
@@ -331,32 +352,20 @@ angular.module('leth.services')
         }).catch(console.log);
       });
     },
-    sendTransactionNotePlain: function (transaction) {
-      var msg = this.envelop('transaction');
-      msg.text = 'I sent ' + transaction.symbol + " " + (transaction.value / transaction.unit).toFixed(6) + '&#x1F4B8;';
-      msg.attach = transaction;
-      msg.to = [transaction.addr,AppService.account()];
-      var svc = this;
-
-      var payload = web3.fromUtf8(JSON.stringify(msg));
-      var message = svc.wrap(payload);
-    
-      svc.pushChatDM(msg,payload);
-
-      web3.shh.post(message, function(err,res){
-        console.log(err,res);
-      });
-    },
     sendTransactionNote: function (transaction) {
       var toKey = Friends.get(transaction.to);
       //sesinamiku
       if(typeof toKey == "undefined") return;
 
       var msg = this.envelop('transaction');
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
+
       msg.text = 'I sent ' + transaction.symbol + " " + (transaction.value / transaction.unit).toFixed(6) + '&#x1F4B8;';
       msg.attach = transaction;
-      msg.to = [transaction.addr,AppService.account()];
+      msg.to = [transaction.to,AppService.account()];
       var svc = this;
+
+      svc.pushChatDM(msg,hashMsg);
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
         var encNote = angular.copy(msg);
@@ -366,27 +375,34 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(encNote));
         var message = svc.wrap(payload);
   
-        svc.pushChatDM(msg,payload);
 
         web3.shh.post(message, function(err,res){
-          console.log(err,res);
-        });
+          if(!res){
+            chatsDM.filter(function (c) {
+              if(c.hash === hashMsg){
+                c.error = true;
+              }
+            }); 
+          }
+        }); 
       });
     },      
     sendContact: function () {
       var msg = this.envelop('contact');
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
+
       msg.text = 'My addresses ' + '&#x1F464;';
       var svc = this;
 
       var payload = web3.fromUtf8(JSON.stringify(msg));
       var message = svc.wrap(payload);
       
-      svc.pushChat(msg,payload);
+      svc.pushChat(msg,hashMsg);
 
       web3.shh.post(message, function(err,res){
         if(err){
             chats.filter(function (c) {
-              if(c.hash === payload){
+              if(c.hash === hashMsg){
                 c.error=true;
               }
             }); 
@@ -397,6 +413,8 @@ angular.module('leth.services')
     },      
     sendPosition: function (toAddr, position) {
       var msg = this.envelop('geolocation');
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
+
       msg.text = "Here I am! " + '&#x1F4CD;';
       msg.attach = position;
       var svc = this;
@@ -404,12 +422,12 @@ angular.module('leth.services')
       var payload = web3.fromUtf8(JSON.stringify(msg));
       var message = svc.wrap(payload);
       
-      svc.pushChat(msg,payload);
+      svc.pushChat(msg,hashMsg);
 
       web3.shh.post(message, function(err,res){
         if(err){
             chats.filter(function (c) {
-              if(c.hash === payload){
+              if(c.hash === hashMsg){
                 c.error=true;
               }
             }); 
@@ -418,11 +436,15 @@ angular.module('leth.services')
     },
     sendCryptedPosition: function (toAddr, position) {
       var msg = this.envelop('geolocation');
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
+
       msg.text = "Here I am! " + '&#x1F4CD;';
       msg.attach = position;
       msg.to = [toAddr,AppService.account()];
       var svc = this;
     
+      svc.pushChatDM(msg,hashMsg);
+
       var toKey = Friends.get(toAddr).idkey;
 
       lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
@@ -433,12 +455,10 @@ angular.module('leth.services')
         var payload = web3.fromUtf8(JSON.stringify(encMsg));
         var message = svc.wrap(payload);
   
-        svc.pushChatDM(msg,payload);
-
         web3.shh.post(message, function(err,res){
           if(err){
             chats.filter(function (c) {
-              if(c.hash === payload){
+              if(c.hash === hashMsg){
                 c.error=true;
               }
             }); 
