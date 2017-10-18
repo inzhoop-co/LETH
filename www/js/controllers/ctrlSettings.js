@@ -1,6 +1,6 @@
 angular.module('leth.controllers')
 .controller('SettingsCtrl', function ($scope, $interval, $ionicModal, $ionicLoading, $ionicListDelegate, $ionicPopup, $timeout,$cordovaEmailComposer, $ionicActionSheet, $cordovaFile, $http, 
-                                      Geolocation, $translate, tmhDynamicLocale, availableLanguages, AppService, ExchangeService, Chat, PasswordPopup) {    
+                                      $cordovaGeolocation,$translate, tmhDynamicLocale, availableLanguages, AppService, ExchangeService, Chat, PasswordPopup) {    
 
   $scope.hostsList= JSON.parse(localStorage.HostsList);
   $scope.pin = { checked: (localStorage.PinOn=="true") };
@@ -53,7 +53,7 @@ angular.module('leth.controllers')
     $scope.geo = { checked: value};
     if(value){   
       if (AppService.isPlatformReady()){
-        Geolocation
+        $cordovaGeolocation
           .getCurrentPosition()
             .then(function (position) {
               console.log(position);

@@ -4,7 +4,7 @@
 		{
 			"Name": "Lab",
 			"Description": "Issue and deploy your Dappleth",
-			"List":["1","2"]
+			"List":["dev","1","2"]
 		},
 		{
 			"Name": "Generic",
@@ -28,6 +28,28 @@
 		}
 	],
 	"dappleths":[
+		{
+			"GUID": "dev",
+			"Name" : "XLabY",
+			"Company" : "hacktar",
+			"Url" :{
+				"Install" : "index.html",
+				"Template" : "index.html",
+				"Script" : "index.js"
+			},
+			"Contracts" :[
+				{"Address":"", "ABI": [] }				
+			],
+			"Logo" :{ 
+				"Full":"logo.png",
+				"Mini":"mini.png",
+				"Banner":"logo.png"
+			},
+			"Descriptions" : {
+				"Title": "Lab space",
+				"Abstract": "XYZ"
+			}
+		},
 		{
 			"GUID": "1",
 			"Name" : "Greeting",

@@ -2,10 +2,13 @@ angular.module('leth.services')
 .service('DappService', function ($rootScope, $http, $q, $timeout, 
                                 $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSideMenuDelegate, 
                                 $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicActionSheet,
-                                $cordovaBarcodeScanner,
+                                $cordovaBarcodeScanner, $cordovaGeolocation,
                                 StoreEndpoint, AppService, Chat, ENSService, ExchangeService, 
-                                Friends, nfcService, SwarmService, Geolocation) {
+                                Friends, nfcService, SwarmService, BEService) {
   return{
+    contractNew: function(params, abi, datacode, gasLimit, fee){
+      return AppService.contractNew(params, abi, datacode, gasLimit, fee);
+    },
     address: function(){
       return AppService.account();
     },
