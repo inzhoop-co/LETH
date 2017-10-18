@@ -87,23 +87,6 @@ function run(core) {
 
   // Todo: Popoliamo manualmente functions e data. Trovare un modo per popolare automaticamente le variabili functions e data.
   var functions = {
-    greet: function greet(name) {
-      $SERVICE.popupConfirm("Popup Test").then(function (res) {
-        // Call Contracts Methods
-        CONTRACT.greet(function (err, res) {
-          if (err) {
-            $SERVICE.popupAlert("ERROR", err);
-            $SCOPE.greeting = err.message;
-          }
-          if (res) {
-            $SCOPE.greeting = res;
-            $SCOPE.$digest();
-          }
-        });
-      }, function (err) {
-        console.log(err);
-      });
-    },
     showDetails: function showDetails(idEvent, event) {
       event.currentTarget.classList.add('opened');
       document.querySelector('.eventscontainer').classList.add('hasOpenedEvent');
@@ -123,7 +106,7 @@ function run(core) {
       $SCOPE.$broadcast('scroll.refreshComplete');
     }
   };
-  var data = {
+  var data_static = {
     events: [{
       id: "12",
       name: "Evento x",
@@ -164,6 +147,44 @@ function run(core) {
 
     //RETRIEVE THE CONTRACT
     CONTRACT = web3.eth.contract(DAPP.Contracts[0].ABI).at(DAPP.Contracts[0].Address);
+
+
+    //TEST SOME CALL
+    CONTRACT.name(function (err, res) {
+      console.log("name: " + res);
+    });
+    CONTRACT.ended(function (err, res) {
+      console.log("ended: " + res);
+    });
+    CONTRACT.registered(function (err, res) {
+      console.log("registered: " + res);
+    });
+    CONTRACT.endedAt(function (err, res) {
+      console.log("endedAt: " + res);
+    });
+    CONTRACT.limitOfParticipants(function (err, res) {
+      console.log("limitOfParticipants: " + res);
+    });
+  
+    var data = {
+      events: []
+    };
+
+    for(var i=0; i< DAPP.Contracts.length; i++){
+      var c = web3.eth.contract(DAPP.Contracts[i].ABI).at(DAPP.Contracts[i].Address);
+
+      data.events.push({
+        id: DAPP.Contracts[i].Address,
+        name: c.name(),
+        description: "the best event x",
+        status: { id: 0 },
+        position: { location: "Auditorium", city: "London", lat: "", long: "" },
+        date: "10/11/2017",
+        hour: "9:00",
+        users: "1",
+        assets: { banner: "https://ethereum.org/images/assets/1900/Ethereum-homestead-background-38.jpg", logo: "" }
+      })
+    }  
 
     if (angular !== undefined) {
       angular.extend($SCOPE, functions);

@@ -56,7 +56,7 @@ angular.module('leth.controllers', [])
   }
 
   $scope.deppoi = function(){
-    var _name = "TestEvent" ;
+    var _name = "Devcon3" ;
     var _deposit = 1 ;
     var _limitOfParticipants = 3 ;
     var _coolingPeriod = 1 ;
