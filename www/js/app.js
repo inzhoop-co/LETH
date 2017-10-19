@@ -12,8 +12,8 @@ var app = angular.module('leth', [
     template: 'Loading...'
   })
   .constant('StoreEndpoint', {
-    url: 'repository'
-    //url: StorePath
+    //url: 'repository'
+    url: StorePath
   })
   .constant('availableLanguages', [
               {'Language':'English', 'ISO':'en-GB'},
@@ -143,7 +143,7 @@ var app = angular.module('leth', [
         $ionicLoading.hide()
       })
       */
-      
+
       $window.addEventListener('LaunchUrl', function(event) {
         // gets page name from url
         var page =/.*:[/]{2}([^?]*)[?]?(.*)/.exec(event.detail.url)[1];
@@ -198,13 +198,86 @@ var app = angular.module('leth', [
             templateUrl: 'templates/login.html'          
           }
         }
+      })
+      .state('tab.dappleths', {
+        url: '/dappleths',
+        views: {
+          'dappleths': {
+            templateUrl: 'templates/dappleths.html',
+            controller: "DapplethsCtrl"
+          }
+        }
       }) 
+      .state('tab.dappleth-run', {
+        cache: false,
+        url: '/dappleth-run/:Id',
+        views: {
+          'dappleths': {
+            templateUrl: 'templates/dappleth-run.html',
+            controller: "DapplethRunCtrl"
+          }
+        }
+      })
+      .state('tab.chats', {
+        url: '/chats',
+        views: {
+          'chats': {
+            templateUrl: 'templates/chats.html',
+            controller: 'ChatsCtrl'
+          }
+        }
+      })
+      .state('tab.friends', {
+        url: '/friends',
+        views: {
+          'friends': {
+            templateUrl: 'templates/friends.html',
+            controller: 'FriendsCtrl'
+          }
+        }
+      })
+      .state('tab.friend', {
+        url: '/friends/:Friend',
+        views: {
+          'friends': {
+            templateUrl: 'templates/friend-detail.html',
+            controller: 'FriendCtrl'
+          }
+        }
+      })
+      .state('tab.transactions', {
+        url: '/transactions/:addr',
+        views: {
+          'friends': {
+            templateUrl: 'templates/transactions.html',
+            controller: 'TransactionCtrl'
+          }
+        }
+      })     
       .state('tab.wallet', {
         url: '/wallet/:addr',
         views: {
           'wallet': {
             templateUrl: 'templates/wallet.html',
             controller: 'WalletCtrl'
+          }
+        }
+      })
+      .state('tab.transall', {
+        url: '/transactions/:addr',
+        views: {
+          'wallet': {
+            templateUrl: 'templates/transactions.html',
+            controller: 'TransactionCtrl'
+          }
+        }
+      })
+      .state('tab.address', {
+        url: '/address',
+        views: {
+          'address': {
+            templateUrl: 'templates/address.html',
+            controller: 'AddressCtrl'
           }
         }
       })
@@ -261,80 +334,7 @@ var app = angular.module('leth', [
             controller: 'SettingsCtrl'
           }
         }
-      })
-      .state('tab.transactions', {
-        url: '/transactions/:addr',
-        views: {
-          'friends': {
-            templateUrl: 'templates/transactions.html',
-            controller: 'TransactionCtrl'
-          }
-        }
-      })
-      .state('tab.transall', {
-        url: '/transactions/:addr',
-        views: {
-          'wallet': {
-            templateUrl: 'templates/transactions.html',
-            controller: 'TransactionCtrl'
-          }
-        }
-      })      
-      .state('tab.dappleths', {
-        url: '/dappleths',
-        views: {
-          'dappleths': {
-            templateUrl: 'templates/dappleths.html',
-            controller: "DapplethsCtrl"
-          }
-        }
-      }) 
-      .state('tab.dappleth-run', {
-        cache: false,
-        url: '/dappleth-run/:Id',
-        views: {
-          'dappleths': {
-            templateUrl: 'templates/dappleth-run.html',
-            controller: "DapplethRunCtrl"
-          }
-        }
-      })     
-      .state('tab.address', {
-        url: '/address',
-        views: {
-          'address': {
-            templateUrl: 'templates/address.html',
-            controller: 'AddressCtrl'
-          }
-        }
-      })
-      .state('tab.friends', {
-        url: '/friends',
-        views: {
-          'friends': {
-            templateUrl: 'templates/friends.html',
-            controller: 'FriendsCtrl'
-          }
-        }
-      })
-      .state('tab.chats', {
-        url: '/chats',
-        views: {
-          'chats': {
-            templateUrl: 'templates/chats.html',
-            controller: 'ChatsCtrl'
-          }
-        }
-      })
-      .state('tab.friend', {
-        url: '/friends/:Friend',
-        views: {
-          'friends': {
-            templateUrl: 'templates/friend-detail.html',
-            controller: 'FriendCtrl'
-          }
-        }
-      })
+      })  
       ;
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/tab');

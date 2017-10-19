@@ -5,10 +5,10 @@ angular.module('leth.services', [])
       $window.localStorage[guid + "_" + key] = JSON.stringify(data);
     },
     clearData: function(guid,key){
-      $window.localStorage[guid + "_" + key] = {};
+      $window.localStorage[guid + "_" + key] = '';
     },
     getKey: function (guid,key) {
-      return $window.localStorage[guid + "_" + key];
+      return JSON.parse($window.localStorage[guid + "_" + key]);
     },
     removeKey: function(guid,key){
       $window.localStorage.removeItem(guid + "_" + key);
@@ -330,12 +330,9 @@ angular.module('leth.services', [])
               q.reject(err);
             else{
               if(contract.address){
-                  var result = new Array;
-                  result.push(contract);
-                  console.log(contract.address);
-                  q.resolve(result);
+                q.resolve(contract.address);
               }else{
-                console.log(contract.transactionHash);
+                q.notify(contract.transactionHash);
               }
             }
           }

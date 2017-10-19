@@ -6,6 +6,18 @@ angular.module('leth.services')
                                 StoreEndpoint, AppService, Chat, ENSService, ExchangeService, 
                                 Friends, nfcService, SwarmService, BEService) {
   return{
+    storeData: function(GUID,key,value){
+      BEService.storeData(GUID,key,value);
+    },
+    clearData: function(GUID,key){
+      BEService.clearData(GUID,key);
+    },
+    getKey: function (GUID,key) {
+      return BEService.getKey(GUID,key);
+    },
+    removeKey: function(GUID,key){
+      BEService.removeKey(GUID,key);
+    },
     contractNew: function(params, abi, datacode, gasLimit, fee){
       return AppService.contractNew(params, abi, datacode, gasLimit, fee);
     },

@@ -1,51 +1,60 @@
 angular.module('leth.controllers')
-  .controller('TransactionCtrl', function ($scope, $stateParams, $ionicPopup, $ionicListDelegate, Transactions) {
-    $scope.isFromTo = function(item) {
-        if($stateParams.addr!="")
-          return (item.to == $stateParams.addr || item.from == $stateParams.addr);
-        return item;
-    }
+.controller('TransactionCtrl', function ($scope, $ionicHistory, $state, $stateParams, $ionicPopup, $ionicListDelegate, Transactions) {
+  
+  /*
+  var backView = $ionicHistory.backView().url;
 
-   $scope.checkStatus = function(t){
-      web3.eth.getTransaction(t.id, function(err,res){
-        if(res){
-          t.block = res.blockNumber;
-          Transactions.upd(t);
-          $scope.transactions = Transactions.all();
-          $scope.$digest(); 
-        }
-      });
+  $scope.goBack = function(){
+    $location.path(backView);
+  }
+  */
 
-      $ionicListDelegate.closeOptionButtons();
-   }
+  $scope.isFromTo = function(item) {
+      if($stateParams.addr!="")
+        return (item.to == $stateParams.addr || item.from == $stateParams.addr);
+      return item;
+  }
 
-    $scope.deleteTransaction = function(t){
-      var confirmPopup = $ionicPopup.confirm({
-        title: 'Delete Transaction',
-        template: 'Are you sure you want to delete this transaction?'
-      });
+ $scope.checkStatus = function(t){
+    web3.eth.getTransaction(t.id, function(err,res){
+      if(res){
+        t.block = res.blockNumber;
+        Transactions.upd(t);
+        $scope.transactions = Transactions.all();
+        $scope.$digest(); 
+      }
+    });
 
-      confirmPopup.then(function(res) {
-       if(res) {
-          Transactions.del(t);
-       }
+    $ionicListDelegate.closeOptionButtons();
+ }
 
-       $ionicListDelegate.closeOptionButtons();
-     });
-    }
+  $scope.deleteTransaction = function(t){
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Delete Transaction',
+      template: 'Are you sure you want to delete this transaction?'
+    });
 
-    $scope.deleteAllTransactions = function(){
-      var confirmPopup = $ionicPopup.confirm({
-        title: 'Delete Transactions',
-        template: 'Are you sure you want to delete all transactions?'
-      });
+    confirmPopup.then(function(res) {
+     if(res) {
+        Transactions.del(t);
+     }
 
-      confirmPopup.then(function(res) {
-       if(res) {
-          Transactions.delAll();
-          $scope.transactions = Transactions.all();
-       }
-     });
-    }
+     $ionicListDelegate.closeOptionButtons();
+   });
+  }
 
-  })
+  $scope.deleteAllTransactions = function(){
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Delete Transactions',
+      template: 'Are you sure you want to delete all transactions?'
+    });
+
+    confirmPopup.then(function(res) {
+     if(res) {
+        Transactions.delAll();
+        $scope.transactions = Transactions.all();
+     }
+   });
+  }
+
+})
