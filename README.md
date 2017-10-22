@@ -16,16 +16,16 @@ With LETH you could:
 - Send / Receive ETH
 - Send / Receive TOKENS
 - List your transactions
-- Share Address via SMS, Email or Whisper (Shh)
+- Share Address via SMS, Email or Whisper v5 (Shh)
 - Share your geolocation
 - Request payments via SMS, Email or Whisper (Shh)
 - Send messages / images to friends and community using Whisper protocol in unpersisted chat
 - Send private unpersisted crypted messages to friends
-- Backup / Restore wallet or seed
+- Backup / Restore wallet using Mnemonic passphrase
 - Protect access with TouchID / PIN code
 - Currency convertion value via Kraken API
 - Add Custom Token and Share it with friends
-- Run DAppLeth
+- Run DAppLeth (Decentralized external dapps embedded at runtime)
 
 # Beta Testers
 Become a BETA tester, install the App and help the community to grow up.
@@ -59,7 +59,7 @@ Test on browser in localhost:8100
 ionic serve
 ```
 
-# Screenshoots
+# Screenshots
 <img src="https://www.inzhoop.com/img/screenshots/IMG_0010.PNG" width="30%">  <img src="https://www.inzhoop.com/img/screenshots/IMG_0011.PNG" width="30%">  <img src="https://www.inzhoop.com/img/screenshots/IMG_0012.PNG" width="30%">  
 
 <img src="https://www.inzhoop.com/img/screenshots/IMG_0013.PNG" width="30%">  <img src="https://www.inzhoop.com/img/screenshots/IMG_0014.PNG" width="30%">  <img src="https://www.inzhoop.com/img/screenshots/IMG_0015.PNG" width="30%">
