@@ -17,6 +17,9 @@
       <button class="{{filterStoreApps}}" ng-click="readDappsList()">ÐAppleths</button>
     </div>
 
+    <div class="item-image">
+      <img src="img/offline.png" width="50%" ng-if="!isOnline"/>
+    </div>
     <!--div class="categoryBox" ng-if="isDapp">
       <div class="categoryHead">Factory - self deployable dapps
         <span class="item-note">#1</span>
@@ -34,7 +37,7 @@
     </div-->
     <div class="text-center dark" ng-show="!listApps.length" ng-if="isDapp"><p>No Dappleth available :-(</p></div>
 
-    <div class="categoryBox" ng-repeat="cat in listCategory" ng-if="isDapp && cat.List.length">
+    <div class="categoryBox" ng-repeat="cat in listCategory" ng-if="isDapp && cat.List.length && isOnline">
 
       <div class="categoryHead">{{cat.Name}} 
         <span class="item-note">#{{cat.List.length}}</span>
@@ -50,7 +53,7 @@
         </li>
       </ul>
     </div>
-    <ion-list ng-show="isCoin">
+    <ion-list ng-show="isCoin" ng-if="isOnline">
       <ion-item class="item item-avatar-left item-icon-right"  ng-repeat="coin in listTokens track by $index" type="item-text-wrap" on-hold="showCustomTokenInfo(coin)">
           <img ng-src="{{coin.Logo}}"/>
             <h2>{{coin.Name}}</h2>
@@ -79,16 +82,6 @@
             <p>{{'ADD_CUSTOM_TOKEN' | translate}}</p>
             <i class="icon ion-ios-plus-outline positive"></i>
       </ion-item>
-      <!--ion-item class="item item-avatar-left item-icon-right" ng-click="deppoi()">
-            <img ng-src="img/dappbuilder.png"/>
-            <h2>Custom Dappleth to Greet</h2>
-            <p>Deploy your custom greet</p>
-            <i class="icon ion-ios-plus-outline positive"></i>
-            <ion-option-button style="padding-top: 40px; font-size: 12px;" class="button-dark" ng-click="tesdeploy()">
-              <i class="icon ion-play"></i>
-              <span>Test</span>
-            </ion-option-button>
-      </ion-item-->
     </ion-list>  
     </ion-content>
 </ion-view>

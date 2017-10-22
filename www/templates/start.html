@@ -1,0 +1,126 @@
+<ion-modal-view>
+  <ion-content padding="true">
+    <div class="stepContainer" ng-switch="step">
+    	<div class="step startPage" ng-switch-when="0">
+		    <div class="item-image">
+		    	<img src="img/logo.png" />
+			</div>
+			<div class="item-image">
+				<img src="img/offline.png" width="50%" ng-if="!isOnline"/>
+			</div>			
+			<div class="list" ng-if="isOnline">
+				<button class="button button-block button-calm" ng-click="startNew()">{{'NEW_WALLET' | translate}}</button>
+				<button class="button button-block button-calm" ng-click="goStep(2)">{{'IMPORT_WALLET' | translate}}</button>
+			</div>
+		</div>
+
+    	<div class="step importPage" ng-switch-when="1">
+			<div class="bar bar-header bar-assertive">
+    			<h1 class="title">Create a new wallet</h1>
+    		</div>
+			<div class="card">
+		      <div class="item">
+		        <i class="badge badge-balanced">- {{shakeCounter}}</i>
+		        <h2>Shake thrice to start!</h2>
+		      </div>
+		    </div>
+		    <div class="item-image">
+		        <img class="{{classShake}}" ng-src="img/shake{{shakeCounter}}.png"/>
+		    </div>
+		    <button class="button button-block button-calm " ng-click="goMnemonic('')">skip <i class="ion-ios-fastforward"></i></button>
+			<div class="bar bar-footer bar-assertive">
+				<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(0)" ng-show="step > 0"> Previous</a>
+			</div>
+		</div>
+
+    	<div class="step importPage" ng-switch-when="2">
+    		<div class="bar bar-header bar-assertive">
+    			<h1 class="title">Restore a wallet</h1>
+    		</div>
+		    <p class="padding">Insert seed passphrase from backup to restore an existing wallet</p>
+		    <div class="list card">
+		      <div class="item item-input">
+		        <textarea ng-model="randomSeed" rows="5" placeholder="type mnemonic 12 words"></textarea>
+		      </div>
+		    </div> 
+	      	<button class="button button-block button-calm" ng-show="isValidMnemonic(randomSeed)"  ng-click="goStep(3)">Next <i class="icon ion-chevron-right"></i></button>
+
+			<div class="bar bar-footer bar-assertive">
+				<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(0)" ng-show="step > 0"> Back</a>
+			</div>
+		</div>
+
+    	<div class="step importPage" ng-switch-when="3">
+    		<div class="bar bar-header bar-assertive">
+    			<h1 class="title">Secure wallet</h1>
+    		</div>
+			<div class="list">
+		      <div class="card button-rigth">
+		        <div class="item item-text-wrap">
+		          <p>Your mnemonic keystore seed is</p><br/>
+		          <p><b>{{randomSeed}}</b></p><br/>
+		          <p class="subdued">Please write it down on paper, you will need it to restore your keystore. Do not let anyone see this seed or they can take your Ether.</p>          
+		        </div>
+		      </div>
+		    </div>
+		    <button class="button button-block button-calm" ng-click="goStep(4)">Next <i class="icon ion-chevron-right"></i></button>
+		    <div class="bar bar-footer bar-assertive">
+				<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(2)" ng-show="step > 0"> Back</a>
+			</div>
+		</div>
+
+		<div class="step importPage" ng-switch-when="4">
+			<div class="bar bar-header bar-assertive">
+    			<h1 class="title">Verify Mnemonic</h1>
+    		</div>
+    		<p class="padding">Select the words in order to compose mnemonic</p>
+			<span class="padding">
+				<button ng-repeat="w in mnemonicWords | orderBy:'text'" ng-model="w.index" class="button button-positive button-outline" ng-hide="inVerified(w)" ng-click="verifyWord(w)">{{w.text}}</button>
+			</span>
+    		<p class="padding" ng-show="verifiedWords.length">12 ordered words:</p>
+			<tags-input ng-model="verifiedWords" ng-show="verifiedWords.length" placeholder="click on the words" key-property="index" display-property="text" ></tags-input>
+
+
+			<button class="button button-block button-calm" ng-show="isVerifiedMnemonic()" ng-click="goStep(5)">Next <i class="icon ion-chevron-right"></i></button>
+		    <div class="bar bar-footer bar-assertive">
+				<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(2)" ng-show="step > 0"> Back</a>
+			</div>
+		</div>
+
+		<div class="step importPage" ng-switch-when="5">
+			<div class="bar bar-header bar-assertive">
+    			<h1 class="title">Encrypt Wallet</h1>
+    		</div>
+			<p class="padding">Choose a strong password (8 to 20 digit with 1 capital and 1 number at least) to encrypt your wallet.</p>
+			<div class="list">
+        	<form name="login" ng-submit="Login(randomSeed,password,code)">
+				<label class="item item-input">
+				    <span class="input-label">Password</span>
+				    <input type="password" ng-model="password" name="password" required placeholder="Password" minlength="8" maxlength="20" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required>
+				</label>
+
+				<label class="item item-input" ng-show="password">
+				    <span class="input-label">Confirm</span>
+				    <input type="password" ng-model="confirmPassword" name="confirmPassword" placeholder="Confirm" minlength="8" maxlength="20" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required>
+				</label>
+
+				<label class="item item-input" ng-show="confirmPassword">
+				    <span class="input-label">PIN Code</span>
+				    <input type="password" ng-model="code" name="code" placeholder="PIN" pattern="[0-9]*" maxlength="4" minlength="4" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required>
+				</label>
+				<button ng-show="login.$valid && password==confirmPassword" class="button button-block button-calm" type="submit">
+		           <i class="icon ion-flag" ng-hide="!login.$valid || confirmPassword!=password"></i>&nbsp;Start
+		        </button>
+		        <ul class="assertive">
+		            <li ng-show="login.password.$dirty && login.password.$invalid ">* Password 8 to 20 digit (1 capital and 1 number at least)</li>
+		            <li ng-show="login.confirmPassword.$dirty && password!=confirmPassword">* Password mismatch</li>
+		            <li ng-show="login.code.$dirty && login.code.$invalid">* Code not valid</li>
+		        </ul>
+		    </form>
+		</div>
+		<div class="bar bar-footer bar-assertive">	
+			<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(4)" ng-show="step > 0"> Back</a>
+		</div>
+	</div>
+  </ion-content>
+</ion-modal-view>

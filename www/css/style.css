@@ -562,6 +562,42 @@ bottom: 150;
 
 }
 
+/* 
+  ==========================================================================
+   Step Start styles
+  ========================================================================== 
+*/
+
+.stepContainer {
+  height: 100%;
+}
+
+.step {
+  height: 100%;
+  padding: 20px;
+}
+
+.startPage {
+  background-color: #ef473a !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.importPage {
+  background-color: #efeff4 !important;
+  display: flex;
+  flex-direction: column;
+  padding: 60px 20px;
+}
+
+/* 
+  ==========================================================================
+   Other styles
+  ========================================================================== 
+*/
+
 .blinking {
   -webkit-animation: 1s blink step-end infinite;
   -moz-animation: 1s blink step-end infinite;

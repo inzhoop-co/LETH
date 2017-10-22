@@ -5,14 +5,38 @@ angular.module('leth.controllers')
     $scope.typeNumber = 12;
     $scope.inputMode = '';
     $scope.image = true;
-    $scope.qrcodeString = AppService.account() + "#" + AppService.idkey();
-    
+    $scope.filterWalletAddr = 'button button-small button-outline button-positive';
+    $scope.filterShhAddr = 'button button-small button-outline button-positive';
+      
+    $scope.$on('$ionicView.afterEnter', function() {
+       $scope.walletAddress();
+    })
+
     $scope.listUnit = [
       {multiplier: "1.0e18", unitName: "Ether"},
       {multiplier: "1.0e15", unitName: "Finney"},
       {multiplier: "1", unitName: "Wei"}
     ];
 
+    $scope.walletAddress = function(){      
+      $scope.filterWalletAddr = 'button button-small button button-positive';
+      $scope.filterShhAddr = 'button button-small button-outline button-positive';
+      $scope.isWalletAddress = true;
+      $scope.isShhAddress = false;
+      $scope.profileAddress = AppService.account();
+      $scope.qrcodeString = $scope.profileAddress;
+    }
+
+    $scope.shhAddress = function(){
+      $scope.filterWalletAddr = 'button button-small button-outline button-positive';
+      $scope.filterShhAddr = 'button button-small button button-positive';
+      $scope.isWalletAddress = false;
+      $scope.isShhAddress = true;
+      $scope.profileAddress = AppService.idkey();
+      $scope.qrcodeString = AppService.account() + "#" + AppService.idkey();
+
+    }
+    
     $scope.onAmountChange = function(amount){
       if($scope.amountPayment == "")
         $scope.qrcodeString = AppService.account() + "#" + AppService.idkey();
@@ -32,7 +56,12 @@ angular.module('leth.controllers')
     };
 
     $scope.shareBySms = function() {
-      var content = "My address is ethereum://" + $scope.qrcodeString ;
+      var content;
+      if($scope.isWalletAddress)
+        content = "My wallet address is leth://" + $scope.qrcodeString ;
+      if($scope.isShhAddress)
+        content = "My identity keys for Leth are leth://" + AppService.account() + "#" + AppService.idkey() ;
+      
       var phonenumber="";
       if (AppService.isPlatformReady()){
         $cordovaContacts.pickContact().then(function (contactPicked) {
@@ -60,19 +89,39 @@ angular.module('leth.controllers')
       };      
     }
 
+    $scope.shareByShh = function(amount){
+      if($scope.isWalletAddress)
+        $scope.openFriendsModal(amount);
+     if($scope.isShhAddress)
+        $scope.openFriendsModal('contact');       
+    }
+
     $scope.shareByEmail = function(){
+      var mailSubj = '';
+      var mailBody = '';
+
+      if($scope.isWalletAddress){
+        mailSubj = 'Payment Request';
+        mailBody = '<h3>Please send me ETH to my Wallet Address:</h3> <p><a href="leth://' + $scope.qrcodeString + '"> click to pay from Leth</a></p>';
+      }
+
+      if($scope.isShhAddress){
+        mailSubj = 'Add me to Friends';
+        mailBody = '<h3>Please add me to your Leth friends:</h3> <p><a href="leth://' + $scope.qrcodeString + '"> click to add on Leth</a></p>';
+      }
+
       var imgQrcode = angular.element(document.querySelector('qr > img')).attr('ng-src');
       //I need to remove header of bitestream and replace with the new one
       var allegato = 'base64:qr.png//'+imgQrcode.replace('data:image/png;base64,','');
-     
+
       if (AppService.isPlatformReady()){
          $cordovaEmailComposer.isAvailable().then(function() {
         
           var emailOpts = {
             to: [''],
             attachments:[allegato],
-            subject: 'Please Pay me',
-            body: '<h3>Please send me ETH to this Wallet Address:</h3> <p><a href="ethereum://' + $scope.qrcodeString + '">ethereum://' + $scope.qrcodeString + '</a></p>',
+            subject: mailSubj,
+            body: mailBody,
             isHtml: true
           };
 

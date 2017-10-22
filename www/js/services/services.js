@@ -233,7 +233,6 @@ angular.module('leth.services', [])
       return result;
     },
     balance: function (unit) {
-      //to deferr $q
       var result;
       try {
         result = parseFloat(web3.eth.getBalance(this.account()))/unit;

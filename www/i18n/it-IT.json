@@ -46,5 +46,7 @@
   "PHOTO":"Foto",
   "POSITION":"Posizione",
   "CONTACT":"Contatto",
-  "CHOOSETOSHARE": "Scegli di condividere"
+  "CHOOSETOSHARE": "Scegli di condividere",
+  "NEW_WALLET": "Crea Wallet",
+  "IMPORT_WALLET": "Importa Wallet"
 }

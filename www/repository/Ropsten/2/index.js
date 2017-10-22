@@ -15,6 +15,10 @@ var dappleth = (function(){
 		_start();		
 	}
 
+	var _exit = function(){
+        //
+    }
+
 	var _start = function() {
 		$scope.slideIndex=0;
 		$scope.Dapp.read = true;
@@ -59,7 +63,8 @@ var dappleth = (function(){
 	}
 	
 	return {
-		run: _init
+		run: _init,
+		exit: _exit
 	};
 
 })();

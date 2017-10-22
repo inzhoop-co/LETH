@@ -1,5 +1,5 @@
 angular.module('leth.controllers')  
-  .controller('DapplethsCtrl', function ($scope, $state, angularLoad, $ionicLoading, 
+  .controller('DapplethsCtrl', function ($rootScope, $scope, $state, angularLoad, $ionicLoading, 
                                           $ionicListDelegate, $ionicPopup, $timeout, $templateRequest, 
                                           $sce, $compile, $ionicSlideBoxDelegate, $http, 
                                           $cordovaInAppBrowser, StoreEndpoint, AppService) {
@@ -56,7 +56,6 @@ angular.module('leth.controllers')
     var id = $stateParams.Id;
     $scope.Dapp=[];
     $scope.Dapp.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
-    //$scope.Dapp.activeApp.Logo.Full = $scope.getDappPath($scope.Dapp.activeApp.GUID,$scope.Dapp.activeApp.Logo.Full);
     $scope.Dapp.activeApp.Path = $scope.getDappPath($scope.Dapp.activeApp.GUID,"");    
     $scope.Dapp.activeApp.Url.Install = $scope.getDappPath($scope.Dapp.activeApp.GUID,$scope.Dapp.activeApp.Url.Install);
     $scope.Dapp.activeApp.Url.Script = $scope.getDappPath($scope.Dapp.activeApp.GUID,$scope.Dapp.activeApp.Url.Script);
@@ -65,7 +64,6 @@ angular.module('leth.controllers')
       $ionicHistory.clearCache();
     });
     
-
     $scope.$on("$ionicView.afterEnter", function () {    
         angularLoad.loadScript($scope.Dapp.activeApp.Url.Script).then(function(result) {
             dappleth.run({scope: $scope, service: DappService});
@@ -77,6 +75,8 @@ angular.module('leth.controllers')
 
     $scope.$on("$ionicView.beforeLeave", function () {
       $ionicHistory.clearCache();
+
+      dappleth.exit();
 
       angularLoad.resetScript($scope.Dapp.activeApp.Url.Script, "js");
       removejscssfile($scope.Dapp.activeApp.Url.Script, "js"); 

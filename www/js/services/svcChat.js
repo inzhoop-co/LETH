@@ -13,7 +13,8 @@ angular.module('leth.services')
     },
     isEnabled: function(){
       try{
-        web3.shh.version();
+        if(web3.provider)
+         web3.shh.version();
         return true;
       }
       catch(e){
@@ -408,8 +409,32 @@ angular.module('leth.services')
             }); 
           }
       }); 
-
+    },
+    sendCryptedContact: function (toAddr,toKey) {
+      var msg = this.envelop('contact');
+      var hashMsg = web3.fromUtf8(JSON.stringify(msg));
+      msg.to = [toAddr,AppService.account()];
+      msg.text = 'My addresses ' + '&#x1F464;';
+      var svc = this;
       
+      svc.pushChatDM(msg, hashMsg);
+
+      lightwallet.keystore.deriveKeyFromPassword(JSON.parse(localStorage.AppCode).code, function (err, pwDerivedKey) {
+        var encMsg = angular.copy(msg);
+        encMsg.text = lightwallet.encryption.multiEncryptString(local_keystore,pwDerivedKey,msg.text,AppService.idkey(),[toKey.replace("0x",""),AppService.idkey()],hdPath);
+        var payload = web3.fromUtf8(JSON.stringify(encMsg));        
+        var message = svc.wrap(payload);
+
+        web3.shh.post(message, function(err,res){
+          if(!res){
+            chatsDM.filter(function (c) {
+              if(c.hash === hashMsg){
+                c.error = true;
+              }
+            }); 
+          }
+        }); 
+      });
     },      
     sendPosition: function (toAddr, position) {
       var msg = this.envelop('geolocation');
@@ -613,7 +638,9 @@ angular.module('leth.services')
     },
     unlistenMessage: function(){
       if(this.isEnabled() && filter.filterId != null)
-        filter.stopWatching();
+        filter.stopWatching(function(err,res){
+          console.log(err,res);
+        });
     },
     flush: function(){
       chats=[];

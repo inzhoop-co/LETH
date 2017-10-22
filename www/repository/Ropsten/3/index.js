@@ -31,6 +31,7 @@ var dappleth = (function(){
         
             game.load.image('bird',  path + 'eth.png');
             game.load.image('pipe', path + 'chain.png');
+            game.load.image('closebutton', path + 'close.png');
             game.load.image('jumpbutton', path + 'jump.png');
 
             // Load the jump sound
@@ -55,8 +56,9 @@ var dappleth = (function(){
             // New anchor position
             this.bird.anchor.setTo(-0.2, 0.5);
 
-            var jumpbutton = game.add.button(game.world.centerX -50, divH -60, 'jumpbutton', this.jump, this, 2, 1, 0);
-          
+            var jumpbutton = game.add.button(game.world.centerX -50, divH -60, 'jumpbutton', this.close, this, 2, 1, 0);
+            var closebutton = game.add.button(divW - 30, 20, 'closebutton', this.close, this, 2, 1, 0);
+            
             var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             spaceKey.onDown.add(this.jump, this); 
             game.input.onDown.add(this.jump, this);
@@ -93,7 +95,9 @@ var dappleth = (function(){
             // Play sound
             this.jumpSound.play();
         },
-
+        close: function(){
+            $service.exit();
+        },
         hitPipe: function() {
             // If the bird has already hit a pipe, we have nothing to do
             if (this.bird.alive == false)
@@ -145,13 +149,18 @@ var dappleth = (function(){
         _start();
     };
 
+    var _exit = function(){
+        game.destroy();
+    }
+    
     var _start = function() {
         game.state.add('main', mainState);
         game.state.start('main');
     };
 
     return {
-        run: _init
+        run: _init,
+        exit: _exit
     };
 
 })();

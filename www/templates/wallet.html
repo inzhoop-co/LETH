@@ -1,7 +1,7 @@
 <ion-view view-title="{{'WALLET_TITLE' | translate}}">
   <ion-content class="has-header scrollBg" overflow-scroll="false" >
     <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
-    <div class="list">
+    <div class="list" ng-if="isOnline">
       <ion-list class="list" can-swipe="true">
       <ion-item class="item item-divider item-avatar-left  item-icon-right item-avatar-right">
         <img ng-src="{{logoCoin}}" ng-click="scrollRefresh()"/>
@@ -47,7 +47,10 @@
           </div>
           <div class="col col-30"></div>    
           <div class="col col-30"></div>   
-        </div>    
+        </div>   
     </div>
+    <div class="item-image">
+      <img src="img/offline.png" width="50%" ng-if="!isOnline"/>
+    </div> 
   </ion-content>
 </ion-view>

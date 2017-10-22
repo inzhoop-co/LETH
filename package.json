@@ -53,13 +53,6 @@
       "id": "cordova-sms-plugin"
     },
     {
-      "id": "cordova-plugin-customurlscheme",
-      "locator": "cordova-plugin-customurlscheme",
-      "variables": {
-        "URL_SCHEME": "ethereum"
-      }
-    },
-    {
       "locator": "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
       "id": "cordova-plugin-actionsheet"
     },
@@ -79,7 +72,15 @@
     "cordova-plugin-camera",
     "cordova-plugin-inappbrowser",
     "cordova-plugin-vibration",
-    "cordova-plugin-geolocation"
+    "cordova-plugin-geolocation",
+    "cordova-plugin-network-information",
+    {
+      "id": "cordova-plugin-customurlscheme",
+      "locator": "cordova-plugin-customurlscheme",
+      "variables": {
+        "URL_SCHEME": "leth"
+      }
+    }
   ],
   "cordovaPlatforms": [
     "android",

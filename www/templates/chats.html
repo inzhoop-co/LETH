@@ -20,10 +20,10 @@
       </div>
     </div>
   </ion-content>  
-  <div class="assertive bar bar-footer bar-stable has-tabs" ng-show="!shhEnabled">
-    <p>Chat not available :-(  Choose a host node with shh enabled</p>
+  <div class="assertive bar bar-footer bar-stable has-tabs" ng-show="!shhEnabled || !isOnline">
+    <p>Chat not available :-(  Check connection and host node!</p>
   </div>
-  <div align-title="left" keyboard-attach class="bar bar-footer bar-stable has-tabs item-input-inset" ng-show="shhEnabled">
+  <div align-title="left" keyboard-attach class="bar bar-footer bar-stable has-tabs item-input-inset" ng-show="shhEnabled && isOnline"">
     <button class="button button-clear button-icon button-positive icon ion-ios-plus-empty" ng-click="shareItems()"></button>
     <label class="item-input-wrapper">
       <input

@@ -12,8 +12,8 @@ var app = angular.module('leth', [
     template: 'Loading...'
   })
   .constant('StoreEndpoint', {
-    //url: 'repository'
-    url: StorePath
+    url: 'repository'
+    //url: StorePath
   })
   .constant('availableLanguages', [
               {'Language':'English', 'ISO':'en-GB'},
@@ -55,7 +55,7 @@ var app = angular.module('leth', [
   }])
   .run(function (renameDirective,$ionicPlatform, $rootScope, $ionicLoading, $ionicScrollDelegate,
                 $lockScreen,$state,$window, $location, availableLanguages, defaultLanguage, 
-                $translate, $locale, $cordovaGlobalization, tmhDynamicLocale ) {
+                $translate, $locale, $cordovaNetwork, $cordovaGlobalization, tmhDynamicLocale ) {
 
     function getSuitableLanguage(language) {
       for (var index = 0; index < availableLanguages.length; index++) {
@@ -133,27 +133,30 @@ var app = angular.module('leth', [
         StatusBar.styleLightContent();
       }
 
-      /*      
-      $rootScope.$on('loading:show', function () {
-        $ionicLoading.show({
-         template: 'Loading...'
-        })
-      })
-      $rootScope.$on('loading:hide', function () {
-        $ionicLoading.hide()
-      })
-      */
-
       $window.addEventListener('LaunchUrl', function(event) {
         // gets page name from url
         var page =/.*:[/]{2}([^?]*)[?]?(.*)/.exec(event.detail.url)[1];
         // redirects to page specified in url
-        if(event.detail.url.split(':')[0] == "ethereum")
+        if(event.detail.url.split(':')[0] == "leth")
           $state.go('tab.wallet', {addr: page});
       }); 
 
+      $rootScope.online = navigator.onLine;
+        $window.addEventListener("offline", function() {
+          $rootScope.$apply(function() {
+            $rootScope.online = false;
+          });
+        }, false);
+
+        $window.addEventListener("online", function() {
+          $rootScope.$apply(function() {
+            $rootScope.online = true;
+          });
+      }, false);
+
       document.addEventListener("deviceready", function () {  
-          $rootScope.deviceready = true;  
+          $rootScope.deviceReady = true;  
+
       }, false);     
 
     });
@@ -173,6 +176,7 @@ var app = angular.module('leth', [
       'suffix': '.json'
     });
     $translateProvider.preferredLanguage(defaultLanguage);
+    $translateProvider.useSanitizeValueStrategy();
   })
   .config(function ($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
     // $ionicConfigProvider.views.maxCache(10);

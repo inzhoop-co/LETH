@@ -7,7 +7,7 @@
       <a class="button button-clear" ng-href="#/tab/transactions/{{friend.addr}}">
         <i class="icon ion-ios-list-outline"></i>
       </a>&nbsp;
-      <a class="button button-clear" ng-href="#/tab/wallet/{{friend.addr}}">
+      <a class="button button-clear" ng-if="isOnline" ng-href="#/tab/wallet/{{friend.addr}}">
         <i class="icon icon-pay"></i>
       </a>
     </ion-nav-buttons>
@@ -35,10 +35,10 @@
     </div>
   </div>
   </ion-content>
-  <div class="assertive bar bar-footer bar-stable" ng-show="!shhEnabled">
-    <p>Chat not available :-(  Choose a host node with shh enabled</p>
-  </div> 
-  <div align-title="left" keyboard-attach class="bar bar-footer bar-stable item-input-inset" ng-show="shhEnabled">
+  <div class="assertive bar bar-footer bar-stable" ng-show="!shhEnabled || !isOnline">
+    <p>Chat not available :-(  Check connection and host node!</p>
+  </div>
+  <div align-title="left" keyboard-attach class="bar bar-footer bar-stable item-input-inset" ng-show="shhEnabled && isOnline">
     <button class="button button-clear button-icon button-positive icon ion-ios-plus-empty" ng-click="shareItems()"></button>
     <label class="item-input-wrapper">
       <input

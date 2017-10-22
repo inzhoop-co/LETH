@@ -51,9 +51,12 @@ angular.module('leth.controllers')
     }
 
     var updateExchange = function(){
+      if(!$scope.isOnline) return;
       if($scope.xCoin){
         ExchangeService.getTicker($scope.xCoin, JSON.parse(localStorage.BaseCurrency).value).then(function(value){
           $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat((value * $scope.balance).toFixed(2)) ;
+        }, function(err){
+          $scope.balanceExc = 0;
         });
       }else{
         $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat((0).toFixed(2)) ;

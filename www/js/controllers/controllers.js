@@ -6,6 +6,23 @@ angular.module('leth.controllers', [])
                                 $cordovaBadge, $cordovaGeolocation, $translate,tmhDynamicLocale,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, $cordovaVibration,
                                 StoreEndpoint, ENSService, AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, nfcService, SwarmService) {
 
+  $scope.step=0;
+  $scope.goStep = function(n){
+    if(n==0){
+      $scope.verifiedWords=[];
+      $scope.mnemonicWords=[];
+      $scope.randomSeed='';
+    }
+
+    $scope.step = n;
+  }
+
+  $scope.$watch('online', function(newStatus) {
+    $scope.isOnline = newStatus; 
+    refresh();
+  });
+
+
   $scope.filterStoreCoins = 'button button-small button-outline button-positive';
   $scope.filterStoreApps = 'button button-small button-outline button-positive';
 
@@ -17,9 +34,13 @@ angular.module('leth.controllers', [])
     else
       $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.decimals);
 
-    ExchangeService.getTicker($scope.xCoin, JSON.parse(localStorage.BaseCurrency).value).then(function(value){
-      $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat(value * $scope.balance).toFixed(2) ;
-    });
+    if($scope.isOnline){
+      ExchangeService.getTicker($scope.xCoin, JSON.parse(localStorage.BaseCurrency).value).then(function(value){
+        $scope.balanceExc = JSON.parse(localStorage.BaseCurrency).symbol + " " + parseFloat(value * $scope.balance).toFixed(2) ;
+      }, function(err){
+        $scope.balanceExc='N/A';
+      });      
+    }
     $scope.account = AppService.account();
     $scope.nick = AppService.idkey();
     $scope.qrcodeString = $scope.account + "/" + $scope.nick ;
@@ -36,6 +57,9 @@ angular.module('leth.controllers', [])
         $scope.readCoinsList(res.name);    
     }, function(err){
         console.log('no Network');
+        $scope.nameNetwork = "unvailable";
+        $scope.classNetwork = "stable";               
+        $scope.badgeNetwork = "badge badge-stable";
     });
 
     $scope.loadFriends();
@@ -193,10 +217,17 @@ angular.module('leth.controllers', [])
   }
 
   $scope.infoSync = function(){
+    var sync = 'none';
+    var blockNumber = 0;
+    if(web3.isConnected()){
+     sync = web3.eth.syncing ? 'progress...' : 'OK';
+     blockNumber = web3.eth.blockNumber;
+    }
+
      var alertPopup = $ionicPopup.alert({
         title: 'Info Sync Node',
-        template: web3.eth.syncing ? 'Sync status: progress...' : 'Sync status: OK' + 
-                  '<br/>BlockNumber: ' + web3.eth.blockNumber + 
+        template: 'Sync status: ' + sync + 
+                  '<br/>BlockNumber: ' + blockNumber + 
                   '<br/>Network: ' + $scope.nameNetwork + 
                   '<br/>Change Network type from Settings'
       });
@@ -236,16 +267,14 @@ angular.module('leth.controllers', [])
       $scope.listTokens=null;
     });
 
-    /*
-    $scope.listTokens = AppService.getLocalCoins($scope.nameNetwork);
-    AppService.getStoreCoins($scope.nameNetwork).then(function(response){
-      angular.merge($scope.listTokens,response);
-    }) 
-    */
   };      
 
-  $scope.shareByChat = function (friend,payment) {
-    Chat.sendCryptedPaymentReq("Please send me " + payment + " eth &#x1F4B8; !", payment, friend.addr,friend.idkey);
+  $scope.shareByChat = function (friend,param) {
+    if(param=='contact')
+      Chat.sendCryptedContact(friend.addr,friend.idkey);
+    else
+      Chat.sendCryptedPaymentReq("Please send me " + param + " eth &#x1F4B8; !", param, friend.addr,friend.idkey);
+  
     $state.go('tab.friend', {Friend: friend.addr});
   };
 
@@ -263,6 +292,7 @@ angular.module('leth.controllers', [])
     }).then(function (modal) {
       codeModal = modal;
       codeModal.show();
+      scanAddr();
     });
   };
   $scope.openChangeCodeModal = function () {
@@ -315,9 +345,8 @@ angular.module('leth.controllers', [])
     });
   };
   $scope.chooseFriend = function (friend) {
-    if($ionicHistory.currentStateName()=="tab.wallet"){
+    if($ionicHistory.currentStateName()=="tab.wallet")
      $scope.addrTo = friend.addr;
-    }
     if($ionicHistory.currentStateName()=="tab.address")
       $scope.shareByChat(friend, $scope.param);
     if($ionicHistory.currentStateName()=="tab.dappleths")
@@ -444,7 +473,7 @@ angular.module('leth.controllers', [])
       "Address" : $scope.token.address,
       "ABI" : $scope.token.abi,
       "Send" : "transfer",
-      "Events" : [{"Transfer":"address indexed from, address indexed to, uint256 value"}],
+      //"Events" : [{"Transfer":"address indexed from, address indexed to, uint256 value"}],
       "Units":[{"multiplier": "1", "unitName": "Token"}],
       "Custom" : true,
       "Installed" : true
@@ -632,8 +661,6 @@ angular.module('leth.controllers', [])
     })
   };
 
-
-
   $scope.scanAddr = function () {
     if (AppService.isPlatformReady()){
      $cordovaBarcodeScanner
@@ -653,6 +680,43 @@ angular.module('leth.controllers', [])
     ionic.Platform.exitApp();
   };
 
+  var seedToList = function(seed){
+    $scope.mnemonicWords=[];
+    var list = seed.split(' ');
+    for(var i=0; i<list.length; i++){
+      $scope.mnemonicWords.push({index: i, text: list[i]});
+    }
+    console.log($scope.mnemonicWords);
+  }
+
+  $scope.isValidMnemonic = function(seed){        
+    if (lightwallet.keystore.isSeedValid(seed)){
+      $scope.randomSeed = seed;
+      seedToList(seed);
+      return true;
+    }else
+      return false;
+  }
+  
+  $scope.verifiedWords=[];
+  $scope.verifyWord = function(word){
+    $scope.verifiedWords.push(word);
+  }
+
+  $scope.inVerified = function(word){
+    var result = false;
+    $scope.verifiedWords.filter(function(w){
+      if(w == word) 
+        result=true;
+    })
+    return result;
+  }
+
+  $scope.isVerifiedMnemonic = function(){
+    var match = angular.equals($scope.verifiedWords,$scope.mnemonicWords);
+    return match;
+  }
+
   $scope.createWallet = function (seed, password, code) { 
     if(!lightwallet.keystore.isSeedValid(seed)){
       var alertPopup = $ionicPopup.alert({
@@ -661,7 +725,8 @@ angular.module('leth.controllers', [])
       });
 
       alertPopup.then(function(res) {
-        createEntropyModal();
+        //createEntropyModal();
+        createStartModal();
       });
     }else{
       var infoPopup = $ionicPopup.alert({
@@ -876,7 +941,9 @@ angular.module('leth.controllers', [])
 
        if($scope.shakeCounter==0){
           $scope.randomString = hashCode($scope.randomString);
-          $scope.goLogin($scope.randomString);
+          //$scope.goLogin($scope.randomString);
+          $scope.goMnemonic($scope.randomString);
+
         }
 
     } else if (measurementsChange.x + measurementsChange.y + measurementsChange.z > $scope.options.deviation/2) {
@@ -901,6 +968,22 @@ angular.module('leth.controllers', [])
       if($scope.watch != undefined)
         $scope.watch.clearWatch(); 
   }); 
+
+  var startModal;
+  var createStartModal = function () {
+    $ionicModal.fromTemplateUrl('templates/start.html', {
+      scope: $scope,
+      animation: 'slide-in-down',
+      backdropClickToClose: false,
+      hardwareBackButtonClose: false
+    }).then(function (modal) {
+      startModal = modal;
+      startModal.show();
+    });
+  };
+  var closeStartModal = function () {
+    startModal.hide();
+  };
 
   var entropyModal;
   var createEntropyModal = function () {
@@ -975,6 +1058,18 @@ angular.module('leth.controllers', [])
     //console.log('Modal is shown!');
   });
 
+  $scope.startNew = function(){
+    startWatching();
+    $scope.goStep(1);
+  }
+  $scope.goMnemonic = function(random){
+    // create keystore and account and store them
+    var extraEntropy = random.toString();
+    $scope.randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
+    seedToList($scope.randomSeed);
+    $scope.goStep(3);
+  }
+
   $scope.goLogin = function(random){
     closeEntropyModal();
     // create keystore and account and store them
@@ -1019,7 +1114,8 @@ angular.module('leth.controllers', [])
 
     }else{
       $scope.createWallet(seed, pw, cod);
-      $scope.closeLoginModal();      
+      //$scope.closeLoginModal();   
+      closeStartModal();   
     }
   };
 
@@ -1046,70 +1142,9 @@ angular.module('leth.controllers', [])
     };
   };
 
-  $scope.installDapp = function(id) {
-    var dappToInstall = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];
-
-    if (AppService.isPlatformReady()){
-      var directoryTemplate=cordova.file.dataDirectory;
-      if(ionic.Platform.isAndroid()) {
-        directoryTemplate = cordova.file.externalDataDirectory;
-      }
-      var templateName = dappToInstall.GUID + ".html";
-      var templateContent ="";
-
-      $http.get(dappToInstall.TemplateUrl) 
-      .success(function(data){
-        templateContent =  $sce.trustAsHtml(data);
-
-        angularLoad.loadScript(dappToInstall.ScriptUrl).then(function() {
-            console.log('loading ' + dappToInstall.ScriptUrl);
-        }).catch(function() {
-              console.log('ERROR :' + dappToInstall.ScriptUrl);
-          });
-      });
-
-      $cordovaFile.writeFile(directoryTemplate,
-                             templateName,
-                             templateContent,
-                             true)
-        .then(function (success) {
-          localStorage.DAppleths.push(dappToInstall);
-
-          var alertPopup = $ionicPopup.alert({
-            title: 'Install Dappleth',
-              template: 'Dappleth ' + dappToInstall.Name + ' installed successfully!'
-          });
-
-          alertPopup.then(function(res) {
-            console.log('dappleth ' + dappToInstall.Name + ' installed');
-          });
-        }, function () {
-        // not available
-      });
-    };
-  }
-
-  $scope.readDapp = function(filename){
-    if (AppService.isPlatformReady()){
-      var directoryTemplate=cordova.file.dataDirectory;
-      if(ionic.Platform.isAndroid()) {
-        directoryTemplate = cordova.file.externalDataDirectory;
-      }
-      $cordovaFile.readAsText(directoryTemplate, filename)
-        .then(function (success) {
-          // success
-          return $sce.trustAsHtml(success);
-          console.log('read successfully');
-        }, function (error) {
-          // error
-          console.log(error);
-      });
-    };
-  }
   //init
   $scope.friends = [];    
   $scope.transactions = Transactions.all();
-
   $scope.currencies = ExchangeService.getCurrencies();
   $scope.xCoin = "XETH";
   
@@ -1128,11 +1163,12 @@ angular.module('leth.controllers', [])
     AppService.setWeb3Provider(global_keystore);
     $scope.qrcodeString = AppService.account();
 
-  setChatFilter();
+    setChatFilter();
 
 
   }else{
-    createEntropyModal();
+    //createEntropyModal();
+    createStartModal();
   }
 
   /**

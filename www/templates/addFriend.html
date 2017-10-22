@@ -14,21 +14,23 @@
         <form ng-submit="saveAddr(name,addr,idkey,comment)">
           <label class="item item-input item-floating-label">
             <span class="input-label">Name</span>
-            <input type="text" ng-model="name" placeholder="Name">
+            <input type="text" ng-model="name" placeholder="Digit a Name">
           </label>
           <label class="item item-input item-floating-label">
             <span class="input-label">Wallet Address (scan QRCode)</span>
-            <input type="text" ng-model="addr" readonly placeholder="Wallet Address" ng-valid>            
+            <input type="text" ng-model="addr" readonly placeholder="Wallet Address from QRCode" ng-valid>            
           </label>
           <label class="item item-input item-floating-label">
             <span class="input-label">Identity Address (scan QRCode)</span>
-            <input type="text" ng-model="idkey" readonly placeholder="Identity Address" ng-valid>            
+            <input type="text" ng-model="idkey" readonly placeholder="Identity Address from QRCode" ng-valid>            
           </label>
           <label class="item item-input item-floating-label">
             <span class="input-label">Comment</span>
             <input type="text" ng-model="comment" placeholder="Comment">
-          </label>          
+          </label> 
           <button class="button button-block button-energized" type="submit">Save</button>
+          <p>Scan QRCode from Leth to add friend manually</p>
+          <p>You can add friends "holding on" any message</p>         
         </form>
       </div>
     </div>

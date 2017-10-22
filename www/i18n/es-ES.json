@@ -46,5 +46,7 @@
   "PHOTO":"Photo",
   "POSITION":"Position",
   "CONTACT":"Contact",
-  "CHOOSETOSHARE": "Choose to share your"
+  "CHOOSETOSHARE": "Choose to share your",
+  "NEW_WALLET": "New Wallet",
+  "IMPORT_WALLET": "Import Wallet"
 }

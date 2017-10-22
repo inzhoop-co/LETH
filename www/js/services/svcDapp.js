@@ -6,6 +6,9 @@ angular.module('leth.services')
                                 StoreEndpoint, AppService, Chat, ENSService, ExchangeService, 
                                 Friends, nfcService, SwarmService, BEService) {
   return{
+    exit: function(){
+      $rootScope.$ionicGoBack();
+    },
     storeData: function(GUID,key,value){
       BEService.storeData(GUID,key,value);
     },

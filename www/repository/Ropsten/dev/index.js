@@ -15,6 +15,9 @@ var dappleth = (function(){
 		angular.extend($scope, context);		
 	}
 
+	var _exit = function(){
+        //
+    }
 	
 
 	var context = {
@@ -66,7 +69,8 @@ var dappleth = (function(){
 	}
 
 	return {
-		run: _init
+		run: _init,
+		exit: _exit
 	};
 
 })();

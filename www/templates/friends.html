@@ -3,8 +3,9 @@
     <label class="item-input-wrapper">
       <i class="icon ion-ios-search placeholder-icon"></i>
       <input type="search" placeholder="Search" ng-model="search.name">     
+      <button class="icon button-icon ion-ios-close-empty placeholder-icon dark" ng-if="search.name.length > 0" on-touch="search.name=''"></button>
     </label>
-    <button class="icon button-icon ion-ios-close-empty dark" ng-if="search.name.length > 0" on-touch="search.name=''"></button>
+    
     <button class="icon button-icon ion-ios-personadd positive" ng-click="addAddress()"></button>  
   </ion-header-bar>
   <ion-content class="has-header has-subheader has-tabs scrollBg">
@@ -14,8 +15,8 @@
     <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends | orderBy: '-unread' | filter:search track by $index" type="item-text-wrap" href="#/tab/friends/{{friend.addr}}">
       <img ng-src="{{friend.icon}}"/>
       <h2><b>{{friend.name | strLimit: 15 : 5}}</b></h2>
-      <p>{{friend.addr | strLimit: 15 : 5}}</p>
-      <!--span>{{friend.comment | strLimit: 15 : 5}}</span-->
+      <!--p>{{friend.addr | strLimit: 15 : 5}}</p-->
+      <p>{{friend.comment | strLimit: 15 : 5}}</p>
       <span class="badge badge-assertive" ng-hide="friend.unread==0">{{friend.unread}}</span>      
       <ion-reorder-button class="ion-navicon" on-reorder="moveItem(item, $fromIndex, $toIndex)"></ion-reorder-button>
       <i class="icon ion-chevron-right icon-accessory"></i>
