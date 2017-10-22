@@ -60,11 +60,11 @@ ionic serve
 ```
 
 # Screenshoots
-<img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6342.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6343.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6344.PNG" width="30%">  
+<img src="https://www.inzhoop.com/img/screenshots/IMG_0010.PNG" width="30%">  <img src="https://www.inzhoop.com/img/screenshots/IMG_0011.PNG" width="30%">  <img src="https://www.inzhoop.com/img/screenshots/IMG_0012.PNG" width="30%">  
 
-<img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6345.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6346.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6347.PNG" width="30%">
+<img src="https://www.inzhoop.com/img/screenshots/IMG_0013.PNG" width="30%">  <img src="https://www.inzhoop.com/img/screenshots/IMG_0014.PNG" width="30%">  <img src="https://www.inzhoop.com/img/screenshots/IMG_0015.PNG" width="30%">
 
-<img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6348.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6349.PNG" width="30%">  <img src="https://github.com/inzhoop-co/LETH/blob/master/resources/screenshot/v097/IMG_6350.PNG" width="30%">
+<img src="https://www.inzhoop.com/img/screenshots/IMG_0016.PNG" width="30%">  <img src="https://www.inzhoop.com/img/screenshots/IMG_0017.PNG" width="30%">  <img src="https://www.inzhoop.com/img/screenshots/IMG_0018.PNG" width="30%">
 
 # License
- GNU GENERAL PUBLIC LICENSE
+ GNU GENERAL PUBLIC LICENSE 3.0
