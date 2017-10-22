@@ -1,0 +1,11 @@
+{
+  "name": "LETH",
+  "app_id": "com.inzhoop.leth",
+  "integrations": {
+    "gulp": {}
+  },
+  "type": "ionic1",
+  "watchPatterns": [
+    "scss/**/*"
+  ]
+}
