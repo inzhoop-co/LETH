@@ -5,8 +5,8 @@ angular.module('leth.controllers')
     $scope.typeNumber = 12;
     $scope.inputMode = '';
     $scope.image = true;
-    $scope.filterWalletAddr = 'button button-small button-outline button-positive';
-    $scope.filterShhAddr = 'button button-small button-outline button-positive';
+    $scope.filterWalletAddr = 'button button-small button-outline button-dark';
+    $scope.filterShhAddr = 'button button-small button-outline button-dark';
       
     $scope.$on('$ionicView.afterEnter', function() {
        $scope.walletAddress();
@@ -19,8 +19,8 @@ angular.module('leth.controllers')
     ];
 
     $scope.walletAddress = function(){      
-      $scope.filterWalletAddr = 'button button-small button button-positive';
-      $scope.filterShhAddr = 'button button-small button-outline button-positive';
+      $scope.filterWalletAddr = 'button button-small button button-dark';
+      $scope.filterShhAddr = 'button button-small button-outline button-dark';
       $scope.isWalletAddress = true;
       $scope.isShhAddress = false;
       $scope.profileAddress = AppService.account();
@@ -28,8 +28,8 @@ angular.module('leth.controllers')
     }
 
     $scope.shhAddress = function(){
-      $scope.filterWalletAddr = 'button button-small button-outline button-positive';
-      $scope.filterShhAddr = 'button button-small button button-positive';
+      $scope.filterWalletAddr = 'button button-small button-outline button-dark';
+      $scope.filterShhAddr = 'button button-small button button-dark';
       $scope.isWalletAddress = false;
       $scope.isShhAddress = true;
       $scope.profileAddress = AppService.idkey();
