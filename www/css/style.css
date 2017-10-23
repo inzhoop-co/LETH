@@ -631,3 +631,25 @@ bottom: 150;
   50% {color: white;}
 }
 
+
+.platform-ios .scroll-content > .scroll {
+  min-height: 101%;
+}
+
+.overflow-scroll,
+.overflow-scroll.pane {
+  overflow-y: auto !important;
+}
+
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.word {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  height: 10px;
+}
+

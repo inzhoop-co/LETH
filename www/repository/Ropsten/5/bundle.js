@@ -80,6 +80,7 @@ var _Card = __webpack_require__(1);
 
 function run(core) {
   var CONTRACT = void 0;
+  var CONTRACTS = [];
   var DAPP = void 0;
   var $SCOPE = void 0;
   var $SERVICE = void 0;
@@ -102,9 +103,29 @@ function run(core) {
       document.querySelector('.eventscontainer').classList.remove('hasOpenedEvent');
       event.stopPropagation();
     },
+    listParticipants: function(index){
+      var contract = CONTRACTS[index];
+      var list=[];
+      var count = contract.registered().toNumber();
+      for(var i=1;i<=count;i++){
+          var addr = contract.participantsIndex(i); //iterate for list
+          var user = contract.participants(addr);
+          list.push(user);
+          console.log(user[0],user[1],user[2],user[3]);
+      }
+      return list;
+    },
+    register: function(index,nickname){
+        var deposit = web3.toWei(0.05);
+        var name = nickname;
+        $SERVICE.transactionCall(CONTRACTS[index],'register',name, deposit, 3000000, 50000000000).then(function(res){
+          console.log(res);
+        });
+    },
     dappRefresh: function(value){
       $SCOPE.$broadcast('scroll.refreshComplete');
     }
+
   };
   var data_static = {
     events: [{
@@ -148,33 +169,23 @@ function run(core) {
     //RETRIEVE THE CONTRACT
     CONTRACT = web3.eth.contract(DAPP.Contracts[0].ABI).at(DAPP.Contracts[0].Address);
 
-
-    //TEST SOME CALL
-    CONTRACT.name(function (err, res) {
-      console.log("name: " + res);
-    });
-    CONTRACT.ended(function (err, res) {
-      console.log("ended: " + res);
-    });
-    CONTRACT.registered(function (err, res) {
-      console.log("registered: " + res);
-    });
-    CONTRACT.endedAt(function (err, res) {
-      console.log("endedAt: " + res);
-    });
-    CONTRACT.limitOfParticipants(function (err, res) {
-      console.log("limitOfParticipants: " + res);
-    });
-  
     var data = {
       events: []
     };
+    
 
     for(var i=0; i< DAPP.Contracts.length; i++){
       var c = web3.eth.contract(DAPP.Contracts[i].ABI).at(DAPP.Contracts[i].Address);
+      CONTRACTS.push(c);
+
+      var l = functions.listParticipants(i);
+      console.log(l);
+
+      //functions.register(c);
 
       data.events.push({
-        id: DAPP.Contracts[i].Address,
+        prog: i,
+        id: c.Address,
         name: c.name(),
         description: "the best event x",
         status: { id: 0 },

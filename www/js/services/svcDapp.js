@@ -27,6 +27,9 @@ angular.module('leth.services')
     address: function(){
       return AppService.account();
     },
+    idkey: function(){
+      return AppService.idkey();
+    },
     balance: function(){
       return AppService.balance(1.0e18);
     },
@@ -47,6 +50,9 @@ angular.module('leth.services')
     sendMessage: function(id,sender,message){
     	var payload = {from: sender, text: message};
     	Chat.sendDappMessage(payload,id);
+    },
+    transactionCall: function(contract, fname, params, value, gasLimit, gasPrice){
+      return AppService.transactionCall(contract, fname, params, value, gasLimit, gasPrice);
     },
     popupConfirm: function(txtTitle, txtTemplate){
       var q = $q.defer();

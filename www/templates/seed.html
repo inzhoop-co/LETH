@@ -14,11 +14,8 @@
       <label class="item item-input">
         <textarea ng-model="formImport.seed"  rows="5" placeholder="insert seed passphrase or scan your backup"></textarea>
       </label>
-    </div>  
-    <div class="card">
       <label class="item item-text-wrap">
-        Set strong password to encrypt your wallet.
-        Set a 4 digit password for rapid access.
+        Set strong password to encrypt your wallet and a 4 digit PIN to secure access.
       </label>
       <ion-toggle ng-model="legacy" ng-click="setLegacy(legacy)">
         Restore legacy address pre v0.11.0 
@@ -36,7 +33,7 @@
         <input type="password" ng-model="formImport.code" pattern="[0-9]*" maxlength="4" minlength="4" placeholder="4 digit code" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required>
       </label>
       <button ng-disabled="!formImport.$valid || confirmPassword!=password"   class="button button-block button-energized" type="submit">Import</button>
-    </div>
+    </div>  
   </form>    
   </ion-content>
 </ion-modal-view>

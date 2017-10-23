@@ -12,6 +12,11 @@ angular.module('leth.controllers', [])
       $scope.verifiedWords=[];
       $scope.mnemonicWords=[];
       $scope.randomSeed='';
+      $scope.shakeCounter=3;
+      stopWatching();
+    }
+    if(n==2){
+      stopWatching();
     }
 
     $scope.step = n;
@@ -85,7 +90,7 @@ angular.module('leth.controllers', [])
 
   function keyboardShowHandler(e){
     //patch on open
-    
+
     if($ionicHistory.currentView().stateName== "tab.chats"){
       $scope.scrollTo('chatScroll','bottom');
       //$rootScope.hideTabs = 'tabs-item-hide';
@@ -110,6 +115,7 @@ angular.module('leth.controllers', [])
   window.addEventListener('native.keyboardshow', keyboardShowHandler);     
   window.addEventListener('native.keyboardhide', keyboardHideHandler);     
 
+ 
   
   var flushChats = function(){
     //Flush chat messages
@@ -895,64 +901,65 @@ angular.module('leth.controllers', [])
     if (AppService.isPlatformReady()){
       $scope.watch = $cordovaDeviceMotion.watchAcceleration($scope.options);
       $scope.watch.then(null, function(error) {
-          console.log('Error');
+        console.log('Error');
       },function(result) {
-          // Set current data  
-          $scope.measurements.x = result.x;
-          $scope.measurements.y = result.y;
-          $scope.measurements.z = result.z;
-          $scope.measurements.timestamp = result.timestamp;  
-          // Detecta shake  
-          detectShake(result);   
+        // Set current data  
+        $scope.measurements.x = result.x;
+        $scope.measurements.y = result.y;
+        $scope.measurements.z = result.z;
+        $scope.measurements.timestamp = result.timestamp;  
+        // Detecta shake  
+        detectShake(result);   
       });   
     };
   };       
 
-  var stopWatching = function() {  
-      $scope.watch.clearWatch();      
+  var stopWatching = function() { 
+    if($scope.watch != undefined)
+      $scope.watch.clearWatch();  
   }       
 
   var detectShake = function(result) {  
     var measurementsChange = {};
     // Calculate measurement change only if we have two sets of data, current and old
     if ($scope.previousMeasurements.x !== null) {
-        measurementsChange.x = Math.abs($scope.previousMeasurements.x, result.x);
-        measurementsChange.y = Math.abs($scope.previousMeasurements.y, result.y);
-        measurementsChange.z = Math.abs($scope.previousMeasurements.z, result.z);
+      measurementsChange.x = Math.abs($scope.previousMeasurements.x, result.x);
+      measurementsChange.y = Math.abs($scope.previousMeasurements.y, result.y);
+      measurementsChange.z = Math.abs($scope.previousMeasurements.z, result.z);
     }
 
     if (measurementsChange.x + measurementsChange.y + measurementsChange.z > $scope.options.deviation) {
-        stopWatching();  // Stop watching because it will start triggering like hell
-        console.log('Shake detected'); 
-        $scope.classShake = "shakeit";       
-        $scope.shakeCounter--;
+      stopWatching();  // Stop watching because it will start triggering like hell
+      console.log('Shake detected'); 
+      $scope.classShake = "shakeit";       
+      $scope.shakeCounter--;
 
-        if ($scope.shakeCounter>0)
-         setTimeout(startWatching(), 800);  // Again start watching after 1 sec
+      if ($scope.shakeCounter>0)
+       setTimeout(startWatching(), 800);  // Again start watching after 1 sec
 
-        $scope.randomString+=result.x+result.y+result.z;
+      $scope.randomString+=result.x+result.y+result.z;
 
-        // Clean previous measurements after succesfull shake detection, so we can do it next time
-        $scope.previousMeasurements = { 
-            x: null, 
-            y: null, 
-            z: null
-        } 
+      // Clean previous measurements after succesfull shake detection, so we can do it next time
+      $scope.previousMeasurements = { 
+          x: null, 
+          y: null, 
+          z: null
+      } 
 
-       if($scope.shakeCounter==0){
-          $scope.randomString = hashCode($scope.randomString);
-          //$scope.goLogin($scope.randomString);
-          $scope.goMnemonic($scope.randomString);
+     if($scope.shakeCounter==0){
+        $scope.randomString = hashCode($scope.randomString);
+        //$scope.goLogin($scope.randomString);
+        $scope.goMnemonic($scope.randomString);
 
-        }
+      }
 
     } else if (measurementsChange.x + measurementsChange.y + measurementsChange.z > $scope.options.deviation/2) {
-        $scope.classShake = "shakeit"; 
-        $scope.previousMeasurements = {
-            x: result.x,
-            y: result.y,
-            z: result.z
-        }
+      $scope.classShake = "shakeit"; 
+      $scope.previousMeasurements = {
+          x: result.x,
+          y: result.y,
+          z: result.z
+      }
     } else {
       // On first measurements set it as the previous one
       $scope.classShake = ""; 
@@ -965,8 +972,7 @@ angular.module('leth.controllers', [])
   }        
 
   $scope.$on('$ionicView.beforeLeave', function(){
-      if($scope.watch != undefined)
-        $scope.watch.clearWatch(); 
+    stopWatching(); 
   }); 
 
   var startModal;

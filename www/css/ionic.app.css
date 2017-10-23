@@ -3367,7 +3367,7 @@ body.grade-c {
   padding-top: 1px;
   margin-bottom: -1px;
   width: auto;
-  height: auto; }
+  height: auto !important; }
 
 .menu .scroll-content.scroll-content-false {
   z-index: 11; }
@@ -7718,9 +7718,6 @@ input[type="color"] {
 .platform-android input[type="week"] {
   padding-top: 8px; }
 
-.platform-ios textarea,
-.platform-android textarea {
-  text-indent: -3px; }
 
 .item-input input,
 .item-input textarea {

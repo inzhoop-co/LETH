@@ -29,7 +29,7 @@
 		    </div>
 		    <button class="button button-block button-calm " ng-click="goMnemonic('')">skip <i class="ion-ios-fastforward"></i></button>
 			<div class="bar bar-footer bar-assertive">
-				<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(0)" ng-show="step > 0"> Previous</a>
+				<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(0)" ng-show="step > 0"> Back</a>
 			</div>
 		</div>
 
@@ -65,7 +65,7 @@
 		    </div>
 		    <button class="button button-block button-calm" ng-click="goStep(4)">Next <i class="icon ion-chevron-right"></i></button>
 		    <div class="bar bar-footer bar-assertive">
-				<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(2)" ng-show="step > 0"> Back</a>
+				<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(0)" ng-show="step > 0"> Back</a>
 			</div>
 		</div>
 
@@ -74,16 +74,16 @@
     			<h1 class="title">Verify Mnemonic</h1>
     		</div>
     		<p class="padding">Select the words in order to compose mnemonic</p>
-			<span class="padding">
-				<button ng-repeat="w in mnemonicWords | orderBy:'text'" ng-model="w.index" class="button button-positive button-outline" ng-hide="inVerified(w)" ng-click="verifyWord(w)">{{w.text}}</button>
-			</span>
+			<div class="words padding">
+				<button ng-repeat="w in mnemonicWords | orderBy:'text'" ng-model="w.index" class="button word button-positive button-outline" ng-hide="inVerified(w)" ng-click="verifyWord(w)">{{w.text}}</button>
+			</div>
     		<p class="padding" ng-show="verifiedWords.length">12 ordered words:</p>
 			<tags-input ng-model="verifiedWords" ng-show="verifiedWords.length" placeholder="click on the words" key-property="index" display-property="text" ></tags-input>
 
 
 			<button class="button button-block button-calm" ng-show="isVerifiedMnemonic()" ng-click="goStep(5)">Next <i class="icon ion-chevron-right"></i></button>
 		    <div class="bar bar-footer bar-assertive">
-				<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(2)" ng-show="step > 0"> Back</a>
+				<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(0)" ng-show="step > 0"> Back</a>
 			</div>
 		</div>
 
@@ -119,7 +119,7 @@
 		    </form>
 		</div>
 		<div class="bar bar-footer bar-assertive">	
-			<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(4)" ng-show="step > 0"> Back</a>
+			<a class="button icon-left ion-chevron-left button-clear button-light" ng-click="goStep(0)" ng-show="step > 0"> Back</a>
 		</div>
 	</div>
   </ion-content>

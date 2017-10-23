@@ -259,22 +259,25 @@ angular.module('leth.services', [])
       }
       return result
     },
-    transactionCall: function (fname, to, params) {
+    transactionCall: function (contract, fname, params, value, gasLimit, gasPrice) {
       return $q(function (resolve, reject) {
         var fromAddr = global_keystore.getAddresses()[0];
-        var toAddr = to;
+        var toAddr = contract.Address;
         var functionName = fname;
         var args = JSON.parse('[]');
-        var gasPrice = web3.eth.gasPrice;
-        var gas = web3.eth.estimateGas * gasPrice; //TODO: use estimate?
+        var gasPrice = gasPrice;
+        var gas = gasLimit;
+
         try {
-          args.push(params,{from: fromAddr, gasPrice: gasPrice, gas: gas});
+          args.push(params,{from: fromAddr, gasPrice: gasPrice, gas: gas, value: value});
+          
           var callback = function (err, hash) {
             var result = new Array;
             result.push(err);
             result.push(hash);
             resolve(result);
           }
+          
           args.push(callback);
           contract[functionName].apply(this, args);
         } catch (e) {
