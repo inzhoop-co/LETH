@@ -49,6 +49,7 @@ angular.module('leth.controllers', [])
     $scope.account = AppService.account();
     $scope.nick = AppService.idkey();
     $scope.qrcodeString = $scope.account + "/" + $scope.nick ;
+
     AppService.getNetwork().then(function(res){
       $scope.nameNetwork = res.name;
       $scope.classNetwork = res.class;               

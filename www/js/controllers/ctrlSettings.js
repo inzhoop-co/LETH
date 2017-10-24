@@ -10,7 +10,7 @@ angular.module('leth.controllers')
   $scope.vibration = { checked: (localStorage.Vibration=="true") };
   $scope.nfc = { checked: (localStorage.NfcOn=="true") };
   $scope.baseCurrency = JSON.parse(localStorage.BaseCurrency);
-  
+
   $scope.$on("$ionicView.enter", function () {
     $scope.addrHost = localStorage.NodeHost;
     $scope.language = localStorage.Language;

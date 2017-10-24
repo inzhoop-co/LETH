@@ -577,6 +577,9 @@ bottom: 150;
   padding: 20px;
 }
 
+.start{
+  background-color: #ef473a !important;}
+
 .startPage {
   background-color: #ef473a !important;
   display: flex;
