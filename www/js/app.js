@@ -12,8 +12,8 @@ var app = angular.module('leth', [
     template: 'Loading...'
   })
   .constant('StoreEndpoint', {
-    url: 'repository'
-    //url: StorePath
+    //url: 'repository'
+    url: StorePath
   })
   .constant('availableLanguages', [
               {'Language':'English', 'ISO':'en-GB'},
