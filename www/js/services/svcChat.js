@@ -13,7 +13,7 @@ angular.module('leth.services')
     },
     isEnabled: function(){
       try{
-        if(web3.provider)
+        if(web3.currentProvider)
          web3.shh.version();
         return true;
       }
