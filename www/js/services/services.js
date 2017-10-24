@@ -316,13 +316,13 @@ angular.module('leth.services', [])
       var estimateGas = web3.eth.estimateGas({from: fromAddr, gasPrice: gasPrice, gas: gasLimit, data: datacode});
       
       var gPrice = fee/estimateGas;
-      
+      /*
       console.log("fee: " + fee);
       console.log("price: " + gPrice);
       console.log("estimate: " + estimateGas);
       console.log("priceStandard: " + gasPrice.toNumber());
       console.log("cost: " + gasPrice*gasLimit);
-
+      */
       if(estimateGas>gasLimit) console.log("Warning: GasLimit too low!");
 
       var q = $q.defer();

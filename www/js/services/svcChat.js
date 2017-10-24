@@ -530,15 +530,15 @@ angular.module('leth.services')
     listenMessage: function($scope){
       var svc = this;
 
-      if(!this.isEnabled()) return;
+      if(!svc.isEnabled()) return;
 
-      filter =  this.createFilter(topics);
+      filter =  svc.createFilter(topics);
       
       filter.watch(function (error, result) {
         //exit on error
         if(error){
           if(error.message=='filter not found')
-            this.createFilter(topics);
+            svc.createFilter(topics);
           else
             return;  
         };
