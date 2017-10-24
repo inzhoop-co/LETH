@@ -259,15 +259,15 @@ angular.module('leth.services', [])
       }
       return result
     },
-    transactionCall: function (contract, fname, params, value, gasLimit, gasPrice) {
+    transactionCall: function (contract, fname, params, value, gLimit, gPrice) {
       return $q(function (resolve, reject) {
         var fromAddr = global_keystore.getAddresses()[0];
         var toAddr = contract.Address;
         var functionName = fname;
         var args = JSON.parse('[]');
-        var gasPrice = gasPrice;
-        var gas = gasLimit;
-
+        var gasPrice = web3.toBigNumber(gPrice);
+        var gas = gLimit;
+        
         try {
           args.push(params,{from: fromAddr, gasPrice: gasPrice, gas: gas, value: value});
           
@@ -277,7 +277,7 @@ angular.module('leth.services', [])
             result.push(hash);
             resolve(result);
           }
-          
+
           args.push(callback);
           contract[functionName].apply(this, args);
         } catch (e) {

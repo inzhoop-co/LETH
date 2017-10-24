@@ -118,7 +118,9 @@ function run(core) {
     register: function(index,nickname){
         var deposit = web3.toWei(0.05);
         var name = nickname;
-        $SERVICE.transactionCall(CONTRACTS[index],'register',name, deposit, 3000000, 50000000000).then(function(res){
+        var gasLimit = 3000000; // gas limit
+        var gasPrice = 50000000000; //gas price in wei
+        $SERVICE.transactionCall(CONTRACTS[index],'register',name, deposit, gasLimit, gasPrice).then(function(res){
           console.log(res);
         });
     },
