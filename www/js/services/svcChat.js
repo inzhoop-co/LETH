@@ -11,6 +11,13 @@ angular.module('leth.services')
     settings: function(){
       return JSON.parse(localStorage.Shh);
     },
+    createFilter: function(myTopics){
+      return web3.shh.newMessageFilter({symKeyID: this.identity(), topic: myTopics}, 
+        null, 
+        function(error) {
+          console.log(error);
+        });
+    },
     isEnabled: function(){
       try{
         if(web3.currentProvider)
@@ -525,11 +532,16 @@ angular.module('leth.services')
 
       if(!this.isEnabled()) return;
 
-      filter =  web3.shh.newMessageFilter({symKeyID: this.identity(), topic: topics}, null, function(error) {console.log(error);});
+      filter =  this.createFilter(topics);
       
       filter.watch(function (error, result) {
         //exit on error
-        if(error) return; 
+        if(error){
+          if(error.message=='filter not found')
+            this.createFilter(topics);
+          else
+            return;  
+        };
 
         var payload = JSON.parse(web3.toUtf8(result.payload));
         //build hashId for ack message

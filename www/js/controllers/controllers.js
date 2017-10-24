@@ -309,6 +309,10 @@ angular.module('leth.controllers', [])
     codeModal.hide();
   };
 
+  $scope.openSaveAddressModal = function(name,comment,address,key){
+    createSaveAddressModal(name,comment,address,key);
+  };
+  
   var saveAddressModal;
   var createSaveAddressModal = function(name,comment,address,key) {
     $ionicModal.fromTemplateUrl('templates/addFriend.html', {

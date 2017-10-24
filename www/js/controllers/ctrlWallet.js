@@ -95,6 +95,11 @@ angular.module('leth.controllers')
       $scope.addrKey = idkey;
       $scope.amountTo = parseFloat(coins);
       $scope.fromAddressBook = true;
+      //if contact link
+      if($scope.addrKey && $scope.isFriend()==""){
+          $scope.openSaveAddressModal($scope.addrTo,"from share",$scope.addrTo,$scope.addrKey);
+      } 
+
       if($scope.idCoin==0 || $scope.idCoin==undefined)
         $scope.balAddrTo = parseFloat(web3.eth.getBalance($scope.addrTo))/$scope.unit;
       else
