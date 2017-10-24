@@ -312,7 +312,7 @@ angular.module('leth.controllers', [])
   $scope.openSaveAddressModal = function(name,comment,address,key){
     createSaveAddressModal(name,comment,address,key);
   };
-  
+
   var saveAddressModal;
   var createSaveAddressModal = function(name,comment,address,key) {
     $ionicModal.fromTemplateUrl('templates/addFriend.html', {
@@ -701,7 +701,7 @@ angular.module('leth.controllers', [])
   }
 
   $scope.isValidMnemonic = function(seed){        
-    if (lightwallet.keystore.isSeedValid(seed)){
+    if (seed.split(' ').length==12 && lightwallet.keystore.isSeedValid(seed)){
       $scope.randomSeed = seed;
       seedToList(seed);
       return true;
