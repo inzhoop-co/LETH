@@ -1170,7 +1170,7 @@ button {
     <button class="button-addevent"><i class="ion-plus-round"></i></button>
   </div>
   <div class="eventscontainer">
-    <div ng-repeat="event in events track by $event.id" ng-click="showDetails(event.id,$event)" class="event animated bounceInUp" data-id-event="{{event.id}}">
+    <div ng-repeat="event in events track by event.id" ng-click="showDetails(event.id,$event)" class="event animated bounceInUp" data-id-event="{{event.id}}">
       <button class="closebutton" ng-click="hideDetails(event.id, $event)"><i class="ion-close-circled"></i></button>
       <div class="head">
           <div class="first">{{event.position.city}} - {{event.name}}</div>
@@ -1206,10 +1206,10 @@ button {
           <li class="info"><button class="ion-ios-information-outline"></button></li>
         </ul>
       </div>
-    <button class="button" ng-click="register(event.prog,'@hacktar')">
+    <button class="button" ng-click="register(event.id,'@inzhoop')">
       <i class="ion-play">Reg</i>
     </button>
-    <button class="button" ng-click="listParticipants(event.prog)">
+    <button class="button" ng-click="listParticipants(event.id)">
       <i class="ion-play">List</i>
     </button>
     </div>

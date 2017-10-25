@@ -536,12 +536,7 @@ angular.module('leth.services')
       
       filter.watch(function (error, result) {
         //exit on error
-        if(error){
-          if(error.message=='filter not found')
-            svc.createFilter(topics);
-          else
-            return;  
-        };
+        if(error) return;
 
         var payload = JSON.parse(web3.toUtf8(result.payload));
         //build hashId for ack message

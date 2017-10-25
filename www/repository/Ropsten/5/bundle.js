@@ -116,52 +116,29 @@ function run(core) {
       return list;
     },
     register: function(index,nickname){
-        var deposit = web3.toWei(0.05);
-        var name = nickname;
-        var gasLimit = 3000000; // gas limit
-        var gasPrice = 50000000000; //gas price in wei
-        $SERVICE.transactionCall(CONTRACTS[index],'register',name, deposit, gasLimit, gasPrice).then(function(res){
-          console.log(res);
-        });
+      var deposit = web3.toWei(0.05);
+      var name = nickname;
+      var gasLimit = 3000000; // gas limit
+      var gasPrice = 50000000000; //gas price in wei
+      $SERVICE.transactionCall(CONTRACTS[index],'register',name, deposit, gasLimit, gasPrice).then(function(res){
+        console.log(res);
+      });
+    },
+    attende: function(index,addr){
+      var deposit = web3.toWei(0.05);
+      var name = nickname;
+      var gasLimit = 3000000; // gas limit
+      var gasPrice = 50000000000; //gas price in wei
+      $SERVICE.transactionCall(CONTRACTS[index],'register',name, deposit, gasLimit, gasPrice).then(function(res){
+        console.log(res);
+      });
     },
     dappRefresh: function(value){
       $SCOPE.$broadcast('scroll.refreshComplete');
     }
 
   };
-  var data_static = {
-    events: [{
-      id: "12",
-      name: "Evento x",
-      description: "the best event x",
-      status: { id: 0 },
-      position: { location: "Auditorium", city: "London", lat: "", long: "" },
-      date: "10/11/2017",
-      hour: "9:00",
-      users: "12",
-      assets: { banner: "https://ethereum.org/images/assets/1900/Ethereum-homestead-background-38.jpg", logo: "" }
-    }, {
-      id: "13",
-      name: "Evento Y",
-      description: "the best event y",
-      status: { id: 1 },
-      position: { location: "Auditorium", city: "Zurich", lat: "", long: "" },
-      date: "13/11/2017",
-      hour: "10:00",
-      users: "45",
-      assets: { banner: "https://ethereum.org/images/assets/1900/Ethereum-homestead-background-36.jpg", logo: "" }
-    }, {
-      id: "14",
-      name: "Evento Z",
-      description: "the best event z",
-      status: { id: 1 },
-      position: { location: "Sushi Bar", city: "Tokyo", lat: "", long: "" },
-      date: "11/12/2017",
-      hour: "11:00",
-      users: "43",
-      assets: { banner: "https://ethereum.org/images/assets/1900/Ethereum-homestead-background-33.jpg", logo: "" }
-    }]
-  };
+  
 
   var _init = function _init(core) {
     $SCOPE = core.scope;
@@ -183,19 +160,16 @@ function run(core) {
       var l = functions.listParticipants(i);
       console.log(l);
 
-      //functions.register(c);
-
       data.events.push({
-        prog: i,
-        id: c.Address,
+        id: i,
         name: c.name(),
-        description: "the best event x",
+        description: c.Address,
         status: { id: 0 },
-        position: { location: "Auditorium", city: "London", lat: "", long: "" },
-        date: "10/11/2017",
-        hour: "9:00",
-        users: "1",
-        assets: { banner: "https://ethereum.org/images/assets/1900/Ethereum-homestead-background-38.jpg", logo: "" }
+        position: { location: "No place", city: "No City", lat: "", long: "" },
+        date: "00/00/0000",
+        hour: "0:00",
+        users: c.registered().toNumber(),
+        assets: { banner: "https://ethereum.org/images/assets/1900/Ethereum-homestead-background-38.jpg", logo: "https://ethereum.org/images/logos/ETHEREUM-ICON_Black_small.png" }
       })
     }  
 
