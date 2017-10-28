@@ -1,8 +1,8 @@
 web3 = new Web3();
 hdPath = "m/44'/60'/0";
 hdPath2 = "m/44'/60'/0'/0";
-//StorePath = 'https://www.inzhoop.com/repository'; 
-StorePath = 'http://127.0.0.1:8887'; 
+StorePath = 'https://www.inzhoop.com/repository'; 
+//StorePath = 'http://127.0.0.1:8887'; 
 
 
 var app = angular.module('leth', [
