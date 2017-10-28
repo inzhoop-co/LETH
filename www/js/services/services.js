@@ -175,13 +175,41 @@ angular.module('leth.services', [])
     }, 
     addLocalToken: function(token){
       var tmpstore = JSON.parse(localStorage.Tokens);
-      tmpstore.splice(tmpstore.indexOf(token),1);
-      tmpstore.push(token);
+      var indexOfToken = tmpstore.findIndex(i => i.Address === token.Address);
+
+      
+      if(token.Custom){
+        if(indexOfToken!=-1){
+          //if exist update
+          token.GUID = tmpstore[indexOfToken].GUID;
+          tmpstore[indexOfToken] = token;
+        }else{
+          //add new one
+          var counter = tmpstore.length+1;
+          token.GUID = "C" + counter; //to change
+          tmpstore.push(token);
+        }
+      }
+
+      if(!token.Custom){
+        if(indexOfToken!=-1){
+          //if exist update
+          tmpstore[indexOfToken] = token;
+        }else{
+          //add new one
+          tmpstore.push(token);
+        }
+      }
+      
+
+      //save to store
       localStorage.Tokens = JSON.stringify(tmpstore);
     },
     deleteLocalToken: function(token){
       var tmpstore = JSON.parse(localStorage.Tokens);
-      tmpstore.splice(tmpstore.indexOf(token),1);
+      var indexOfToken = tmpstore.findIndex(i => i.Address === token.Address);
+
+      tmpstore.splice(indexOfToken,1);
       localStorage.Tokens = JSON.stringify(tmpstore);
     },
     setWeb3Provider: function (keys) {
@@ -270,6 +298,32 @@ angular.module('leth.services', [])
         
         try {
           args.push(params,{from: fromAddr, gasPrice: gasPrice, gas: gas, value: value});
+          
+          var callback = function (err, hash) {
+            var result = new Array;
+            result.push(err);
+            result.push(hash);
+            resolve(result);
+          }
+
+          args.push(callback);
+          contract[functionName].apply(this, args);
+        } catch (e) {
+            reject(e);
+          }
+        }); 
+    },
+    transactionCallNoParam: function (contract, fname, value, gLimit, gPrice) {
+      return $q(function (resolve, reject) {
+        var fromAddr = global_keystore.getAddresses()[0];
+        var toAddr = contract.Address;
+        var functionName = fname;
+        var args = JSON.parse('[]');
+        var gasPrice = web3.toBigNumber(gPrice);
+        var gas = gLimit;
+        
+        try {
+          args.push({from: fromAddr, gasPrice: gasPrice, gas: gas, value: value});
           
           var callback = function (err, hash) {
             var result = new Array;

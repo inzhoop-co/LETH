@@ -490,9 +490,15 @@ angular.module('leth.controllers', [])
       "Installed" : true
     }
 
-    $scope.listTokens.push(customToken);
+    //$scope.listTokens.push(customToken);
 
     AppService.addLocalToken(customToken);
+
+    AppService.getAllTokens($scope.nameNetwork).then(function(response){
+      $scope.listTokens = response;
+    }, function(err){
+      $scope.listTokens=null;
+    });
 
     $scope.closeTokenModal();
   };
@@ -508,7 +514,7 @@ angular.module('leth.controllers', [])
         $scope.listTokens.splice($scope.listTokens.indexOf(token),1);
         AppService.deleteLocalToken(token);
       }
-    
+      
       $scope.readCoinsList();
       $ionicListDelegate.closeOptionButtons();
    });
@@ -1330,9 +1336,17 @@ angular.module('leth.controllers', [])
 
             confirmPopup.then(function(res) {
               if(res) {
-                if($scope.listTokens.indexOf(msg.attach)==-1)
-                  $scope.listTokens.push(msg.attach);
-                localStorage.listTokens = JSON.stringify($scope.listTokens);
+                msg.attach.Installed = true;
+
+                AppService.addLocalToken(msg.attach);
+
+                AppService.getAllTokens($scope.nameNetwork).then(function(response){
+                    $scope.listTokens = response;
+                  }, function(err){
+                    $scope.listTokens=null;
+                });
+
+                $scope.readCoinsList();
                 $state.go('tab.dappleths', { relative: $state.$current.view});
                }
             });

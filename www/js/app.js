@@ -1,7 +1,9 @@
 web3 = new Web3();
 hdPath = "m/44'/60'/0";
 hdPath2 = "m/44'/60'/0'/0";
-StorePath = 'https://www.inzhoop.com/repository'; 
+//StorePath = 'https://www.inzhoop.com/repository'; 
+StorePath = 'http://127.0.0.1:8887'; 
+
 
 var app = angular.module('leth', [
       'ionic', 'nfcFilters', 'ngTagsInput', 'angularLoad',
@@ -83,6 +85,10 @@ var app = angular.module('leth', [
       }
     }
 
+    //clean
+    localStorage.removeItem("Coins");
+    localStorage.removeItem("listTokens");
+
     if (typeof localStorage.Shh == 'undefined') {localStorage.Shh=JSON.stringify({ttl:10000, targetPow: 1.01, timePow: 19});}
     if (typeof localStorage.Language == 'undefined') {localStorage.Language=defaultLanguage.ISO;}
     if (typeof localStorage.Blacklist == 'undefined') {localStorage.Blacklist='[]';}
@@ -95,7 +101,6 @@ var app = angular.module('leth', [
     if (typeof localStorage.Friends == 'undefined') {localStorage.Friends = '[]';}
     if (typeof localStorage.LastMsg == 'undefined') {localStorage.LastMsg= JSON.stringify({time:0, hash:"0x"});}
     if (typeof localStorage.Transactions == 'undefined') {localStorage.Transactions = '[]';}
-    localStorage.removeItem("Coins");
     if (typeof localStorage.Tokens == 'undefined') {localStorage.Tokens = '[]';}
     if (typeof localStorage.NodeHost == 'undefined') {
       localStorage.NodeHost = "http://wallet.inzhoop.com:8546";

@@ -18,17 +18,22 @@ angular.module('leth.controllers')
       $timeout(function() {
         coin.Installed = true;
         $scope.listTokens.filter(function (c) {
-          if(c.GUID === coin.GUID){
+          if(c.Address === coin.Address){
             c.Installed = true;
             c.Progress = false;
             c.Network = $scope.nameNetwork;
           }
         })
         coin.Progress = false;
-        if($scope.listTokens.indexOf(coin)==-1)
-          $scope.listTokens.splice($scope.listTokens.indexOf(coin),1);
-        
+
         AppService.addLocalToken(coin);
+
+        AppService.getAllTokens($scope.nameNetwork).then(function(response){
+          $scope.listTokens = response;
+        }, function(err){
+          $scope.listTokens=null;
+        });
+    
       }, 1500);
     };
 
@@ -37,7 +42,7 @@ angular.module('leth.controllers')
       $timeout(function() {
         coin.Installed = false;
         $scope.listTokens.filter(function (c) {
-          if(c.GUID === coin.GUID){
+          if(c.Address === coin.Address){
             c.Installed = false;
             c.Progress = false;
           }

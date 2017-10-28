@@ -54,6 +54,9 @@ angular.module('leth.services')
     transactionCall: function(contract, fname, params, value, gasLimit, gasPrice){
       return AppService.transactionCall(contract, fname, params, value, gasLimit, gasPrice);
     },
+    transactionCallNoParam: function(contract, fname, value, gasLimit, gasPrice){
+      return AppService.transactionCallNoParam(contract, fname, value, gasLimit, gasPrice);
+    },
     popupConfirm: function(txtTitle, txtTemplate){
       var q = $q.defer();
       
@@ -151,6 +154,19 @@ angular.module('leth.services')
     },
     toggleRight: function() {
       $ionicSideMenuDelegate.toggleRight();
+    },
+    getPosition: function(){
+      var q = $q.defer();
+
+      $cordovaGeolocation
+      .getCurrentPosition()
+        .then(function (position) {
+          console.log(position);
+          q.resolve(position)
+        }, function (err) {
+            q.reject();
+        });
+      return q.promise;
     }
 
   }
