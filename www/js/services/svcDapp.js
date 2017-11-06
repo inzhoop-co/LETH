@@ -6,6 +6,9 @@ angular.module('leth.services')
                                 StoreEndpoint, AppService, Chat, ENSService, ExchangeService, 
                                 Friends, nfcService, SwarmService, BEService) {
   return{
+    ENS_getAddress: function(name){
+      return ENSService.getAddress(name);
+    },
     exit: function(){
       $rootScope.$ionicGoBack();
     },

@@ -6,9 +6,13 @@ angular.module('leth.services', [])
     },
     clearData: function(guid,key){
       $window.localStorage[guid + "_" + key] = '';
-    },
+    }
     getKey: function (guid,key) {
-      return JSON.parse($window.localStorage[guid + "_" + key]);
+      var data = $window.localStorage[guid + "_" + key];
+      if(data)
+        return JSON.parse(data);
+      else
+        return null;
     },
     removeKey: function(guid,key){
       $window.localStorage.removeItem(guid + "_" + key);
