@@ -2,7 +2,10 @@
   <ion-content class="has-header has-tabs">
     <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
   	<ion-scroll class="list scrollBg" overflow-scroll="true" >
-      	<div class="padding subdued">Shh settings</div>
+      	<div class="padding subdued item-button-right">Shh settings
+      		<button class="button button-clear button-positive" ng-click="saveSettings(shhSettings)">
+			Save
+		</button></div>
 		<div class="item item-input-inset">
 		  <div class="col col-70">Message TTL</div>
 		  <div class="col">
@@ -27,10 +30,14 @@
 			</label>
 		  </div>
 		</div>
+      	<div class="padding subdued">Developer URL Store</div>
+		<div class="item item-input">
+			<label class="item-input-wrapper">
+				<input type="text" ng-model="StoreUrl" placeholder="type custom Url Store address"></label>
+			<button class="button button-clear" ng-click="editStore(StoreUrl)">
+			    <i class="icon ion-edit"></i>
+			 </button>
+		</div>
 	</ion-scroll>
-	<button class="button button-block button-outline button-positive" ng-click="saveSettings(shhSettings)">
-		Save
-	</button>
-
   </ion-content>
 </ion-view>

@@ -4,7 +4,7 @@ angular.module('leth.controllers', [])
                                 $ionicActionSheet, $cordovaEmailComposer, $cordovaContacts, $q, $ionicLoading, 
                                 $ionicLoadingConfig, $location, $sce, $lockScreen, $cordovaInAppBrowser,$cordovaLocalNotification,
                                 $cordovaBadge, $cordovaGeolocation, $translate,tmhDynamicLocale,$ionicScrollDelegate, $ionicListDelegate, $cordovaClipboard, $cordovaVibration,
-                                StoreEndpoint, ENSService, AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, nfcService, SwarmService) {
+                                ENSService, AppService, Chat, PasswordPopup, Transactions, Friends, ExchangeService, nfcService, SwarmService) {
 
   $scope.step=0;
   $scope.goStep = function(n){
@@ -81,7 +81,7 @@ angular.module('leth.controllers', [])
   };
 
   $scope.getDappPath = function(id,asset){
-    return StoreEndpoint.url + "/" + $scope.nameNetwork + "/" + id + "/" + asset;
+    return StoreEndpoint() + "/" + $scope.nameNetwork + "/" + id + "/" + asset;
   }
 
   $scope.checkContract = function(hash){

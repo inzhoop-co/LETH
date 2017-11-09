@@ -3,9 +3,12 @@ angular.module('leth.services')
                                 $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSideMenuDelegate, 
                                 $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicActionSheet,
                                 $cordovaBarcodeScanner, $cordovaGeolocation,
-                                StoreEndpoint, AppService, Chat, ENSService, ExchangeService, 
+                                AppService, Chat, ENSService, ExchangeService, 
                                 Friends, nfcService, SwarmService, BEService) {
   return{
+    q: function(){
+      return $q;
+    },
     ENS_getAddress: function(name){
       return ENSService.getAddress(name);
     },
@@ -133,6 +136,9 @@ angular.module('leth.services')
         }
       });
       return q.promise;
+    },
+    closeOptionButtons: function(){
+      $ionicListDelegate.closeOptionButtons();
     },
     actionSheet: function(){
       return $ionicActionSheet;

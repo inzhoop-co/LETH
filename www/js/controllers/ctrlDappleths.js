@@ -2,7 +2,7 @@ angular.module('leth.controllers')
   .controller('DapplethsCtrl', function ($rootScope, $scope, $state, angularLoad, $ionicLoading, 
                                           $ionicListDelegate, $ionicPopup, $timeout, $templateRequest, 
                                           $sce, $compile, $ionicSlideBoxDelegate, $http, 
-                                          $cordovaInAppBrowser, StoreEndpoint, AppService) {
+                                          $cordovaInAppBrowser, AppService) {
     $ionicSlideBoxDelegate.start();
     $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
@@ -57,7 +57,7 @@ angular.module('leth.controllers')
   })
   .controller('DapplethRunCtrl', function ($scope, $rootScope, $ionicHistory, angularLoad, $ionicLoading, $templateRequest, 
                                           $sce, $interpolate, $compile, 	$ionicSlideBoxDelegate, $http, $stateParams,$timeout, 
-                                           StoreEndpoint, AppService, Chat, DappService) {
+                                          AppService, Chat, DappService) {
     var id = $stateParams.Id;
     $scope.Dapp=[];
     $scope.Dapp.activeApp = $scope.listApps.filter( function(app) {return app.GUID==id;} )[0];

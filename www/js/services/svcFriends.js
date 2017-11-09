@@ -28,9 +28,16 @@ angular.module('leth.services')
       });
       return obj[0];         
     },
-    remove: function(addressbook, index) {
+    remove_old: function(addressbook, index) {
       addressbook.splice(index, 1);
       return addressbook;
+    },
+    remove: function(friend){
+      var addressbook = JSON.parse(localStorage.Friends);
+      var indexOfFriend = addressbook.findIndex(i => i.addr === friend.addr);
+
+      addressbook.splice(indexOfFriend,1);
+      localStorage.Friends = JSON.stringify(addressbook);
     },
     update: function(name,addr,idkey,comment) {
       var addressbook = JSON.parse(localStorage.Friends);

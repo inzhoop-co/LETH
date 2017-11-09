@@ -1,5 +1,5 @@
 angular.module('leth') 
-.directive('dapplethTemplate', function($compile, $http, StoreEndpoint){
+.directive('dapplethTemplate', function($compile, $http){
     return {
       restrict: "E",
       scope: true,
@@ -48,7 +48,7 @@ angular.module('leth')
       }
     };
   })
-  .directive('dapplethChat', function($compile, $http, StoreEndpoint){
+  .directive('dapplethChat', function($compile, $http){
     return {
       restrict: "E",
       scope: false,

@@ -12,9 +12,9 @@ angular.module('leth.controllers')
       $ionicListDelegate.closeOptionButtons();
     };
 
-    $scope.remove = function (friendIndex) {
-      Friends.remove($scope.friends,friendIndex);
-      localStorage.Friends = JSON.stringify($scope.friends);
+    $scope.remove = function (friend) {
+      Friends.remove(friend);
+      $scope.loadFriends();
       $ionicListDelegate.closeOptionButtons();
     };
 

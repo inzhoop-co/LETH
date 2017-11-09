@@ -10,6 +10,7 @@ angular.module('leth.controllers')
   $scope.vibration = { checked: (localStorage.Vibration=="true") };
   $scope.nfc = { checked: (localStorage.NfcOn=="true") };
   $scope.baseCurrency = JSON.parse(localStorage.BaseCurrency);
+  $scope.StoreUrl = localStorage.StoreUrl;
 
   $scope.$on("$ionicView.enter", function () {
     $scope.addrHost = localStorage.NodeHost;
@@ -130,6 +131,24 @@ angular.module('leth.controllers')
   $scope.setCurrency = function(currency){
     localStorage.BaseCurrency =  JSON.stringify(currency); 
     $scope.baseCurrency = JSON.parse(localStorage.BaseCurrency);
+  };
+
+  $scope.editStore = function (addr) {
+    localStorage.StoreUrl = addr; 
+    var alertPopup = $ionicPopup.show({
+        title: 'Store changed',
+        template: 'Url Store updated to ' + addr   
+      });
+
+      alertPopup.then(function(res) {
+        refresh();
+        alertPopup.close();
+      });
+    
+      $timeout(function() {
+        refresh();
+        alertPopup.close();
+      }, 3000);
   };
 
   $scope.editHost = function (addr) {
@@ -412,6 +431,7 @@ angular.module('leth.controllers')
   $scope.saveSettings = function(set){
     var newSet = {ttl:set.ttl, targetPow: set.targetPow, timePow: set.timePow}
     localStorage.Shh = JSON.stringify(newSet);
+    
   };
 
   var walletViaEmail = function(){

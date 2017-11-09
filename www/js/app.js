@@ -1,9 +1,11 @@
 web3 = new Web3();
 hdPath = "m/44'/60'/0";
 hdPath2 = "m/44'/60'/0'/0";
-StorePath = 'https://www.inzhoop.com/repository'; 
-//StorePath = 'http://127.0.0.1:8887'; 
+//StorePath = 'https://www.inzhoop.com/repository'; 
 
+StoreEndpoint = function(){
+  return typeof localStorage.StoreUrl == 'undefined' ? "https://www.inzhoop.com/repository" : localStorage.StoreUrl;
+}
 
 var app = angular.module('leth', [
       'ionic', 'nfcFilters', 'ngTagsInput', 'angularLoad',
@@ -12,10 +14,6 @@ var app = angular.module('leth', [
       'ionic-lock-screen', 'pascalprecht.translate', 'tmh.dynamicLocale', 'openlayers-directive'])
   .constant('$ionicLoadingConfig', {
     template: 'Loading...'
-  })
-  .constant('StoreEndpoint', {
-    //url: 'repository'
-    url: StorePath
   })
   .constant('availableLanguages', [
               {'Language':'English', 'ISO':'en-GB'},
@@ -89,6 +87,7 @@ var app = angular.module('leth', [
     localStorage.removeItem("Coins");
     localStorage.removeItem("listTokens");
 
+    if (typeof localStorage.StoreUrl == 'undefined') {localStorage.StoreUrl="https://www.inzhoop.com/repository";}
     if (typeof localStorage.Shh == 'undefined') {localStorage.Shh=JSON.stringify({ttl:10000, targetPow: 1.01, timePow: 19});}
     if (typeof localStorage.Language == 'undefined') {localStorage.Language=defaultLanguage.ISO;}
     if (typeof localStorage.Blacklist == 'undefined') {localStorage.Blacklist='[]';}

@@ -9,5 +9,5 @@ platforms
 /resources/ios
 /resources/android
 .DS_Store
-www/DappLETHs
-www/repository
+DappLETHs
+repository

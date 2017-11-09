@@ -1,12 +1,12 @@
 angular.module('leth.services', [])
-.service('BEService', function ($rootScope, $http, $window, $q, StoreEndpoint, $ionicLoading) {
+.service('BEService', function ($rootScope, $http, $window, $q, $ionicLoading) {
   return{
     storeData: function(guid,key,data){
       $window.localStorage[guid + "_" + key] = JSON.stringify(data);
     },
     clearData: function(guid,key){
       $window.localStorage[guid + "_" + key] = '';
-    }
+    },
     getKey: function (guid,key) {
       var data = $window.localStorage[guid + "_" + key];
       if(data)
@@ -19,8 +19,7 @@ angular.module('leth.services', [])
     }
   }
 })                
-
-.service('AppService', function ($rootScope, $http, $q, StoreEndpoint) {
+.service('AppService', function ($rootScope, $http, $q) {
   var networks = {
       '0x': {
         name: 'Private',
@@ -106,7 +105,7 @@ angular.module('leth.services', [])
       var q = $q.defer();
       $http({
         method: 'GET',
-        url: StoreEndpoint.url + '/' + network + '/Store.json'
+        url: StoreEndpoint() + '/' + network + '/Store.json'
       }).then(function(response) {
         q.resolve(response.data);
       }, function(response) {
@@ -118,7 +117,7 @@ angular.module('leth.services', [])
       var q = $q.defer();
       $http({
         method: 'GET',
-        url: StoreEndpoint.url + '/' + network + '/Store.json'
+        url: StoreEndpoint() + '/' + network + '/Store.json'
       }).then(function(response) {
         q.resolve(response.data.categories);
       }, function(response) {
@@ -130,7 +129,7 @@ angular.module('leth.services', [])
       var q = $q.defer();
       $http({
         method: 'GET',
-        url: StoreEndpoint.url + '/' + network + '/Store.json'
+        url: StoreEndpoint() + '/' + network + '/Store.json'
       }).then(function(response) {
         q.resolve(response.data.dappleths);
       }, function(response) {
@@ -142,7 +141,7 @@ angular.module('leth.services', [])
       var q = $q.defer();
       $http({
         method: 'GET',
-        url: StoreEndpoint.url + '/' + network + '/Store.json'
+        url: StoreEndpoint() + '/' + network + '/Store.json'
       }).then(function(response) {
         q.resolve(response.data.tokens);
       }, function(response) {
