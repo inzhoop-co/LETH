@@ -446,7 +446,28 @@ angular.module('leth.controllers', [])
       subTitle: 'Enter contract token address',
       scope: $scope,
       buttons: [
-        { text: 'Cancel' },
+        { text: '<i class="icon ion-ios-undo"></i>' },
+        { text: '<i class="icon ion-ios-camera-outline"></i>',
+          type: 'button-clear button-dark',
+          onTap: function(e) {
+            if (AppService.isPlatformReady()){
+              $cordovaBarcodeScanner
+              .scan()
+              .then(function (barcodeData) {
+                if(barcodeData.text!= ""){
+                  console.log('read code: ' + barcodeData.text);
+                  $scope.token.address = barcodeData.text;
+                  loadTokenData($scope.token.address);
+                  createModalToken();
+                }
+              }, function (error) {
+                // An error occurred
+                console.log('Error!' + error);
+              });
+            }else
+            return null;
+          }
+        },
         {
           text: '<b>Load</b>',
           type: 'button-balanced',

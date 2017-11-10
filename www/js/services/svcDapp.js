@@ -2,10 +2,38 @@ angular.module('leth.services')
 .service('DappService', function ($rootScope, $http, $q, $timeout, 
                                 $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSideMenuDelegate, 
                                 $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicActionSheet,
-                                $cordovaBarcodeScanner, $cordovaGeolocation,
+                                $cordovaBarcodeScanner, $cordovaGeolocation, angularLoad,
                                 AppService, Chat, ENSService, ExchangeService, 
                                 Friends, nfcService, SwarmService, BEService) {
   return{
+    loadScripts: function(scriptList){
+      var promises = [];
+      var q = $q.defer();
+      
+      for(var i = 0; i<scriptList.length; i++) {
+          promises.push(angularLoad.loadScript(scriptList[i]));
+      }
+
+      $q.all(promises).then(function(result){
+        q.resolve(result); 
+      })
+
+      return q.promise;
+    },
+    loadCSS: function(cssList){
+      var promises = [];
+      var q = $q.defer();
+      
+      for(var i = 0; i<cssList.length; i++) {
+          promises.push(angularLoad.loadCSS(cssList[i]));
+      }
+
+      $q.all(promises).then(function(result){
+        q.resolve(result); 
+      })
+
+      return q.promise;
+    },
     q: function(){
       return $q;
     },
