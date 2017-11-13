@@ -134,21 +134,29 @@ angular.module('leth.controllers')
   };
 
   $scope.editStore = function (addr) {
-    localStorage.StoreUrl = addr; 
-    var alertPopup = $ionicPopup.show({
-        title: 'Store changed',
-        template: 'Url Store updated to ' + addr   
-      });
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Set Store Url',
+      template: 'Are you sure you want to change the store url? '
+    });
+    confirmPopup.then(function (res) {
+      if (res) {
+        localStorage.StoreUrl = addr; 
+        var alertPopup = $ionicPopup.show({
+            title: 'Store changed',
+            template: 'Url Store updated to ' + addr   
+          });
 
-      alertPopup.then(function(res) {
-        refresh();
-        alertPopup.close();
-      });
-    
-      $timeout(function() {
-        refresh();
-        alertPopup.close();
-      }, 3000);
+          alertPopup.then(function(res) {
+            refresh();
+            alertPopup.close();
+          });
+        
+          $timeout(function() {
+            refresh();
+            alertPopup.close();
+          }, 3000);
+      }
+    });
   };
 
   $scope.editHost = function (addr) {
