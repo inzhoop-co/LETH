@@ -85,6 +85,7 @@
   <plugin name="de.appplant.cordova.plugin.email-composer" spec="https://github.com/katzer/cordova-plugin-email-composer.git"/>
   <plugin name="de.appplant.cordova.plugin.local-notification" spec="https://github.com/katzer/cordova-plugin-local-notifications.git"/>
   <plugin name="phonegap-nfc" spec="~0.6.6"/>
+  <plugin name="cordova-plugin-file" spec="~3.0.0"/>
   <plugin name="cordova-plugin-http" spec="~1.2.0"/>
   <plugin name="cordova-plugin-globalization" spec="~1.0.7"/>
 </widget>

@@ -83,13 +83,8 @@
     }
   ],
   "cordovaPlatforms": [
-    "android",
     "ios",
-    {
-      "platform": "android",
-      "version": "",
-      "locator": "android"
-    },
+    "android",
     {
       "platform": "ios",
       "version": "",

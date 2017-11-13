@@ -146,16 +146,16 @@ var app = angular.module('leth', [
       }); 
 
       $rootScope.online = navigator.onLine;
-        $window.addEventListener("offline", function() {
-          $rootScope.$apply(function() {
-            $rootScope.online = false;
-          });
-        }, false);
+      $window.addEventListener("offline", function() {
+        $rootScope.$apply(function() {
+          $rootScope.online = false;
+        });
+      }, false);
 
-        $window.addEventListener("online", function() {
-          $rootScope.$apply(function() {
-            $rootScope.online = true;
-          });
+      $window.addEventListener("online", function() {
+        $rootScope.$apply(function() {
+          $rootScope.online = true;
+        });
       }, false);
 
       document.addEventListener("deviceready", function () {  

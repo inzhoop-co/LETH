@@ -63,11 +63,11 @@ angular.module('leth.services', [])
         badge: 'badge badge-balanced'
       }
   }
+  
   var deviceReady = false;
-
   document.addEventListener("deviceready", function(){
     deviceReady = true;
-  });
+  }, false); 
   
   return {
     isPlatformReady: function(){

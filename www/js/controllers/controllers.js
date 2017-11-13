@@ -23,6 +23,7 @@ angular.module('leth.controllers', [])
   }
 
   $scope.$watch('online', function(newStatus) {
+    //console.log('status: ' + newStatus);
     $scope.isOnline = newStatus; 
     refresh();
   });
