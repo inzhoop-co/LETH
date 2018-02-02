@@ -30,7 +30,7 @@ With LETH you could:
 # Beta Testers
 Become a BETA tester, install the App and help the community to grow up.
 Visit <a href="http://www.inzhoop.com">Inzhoop website</a>
-
+Contact to <a href="https://gitter.im/inzhoop-leth/Lobby">Gitter</a>
 
 # References
 ```
