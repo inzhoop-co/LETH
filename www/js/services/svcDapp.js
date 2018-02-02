@@ -1,11 +1,14 @@
 angular.module('leth.services')
 .service('DappService', function ($rootScope, $http, $q, $timeout, 
                                 $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSideMenuDelegate, 
-                                $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicActionSheet,
-                                $cordovaBarcodeScanner, $cordovaGeolocation, angularLoad,
+                                $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicActionSheet, $ionicModal,
+                                $cordovaBarcodeScanner, $cordovaGeolocation, $cordovaInAppBrowser, angularLoad,
                                 AppService, Chat, ENSService, ExchangeService, 
                                 Friends, nfcService, SwarmService, BEService) {
   return{
+    inAppBrowser: function(){
+      return $cordovaInAppBrowser;
+    },
     loadScripts: function(scriptList){
       var promises = [];
       var q = $q.defer();
@@ -171,6 +174,9 @@ angular.module('leth.services')
     actionSheet: function(){
       return $ionicActionSheet;
     },
+    loading: function(){
+      return $ionicLoading;
+    },
     loadingOn: function(){
       $ionicLoading.show();
     },
@@ -191,6 +197,9 @@ angular.module('leth.services')
     },
     toggleRight: function() {
       $ionicSideMenuDelegate.toggleRight();
+    },
+    pageModal: function(){
+      return $ionicModal;
     },
     getPosition: function(){
       var q = $q.defer();

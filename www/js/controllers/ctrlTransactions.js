@@ -9,6 +9,19 @@ angular.module('leth.controllers')
   }
   */
 
+  $scope.update = function(){
+    Transactions.getMyTransactions(2056288,2068176).then(function(ok){
+      console.log('end');
+    },function(err){
+      console.log(err);
+    },function(progress){
+      console.log(progress);
+    });
+
+    $scope.refresh();
+
+  }
+
   $scope.isFromTo = function(item) {
       if($stateParams.addr!="")
         return (item.to == $stateParams.addr || item.from == $stateParams.addr);

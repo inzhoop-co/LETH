@@ -6,6 +6,7 @@ node_modules/
 platforms
 .gitignore
 /plugins
+/res
 /resources/ios
 /resources/android
 .DS_Store

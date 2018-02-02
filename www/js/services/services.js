@@ -291,15 +291,14 @@ angular.module('leth.services', [])
       return result
     },
     transactionCall: function (contract, fname, params, value, gLimit, gPrice) {
-      return $q(function (resolve, reject) {
-        var fromAddr = global_keystore.getAddresses()[0];
-        var toAddr = contract.Address;
-        var functionName = fname;
-        var args = JSON.parse('[]');
-        var gasPrice = web3.toBigNumber(gPrice);
-        var gas = gLimit;
-        
+      return $q(function (resolve, reject) {        
         try {
+          var fromAddr = global_keystore.getAddresses()[0];
+          var toAddr = contract.Address;
+          var functionName = fname;
+          var args = JSON.parse('[]');
+          var gasPrice = web3.toBigNumber(gPrice);
+          var gas = gLimit;
           args.push(params,{from: fromAddr, gasPrice: gasPrice, gas: gas, value: value});
           
           var callback = function (err, hash) {
@@ -366,24 +365,17 @@ angular.module('leth.services', [])
         }); 
     },
     contractNew: function (params, abi, datacode, gasLimit, fee) {
-      var fromAddr = global_keystore.getAddresses()[0];
-      var m = params[0];
-      var contract = web3.eth.contract(abi);
-      var gasPrice = web3.toBigNumber(50000000000); //web3.eth.gasPrice;
-      var estimateGas = web3.eth.estimateGas({from: fromAddr, gasPrice: gasPrice, gas: gasLimit, data: datacode});
-      
-      var gPrice = fee/estimateGas;
-      /*
-      console.log("fee: " + fee);
-      console.log("price: " + gPrice);
-      console.log("estimate: " + estimateGas);
-      console.log("priceStandard: " + gasPrice.toNumber());
-      console.log("cost: " + gasPrice*gasLimit);
-      */
-      if(estimateGas>gasLimit) console.log("Warning: GasLimit too low!");
-
       var q = $q.defer();
         try {
+          var fromAddr = global_keystore.getAddresses()[0];
+          var m = params[0];
+          var contract = web3.eth.contract(abi);
+          var gasPrice = web3.toBigNumber(50000000000); //web3.eth.gasPrice;
+          var estimateGas = web3.eth.estimateGas({from: fromAddr, gasPrice: gasPrice, gas: gasLimit, data: datacode});
+          
+          var gPrice = fee/estimateGas;
+          if(estimateGas>gasLimit) console.log("Warning: GasLimit too low!");
+
           var callback = function (err, contract) {
             if(err) 
               q.reject(err);
@@ -404,14 +396,16 @@ angular.module('leth.services', [])
       return q.promise;
     },
     transferEth: function (from, to, value, fee) {
-      var gas = web3.eth.estimateGas({});
-      var gasPrice = web3.eth.gasPrice; 
-      console.log("fee: " + fee);
-      var gPrice =  web3.toBigNumber(fee/gas).round();
-      console.log(gPrice.toNumber());
-
       return $q(function (resolve, reject) {
         try {
+
+          var gasPrice = web3.eth.gasPrice; 
+          var gas = web3.eth.estimateGas({to: to, value: value, gasPrice: gasPrice});
+
+          console.log("fee: " + fee);
+          var gPrice =  web3.toBigNumber(fee/gas).round();
+          console.log(gPrice.toNumber());
+
           web3.eth.sendTransaction({
             from: from,
             to: to,
@@ -432,14 +426,15 @@ angular.module('leth.services', [])
     },
     transferCoin: function (contract, nameSend, from, to, amount ) {
       return $q(function (resolve, reject) {
-        var fromAddr = from;
-        var toAddr = to;
-        var functionName = nameSend;
-        var args = JSON.parse('[]');
-        var gasPrice = web3.eth.gasPrice;
-        var estimateGas = web3.eth.estimateGas({from: fromAddr, gasPrice: gasPrice, gas: gas});
-        var gas = estimateGas; //3000000; 
         try {
+          var fromAddr = from;
+          var toAddr = to;
+          var functionName = nameSend;
+          var args = JSON.parse('[]');
+          var gasPrice = web3.eth.gasPrice;
+          var estimateGas = web3.eth.estimateGas({from: fromAddr, gasPrice: gasPrice, gas: gas});
+          var gas = estimateGas; //3000000; 
+
           args.push(toAddr,amount,{from: fromAddr, gasPrice: gasPrice, gas: gas});
           var callback = function (err, hash) {
             var result = new Array;

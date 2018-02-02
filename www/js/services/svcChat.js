@@ -116,7 +116,8 @@ angular.module('leth.services')
       var message = svc.wrap(payload);
 
       web3.shh.post(message, function(err,res){
-        console.log(err,res);
+        if(err)
+          console.log(err);
       }); 
 
     },

@@ -40,10 +40,10 @@ angular.module('leth.controllers')
         $scope.methodSend = activeCoins[index-1].Send;
         $scope.contractCoin = web3.eth.contract(activeCoins[index-1].ABI).at(activeCoins[index-1].Address);
     		$scope.listUnit = activeCoins[index-1].Units;
-        $scope.unit = $scope.listUnit[0].multiplier;
-        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit + 'e+' + $scope.decimals);
+        $scope.unit = $scope.listUnit[0].multiplier + 'e+' + $scope.decimals;
+        $scope.balance = AppService.balanceOf($scope.contractCoin,$scope.unit);
         if($scope.addrTo!=undefined)
-          $scope.balAddrTo = AppService.balanceOfUser($scope.contractCoin,$scope.unit + 'e+' + $scope.decimals,$scope.addrTo);
+          $scope.balAddrTo = AppService.balanceOfUser($scope.contractCoin,$scope.unit,$scope.addrTo);
 
       }
       
@@ -110,6 +110,16 @@ angular.module('leth.controllers')
 
     $scope.scrollRefresh = function(){
       refresh();
+    }
+
+    $scope.allBalance = function(){
+      var gas = web3.toBigNumber(web3.eth.estimateGas({}));
+      var gPrice = web3.eth.gasPrice; 
+      var price = web3.toBigNumber($scope.fee/gas);
+      var balance = web3.eth.getBalance(AppService.account());
+      var value = balance.minus(gas.times(price));
+      console.log('all balance ' + value);
+      $scope.amountTo = value/$scope.unit;
     }
 
     $scope.sendCoins = function (addr, amount, unit, idCoin) {

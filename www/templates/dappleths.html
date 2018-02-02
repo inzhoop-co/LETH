@@ -1,14 +1,11 @@
 <ion-view view-title="LΞTH" can-swipe-back="false">
   <ion-content class="has-header has-tabs scrollBg" >
     <ion-slide-box auto-play="true" does-continue="false" show-pager="false">
-      <ion-slide>
+      <ion-slide ng-repeat="banner in banners track by $index">
         <div>
-          <a href="#" onclick="window.open('https://www.inzhoop.com','_blank','location=yes','closebuttoncaption=Return');"><img src="img/banners/header1.png"  height="150" ng-click="nextSlide()"/></a>
-        </div>
-      </ion-slide>
-      <ion-slide>
-        <div>
-          <a href="#" onclick="window.open('https://www.inzhoop.com','_blank','location=yes','closebuttoncaption=Return');"><img src="img/banners/header2.png"  height="150" ng-click="nextSlide()"/></a>
+          <a href="#" ng-click="goToUrl(banner.Url)">
+            <img ng-src="{{banner.image}}" height="150"/>
+          </a>
         </div>
       </ion-slide>
     </ion-slide-box>

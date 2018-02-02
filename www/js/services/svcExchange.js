@@ -37,7 +37,10 @@ angular.module('leth.services')
         method: 'GET',
         url: 'https://api.kraken.com/0/public/Ticker?pair=' + coin + pair
       }).then(function(response) {
-        q.resolve(response.data.result[coin + pair]["o"]);
+        if(typeof response.data.error == 'undefined')
+          q.resolve(response.data.result[coin + pair]["o"]);
+        else
+          q.reject(response.data.error);
       }, function(response) {
         q.reject(response);
       });

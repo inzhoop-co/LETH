@@ -5,7 +5,7 @@
       <ion-list class="list" can-swipe="true">
       <ion-item class="item item-divider item-avatar-left  item-icon-right item-avatar-right">
         <img ng-src="{{logoCoin}}" ng-click="scrollRefresh()"/>
-        <label id="{{idCoin}}"><b>{{balance | currency:symbolCoin+' ':decimals}} </b><span class="subdued" ">({{balanceExc}})</span></label>
+        <label id="{{idCoin}}"><b>{{balance | currency:symbolCoin+' ':6}} </b><span class="subdued" ">({{balanceExc}})</span></label>
         <p>
           <label >{{descCoin}}</label>
         </p>
@@ -21,7 +21,7 @@
             <label class="item-floating-label" ng-show="isFriend(addrTo)">{{isFriend(addrTo) | strLimit: 15 : 3}}</label> 
             <i class="icon ion-ios-person-outline positive" ng-show="!addrTo.length" ng-click="openFriendsModal()"></i>            
           </span>
-          <span class="item-note">{{balAddrTo | currency:symbolCoin+' ':decimals}}</span>
+          <span class="item-note">{{balAddrTo | currency:symbolCoin+' ':6}}</span>
           <i class="icon ion-ios-personadd-empty positive" ng-show="isFriend(addrTo)=='' && isValidAddr(addrTo)" ng-click="addAddress(addrTo,addrKey)"></i>
           <input type="text" ng-model="addrTo" placeholder="Type address or use camera to scan" ng-required="true"/>
         </div>
@@ -36,6 +36,7 @@
             <span class="item-note">fee {{feeLabel}} {{symbolFee}}</span>
             <input type="range" ng-model="fee"  min="{{minFee}}" max="{{maxFee}}" step="{{step}}" value="{{fee}}" ng-init="fee" ng-change="setFee(fee)">
           </div>
+          <button class="button button-clear icon ion-ios-calculator" ng-click="allBalance()"> entire balance</button>
         </div>
         <button ng-disabled="!unit || !amountTo>0 || !isValidAddr(addrTo)" class="button button-block button-energized" ng-click="confirmSend(addrTo,amountTo,unit,idCoin)"><i class="icon ion-paper-airplane"></i> Send 
         </button>

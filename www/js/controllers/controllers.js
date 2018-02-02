@@ -22,6 +22,11 @@ angular.module('leth.controllers', [])
     $scope.step = n;
   }
 
+
+  window.addEventListener("orientationchange", function(){
+      console.log(screen.orientation.type); // e.g. portrait
+  });
+
   $scope.$watch('online', function(newStatus) {
     //console.log('status: ' + newStatus);
     $scope.isOnline = newStatus; 
@@ -31,6 +36,13 @@ angular.module('leth.controllers', [])
 
   $scope.filterStoreCoins = 'button button-small button-outline button-positive';
   $scope.filterStoreApps = 'button button-small button-outline button-positive';
+  $scope.banners =[ 
+    {Url: "https://www.inzhoop.com", image: "img/banners/header1.png"},
+    {Url: "https://www.inzhoop.com", image: "img/banners/header2.png"}
+  ];
+  $scope.goToUrl = function(url){
+    window.open(url,'_blank','location=yes','closebuttoncaption=Return');
+  }
 
   window.refresh = function () {
     $ionicLoading.show();
@@ -49,7 +61,7 @@ angular.module('leth.controllers', [])
     }
     $scope.account = AppService.account();
     $scope.nick = AppService.idkey();
-    $scope.qrcodeString = $scope.account + "/" + $scope.nick ;
+    //$scope.qrcodeString = $scope.account + "#" + $scope.nick ;
 
     AppService.getNetwork().then(function(res){
       $scope.nameNetwork = res.name;
@@ -182,21 +194,21 @@ angular.module('leth.controllers', [])
       etherscanUrl="https://etherscan.io/" + path +"/";
     
     var pinUrl = etherscanUrl + addr;    
-      var options = {
-        location: 'yes',
-        clearcache: 'yes',
-        toolbar: 'yes'
-      };
+    var options = {
+      location: 'yes',
+      clearcache: 'yes',
+      toolbar: 'yes'
+    };
 
-      if (AppService.isPlatformReady()){
-        $cordovaInAppBrowser.open(pinUrl, '_system', options)
-          .then(function(event) {
-            // success
-          })
-          .catch(function(event) {
-            // error
-          }); 
-      }
+    if (AppService.isPlatformReady()){
+      $cordovaInAppBrowser.open(pinUrl, '_system', options)
+        .then(function(event) {
+          // success
+        })
+        .catch(function(event) {
+          // error
+        }); 
+    }
   }
 
   var getSync = function(){
