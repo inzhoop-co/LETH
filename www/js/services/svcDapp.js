@@ -1,7 +1,7 @@
 angular.module('leth.services')
 .service('DappService', function ($rootScope, $http, $q, $timeout, 
                                 $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSideMenuDelegate, 
-                                $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicActionSheet, $ionicModal,
+                                ionicListDelegate, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicActionSheet, $ionicModal,
                                 $cordovaBarcodeScanner, $cordovaGeolocation, $cordovaInAppBrowser, angularLoad,
                                 AppService, Chat, ENSService, ExchangeService, 
                                 Friends, nfcService, SwarmService, BEService) {
