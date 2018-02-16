@@ -1,9 +1,9 @@
 angular.module('leth.services')
-.service('DappService', function ($rootScope, $http, $q, $timeout, 
-                                $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSideMenuDelegate, 
-                                ionicListDelegate, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicActionSheet, $ionicModal,
+.service('DappService', function ($rootScope, $http, $q, $timeout,
+                                $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSideMenuDelegate,
+                                $ionicListDelegate, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicActionSheet, $ionicModal,
                                 $cordovaBarcodeScanner, $cordovaGeolocation, $cordovaInAppBrowser, angularLoad,
-                                AppService, Chat, ENSService, ExchangeService, 
+                                AppService, Chat, ENSService, ExchangeService,
                                 Friends, nfcService, SwarmService, BEService) {
   return{
     inAppBrowser: function(){
@@ -12,13 +12,13 @@ angular.module('leth.services')
     loadScripts: function(scriptList){
       var promises = [];
       var q = $q.defer();
-      
+
       for(var i = 0; i<scriptList.length; i++) {
           promises.push(angularLoad.loadScript(scriptList[i]));
       }
 
       $q.all(promises).then(function(result){
-        q.resolve(result); 
+        q.resolve(result);
       })
 
       return q.promise;
@@ -26,13 +26,13 @@ angular.module('leth.services')
     loadCSS: function(cssList){
       var promises = [];
       var q = $q.defer();
-      
+
       for(var i = 0; i<cssList.length; i++) {
           promises.push(angularLoad.loadCSS(cssList[i]));
       }
 
       $q.all(promises).then(function(result){
-        q.resolve(result); 
+        q.resolve(result);
       })
 
       return q.promise;
@@ -73,7 +73,7 @@ angular.module('leth.services')
     swarmUpload: function(content){
       SwarmService.upload(content).then(function(res){
         console.log(res);
-      }); 
+      });
     },
     swarmDownload: function(hash){
       SwarmService.download(hash).then(function(res){
@@ -82,7 +82,7 @@ angular.module('leth.services')
       }).catch(console.log);
     },
     readMessages: function(){
-        return Chat.findDAPP(); 
+        return Chat.findDAPP();
     },
     sendMessage: function(id,sender,message){
     	var payload = {from: sender, text: message};
@@ -96,7 +96,7 @@ angular.module('leth.services')
     },
     popupConfirm: function(txtTitle, txtTemplate){
       var q = $q.defer();
-      
+
       var confirmPopup = $ionicPopup.confirm({
         title: txtTitle,
         template: txtTemplate
@@ -108,12 +108,12 @@ angular.module('leth.services')
         else
           q.reject(res);
        });
-      
+
       return q.promise;
     },
     popupPrompt: function(txtTitle, txtSubtitle, inputType, inputPlaceholder){
       var q = $q.defer();
-    
+
       var promptPopup = $ionicPopup.prompt({
         title: txtTitle,
         subTitle: txtSubtitle,
@@ -127,12 +127,12 @@ angular.module('leth.services')
         else
             q.reject(err);
        });
-      
+
       return q.promise;
     },
     popupAlert: function(txtTitle, txtTemplate){
       var q = $q.defer();
-      
+
       var alertPopup = $ionicPopup.alert({
         title: txtTitle,
         template: txtTemplate
@@ -144,7 +144,7 @@ angular.module('leth.services')
         else
           q.reject(res);
        });
-      
+
       return q.promise;
     },
     scanQR : function(){
