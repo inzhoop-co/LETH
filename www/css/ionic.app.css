@@ -3288,10 +3288,6 @@ textarea {
 img {
   -webkit-user-drag: none; }
 
-
-
-
-
 /* ==========================================================================
    Tables
    ========================================================================== */
@@ -3367,7 +3363,7 @@ body.grade-c {
   padding-top: 1px;
   margin-bottom: -1px;
   width: auto;
-  height: auto !important; }
+  height: auto; }
 
 .menu .scroll-content.scroll-content-false {
   z-index: 11; }
@@ -3812,34 +3808,34 @@ a.subdued {
   .action-sheet-open .action-sheet-backdrop {
     pointer-events: auto; }
 
-.platform-android .action-sheet-backdrop.active {
+.xplatform-android .action-sheet-backdrop.active {
   background-color: rgba(0, 0, 0, 0.2); }
 
-.platform-android .action-sheet {
+.xplatform-android .action-sheet {
   margin: 0; }
-  .platform-android .action-sheet .action-sheet-title,
-  .platform-android .action-sheet .button {
+  .xplatform-android .action-sheet .action-sheet-title,
+  .xplatform-android .action-sheet .button {
     text-align: left;
     border-color: transparent;
     font-size: 16px;
     color: inherit; }
-  .platform-android .action-sheet .action-sheet-title {
+  .xplatform-android .action-sheet .action-sheet-title {
     font-size: 14px;
     padding: 16px;
     color: #666; }
-  .platform-android .action-sheet .button.active,
-  .platform-android .action-sheet .button.activated {
+  .xplatform-android .action-sheet .button.active,
+  .xplatform-android .action-sheet .button.activated {
     background: #e8e8e8; }
 
-.platform-android .action-sheet-group {
+.xplatform-android .action-sheet-group {
   margin: 0;
   border-radius: 0;
   background-color: #fafafa; }
 
-.platform-android .action-sheet-cancel {
+.xplatform-android .action-sheet-cancel {
   display: none; }
 
-.platform-android .action-sheet-has-icons .button {
+.xplatform-android .action-sheet-has-icons .button {
   padding-left: 56px; }
 
 .backdrop {
@@ -5290,38 +5286,24 @@ ion-tabs.tabs-color-active-dark .tab-item {
   background-color: #fff; }
 
 @media (min-width: 680px) {
-  /*Full screen for tablet*/
   .modal {
-      top: 0px !important;
-      bottom: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      width: 100% !important;}
-  .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) > * {
-      margin-top: 20px;}
-  .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) {
-    height: 64px;}
-  .platform-ios.platform-cordova .modal-wrapper .modal .has-header,
-  .platform-ios.platform-cordova .modal-wrapper .modal .bar-subheader {
-    top: 64px;}
-/*  .modal {
     top: 20%;
     right: 20%;
     bottom: 20%;
     left: 20%;
     min-height: 240px;
     width: 60%; }
-  
+  .modal.ng-leave-active {
+    bottom: 0; }
   .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) {
     height: 44px; }
     .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) > * {
       margin-top: 0; }
-  .platform-ios.platform-cordova .modal-wrapper .modal .has-header,
-  .platform-ios.platform-cordova .modal-wrapper .modal .bar-subheader {
-    top: 44px; }
-*/
   .platform-ios.platform-cordova .modal-wrapper .modal .tabs-top > .tabs,
   .platform-ios.platform-cordova .modal-wrapper .modal .tabs.tabs-top {
+    top: 44px; }
+  .platform-ios.platform-cordova .modal-wrapper .modal .has-header,
+  .platform-ios.platform-cordova .modal-wrapper .modal .bar-subheader {
     top: 44px; }
   .platform-ios.platform-cordova .modal-wrapper .modal .has-subheader {
     top: 88px; }
@@ -5329,8 +5311,6 @@ ion-tabs.tabs-color-active-dark .tab-item {
     top: 93px; }
   .platform-ios.platform-cordova .modal-wrapper .modal .has-header.has-subheader.has-tabs-top {
     top: 137px; }
-  .modal.ng-leave-active {
-    bottom: 0; }
   .modal-backdrop-bg {
     -webkit-transition: opacity 300ms ease-in-out;
     transition: opacity 300ms ease-in-out;
@@ -7718,6 +7698,9 @@ input[type="color"] {
 .platform-android input[type="week"] {
   padding-top: 8px; }
 
+.platform-ios textarea,
+.platform-android textarea {
+  text-indent: -3px; }
 
 .item-input input,
 .item-input textarea {
@@ -8938,7 +8921,7 @@ a.button {
   .button-bar.button-bar-inline {
     display: block;
     width: auto;
-    zoom: 1; }
+    *zoom: 1; }
     .button-bar.button-bar-inline:before, .button-bar.button-bar-inline:after {
       display: table;
       content: "";
@@ -9366,7 +9349,7 @@ a.button {
   width: 100%; }
 
 .clearfix {
-  zoom: 1; }
+  *zoom: 1; }
   .clearfix:before, .clearfix:after {
     display: table;
     content: "";

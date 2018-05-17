@@ -77,6 +77,7 @@ angular.module('leth.controllers')
 
       $scope.feeLabel = $scope.fee / $scope.unit;
 
+
       updateExchange();
     })
 

@@ -1,5 +1,18 @@
 {
   "name": "LETH",
-  "app_id": "com.inzhoop.leth"
-
+  "app_id": "com.inzhoop.leth",
+  "integrations": {
+    "gulp": {},
+    "cordova": {}
+  },
+  "type": "ionic1",
+  "gulp": {
+    "enabled": false
+  },
+  "watchPatterns": [
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
+  ]
 }

@@ -73,7 +73,8 @@ angular.module('leth.controllers', [])
       if($scope.isDapp)
         $scope.readDappsList(res.name);
       else
-        $scope.readCoinsList(res.name);    
+        $scope.readCoinsList(res.name); 
+        ENSService.init(res.name);   
     }, function(err){
         console.log('no Network');
         $scope.nameNetwork = "unvailable";

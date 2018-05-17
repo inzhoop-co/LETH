@@ -295,7 +295,7 @@ bottom: 150;
 
   .chat  {
     background-image: url(../img/backgrounds/xmas.png);
-    background-color: #E0DAD6;
+    /*background-color: #E0DAD6;*/
     background-repeat: no-repeat;
     background-size: 100%; }
 
@@ -655,4 +655,13 @@ bottom: 150;
   margin-bottom: 5px;
   height: 10px;
 }
+/*
+@media (min-width: 680px) {
+  .modal {
+    top: 0px !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important; }
+    */
 
