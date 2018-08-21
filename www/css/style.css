@@ -256,9 +256,20 @@ bottom: 150;
     color: gray;
     font-size: 12px; }
   .image {
+    align-self: flex-end;
+    display: inline-block;
     width: 32px;
     height: 32px;
-    align-self: flex-end;
+    background-size: cover;
+    background-repeat: no-repeat;
+    box-shadow: inset rgba(255, 255, 255, 0.6) 0 2px 2px, inset rgba(0, 0, 0, 0.3) 0 -2px 6px;
+    border-radius: 6.25%;
+    transition-delay: 1s;
+  }
+  .image:hover {
+    border-radius: 50%;
+    transition: border-radius 2.5s;
+    transition-delay: 3s;
   }
 
   .bubble {

@@ -1399,7 +1399,7 @@ angular.module('leth.controllers', [])
               if(res) {
                 //add user to black list
                 if(!$scope.blacklisted.includes(msg.from)) {
-                  var banned = {addr:msg.from, icon: blockies.create({seed: msg.from}).toDataURL("image/jpeg"),  date: Date.now(), comment: msg.text};
+                  var banned = {addr:msg.from, icon: hqx(blockies.create({seed: msg.from}),4).toDataURL("image/jpeg"),  date: Date.now(), comment: msg.text};
                   $scope.blacklisted.push(banned);
                   localStorage.Blacklist=JSON.stringify($scope.blacklisted);
                 }

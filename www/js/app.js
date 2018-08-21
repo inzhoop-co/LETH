@@ -133,9 +133,11 @@ var app = angular.module('leth', [
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.disableScroll(true);   
       }
-      if (window.StatusBar) {
-        StatusBar.styleLightContent();
-      }
+      
+      //if (window.StatusBar) {
+        //StatusBar.overlaysWebView(true);
+        //StatusBar.styleLightContent();
+      //}
 
       $window.addEventListener('LaunchUrl', function(event) {
         // gets page name from url

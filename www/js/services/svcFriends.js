@@ -7,16 +7,16 @@ angular.module('leth.services')
     add: function(name,addr,idkey,comment) {
       var addressbook = JSON.parse(localStorage.Friends);
 
-      var icon = blockies.create({ 
+      var icon = hqx(blockies.create({ 
       seed: addr, 
       //color: '#ff9933', 
       //bgcolor: 'red', 
       //size: 15, // width/height of the icon in blocks, default: 8
       //scale: 2, 
       //spotcolor: '#000' 
-      });
+      }),4).toDataURL("image/jpeg");
 
-      var friend = {"addr": addr, "idkey": idkey, "comment": comment, "name": name, "icon":icon.toDataURL("image/jpeg"), "unread":0};
+      var friend = {"addr": addr, "idkey": idkey, "comment": comment, "name": name, "icon":icon, "unread":0};
       addressbook.push(friend);
       localStorage.Friends = JSON.stringify(addressbook);
 

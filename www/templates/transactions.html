@@ -19,7 +19,7 @@
     </label>
   </ion-header-bar>
   <ion-content class="has-header has-subheader scrollBg">
-  <ion-refresher pulling-txt="load" on-refresh="refresh()"></ion-refresher>
+  <ion-refresher pulling-txt="load" on-refresh="updateTx()"></ion-refresher>
     <ion-list can-swipe="true">
     <p ng-show="transactions.length == 0" align="center"><br/>No saved transaction</p>
       <ion-item class="item item-icon-left" collection-repeat="t in transactions | filter:{to:search} | filter:isFromTo | orderBy:time:true" ng-click="checkStatus(t)">

@@ -9,14 +9,16 @@ angular.module('leth.controllers')
   }
   */
 
-  $scope.update = function(){
-    Transactions.getMyTransactions(2056288,2068176).then(function(ok){
-      console.log('end');
-    },function(err){
-      console.log(err);
-    },function(progress){
-      console.log(progress);
-    });
+  $scope.updateTx = function(){
+    if($scope.nameNetwork=="Private"){
+      Transactions.getMyTransactions(0,null).then(function(ok){
+        console.log('end');
+      },function(err){
+        console.log(err);
+      },function(progress){
+        console.log(progress);
+      });
+    }
 
     $scope.refresh();
 

@@ -53,21 +53,21 @@ angular.module('leth.services')
     },
     pushChatDM: function(msg, hashId){
       chatsDM.push({
-            identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
+            identity: hqx(blockies.create({ seed: msg.from}),4).toDataURL("image/jpeg"),
             timestamp: Date.now(),
             message: msg,
             hash: hashId,
-            delivered: false
+            delivered: 0
       });
       
     },
     pushChat: function(msg, hashId){
       chats.push({
-            identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
+            identity: hqx(blockies.create({ seed: msg.from}),4).toDataURL("image/jpeg"),
             timestamp: Date.now(),
             message: msg,
             hash: hashId,
-            delivered: false
+            delivered: 0
       });
      
     },
@@ -511,7 +511,7 @@ angular.module('leth.services')
       web3.shh.post(message); 
 
       chatsDAPP.push({
-        identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
+        identity: hqx(blockies.create({ seed: msg.from}),4).toDataURL("image/jpeg"),
         timestamp: Date.now(),
         message: msg
       });
@@ -523,7 +523,7 @@ angular.module('leth.services')
 
       chatsDAPP.push({
         guid: guid,
-        identity: blockies.create({ seed: msg.from}).toDataURL("image/jpeg"),
+        identity: hqx(blockies.create({ seed: msg.from}),4).toDataURL("image/jpeg"),
         timestamp: Date.now(),
         message: msg
       });
@@ -552,13 +552,13 @@ angular.module('leth.services')
         if(payload.mode=="ack"){
           chats.filter(function (c) {
             if(c.hash === payload.attach && c.message.from == AppService.account()){
-              c.delivered=true;
+              c.delivered+=1;
             }
           })
           
           chatsDM.filter(function (c) {
             if(c.hash === payload.attach && c.message.from == AppService.account()){
-              c.delivered=true;
+              c.delivered+=1;
             }
           })
           
