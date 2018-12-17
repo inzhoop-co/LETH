@@ -1,5 +1,5 @@
 angular.module('leth.controllers')
-  .controller('AddressCtrl', function ($scope, AppService, $ionicModal, $ionicPopup, $cordovaEmailComposer, $cordovaClipboard, $cordovaSms, $cordovaContacts) {
+  .controller('AddressCtrl', function ($scope, AppService, $ionicModal, $ionicPopup, $cordovaEmailComposer, $cordovaClipboard, $cordovaContacts) {
     $scope.size = 200;
     $scope.correctionLevel = 'H';
     $scope.typeNumber = 12;
@@ -55,6 +55,7 @@ angular.module('leth.controllers')
       });
     };
 
+    /* Feature disabled
     $scope.shareBySms = function() {
       var content;
       if($scope.isWalletAddress)
@@ -88,6 +89,7 @@ angular.module('leth.controllers')
         });
       };      
     }
+    */
 
     $scope.shareByShh = function(amount){
       if($scope.isWalletAddress)
