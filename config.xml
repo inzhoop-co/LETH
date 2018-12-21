@@ -62,7 +62,7 @@
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
     <platform name="android">
-        <preference name="android-targetSdkVersion" value="22" />
+        <preference name="android-targetSdkVersion" value="26" />
         <plugin name="de.appplant.cordova.plugin.email-composer" spec="https://github.com/katzer/cordova-plugin-email-composer.git#0.8.2" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
@@ -84,7 +84,7 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <plugin name="phonegap-plugin-barcodescanner" spec="https://github.com/wildabeast/BarcodeScanner.git" />
+    <plugin name="phonegap-plugin-barcodescanner" spec="https://github.com/wildabeast/BarcodeScanner.git#0.8.2" />
     <plugin name="phonegap-nfc" spec="~0.6.6" />
     <plugin name="cordova-plugin-file" spec="~3.0.0" />
     <plugin name="cordova-plugin-http" spec="~1.2.0" />
