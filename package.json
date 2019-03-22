@@ -3,7 +3,7 @@
   "version": "0.7.0",
   "description": "LETH: the 1st Eth mobile wallet",
   "dependencies": {
-    "cordova-android": "7.0.0",
+    "cordova-android": "6.4.0",
     "cordova-ios": "4.5.4",
     "cordova-plugin-email-composer": "^0.8.15",
     "cordova-plugin-file": "~3.0.0",
@@ -103,7 +103,8 @@
       "cordova-plugin-globalization": {}
     },
     "platforms": [
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }
