@@ -1,6 +1,6 @@
 {
   "name": "leth",
-  "version": "0.7.0",
+  "version": "0.26.18",
   "description": "LETH: the 1st Eth mobile wallet",
   "dependencies": {
     "cordova-android": "6.4.0",
@@ -15,7 +15,8 @@
     "gulp-rename": "^1.2.0",
     "ionic-lock-screen": "^1.0.0",
     "phonegap-nfc": "~0.6.6",
-    "phonegap-plugin-barcodescanner": "https://github.com/wildabeast/BarcodeScanner.git"
+    "phonegap-plugin-barcodescanner": "https://github.com/wildabeast/BarcodeScanner.git",
+    "run": "1.4.0"
   },
   "devDependencies": {
     "bower": "^1.3.3",

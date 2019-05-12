@@ -151,7 +151,7 @@ angular.module('leth.services')
       var q = $q.defer();
 
       $ionicPlatform.ready(function () {
-        if($rootScope.deviceready){
+        if (AppService.isPlatformReady()){
           $cordovaBarcodeScanner
           .scan()
           .then(function (barcodeData) {
