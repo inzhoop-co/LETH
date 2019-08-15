@@ -34,7 +34,12 @@ angular.module('leth.services')
     },
     remove: function(friend){
       var addressbook = JSON.parse(localStorage.Friends);
-      var indexOfFriend = addressbook.findIndex(i => i.addr === friend.addr);
+      //var indexOfFriend = addressbook.findIndex(i => i.addr === friend.addr);
+      var existFriend = function(item){
+        return item.addr === friend.addr;
+      }
+
+      var indexOfFriend = addressbook.findIndex(existFriend);
 
       addressbook.splice(indexOfFriend,1);
       localStorage.Friends = JSON.stringify(addressbook);

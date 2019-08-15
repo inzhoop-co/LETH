@@ -213,6 +213,18 @@ angular.module('leth.services')
             q.reject();
         });
       return q.promise;
+    },
+    NFCSend: function(tag){
+      return nfcService.share(tag);
+    },
+    NFCSendStop: function(){
+      return nfcService.unshare();
+    },
+    NFCListen: function(){
+      return nfcService.listen();
+    },
+    NFCTag: function(){
+      return nfcService.tagNFC;
     }
 
   }

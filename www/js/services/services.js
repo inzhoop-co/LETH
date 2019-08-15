@@ -178,7 +178,13 @@ angular.module('leth.services', [])
     }, 
     addLocalToken: function(token){
       var tmpstore = JSON.parse(localStorage.Tokens);
-      var indexOfToken = tmpstore.findIndex(i => i.Address === token.Address);
+      //var indexOfToken = tmpstore.findIndex(i => i.Address === token.Address);
+
+      var existToken = function(item){
+        return item.Address === token.Address;
+      }
+
+      var indexOfToken = tmpstore.findIndex(existToken);
 
       
       if(token.Custom){
@@ -210,7 +216,13 @@ angular.module('leth.services', [])
     },
     deleteLocalToken: function(token){
       var tmpstore = JSON.parse(localStorage.Tokens);
-      var indexOfToken = tmpstore.findIndex(i => i.Address === token.Address);
+      //var indexOfToken = tmpstore.findIndex(i => i.Address === token.Address);
+
+      var existToken = function(item){
+        return item.Address === token.Address;
+      }
+
+      var indexOfToken = tmpstore.findIndex(existToken);
 
       tmpstore.splice(indexOfToken,1);
       localStorage.Tokens = JSON.stringify(tmpstore);

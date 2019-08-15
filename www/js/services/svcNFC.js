@@ -22,6 +22,28 @@ angular.module('leth.services')
         },
         clearTag: function () {
             angular.copy({}, this.tagNFC);
+        },
+        share: function (message) {
+            document.addEventListener("deviceready", function () {
+                var tag = [
+                    ndef.textRecord(message)
+                ];
+                nfc.share(tag, function (success) {
+                    console.log("Ok: " + success);
+                }, function (fail) {
+                    console.log("Err: " + fail);
+                });
+            }, false)
+        },
+        unshare: function () {
+            document.addEventListener("deviceready", function () {
+                nfc.unshare(function (success) {
+                    console.log("Ok: " + success);
+                }, function (fail) {
+                    console.log("Err: " + fail);
+                });
+            }, false)
         }
+
     };
 })
