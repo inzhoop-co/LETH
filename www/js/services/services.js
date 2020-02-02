@@ -46,6 +46,11 @@ angular.module('leth.services', [])
         class: 'energized',            
         badge: 'badge badge-energized'
       },
+      '0xbf7e331f7f7c1dd2e05159666b3bf8bc7a8a3a9eb1d518969eab529dd9b88c1a': {
+        name: 'Goerli',
+        class: 'assertive',            
+        badge: 'badge badge-assertive'
+      },
       '0xf8db90a3c81d9f86022cca1e12b4e05770aeae784d56cc5a31e78f6aea44698b': {
         name: 'Infura',
         class: 'dark',            
@@ -144,6 +149,18 @@ angular.module('leth.services', [])
         url: StoreEndpoint() + '/' + network + '/Store.json'
       }).then(function(response) {
         q.resolve(response.data.tokens);
+      }, function(response) {
+        q.reject(response);
+      });
+      return q.promise;
+    },
+    getStoreHosts: function (network) {
+      var q = $q.defer();
+      $http({
+        method: 'GET',
+        url: StoreEndpoint() + '/' + network + '/Store.json'
+      }).then(function(response) {
+        q.resolve(response.data.nodeHosts);
       }, function(response) {
         q.reject(response);
       });

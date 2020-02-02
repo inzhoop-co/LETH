@@ -1,5 +1,5 @@
 angular.module('leth.services')
-.factory('ENSService', function ($rootScope, $q, AppService) {    
+.factory('ENSService', function ($rootScope, $q, $http, AppService) {    
     var contract; 
     var address;
     var ens;
@@ -32,25 +32,26 @@ angular.module('leth.services')
         setAddress: setAddress,
         ens: ens,
         suffix: suffix,
+        suffixes: /^.{3,}\.(eth|test|xyz|kred)$/,
 
         init: function(networktype) {
             this.contract = web3.eth.contract([{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"resolver","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"label","type":"bytes32"},{"name":"owner","type":"address"}],"name":"setSubnodeOwner","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"ttl","type":"uint64"}],"name":"setTTL","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"ttl","outputs":[{"name":"","type":"uint64"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"resolver","type":"address"}],"name":"setResolver","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"owner","type":"address"}],"name":"setOwner","outputs":[],"payable":false,"type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"node","type":"bytes32"},{"indexed":false,"name":"owner","type":"address"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"node","type":"bytes32"},{"indexed":true,"name":"label","type":"bytes32"},{"indexed":false,"name":"owner","type":"address"}],"name":"NewOwner","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"node","type":"bytes32"},{"indexed":false,"name":"resolver","type":"address"}],"name":"NewResolver","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"node","type":"bytes32"},{"indexed":false,"name":"ttl","type":"uint64"}],"name":"NewTTL","type":"event"}]);
             this.resolverContract = web3.eth.contract([{"constant":true,"inputs":[{"name":"interfaceID","type":"bytes4"}],"name":"supportsInterface","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"addr","outputs":[{"name":"ret","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"node","type":"bytes32"},{"name":"kind","type":"bytes32"}],"name":"has","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"addr","type":"address"}],"name":"setAddr","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"content","outputs":[{"name":"ret","type":"bytes32"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"hash","type":"bytes32"}],"name":"setContent","outputs":[],"payable":false,"type":"function"},{"inputs":[{"name":"ensAddr","type":"address"}],"type":"constructor"},{"payable":false,"type":"fallback"}]);
             this.fifsRegistrarContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"ens","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"expiryTimes","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"subnode","type":"bytes32"},{"name":"owner","type":"address"}],"name":"register","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"rootNode","outputs":[{"name":"","type":"bytes32"}],"payable":false,"type":"function"},{"inputs":[{"name":"ensAddr","type":"address"},{"name":"node","type":"bytes32"}],"type":"constructor"}]);
-
+            this.address = "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
             if(networktype=="Mainet"){
                 this.suffix ="eth";
-                this.address="0x314159265dd8dbb310642f98f50c066173c1259b";
+                //this.address="0x314159265dd8dbb310642f98f50c066173c1259b";
                 this.publicResolver = this.resolverContract.at('0x1da022710df5002339274aadee8d58218e9d6ab5');
             }
             if(networktype=="Ropsten"){
                 this.suffix ="test"
-                this.address="0x112234455c3a32fd11230c42e7bccd4a84e02010";
+                //this.address="0x112234455c3a32fd11230c42e7bccd4a84e02010";
                 this.publicResolver = this.resolverContract.at('0x4c641fb9bad9b60ef180c31f56051ce826d21a9a');
             }
             if(networktype=="Rinkeby"){
                 this.suffix ="test"
-                this.address="0xe7410170f87102DF0055eB195163A03B7F2Bff4A";
+                //this.address="0xe7410170f87102DF0055eB195163A03B7F2Bff4A";
                 this.publicResolver = this.resolverContract.at('0xb14fdee4391732ea9d2267054ead2084684c0ad8');
             }
 
@@ -73,7 +74,7 @@ angular.module('leth.services')
             var resolverAddress = this.ens.resolver(node);
             if(resolverAddress == '0x0000000000000000000000000000000000000000') {
                 //console.log(ens.address + " not found");
-                return "not found"; 
+                return "Not found!"; 
             }
             var result = this.resolverContract.at(resolverAddress).addr(node);
 
@@ -84,7 +85,7 @@ angular.module('leth.services')
         getOwner: function(name){
           var owner = this.ens.owner(this.namehash(name));
           if(owner == "0x0000000000000000000000000000000000000000")
-              return "Not found";
+              return "Not found!";
           else
               return owner;
         },

@@ -3,6 +3,7 @@ angular.module('leth.controllers')
                                       $cordovaGeolocation,$translate, tmhDynamicLocale, availableLanguages, AppService, ExchangeService, Chat, PasswordPopup) {    
 
   $scope.hostsList= JSON.parse(localStorage.HostsList);
+ 
   $scope.pin = { checked: (localStorage.PinOn=="true") };
   $scope.touch = { checked: (localStorage.TouchOn=="true") };
   $scope.geo = { checked: (localStorage.GeoOn=="true") };
@@ -17,6 +18,11 @@ angular.module('leth.controllers')
     $scope.language = localStorage.Language;
     $scope.availableLanguages = availableLanguages;
     $scope.shhSettings = Chat.settings();
+    AppService.getStoreHosts($scope.nameNetwork).then(function(response){
+      $scope.hostsDynList = response;
+    }, function(err){
+        $scope.hostsDynList = null;
+    });
   });
 
   var seedModal;

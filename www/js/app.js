@@ -1,3 +1,4 @@
+/* INIT */
 web3 = new Web3();
 hdPath = "m/44'/60'/0";
 hdPath2 = "m/44'/60'/0'/0";
@@ -82,11 +83,7 @@ var app = angular.module('leth', [
 
       }
     }
-
-    //clean
-    localStorage.removeItem("Coins");
-    localStorage.removeItem("listTokens");
-
+    
     if (typeof localStorage.StoreUrl == 'undefined') {localStorage.StoreUrl="https://www.inzhoop.com/repository";}
     if (typeof localStorage.Shh == 'undefined') {localStorage.Shh=JSON.stringify({ttl:10000, targetPow: 1.01, timePow: 19});}
     if (typeof localStorage.Language == 'undefined') {localStorage.Language=defaultLanguage.ISO;}
@@ -102,12 +99,12 @@ var app = angular.module('leth', [
     if (typeof localStorage.Transactions == 'undefined') {localStorage.Transactions = '[]';}
     if (typeof localStorage.Tokens == 'undefined') {localStorage.Tokens = '[]';}
     if (typeof localStorage.NodeHost == 'undefined') {
-      localStorage.NodeHost = "http://wallet.inzhoop.com:8546";
-    }
-    if (typeof localStorage.HostsList == 'undefined') {
-      localStorage.HostsList=JSON.stringify(["http://wallet.inzhoop.com:8546","http://wallet.inzhoop.com:8545"]);
+      localStorage.NodeHost = "https://ropsten.inzhoop.com";
     }
     
+    if (typeof localStorage.HostsList == 'undefined') {
+      localStorage.HostsList=JSON.stringify(["https://ropsten.inzhoop.com","https://mainnet.inzhoop.com"]);
+    }
     if (typeof localStorage.BaseCurrency == 'undefined') {localStorage.BaseCurrency = JSON.stringify({ name: 'EUR', symbol:'€', value: 'ZEUR'});}      
     if(localStorage.PinOn=="true"){
       $lockScreen.show({

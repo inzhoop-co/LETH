@@ -7700,7 +7700,7 @@ input[type="color"] {
 
 .platform-ios textarea,
 .platform-android textarea {
-  text-indent: -3px; }
+  text-indent: 0px; }
 
 .item-input input,
 .item-input textarea {

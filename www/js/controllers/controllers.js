@@ -61,6 +61,7 @@ angular.module('leth.controllers', [])
     }
     $scope.account = AppService.account();
     $scope.nick = AppService.idkey();
+    $scope.qrcodeString = AppService.account();
     //$scope.qrcodeString = $scope.account + "#" + $scope.nick ;
 
     AppService.getNetwork().then(function(res){
@@ -574,12 +575,11 @@ angular.module('leth.controllers', [])
   };
 
   $scope.isValidAddr = function(addr){
-    if(addr){      
-      if(typeof addr.split('.')[1] != 'undefined' && addr.split('.')[1]==ENSService.suffix){
-        //not able to change addrTo scope wallet variable!
+    if(addr){ 
+      if (addr.match(ENSService.suffixes)){
         addr = ENSService.getAddress(angular.lowercase(addr));
-        $scope.ENSResolved = addr;
-      } 
+        $scope.ENSResolved = addr;        
+      }
       else
         $scope.ENSResolved="";
     }
@@ -738,10 +738,13 @@ angular.module('leth.controllers', [])
     for(var i=0; i<list.length; i++){
       $scope.mnemonicWords.push({index: i, text: list[i]});
     }
-    console.log($scope.mnemonicWords);
+    //console.log($scope.mnemonicWords);
   }
 
-  $scope.isValidMnemonic = function(seed){        
+  $scope.isValidMnemonic = function(seed){ 
+    if(typeof seed == 'undefined')
+      return false;
+
     if (seed.split(' ').length==12 && lightwallet.keystore.isSeedValid(seed)){
       $scope.randomSeed = seed;
       seedToList(seed);
@@ -833,7 +836,7 @@ angular.module('leth.controllers', [])
               localStorage.HasLogged = JSON.stringify(true);
               localStorage.Transactions = JSON.stringify({});
               localStorage.Friends = JSON.stringify($scope.friends);
-
+              
               $rootScope.hasLogged = true;
 
               var msg = 'new user added';
