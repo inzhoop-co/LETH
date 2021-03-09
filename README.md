@@ -1,4 +1,4 @@
-# LΞTH 
+# LΞTH (deprecating...)
 The Only mobile ligthwallet built with Ξthereum community in mind!
 
 # About
