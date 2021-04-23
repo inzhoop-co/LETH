@@ -26,7 +26,7 @@
     "gulp-clean-css": "^3.10.0",
     "gulp-sass": "^2.3.2",
     "gulp-util": "^3.0.7",
-    "node-sass": "^4.10.0",
+    "node-sass": "^4.13.1",
     "shelljs": "^0.3.0"
   },
   "cordovaPlugins": [
